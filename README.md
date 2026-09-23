@@ -17,6 +17,14 @@ LSA_AS/
 │   ├── empty_auth.log              # Empty log edge-case test file
 │   ├── reports/                    # Audit report logs
 │   └── README.md                   # Problem documentation & usage
+├── AS_15/                          # Automation Sprint Problem #15
+│   ├── error_log_report.sh         # Core bash script for error log analysis
+│   ├── commands_used.md            # Command log & viva preparation
+│   ├── sample_syslog.log           # Synthetic test syslog
+│   ├── clean_syslog.log            # Clean log edge-case test file
+│   ├── empty_syslog.log            # Empty log edge-case test file
+│   ├── reports/                    # Timestamped error reports
+│   └── README.md                   # Problem documentation & usage
 └── (Upcoming Projects)/            # Future Automation Sprint additions
 ```
 
@@ -27,6 +35,7 @@ LSA_AS/
 | Sprint / Problem | Title | Description | Status | Folder |
 |---|---|---|---|---|
 | **AS_14** | **Suspicious IP Detection** | Automated SSH brute-force monitor, regex parsing, descending frequency ranking, and timestamped audit reporting. | ✅ Completed | [`AS_14/`](./AS_14) |
+| **AS_15** | **Error Log Report** | Automated error extraction with severity categorization, frequency ranking, distribution bars, and tail-style review. | ✅ Completed | [`AS_15/`](./AS_15) |
 | *Upcoming* | *Future Sprints* | Additional automation tasks and administration solutions. | ⏳ Planned | — |
 
 ---
