@@ -25,6 +25,12 @@ LSA_AS/
 │   ├── empty_syslog.log            # Empty log edge-case test file
 │   ├── reports/                    # Timestamped error reports
 │   └── README.md                   # Problem documentation & usage
+├── AS_16/                          # Automation Sprint Problem #16
+│   ├── service_availability_check.sh # Core service monitoring & reporting script
+│   ├── commands_used.md            # Command log & viva preparation
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── logs/                       # Audit trail directory
+│   └── README.md                   # Problem documentation & usage
 └── (Upcoming Projects)/            # Future Automation Sprint additions
 ```
 
@@ -36,6 +42,7 @@ LSA_AS/
 |---|---|---|---|---|
 | **AS_14** | **Suspicious IP Detection** | Automated SSH brute-force monitor, regex parsing, descending frequency ranking, and timestamped audit reporting. | ✅ Completed | [`AS_14/`](./AS_14) |
 | **AS_15** | **Error Log Report** | Automated error extraction with severity categorization, frequency ranking, distribution bars, and tail-style review. | ✅ Completed | [`AS_15/`](./AS_15) |
+| **AS_16** | **Service Availability Check** | Real-time service monitoring, boot persistence verification, systemd/SysV fallback, audit logging, and dark-themed HTML report dashboard. | ✅ Completed | [`AS_16/`](./AS_16) |
 | *Upcoming* | *Future Sprints* | Additional automation tasks and administration solutions. | ⏳ Planned | — |
 
 ---

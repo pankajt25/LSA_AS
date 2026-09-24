@@ -1,0 +1,8 @@
+[2026-09-24 09:35:24 IST] [systemd] SERVICE=cron ACTIVE=active ENABLED=enabled EXIT=0 MSG="✅ Service 'cron' is ACTIVE and running"
+[2026-09-24 09:35:30 IST] [systemd] SERVICE=not-a-real-service ACTIVE=not-found ENABLED=n/a EXIT=2 MSG="⚠️ Service 'not-a-real-service' not found on this system"
+[2026-09-24 09:35:40 IST] [systemd] SERVICE=rsync ACTIVE=inactive ENABLED=disabled EXIT=1 MSG="❌ Service 'rsync' is INACTIVE / NOT running"
+[2026-09-24 09:35:40 IST] [systemd] SERVICE=apparmor ACTIVE=inactive ENABLED=enabled EXIT=1 MSG="❌ Service 'apparmor' is INACTIVE / NOT running"
+[2026-09-24 09:36:04 IST] [systemd] SERVICE=cron ACTIVE=active ENABLED=enabled EXIT=0 MSG="✅ Service 'cron' is ACTIVE and running"
+[2026-09-24 09:39:39 IST] [systemd] SERVICE=cron ACTIVE=active ENABLED=enabled EXIT=0 MSG="✅ Service 'cron' is ACTIVE and running"
+[2026-09-24 09:42:16 IST] [systemd] SERVICE=cron ACTIVE=active ENABLED=enabled EXIT=0 MSG="✅ Service 'cron' is ACTIVE and running"
+[2026-09-24 09:42:59 IST] [systemd] SERVICE=cron ACTIVE=active ENABLED=enabled EXIT=0 MSG="✅ Service 'cron' is ACTIVE and running"
