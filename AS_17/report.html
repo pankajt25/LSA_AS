@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automatic Service Recovery Dashboard | AS_17</title>
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #182234;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border-color: #334155;
+            --status-green: #10b981;
+            --status-green-bg: rgba(16, 185, 129, 0.15);
+            --status-green-border: rgba(16, 185, 129, 0.4);
+            --status-red: #ef4444;
+            --status-red-bg: rgba(239, 68, 68, 0.15);
+            --status-red-border: rgba(239, 68, 68, 0.4);
+            --status-blue: #38bdf8;
+            --status-yellow: #f59e0b;
+            --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            padding: 30px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header Section */
+        header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 28px 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .badge-course {
+            display: inline-block;
+            background: rgba(56, 189, 248, 0.12);
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            color: var(--status-blue);
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        h1 {
+            font-size: 1.85rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .meta-pill-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .meta-pill {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .meta-pill strong {
+            color: var(--text-primary);
+        }
+
+        /* Metric Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .metric-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 18px 20px;
+        }
+
+        .metric-label {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 6px;
+        }
+
+        .metric-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .metric-sub {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* Status Cards Side by Side */
+        .comparison-section {
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 14px;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 860px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .status-card {
+            border-radius: 12px;
+            padding: 22px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+            background: var(--bg-card);
+        }
+
+        .card-before {
+            border: 1px solid var(--status-red-border);
+            background: linear-gradient(180deg, var(--status-red-bg) 0%, var(--bg-card) 25%);
+        }
+
+        .card-after {
+            border: 1px solid var(--status-green-border);
+            background: linear-gradient(180deg, var(--status-green-bg) 0%, var(--bg-card) 25%);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 12px;
+        }
+
+        .card-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+
+        .badge-status {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+        }
+
+        .badge-down {
+            background: rgba(239, 68, 68, 0.25);
+            color: #fca5a5;
+            border: 1px solid var(--status-red);
+        }
+
+        .badge-up {
+            background: rgba(16, 185, 129, 0.25);
+            color: #6ee7b7;
+            border: 1px solid var(--status-green);
+        }
+
+        .code-box {
+            background: #090d16;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 14px;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            line-height: 1.45;
+            overflow-x: auto;
+            color: #cbd5e1;
+            white-space: pre;
+            flex-grow: 1;
+        }
+
+        /* Terminal Execution Output */
+        .exec-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 24px;
+        }
+
+        .terminal-window {
+            background: #090d16;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 12px;
+        }
+
+        .terminal-bar {
+            background: #1e293b;
+            padding: 8px 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .dot-red { background: #ef4444; }
+        .dot-yellow { background: #f59e0b; }
+        .dot-green { background: #10b981; }
+
+        .terminal-title {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-left: 8px;
+            font-family: var(--font-mono);
+        }
+
+        .terminal-body {
+            padding: 16px;
+            font-family: var(--font-mono);
+            font-size: 0.82rem;
+            line-height: 1.5;
+            color: #e2e8f0;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        .term-prompt { color: #38bdf8; }
+        .term-cmd { color: #f8fafc; font-weight: 600; }
+        .term-warn { color: #fbbf24; }
+        .term-info { color: #38bdf8; }
+        .term-ok { color: #34d399; font-weight: 600; }
+        .term-err { color: #f87171; }
+
+        /* Log Section */
+        .log-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 24px;
+        }
+
+        .log-container {
+            background: #090d16;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            line-height: 1.6;
+            max-height: 240px;
+            overflow-y: auto;
+            color: #94a3b8;
+            white-space: pre-wrap;
+            margin-top: 12px;
+        }
+
+        .log-entry {
+            margin-bottom: 6px;
+            border-left: 3px solid transparent;
+            padding-left: 8px;
+        }
+
+        .log-entry.healthy {
+            border-left-color: var(--status-green);
+            color: #a7f3d0;
+        }
+
+        .log-entry.recovered {
+            border-left-color: var(--status-blue);
+            color: #bae6fd;
+        }
+
+        .log-entry.failed {
+            border-left-color: var(--status-red);
+            color: #fecaca;
+        }
+
+        /* Safety & Rubric Checklist */
+        .checklist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .check-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .check-icon {
+            color: var(--status-green);
+            font-weight: bold;
+            font-size: 1.1rem;
+            line-height: 1;
+        }
+
+        .check-content h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 4px;
+        }
+
+        .check-content p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        footer {
+            text-align: center;
+            padding: 24px 0 10px 0;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="header-top">
+                <div>
+                    <span class="badge-course">E1ITA307 &bull; Linux System Administration</span>
+                    <h1>Automatic Service Recovery Dashboard</h1>
+                    <p class="subtitle">Problem Statement #17 &bull; Service Automation & Fault Remediation Sprint</p>
+                </div>
+                <div class="meta-pill-group">
+                    <div class="meta-pill">
+                        <span>Environment:</span>
+                        <strong>WSL Linux (systemd active)</strong>
+                    </div>
+                    <div class="meta-pill">
+                        <span>Test Unit:</span>
+                        <strong>dummy-test.service</strong>
+                    </div>
+                    <div class="meta-pill">
+                        <span>Status:</span>
+                        <strong style="color: var(--status-green);">PASSED &amp; VERIFIED</strong>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Metric Summary Cards -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-label">Monitored Service</div>
+                <div class="metric-value" style="color: var(--status-blue);">dummy-test</div>
+                <div class="metric-sub">Sandboxed safe dummy unit (/bin/sleep)</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Detection Method</div>
+                <div class="metric-value">systemctl is-active</div>
+                <div class="metric-sub">Fast non-blocking probe (returns exit code &amp; state)</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Recovery Action</div>
+                <div class="metric-value" style="color: var(--status-green);">Auto Restart + Delay</div>
+                <div class="metric-sub">2s stabilization wait + post-check verification</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Error Handling</div>
+                <div class="metric-value" style="color: var(--status-yellow);">Graceful Exit</div>
+                <div class="metric-sub">Traps missing units without infinite crash loops</div>
+            </div>
+        </div>
+
+        <!-- Before & After Comparison -->
+        <section class="comparison-section">
+            <h2 class="section-title">
+                <span>&#9881;</span> Service Recovery Verification: Stop &rarr; Recover Test
+            </h2>
+            <div class="comparison-grid">
+                <!-- Before Card -->
+                <div class="status-card card-before">
+                    <div class="card-header">
+                        <div class="card-title">Before Recovery (Simulated Failure)</div>
+                        <span class="badge-status badge-down">&#9679; DOWN / INACTIVE</span>
+                    </div>
+                    <div class="code-box">&#x25cb; dummy-test.service - Dummy Test Service for Automatic Service Recovery Sprint
+     Loaded: loaded (/etc/systemd/system/dummy-test.service; enabled; preset: enabled)
+     Active: inactive (dead) since Thu 2026-09-24 11:47:00 IST; 34ms ago
+   Duration: 1min 16.313s
+ Invocation: c47d0c8b9a6048168fd1e84379aa90a2
+    Process: 1868 ExecStart=/bin/sleep infinity (code=killed, signal=TERM)
+   Main PID: 1868 (code=killed, signal=TERM)
+   Mem peak: 1.7M
+        CPU: 37ms
+
+Sep 24 11:45:44 SP systemd[1]: Started dummy-test.service - Dummy Test Ser&hellip;rint.
+Sep 24 11:47:00 SP systemd[1]: Stopping dummy-test.service - Dummy Test Se&hellip;nt...
+Sep 24 11:47:00 SP systemd[1]: dummy-test.service: Deactivated successfully.
+Sep 24 11:47:00 SP systemd[1]: Stopped dummy-test.service - Dummy Test Ser&hellip;rint.</div>
+                </div>
+
+                <!-- After Card -->
+                <div class="status-card card-after">
+                    <div class="card-header">
+                        <div class="card-title">After Recovery (Auto Remediated)</div>
+                        <span class="badge-status badge-up">&#9679; UP / ACTIVE</span>
+                    </div>
+                    <div class="code-box">&#x25cf; dummy-test.service - Dummy Test Service for Automatic Service Recovery Sprint
+     Loaded: loaded (/etc/systemd/system/dummy-test.service; enabled; preset: enabled)
+     Active: active (running) since Thu 2026-09-24 11:47:12 IST; 16s ago
+ Invocation: a0a5998a4d67469c9b8d236e3716c0c4
+   Main PID: 1908 (sleep)
+      Tasks: 1 (limit: 4627)
+     Memory: 1.8M (peak: 2.4M)
+        CPU: 24ms
+     CGroup: /system.slice/dummy-test.service
+             &#x2514;&#x2500;1908 /bin/sleep infinity
+
+Sep 24 11:47:12 SP systemd[1]: Started dummy-test.service - Dummy Test Ser&hellip;rint.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Execution Demonstration -->
+        <section class="exec-section">
+            <h2 class="section-title">
+                <span>&#128187;</span> Script Execution Logs (Terminal Session)
+            </h2>
+            <div class="terminal-window">
+                <div class="terminal-bar">
+                    <span class="dot dot-red"></span>
+                    <span class="dot dot-yellow"></span>
+                    <span class="dot dot-green"></span>
+                    <span class="terminal-title">bash &bull; ./auto_service_recovery.sh</span>
+                </div>
+                <div class="terminal-body"><span class="term-prompt">pankaj@SP:~/AS_17$</span> <span class="term-cmd">sudo systemctl stop dummy-test</span>
+<span class="term-prompt">pankaj@SP:~/AS_17$</span> <span class="term-cmd">./auto_service_recovery.sh</span>
+=== Automatic Service Recovery Monitor ===
+Target Service : dummy-test
+Log Destination: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_17/logs/recovery.log
+--------------------------------------------------------
+<span class="term-warn">[WARN] Service 'dummy-test' is currently 'inactive'. Initiating recovery...</span>
+<span class="term-info">[INFO] Restart signal sent. Waiting 2 seconds for service stabilization...</span>
+<span class="term-ok">[SUCCESS] Service 'dummy-test' successfully recovered and is now active.</span>
+
+<span class="term-prompt">pankaj@SP:~/AS_17$</span> <span class="term-cmd">./auto_service_recovery.sh nonexistent-service</span>
+=== Automatic Service Recovery Monitor ===
+Target Service : nonexistent-service
+Log Destination: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_17/logs/recovery.log
+--------------------------------------------------------
+<span class="term-warn">[WARN] Service 'nonexistent-service' is currently 'inactive'. Initiating recovery...</span>
+<span class="term-err">[ERROR] Restart attempt failed (Exit Code 5): Failed to restart nonexistent-service.service: Unit nonexistent-service.service not found.</span></div>
+            </div>
+        </section>
+
+        <!-- Recovery Log History -->
+        <section class="log-section">
+            <h2 class="section-title">
+                <span>&#128220;</span> Persistent Log Stream: <code>logs/recovery.log</code>
+            </h2>
+            <p style="color: var(--text-secondary); font-size: 0.85rem;">
+                Historical log entries recorded during testing. Format: <code>[Timestamp] Service | Prior State | Action | Result State</code>
+            </p>
+            <div class="log-container">
+<div class="log-entry healthy">[2026-09-24 11:46:33] Service: dummy-test | Prior State: active | Action: Checked (healthy, no action needed) | Result State: active</div>
+<div class="log-entry recovered">[2026-09-24 11:47:14] Service: dummy-test | Prior State: inactive | Action: Restarted service | Result State: active</div>
+<div class="log-entry failed">[2026-09-24 11:47:48] Service: nonexistent-service | Prior State: inactive | Action: Restart attempt failed (Failed to restart nonexistent-service.service: Unit nonexistent-service.service not found. ) | Result State: inactive</div>
+<div class="log-entry healthy">[2026-09-24 11:48:08] Service: dummy-test | Prior State: active | Action: Checked (healthy, no action needed) | Result State: active</div>
+            </div>
+        </section>
+
+        <!-- Safety & Compliance Confirmation -->
+        <section class="log-section">
+            <h2 class="section-title">
+                <span>&#10004;</span> Sandbox Compliance &amp; Verification Matrix
+            </h2>
+            <div class="checklist-grid">
+                <div class="check-card">
+                    <span class="check-icon">&#10003;</span>
+                    <div class="check-content">
+                        <h4>Strict Sandboxing</h4>
+                        <p>Only <code>dummy-test.service</code> was created and manipulated. No real services (ssh, cron, networking) were touched.</p>
+                    </div>
+                </div>
+                <div class="check-card">
+                    <span class="check-icon">&#10003;</span>
+                    <div class="check-content">
+                        <h4>Safe Default Target</h4>
+                        <p>Script defaults to <code>dummy-test</code> if no argument is passed, preventing accidental restarts of system daemons.</p>
+                    </div>
+                </div>
+                <div class="check-card">
+                    <span class="check-icon">&#10003;</span>
+                    <div class="check-content">
+                        <h4>Post-Restart Verification</h4>
+                        <p>Waited 2 seconds for service stabilization and re-probed <code>is-active</code> to verify active state before reporting success.</p>
+                    </div>
+                </div>
+                <div class="check-card">
+                    <span class="check-icon">&#10003;</span>
+                    <div class="check-content">
+                        <h4>Graceful Error Handling</h4>
+                        <p>Nonexistent or failing units are trapped cleanly with detailed diagnostic error messages without hanging or looping.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            Autonomous Linux System Administration Sprint &bull; E1ITA307 Problem #17 &bull; Generated Self-Contained Report
+        </footer>
+    </div>
+</body>
+</html>
