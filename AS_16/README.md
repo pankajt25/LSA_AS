@@ -133,3 +133,18 @@ The dashboard is generated with zero external dependencies and renders an execut
 - **System Telemetry**: Init architecture (`systemd`), Linux kernel release, hostname, and timestamp.
 - **Service Cards**: Prominently highlights service name, operational status, boot persistence, and exit codes with distinct color-coding.
 - **Collapsible Audit History**: Embeds a toggleable `<details>` viewer containing the raw log lines for rapid inspection.
+
+---
+
+## Viewing the HTML Report
+
+1. The exact command to open `report.html` in the default Windows browser, run from inside WSL:
+   ```bash
+   explorer.exe $(wslpath -w report.html)
+   ```
+
+2. The alternative manual path via Windows Explorer:
+   - If working from `/mnt/d/...` (Windows-mounted): the direct Windows path, e.g. `D:\Users\Dell\Downloads\Projects\LSA\Automation_sprint\AS_16\report.html` — double-click it
+   - If working from the WSL home directory instead: `\\wsl$\Ubuntu\home\pankaj\sprint-sandbox\report.html` (or `\\wsl.localhost\Ubuntu\home\pankaj\sprint-sandbox\report.html` on newer Windows builds)
+
+3. *Note:* report.html is self-contained — no server needed, just open the file directly.

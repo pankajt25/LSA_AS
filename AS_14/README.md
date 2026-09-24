@@ -19,6 +19,7 @@ AS_14/
 ├── test_auth.log               # Synthetic auth log with brute-force & legitimate patterns
 ├── empty_auth.log              # Empty log edge-case test file
 ├── commands_used.md            # Viva preparation log & explanation table
+├── report.html                 # Standalone dark-themed dashboard report
 ├── reports/                    # Output directory for timestamped security audit reports
 └── README.md                   # Project documentation
 ```
@@ -73,3 +74,18 @@ AS_14/
 ## 📝 Viva / Evaluation Reference
 
 See [`commands_used.md`](./commands_used.md) for a comprehensive table of all commands executed during development and testing, along with plain-English explanations.
+
+---
+
+## Viewing the HTML Report
+
+1. The exact command to open `report.html` in the default Windows browser, run from inside WSL:
+   ```bash
+   explorer.exe $(wslpath -w report.html)
+   ```
+
+2. The alternative manual path via Windows Explorer:
+   - If working from `/mnt/d/...` (Windows-mounted): the direct Windows path, e.g. `D:\Users\Dell\Downloads\Projects\LSA\Automation_sprint\AS_14\report.html` — double-click it
+   - If working from the WSL home directory instead: `\\wsl$\Ubuntu\home\pankaj\sprint-sandbox\report.html` (or `\\wsl.localhost\Ubuntu\home\pankaj\sprint-sandbox\report.html` on newer Windows builds)
+
+3. *Note:* report.html is self-contained — no server needed, just open the file directly.

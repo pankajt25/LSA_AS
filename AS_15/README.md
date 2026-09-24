@@ -20,6 +20,7 @@ AS_15/
 ├── clean_syslog.log        # Edge-case test log containing zero errors
 ├── empty_syslog.log        # Edge-case test log with 0 bytes (empty file)
 ├── commands_used.md        # Chronological command history & viva preparation guide
+├── report.html             # Standalone dark-themed dashboard report
 ├── reports/                # Directory storing timestamped error audit reports
 └── README.md               # Project documentation
 ```
@@ -137,3 +138,18 @@ Line 7     | Sep 23 10:06:20 host app: FATAL: service crashed unexpectedly
 ## 📝 Viva / Evaluation Reference
 
 See [`commands_used.md`](./commands_used.md) for the complete chronological command execution log with plain-English explanations and viva justification notes for all Linux utilities (`grep`, `awk`, `sort`, `uniq`, `wc`, `tee`).
+
+---
+
+## Viewing the HTML Report
+
+1. The exact command to open `report.html` in the default Windows browser, run from inside WSL:
+   ```bash
+   explorer.exe $(wslpath -w report.html)
+   ```
+
+2. The alternative manual path via Windows Explorer:
+   - If working from `/mnt/d/...` (Windows-mounted): the direct Windows path, e.g. `D:\Users\Dell\Downloads\Projects\LSA\Automation_sprint\AS_15\report.html` — double-click it
+   - If working from the WSL home directory instead: `\\wsl$\Ubuntu\home\pankaj\sprint-sandbox\report.html` (or `\\wsl.localhost\Ubuntu\home\pankaj\sprint-sandbox\report.html` on newer Windows builds)
+
+3. *Note:* report.html is self-contained — no server needed, just open the file directly.
