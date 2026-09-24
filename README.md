@@ -52,8 +52,8 @@ LSA_AS/
 
 | Sprint / Problem | Title | Description | Status | Folder |
 |---|---|---|---|---|
-| **AS_14** | **Suspicious IP Detection** | Automated SSH brute-force monitor, regex parsing, descending frequency ranking, and timestamped audit reporting. | ✅ Completed | [`AS_14/`](./AS_14) |
-| **AS_15** | **Error Log Report** | Automated error extraction with severity categorization, frequency ranking, distribution bars, and tail-style review. | ✅ Completed | [`AS_15/`](./AS_15) |
+| **AS_14** | **Suspicious IP Detection** | Automated SSH brute-force monitor, real log auto-detection (`/var/log/auth.log`), regex parsing, descending ranking, and audit reporting. | ✅ Completed | [`AS_14/`](./AS_14) |
+| **AS_15** | **Error Log Report** | Automated error extraction, real log auto-detection (`/var/log/syslog`), severity breakdown, frequency ranking, and tail-style review. | ✅ Completed | [`AS_15/`](./AS_15) |
 | **AS_16** | **Service Availability Check** | Real-time service monitoring, boot persistence verification, systemd/SysV fallback, audit logging, and dark-themed HTML report dashboard. | ✅ Completed | [`AS_16/`](./AS_16) |
 | **AS_17** | **Automatic Service Recovery** | Automated service health probing, dead/inactive remediation with safe delays, post-restart active state verification, and dark-themed before/after report. | ✅ Completed | [`AS_17/`](./AS_17) |
 | **AS_18** | **Server Process Check** | Process verification via `pgrep -f`, case-sensitivity flags, regex escaping, PID & oldest uptime inspection, and dark-themed HTML report. | ✅ Completed | [`AS_18/`](./AS_18) |
@@ -62,6 +62,71 @@ LSA_AS/
 ---
 
 ## 🔍 Sprint Deep Dives
+
+<details>
+<summary><strong>AS_14 — Suspicious IP Detection (Real System Data)</strong></summary>
+
+### Problem Statement
+Detect suspicious IP addresses attempting brute-force attacks from SSH authentication logs. Identify repeated failed login attempts, rank offending IPs by aggression, and generate audit reports.
+
+### Summary of Approach
+- **Dynamic Real Log Auto-Detection:** Automatically discovers and parses the active live system authentication log source in precedence order:
+  1. `/var/log/auth.log` (Debian/Ubuntu PAM and SSH authentication log)
+  2. `/var/log/secure` (RHEL/CentOS/Rocky/Fedora authentication log)
+  3. `journalctl -u ssh --no-pager` / `journalctl _COMM=sshd --no-pager` (systemd journald stream)
+  4. Fallback: `test_auth.log` (strictly labeled as *"synthetic demonstration data — no real auth log was available on this system"*).
+- **Precision PCRE Extraction:** Uses `grep -oP 'from \K([0-9]{1,3}\.){3}[0-9]{1,3}'` with keep-out `\K` lookbehind discard to extract IPv4 addresses regardless of log line column shifting (e.g. `invalid user`).
+- **Descending Aggression Ranking:** Deduplicates and tallies failed attempts per IP with `sort | uniq -c | sort -nr` to present top threat actors first.
+- **First Seen & Last Seen Timestamps:** Extracts chronological temporal bounds for flagged attackers.
+- **Real Host Scan Finding:** Auto-detected `/var/log/auth.log`; confirmed 0 failed SSH attempts on the live host, providing valid clean-state reporting: *"No suspicious IP activity found in the current system logs"*.
+- **Interactive Dashboard:** Complete dark-themed HTML report displaying live clean-state audit status and verification logs.
+
+### Key Commands Used
+- `./suspicious_ip_detector.sh` — Auto-detects real auth log (`/var/log/auth.log`) with default threshold (&ge; 5)
+- `./suspicious_ip_detector.sh 3` — Auto-detects real auth log with custom threshold (&ge; 3)
+- `./suspicious_ip_detector.sh ./test_auth.log 5` — Explicit override against synthetic test data labeled as demonstration fallback
+- `./suspicious_ip_detector.sh --help` — Displays command-line manual and option syntax
+- `explorer.exe $(wslpath -w report.html)` — View standalone HTML dashboard in browser
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_14/report.html`](./AS_14/report.html)
+- 📖 **Sprint Documentation:** [`AS_14/README.md`](./AS_14/README.md)
+- 📜 **Audit Report Output:** [`AS_14/reports/`](./AS_14/reports/)
+
+</details>
+
+<details>
+<summary><strong>AS_15 — Error Log Report (Real System Data)</strong></summary>
+
+### Problem Statement
+Automate extraction, severity categorization, frequency ranking, and statistical reporting of error-relevant events from Linux system logs.
+
+### Summary of Approach
+- **Dynamic Real System Log Auto-Detection:** Automatically discovers and analyzes accessible live system logs in priority order:
+  1. `/var/log/syslog` (Standard system log on Debian/Ubuntu)
+  2. `/var/log/dpkg.log` (Package management log on Debian/Ubuntu)
+  3. `/var/log/apt/history.log` (APT transaction history log)
+  4. `journalctl --no-pager` (Systemd journald system log stream)
+  5. Fallback: `sample_syslog.log` (strictly labeled as *"synthetic demonstration data — no real log was available on this system"*).
+- **Single-Pass ERE Pattern Matching:** Compiles configurable keyword array (`error`, `fail`, `critical`, `fatal`, `warn`) into an Extended Regular Expression (`error|fail|critical|fatal|warn`) evaluated via `grep -i -E`.
+- **Severity Breakdown & ASCII Visual Bars:** Computes individual keyword match counts, percentage share of errors, and renders dynamic ASCII distribution progress bars.
+- **Robust Pipeline (SIGPIPE Fix):** Uses `sort | uniq -c | sort -rn | awk 'NR<=5'` instead of `head -n 5`, consuming input cleanly and preventing `SIGPIPE` (exit code 141) under `set -o pipefail` on large logs.
+- **Real Host Scan Finding:** Auto-detected `/var/log/syslog` (937 KB, 7,611 lines); extracted 474 matching error/warning entries (6.23% error density) categorized across WARN (224), ERROR (171), FAIL (158), and FATAL (7).
+- **Interactive Dashboard:** Complete dark-themed HTML report displaying real executive metrics, severity distribution, recurring patterns, and execution output.
+
+### Key Commands Used
+- `./error_log_report.sh` — Auto-detects and analyzes live `/var/log/syslog`
+- `./error_log_report.sh /var/log/syslog` — Explicit override for system log inspection
+- `./error_log_report.sh ./sample_syslog.log` — Fallback run on labeled synthetic demonstration data
+- `./error_log_report.sh --help` — Displays command-line help manual
+- `explorer.exe $(wslpath -w report.html)` — View standalone HTML dashboard in browser
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_15/report.html`](./AS_15/report.html)
+- 📖 **Sprint Documentation:** [`AS_15/README.md`](./AS_15/README.md)
+- 📜 **Audit Report Output:** [`AS_15/reports/`](./AS_15/reports/)
+
+</details>
 
 <details>
 <summary><strong>AS_18 — Server Process Check</strong></summary>
