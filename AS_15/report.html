@@ -324,9 +324,9 @@
       <h1>Problem #15: Error Log Report</h1>
       <p class="subtitle">Automated severity classification, keyword frequency distribution, and chronological tracking.</p>
       <div class="header-stats">
-        <span>Target Log: <strong>sample_syslog.log</strong></span>
+        <span>Target Log: <strong>/var/log/syslog (Real System Syslog)</strong></span>
         <span>Keywords Monitored: <strong>error, fail, critical, fatal, warn</strong></span>
-        <span>Total Analyzed Lines: <strong>7</strong></span>
+        <span>Total Analyzed Lines: <strong>7,611</strong></span>
         <span>Engine: <strong>error_log_report.sh</strong></span>
       </div>
     </header>
@@ -338,22 +338,22 @@
         <div class="card" style="border-top: 4px solid var(--danger);">
           <div class="card-metric-title">Health Status</div>
           <div class="card-metric-value" style="color: #f87171;">ALERT</div>
-          <div class="card-metric-desc">Errors and warnings detected in log</div>
+          <div class="card-metric-desc">Errors and warnings detected in live log</div>
         </div>
         <div class="card" style="border-top: 4px solid var(--danger);">
           <div class="card-metric-title">Matching Error Entries</div>
-          <div class="card-metric-value" style="color: #f87171;">5</div>
-          <div class="card-metric-desc">71.43% error density across entries</div>
+          <div class="card-metric-value" style="color: #f87171;">474</div>
+          <div class="card-metric-desc">6.23% error density across entries</div>
         </div>
         <div class="card" style="border-top: 4px solid var(--accent-blue);">
           <div class="card-metric-title">Total Lines Analyzed</div>
-          <div class="card-metric-value" style="color: var(--accent-blue);">7</div>
-          <div class="card-metric-desc">434 bytes inspected</div>
+          <div class="card-metric-value" style="color: var(--accent-blue);">7,611</div>
+          <div class="card-metric-desc">937,950 bytes inspected</div>
         </div>
         <div class="card" style="border-top: 4px solid var(--warning);">
           <div class="card-metric-title">Dominant Keyword</div>
-          <div class="card-metric-value" style="color: #fbbf24;">FAIL</div>
-          <div class="card-metric-desc">3 occurrences (60.0% matching share)</div>
+          <div class="card-metric-value" style="color: #fbbf24;">WARN</div>
+          <div class="card-metric-desc">224 occurrences (47.3% matching share)</div>
         </div>
       </div>
     </section>
@@ -374,52 +374,52 @@
         </thead>
         <tbody>
           <tr>
-            <td><strong style="color: #ef4444;">FAIL</strong></td>
-            <td>3</td>
-            <td>60.0%</td>
+            <td><strong style="color: #f59e0b;">WARN</strong></td>
+            <td>224</td>
+            <td>47.3%</td>
             <td>
               <div class="progress-bar-container">
-                <div class="progress-bar-fill" style="width: 60%; background: #ef4444;"></div>
+                <div class="progress-bar-fill" style="width: 47.3%; background: #f59e0b;"></div>
               </div>
             </td>
           </tr>
           <tr>
             <td><strong style="color: #f87171;">ERROR</strong></td>
-            <td>2</td>
-            <td>40.0%</td>
+            <td>171</td>
+            <td>36.1%</td>
             <td>
               <div class="progress-bar-container">
-                <div class="progress-bar-fill" style="width: 40%; background: #f87171;"></div>
+                <div class="progress-bar-fill" style="width: 36.1%; background: #f87171;"></div>
               </div>
             </td>
           </tr>
           <tr>
-            <td><strong style="color: #a855f7;">CRITICAL</strong></td>
-            <td>1</td>
-            <td>20.0%</td>
+            <td><strong style="color: #ef4444;">FAIL</strong></td>
+            <td>158</td>
+            <td>33.3%</td>
             <td>
               <div class="progress-bar-container">
-                <div class="progress-bar-fill" style="width: 20%; background: #a855f7;"></div>
+                <div class="progress-bar-fill" style="width: 33.3%; background: #ef4444;"></div>
               </div>
             </td>
           </tr>
           <tr>
             <td><strong style="color: #dc2626;">FATAL</strong></td>
-            <td>1</td>
-            <td>20.0%</td>
+            <td>7</td>
+            <td>1.5%</td>
             <td>
               <div class="progress-bar-container">
-                <div class="progress-bar-fill" style="width: 20%; background: #dc2626;"></div>
+                <div class="progress-bar-fill" style="width: 2%; background: #dc2626;"></div>
               </div>
             </td>
           </tr>
           <tr>
-            <td><strong style="color: #f59e0b;">WARN</strong></td>
-            <td>1</td>
-            <td>20.0%</td>
+            <td><strong style="color: #a855f7;">CRITICAL</strong></td>
+            <td>0</td>
+            <td>0.0%</td>
             <td>
               <div class="progress-bar-container">
-                <div class="progress-bar-fill" style="width: 20%; background: #f59e0b;"></div>
+                <div class="progress-bar-fill" style="width: 0%; background: #a855f7;"></div>
               </div>
             </td>
           </tr>
@@ -435,33 +435,34 @@
             <span>📜 Captured Execution Log</span>
             <span class="log-toggle-hint">Click to toggle</span>
           </div>
-          <div class="log-subtitle">Direct output from: <code>./error_log_report.sh</code></div>
+          <div class="log-subtitle">Direct output from: <code>./error_log_report.sh</code> (auto-detecting <code>/var/log/syslog</code>)</div>
         </summary>
         <div class="log-viewer"><pre>================================================================================
                        SYSTEM LOG ERROR ANALYSIS REPORT
 ================================================================================
-Generated On       : 2026-09-24 11:25:12 IST
-Target Log File    : sample_syslog.log
-Log File Size      : 434 bytes
-Total Log Entries  : 7
+Generated On       : 2026-09-24 12:46:57 IST
+Target Log File    : /var/log/syslog
+Log Source Type    : real system log (/var/log/syslog)
+Log File Size      : 937950 bytes
+Total Log Entries  : 7611
 Monitored Keywords : error fail critical fatal warn
 ================================================================================
 
 [+] SECTION 1: EXECUTIVE SUMMARY
 --------------------------------------------------------------------------------
 Status                  : [ALERT] Errors/Warnings detected!
-Total Lines Analyzed    : 7
-Matching Error Entries  : 5 (71.43% of total entries)
+Total Lines Analyzed    : 7611
+Matching Error Entries  : 474 (6.23% of total entries)
 
 [+] SECTION 2: SEVERITY &amp; KEYWORD BREAKDOWN
 --------------------------------------------------------------------------------
 KEYWORD        MATCHING LINES SHARE (%)    DISTRIBUTION            
 --------------------------------------------------------------------------------
-ERROR          2              40.0%        [########------------]
-FAIL           3              60.0%        [############--------]
-CRITICAL       1              20.0%        [####----------------]
-FATAL          1              20.0%        [####----------------]
-WARN           1              20.0%        [####----------------]
+ERROR          171            36.1%        [#######-------------]
+FAIL           158            33.3%        [######--------------]
+CRITICAL       0              0.0%         [--------------------]
+FATAL          7              1.5%         [--------------------]
+WARN           224            47.3%        [#########-----------]
 --------------------------------------------------------------------------------
 Note: The sum of individual keyword counts may exceed total error lines because
       a single log entry can contain multiple keywords (e.g. &#39;ERROR: failed...&#39;).
@@ -470,26 +471,31 @@ Note: The sum of individual keyword counts may exceed total error lines because
 --------------------------------------------------------------------------------
 COUNT        | ERROR ENTRY PATTERN
 --------------------------------------------------------------------------------
-1            | Sep 23 10:06:20 host app: FATAL: service crashed unexpectedly
-1            | Sep 23 10:05:59 host app: ERROR: authentication failed for user admin
-1            | Sep 23 10:03:44 host app: CRITICAL: disk write failure on /dev/sdb1
-1            | Sep 23 10:02:03 host app: WARNING: low memory detected
-1            | Sep 23 10:01:15 host app: ERROR: failed to connect to database
+1            | 2026-09-24T12:34:33.392782+05:30 SP wsl-pro-service[4368]: #033[33mWARNING#033[0m Exiting after &lt;nil&gt;: check if the Windows agent is installed and running.
+1            | 2026-09-24T12:34:33.391070+05:30 SP wsl-pro-service[4368]: message repeated 16 times: [ #033[33mWARNING#033[0m Daemon: could not connect to Windows Agent: could not get address: could not read agent port file &quot;/mnt/c/Users/panka/.ubuntupro/.address&quot;: open /mnt/c/Users/panka/.ubuntupro/.address: no such file or directory]
+1            | 2026-09-24T12:23:29.400527+05:30 SP wsl-pro-service[4368]: #033[33mWARNING#033[0m Daemon: could not connect to Windows Agent: could not get address: could not read agent port file &quot;/mnt/c/Users/panka/.ubuntupro/.address&quot;: open /mnt/c/Users/panka/.ubuntupro/.address: no such file or directory]
+1            | 2026-09-24T12:03:25.135402+05:30 SP wsl-pro-service[1986]: #033[33mWARNING#033[0m Exiting after &lt;nil&gt;: check if the Windows agent is installed and running.
+1            | 2026-09-24T12:03:25.133583+05:30 SP wsl-pro-service[1986]: message repeated 16 times: [ #033[33mWARNING#033[0m Daemon: could not connect to Windows Agent: could not get address: could not read agent port file &quot;/mnt/c/Users/panka/.ubuntupro/.address&quot;: open /mnt/c/Users/panka/.ubuntupro/.address: no such file or directory]
 
 [+] SECTION 4: 10 MOST RECENT MATCHING LINES (CHRONOLOGICAL)
 --------------------------------------------------------------------------------
 ORIG LINE  | LOG ENTRY CONTENT
 --------------------------------------------------------------------------------
-Line 2     | Sep 23 10:01:15 host app: ERROR: failed to connect to database
-Line 3     | Sep 23 10:02:03 host app: WARNING: low memory detected
-Line 4     | Sep 23 10:03:44 host app: CRITICAL: disk write failure on /dev/sdb1
-Line 6     | Sep 23 10:05:59 host app: ERROR: authentication failed for user admin
-Line 7     | Sep 23 10:06:20 host app: FATAL: service crashed unexpectedly
+Line 7558  | 2026-09-24T11:29:19.157516+05:30 SP wsl-pro-service[198]: message repeated 2 times: [ #033[33mWARNING#033[0m Daemon: could not connect to Windows Agent: could not get address: could not read agent port file &quot;/mnt/c/Users/panka/.ubuntupro/.address&quot;: open /mnt/c/Users/panka/.ubuntupro/.address: no such file or directory]
+Line 7561  | 2026-09-24T11:30:19.220447+05:30 SP wsl-pro-service[198]: #033[33mWARNING#033[0m Daemon: could not connect to Windows Agent: could not get address: could not read agent port file &quot;/mnt/c/Users/panka/.ubuntupro/.address&quot;: open /mnt/c/Users/panka/.ubuntupro/.address: no such file or directory]
+Line 7562  | 2026-09-24T11:32:19.293617+05:30 SP wsl-pro-service[198]: message repeated 2 times: [ #033[33mWARNING#033[0m Daemon: could not connect to Windows Agent: could not get address: could not read agent port file &quot;/mnt/c/Users/panka/.ubuntupro/.address&quot;: open /mnt/c/Users/panka/.ubuntupro/.address: no such file or directory]
+Line 7563  | 2026-09-24T11:32:19.391060+05:30 SP wsl-pro-service[198]: #033[33mWARNING#033[0m Exiting after &lt;nil&gt;: check if the Windows agent is installed and running.
+Line 7592  | 2026-09-24T11:52:21.540010+05:30 SP wsl-pro-service[1986]: #033[33mWARNING#033[0m Daemon: could not connect to Windows Agent: could not get address: could not read agent port file &quot;/mnt/c/Users/panka/.ubuntupro/.address&quot;: open /mnt/c/Users/panka/.ubuntupro/.address: no such file or directory]
+Line 7593  | 2026-09-24T12:03:25.133583+05:30 SP wsl-pro-service[1986]: message repeated 16 times: [ #033[33mWARNING#033[0m Daemon: could not connect to Windows Agent: could not get address: could not read agent port file &quot;/mnt/c/Users/panka/.ubuntupro/.address&quot;: open /mnt/c/Users/panka/.ubuntupro/.address: no such file or directory]
+Line 7594  | 2026-09-24T12:03:25.135402+05:30 SP wsl-pro-service[1986]: #033[33mWARNING#033[0m Exiting after &lt;nil&gt;: check if the Windows agent is installed and running.
+Line 7606  | 2026-09-24T12:23:29.400527+05:30 SP wsl-pro-service[4368]: #033[33mWARNING#033[0m Daemon: could not connect to Windows Agent: could not get address: could not read agent port file &quot;/mnt/c/Users/panka/.ubuntupro/.address&quot;: open /mnt/c/Users/panka/.ubuntupro/.address: no such file or directory]
+Line 7608  | 2026-09-24T12:34:33.391070+05:30 SP wsl-pro-service[4368]: message repeated 16 times: [ #033[33mWARNING#033[0m Daemon: could not connect to Windows Agent: could not get address: could not read agent port file &quot;/mnt/c/Users/panka/.ubuntupro/.address&quot;: open /mnt/c/Users/panka/.ubuntupro/.address: no such file or directory]
+Line 7609  | 2026-09-24T12:34:33.392782+05:30 SP wsl-pro-service[4368]: #033[33mWARNING#033[0m Exiting after &lt;nil&gt;: check if the Windows agent is installed and running.
 ================================================================================
                           END OF ERROR LOG REPORT
 ================================================================================
 
-[INFO] Persistent report successfully written to: reports/error_report_20260924_112512.log</pre></div>
+[INFO] Persistent report successfully written to: reports/error_report_20260924_124657.log</pre></div>
       </details>
     </section>
 

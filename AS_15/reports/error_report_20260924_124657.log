@@ -1,0 +1,57 @@
+================================================================================
+                       SYSTEM LOG ERROR ANALYSIS REPORT
+================================================================================
+Generated On       : 2026-09-24 12:46:57 IST
+Target Log File    : /var/log/syslog
+Log Source Type    : real system log (/var/log/syslog)
+Log File Size      : 937950 bytes
+Total Log Entries  : 7611
+Monitored Keywords : error fail critical fatal warn
+================================================================================
+
+[+] SECTION 1: EXECUTIVE SUMMARY
+--------------------------------------------------------------------------------
+Status                  : [ALERT] Errors/Warnings detected!
+Total Lines Analyzed    : 7611
+Matching Error Entries  : 474 (6.23% of total entries)
+
+[+] SECTION 2: SEVERITY & KEYWORD BREAKDOWN
+--------------------------------------------------------------------------------
+KEYWORD        MATCHING LINES SHARE (%)    DISTRIBUTION            
+--------------------------------------------------------------------------------
+ERROR          171            36.1%        [#######-------------]
+FAIL           158            33.3%        [######--------------]
+CRITICAL       0              0.0%         [--------------------]
+FATAL          7              1.5%         [--------------------]
+WARN           224            47.3%        [#########-----------]
+--------------------------------------------------------------------------------
+Note: The sum of individual keyword counts may exceed total error lines because
+      a single log entry can contain multiple keywords (e.g. 'ERROR: failed...').
+
+[+] SECTION 3: FREQUENCY OF RECURRING ERROR PATTERNS
+--------------------------------------------------------------------------------
+COUNT        | ERROR ENTRY PATTERN
+--------------------------------------------------------------------------------
+1            | 2026-09-24T12:34:33.392782+05:30 SP wsl-pro-service[4368]: #033[33mWARNING#033[0m Exiting after <nil>: check if the Windows agent is installed and running.
+1            | 2026-09-24T12:34:33.391070+05:30 SP wsl-pro-service[4368]: message repeated 16 times: [ #033[33mWARNING#033[0m Daemon: could not connect to Windows Agent: could not get address: could not read agent port file "/mnt/c/Users/panka/.ubuntupro/.address": open /mnt/c/Users/panka/.ubuntupro/.address: no such file or directory]
+1            | 2026-09-24T12:23:29.400527+05:30 SP wsl-pro-service[4368]: #033[33mWARNING#033[0m Daemon: could not connect to Windows Agent: could not get address: could not read agent port file "/mnt/c/Users/panka/.ubuntupro/.address": open /mnt/c/Users/panka/.ubuntupro/.address: no such file or directory
+1            | 2026-09-24T12:03:25.135402+05:30 SP wsl-pro-service[1986]: #033[33mWARNING#033[0m Exiting after <nil>: check if the Windows agent is installed and running.
+1            | 2026-09-24T12:03:25.133583+05:30 SP wsl-pro-service[1986]: message repeated 16 times: [ #033[33mWARNING#033[0m Daemon: could not connect to Windows Agent: could not get address: could not read agent port file "/mnt/c/Users/panka/.ubuntupro/.address": open /mnt/c/Users/panka/.ubuntupro/.address: no such file or directory]
+
+[+] SECTION 4: 10 MOST RECENT MATCHING LINES (CHRONOLOGICAL)
+--------------------------------------------------------------------------------
+ORIG LINE  | LOG ENTRY CONTENT
+--------------------------------------------------------------------------------
+Line 7558  | 2026-09-24T11:29:19.157516+05:30 SP wsl-pro-service[198]: message repeated 2 times: [ #033[33mWARNING#033[0m Daemon: could not connect to Windows Agent: could not get address: could not read agent port file "/mnt/c/Users/panka/.ubuntupro/.address": open /mnt/c/Users/panka/.ubuntupro/.address: no such file or directory]
+Line 7561  | 2026-09-24T11:30:19.220447+05:30 SP wsl-pro-service[198]: #033[33mWARNING#033[0m Daemon: could not connect to Windows Agent: could not get address: could not read agent port file "/mnt/c/Users/panka/.ubuntupro/.address": open /mnt/c/Users/panka/.ubuntupro/.address: no such file or directory
+Line 7562  | 2026-09-24T11:32:19.293617+05:30 SP wsl-pro-service[198]: message repeated 2 times: [ #033[33mWARNING#033[0m Daemon: could not connect to Windows Agent: could not get address: could not read agent port file "/mnt/c/Users/panka/.ubuntupro/.address": open /mnt/c/Users/panka/.ubuntupro/.address: no such file or directory]
+Line 7563  | 2026-09-24T11:32:19.391060+05:30 SP wsl-pro-service[198]: #033[33mWARNING#033[0m Exiting after <nil>: check if the Windows agent is installed and running.
+Line 7592  | 2026-09-24T11:52:21.540010+05:30 SP wsl-pro-service[1986]: #033[33mWARNING#033[0m Daemon: could not connect to Windows Agent: could not get address: could not read agent port file "/mnt/c/Users/panka/.ubuntupro/.address": open /mnt/c/Users/panka/.ubuntupro/.address: no such file or directory
+Line 7593  | 2026-09-24T12:03:25.133583+05:30 SP wsl-pro-service[1986]: message repeated 16 times: [ #033[33mWARNING#033[0m Daemon: could not connect to Windows Agent: could not get address: could not read agent port file "/mnt/c/Users/panka/.ubuntupro/.address": open /mnt/c/Users/panka/.ubuntupro/.address: no such file or directory]
+Line 7594  | 2026-09-24T12:03:25.135402+05:30 SP wsl-pro-service[1986]: #033[33mWARNING#033[0m Exiting after <nil>: check if the Windows agent is installed and running.
+Line 7606  | 2026-09-24T12:23:29.400527+05:30 SP wsl-pro-service[4368]: #033[33mWARNING#033[0m Daemon: could not connect to Windows Agent: could not get address: could not read agent port file "/mnt/c/Users/panka/.ubuntupro/.address": open /mnt/c/Users/panka/.ubuntupro/.address: no such file or directory
+Line 7608  | 2026-09-24T12:34:33.391070+05:30 SP wsl-pro-service[4368]: message repeated 16 times: [ #033[33mWARNING#033[0m Daemon: could not connect to Windows Agent: could not get address: could not read agent port file "/mnt/c/Users/panka/.ubuntupro/.address": open /mnt/c/Users/panka/.ubuntupro/.address: no such file or directory]
+Line 7609  | 2026-09-24T12:34:33.392782+05:30 SP wsl-pro-service[4368]: #033[33mWARNING#033[0m Exiting after <nil>: check if the Windows agent is installed and running.
+================================================================================
+                          END OF ERROR LOG REPORT
+================================================================================

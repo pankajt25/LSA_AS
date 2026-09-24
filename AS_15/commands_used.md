@@ -38,6 +38,10 @@ Every command executed during the development, testing, and verification of `err
 | 24 | `git add AS_15/` | Staged all AS_15 solution files, reports, logs, and documentation for commit. |
 | 25 | `git commit -m "..."` | Committed AS_15 solution with descriptive message. |
 | 26 | `git push origin main` | Pushed committed changes to GitHub remote repository (`origin/main`). |
+| 27 | `ls -la /var/log/syslog /var/log/dpkg.log /var/log/apt/history.log` | Checked accessible real system logs to determine the live system log source on this host. |
+| 28 | `awk 'NR<=5'` (SIGPIPE fix) | Replaced `head -n 5` in the frequency pipeline to consume input cleanly without closing pipes early and throwing SIGPIPE (141) under `set -o pipefail`. |
+| 29 | `./error_log_report.sh` | Verified auto-detection against real live system log (`/var/log/syslog`, 7611 lines, 474 matching error/warning events). |
+| 30 | `./error_log_report.sh ./sample_syslog.log` | Verified fallback execution against synthetic demonstration data with clear labeling. |
 
 ---
 

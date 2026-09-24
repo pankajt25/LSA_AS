@@ -23,6 +23,9 @@
 | 14 | `touch ~/sprint-sandbox/empty_auth.log && ~/sprint-sandbox/suspicious_ip_detector.sh ~/sprint-sandbox/empty_auth.log` | Validates that empty log files are handled gracefully with a warning rather than failing silently or crashing. |
 | 15 | `~/sprint-sandbox/suspicious_ip_detector.sh ~/sprint-sandbox/test_auth.log abc` | Validates threshold input sanitization, rejecting non-integer values with an error message and exit code 1. |
 | 16 | `~/sprint-sandbox/suspicious_ip_detector.sh --help` | Tests the help flag (`-h` / `--help`) to verify clear usage instructions and syntax display. |
+| 17 | `ls -la /var/log/auth.log /var/log/secure` | Inspects real system authentication logs on the host to determine the active auth log source. |
+| 18 | `./suspicious_ip_detector.sh` | Executes detector with auto-detection; dynamically selects `/var/log/auth.log` and verifies clean status. |
+| 19 | `./suspicious_ip_detector.sh ./test_auth.log 5` | Executes detector with explicit override against synthetic test data labeled as demonstration fallback. |
 
 ---
 

@@ -1,0 +1,10 @@
+================================================================================
+           SUSPICIOUS IP DETECTION REPORT - SSH SECURITY MONITOR
+================================================================================
+Generated At : 2026-09-24 12:39:01 IST
+Log File     : /var/log/auth.log
+Log Source   : real system authentication log (/var/log/auth.log)
+Threshold    : 5 failed attempts
+Result       : No suspicious IP activity found in the current system logs.
+Status       : Clean (0 threats detected)
+================================================================================

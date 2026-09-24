@@ -12,18 +12,23 @@
 #
 #   Arguments:
 #     LOG_FILE_PATH (Optional) : Path to the target log file to inspect.
-#                                Defaults to 'sample_syslog.log' inside the
-#                                project sandbox directory if omitted.
+#                                If omitted, auto-detects real system log in priority:
+#                                  1. /var/log/syslog (Standard system log)
+#                                  2. /var/log/dpkg.log (Package manager log)
+#                                  3. /var/log/apt/history.log (APT transaction log)
+#                                  4. journalctl --no-pager (Systemd journal)
+#                                Fallback: sample_syslog.log (clearly labeled as
+#                                synthetic demonstration data).
 #
 #   Example Invocations:
-#     # 1. Run using default sandboxed sample log:
+#     # 1. Run using auto-detected real system log:
 #     ./error_log_report.sh
 #
-#     # 2. Run with explicit log path:
-#     ./error_log_report.sh ./sample_syslog.log
+#     # 2. Run with explicit log path override:
+#     ./error_log_report.sh /var/log/syslog
 #
-#     # 3. Run with custom application log:
-#     ./error_log_report.sh /path/to/custom_application.log
+#     # 3. Run with synthetic demonstration log:
+#     ./error_log_report.sh ./sample_syslog.log
 #
 #     # 4. Display help manual:
 #     ./error_log_report.sh --help
@@ -44,9 +49,8 @@ set -euo pipefail
 # work predictably regardless of the user's current working directory (CWD).
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Sandboxed default target log file.
-# WHY: Prevents unintended modification or dependence on real system logs (/var/log/*).
-DEFAULT_LOG_FILE="${SCRIPT_DIR}/sample_syslog.log"
+# Synthetic demonstration fallback target log file.
+SYNTHETIC_LOG_FILE="${SCRIPT_DIR}/sample_syslog.log"
 
 # Directory dedicated to persisting generated reports.
 REPORTS_DIR="${SCRIPT_DIR}/reports"
@@ -62,12 +66,73 @@ KEYWORDS=("error" "fail" "critical" "fatal" "warn")
 # grep pass, minimizing disk I/O and process spawning overhead.
 KEYWORD_REGEX=$(IFS="|"; echo "${KEYWORDS[*]}")
 
-# Parse command-line argument ($1). If not supplied, fallback to DEFAULT_LOG_FILE.
-TARGET_LOG="${1:-$DEFAULT_LOG_FILE}"
-
 # ------------------------------------------------------------------------------
 # HELPER FUNCTIONS
 # ------------------------------------------------------------------------------
+
+# Function: detect_system_log_source
+# Purpose : Auto-detect the primary accessible real system log in priority order:
+#           1. /var/log/syslog (Standard system log on Debian/Ubuntu)
+#           2. /var/log/dpkg.log (Package manager log on Debian/Ubuntu)
+#           3. /var/log/apt/history.log (APT transaction log)
+#           4. journalctl --no-pager (Systemd journal output)
+#           Fallback: synthetic sample log (sample_syslog.log) clearly labeled.
+detect_system_log_source() {
+    # 1. /var/log/syslog
+    if [[ -f "/var/log/syslog" && -r "/var/log/syslog" ]]; then
+        echo "/var/log/syslog"
+        return 0
+    fi
+
+    # 2. /var/log/dpkg.log
+    if [[ -f "/var/log/dpkg.log" && -r "/var/log/dpkg.log" ]]; then
+        echo "/var/log/dpkg.log"
+        return 0
+    fi
+
+    # 3. /var/log/apt/history.log
+    if [[ -f "/var/log/apt/history.log" && -r "/var/log/apt/history.log" ]]; then
+        echo "/var/log/apt/history.log"
+        return 0
+    fi
+
+    # 4. journalctl --no-pager
+    if command -v journalctl >/dev/null 2>&1; then
+        local j_entries
+        j_entries="$(journalctl --no-pager -n 1 2>/dev/null || true)"
+        if [[ -n "${j_entries}" && "${j_entries}" != *"-- No entries --"* ]]; then
+            local jtmp
+            jtmp="$(mktemp /tmp/journal_system_XXXXXX.log)"
+            journalctl --no-pager > "${jtmp}" 2>/dev/null || true
+            echo "${jtmp}"
+            return 0
+        fi
+    fi
+
+    # 5. Fallback to synthetic sample log
+    if [[ -f "${SYNTHETIC_LOG_FILE}" ]]; then
+        echo "${SYNTHETIC_LOG_FILE}"
+        return 0
+    fi
+
+    echo ""
+    return 1
+}
+
+# Function: get_source_label
+# Purpose : Determine whether the log source is live system data or fallback
+get_source_label() {
+    local target="$1"
+    if [[ "${target}" == "${SYNTHETIC_LOG_FILE}" || "${target}" == *"sample_syslog.log"* ]]; then
+        echo "synthetic demonstration data — no real log was available on this system"
+    elif [[ "${target}" == "/tmp/journal_system_"* ]]; then
+        echo "real system journald log (journalctl)"
+    elif [[ "${target}" == "/var/log/"* ]]; then
+        echo "real system log (${target})"
+    else
+        echo "custom log source (${target})"
+    fi
+}
 
 # Function: show_help
 # Purpose : Display command usage syntax, argument options, and examples.
@@ -78,7 +143,13 @@ Usage: $(basename "$0") [LOG_FILE_PATH]
 Analyze a Linux log file to extract and summarize error-relevant events.
 
 ARGUMENTS:
-  LOG_FILE_PATH    Path to the log file to analyze (default: sample_syslog.log).
+  LOG_FILE_PATH    Path to the log file to analyze. If omitted, auto-detects
+                   live system logs in priority order:
+                     1. /var/log/syslog
+                     2. /var/log/dpkg.log
+                     3. /var/log/apt/history.log
+                     4. journalctl --no-pager
+                   Fallback: sample_syslog.log (synthetic demonstration data).
 
 OPTIONS:
   -h, --help       Display this help documentation and exit.
@@ -150,6 +221,9 @@ generate_report() {
     local timestamp
     timestamp="$(date '+%Y-%m-%d %H:%M:%S %Z')"
 
+    local source_label
+    source_label="$(get_source_label "${file}")"
+
     # 1. Total lines in the target log file using 'wc -l'
     # WHY: Provides baseline scale to calculate the error proportion.
     local total_log_lines
@@ -174,6 +248,7 @@ generate_report() {
     echo "================================================================================"
     echo "Generated On       : ${timestamp}"
     echo "Target Log File    : ${file}"
+    echo "Log Source Type    : ${source_label}"
     echo "Log File Size      : $(wc -c < "${file}") bytes"
     echo "Total Log Entries  : ${total_log_lines}"
     echo "Monitored Keywords : ${KEYWORDS[*]}"
@@ -239,14 +314,14 @@ generate_report() {
 
     # Section 3: Recurring Error Patterns / Frequency Ranking
     # WHY: Groups and counts identical or repeated error messages using
-    # a classic Unix pipeline: sort -> uniq -c -> sort -rn.
-    # This helps administrators spot runaway loops, repeated authentication failures,
-    # or spammy error signatures immediately.
+    # sort -> uniq -c -> sort -rn -> awk 'NR<=5'.
+    # Using awk instead of head avoids triggering SIGPIPE (exit code 141) under 'set -o pipefail'
+    # when processing large system logs.
     echo "[+] SECTION 3: FREQUENCY OF RECURRING ERROR PATTERNS"
     echo "--------------------------------------------------------------------------------"
     printf "%-12s | %s\n" "COUNT" "ERROR ENTRY PATTERN"
     echo "--------------------------------------------------------------------------------"
-    echo "${matched_lines}" | sort | uniq -c | sort -rn | head -n 5 | while read -r count pattern; do
+    echo "${matched_lines}" | sort | uniq -c | sort -rn | awk 'NR<=5' | while read -r count pattern; do
         printf "%-12s | %s\n" "${count}" "${pattern}"
     done
     echo ""
@@ -272,15 +347,24 @@ generate_report() {
 # ------------------------------------------------------------------------------
 main() {
     # Check if user requested help flags
-    if [[ "${TARGET_LOG}" == "-h" || "${TARGET_LOG}" == "--help" ]]; then
+    if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
         show_help
         exit 0
     fi
 
-    # Validate target log file
-    validate_log_file "${TARGET_LOG}"
+    # Determine target log: user override argument or auto-detect real source
+    local target_log="${1:-}"
+    if [[ -z "${target_log}" ]]; then
+        target_log="$(detect_system_log_source)"
+    fi
 
-    # Ensure reports directory exists inside project sandbox
+    # Set trap to clean up any temporary journald output file
+    trap '[[ -n "${target_log:-}" && "${target_log}" == /tmp/journal_* ]] && rm -f "${target_log}"' EXIT
+
+    # Validate target log file
+    validate_log_file "${target_log}"
+
+    # Ensure reports directory exists inside project directory
     mkdir -p "${REPORTS_DIR}"
 
     # Generate timestamped report filename (e.g. reports/error_report_20260923_114500.log)
@@ -289,9 +373,7 @@ main() {
     local report_file="${REPORTS_DIR}/error_report_${report_timestamp}.log"
 
     # Execute report generation, mirroring output to console AND saving to report file
-    # WHY: 'tee' provides immediate visibility on stdout while atomically persisting
-    # an immutable audit trail file inside the sandbox.
-    generate_report "${TARGET_LOG}" | tee "${report_file}"
+    generate_report "${target_log}" | tee "${report_file}"
 
     echo ""
     echo "[INFO] Persistent report successfully written to: ${report_file}"

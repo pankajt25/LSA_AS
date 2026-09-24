@@ -14,27 +14,31 @@
 #
 # Arguments:
 #   LOG_FILE   (Optional) Path to the SSH authentication log file to analyze.
-#              Defaults to: ~/sprint-sandbox/test_auth.log
+#              Defaults to auto-detecting real system logs:
+#                1. /var/log/auth.log
+#                2. /var/log/secure
+#                3. journalctl -u ssh / journalctl _COMM=sshd
+#              Fallback: synthetic test log (test_auth.log) clearly labeled.
 #   THRESHOLD  (Optional) Integer threshold of failed attempts required to
 #              flag an IP as suspicious.
 #              Defaults to: 5
 #
 # Examples:
-#   1. Run with default sandbox log and default threshold (5):
-#      ~/sprint-sandbox/suspicious_ip_detector.sh
+#   1. Run with auto-detected real system log and default threshold (5):
+#      ./suspicious_ip_detector.sh
 #
-#   2. Run with custom log file and default threshold:
-#      ~/sprint-sandbox/suspicious_ip_detector.sh ~/sprint-sandbox/test_auth.log
+#   2. Run with auto-detected real log and custom threshold (e.g. 3 attempts):
+#      ./suspicious_ip_detector.sh 3
 #
-#   3. Run with custom log file and custom threshold (e.g., 3 failed attempts):
-#      ~/sprint-sandbox/suspicious_ip_detector.sh ~/sprint-sandbox/test_auth.log 3
+#   3. Run with custom log file override and custom threshold:
+#      ./suspicious_ip_detector.sh ./test_auth.log 3
 #
 #   4. Display help information:
-#      ~/sprint-sandbox/suspicious_ip_detector.sh --help
+#      ./suspicious_ip_detector.sh --help
 #
 # Outputs:
 #   - Terminal: Formatted summary table of suspicious IPs with timestamps.
-#   - Report File: Timestamped log saved to ~/sprint-sandbox/reports/
+#   - Report File: Timestamped log saved to ./reports/
 # ==============================================================================
 
 # Exit immediately if a pipeline command returns a non-zero status,
@@ -44,10 +48,11 @@ set -euo pipefail
 # ------------------------------------------------------------------------------
 # CONSTANTS AND DEFAULT CONFIGURATION
 # ------------------------------------------------------------------------------
-readonly SANDBOX_DIR="${HOME}/sprint-sandbox"
-readonly DEFAULT_LOG="${SANDBOX_DIR}/test_auth.log"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+readonly SCRIPT_DIR
+readonly SYNTHETIC_LOG="${SCRIPT_DIR}/test_auth.log"
 readonly DEFAULT_THRESHOLD=5
-readonly REPORT_DIR="${SANDBOX_DIR}/reports"
+readonly REPORT_DIR="${SCRIPT_DIR}/reports"
 
 # Generate ISO-style timestamp for report file naming
 REPORT_TIMESTAMP="$(date '+%Y%m%d_%H%M%S')"
@@ -79,22 +84,99 @@ fi
 display_usage() {
     cat << EOF
 Usage: $(basename "$0") [LOG_FILE] [THRESHOLD]
+       $(basename "$0") [THRESHOLD]
 
 Automated SSH Log Security Monitor - Suspicious IP Detection
 
 Arguments:
-  LOG_FILE     Path to SSH auth log (default: ${DEFAULT_LOG})
+  LOG_FILE     Path to SSH auth log (auto-detected if omitted:
+                 1. /var/log/auth.log
+                 2. /var/log/secure
+                 3. journalctl -u ssh / journalctl _COMM=sshd
+                 Fallback: ${SYNTHETIC_LOG} [synthetic demonstration data])
   THRESHOLD    Minimum failed attempts to flag as suspicious (default: ${DEFAULT_THRESHOLD})
 
 Options:
   -h, --help   Show this help message and exit
 
 Examples:
-  $(basename "$0")
-  $(basename "$0") ${DEFAULT_LOG} 3
-  $(basename "$0") /var/log/auth.log 10 (read-only mode)
+  $(basename "$0")                          # Auto-detects real auth log and uses threshold ${DEFAULT_THRESHOLD}
+  $(basename "$0") 3                        # Auto-detects real auth log with custom threshold 3
+  $(basename "$0") /var/log/auth.log 5      # Explicit real log override with threshold 5
+  $(basename "$0") ${SYNTHETIC_LOG} 5       # Run against synthetic test log
 
 EOF
+}
+
+# ------------------------------------------------------------------------------
+# FUNCTION: detect_auth_log_source
+# Description: Auto-detects the first accessible real SSH auth log source in order:
+#              1. /var/log/auth.log (Debian/Ubuntu)
+#              2. /var/log/secure (RHEL/CentOS/Rocky/Fedora)
+#              3. journalctl -u ssh / journalctl _COMM=sshd (systemd journal)
+#              Fallback: synthetic test_auth.log with clear notification
+# ------------------------------------------------------------------------------
+detect_auth_log_source() {
+    # 1. Standard Debian/Ubuntu auth log
+    if [[ -f "/var/log/auth.log" && -r "/var/log/auth.log" ]]; then
+        echo "/var/log/auth.log"
+        return 0
+    fi
+
+    # 2. Standard RHEL/CentOS secure log
+    if [[ -f "/var/log/secure" && -r "/var/log/secure" ]]; then
+        echo "/var/log/secure"
+        return 0
+    fi
+
+    # 3. Systemd journald for ssh/sshd service units
+    if command -v journalctl >/dev/null 2>&1; then
+        local j_ssh
+        j_ssh="$(journalctl -u ssh --no-pager -n 1 2>/dev/null || true)"
+        if [[ -n "${j_ssh}" && "${j_ssh}" != *"-- No entries --"* ]]; then
+            local jtmp
+            jtmp="$(mktemp /tmp/journal_ssh_XXXXXX.log)"
+            journalctl -u ssh --no-pager > "${jtmp}" 2>/dev/null || true
+            echo "${jtmp}"
+            return 0
+        fi
+
+        local j_sshd
+        j_sshd="$(journalctl _COMM=sshd --no-pager -n 1 2>/dev/null || true)"
+        if [[ -n "${j_sshd}" && "${j_sshd}" != *"-- No entries --"* ]]; then
+            local jtmp
+            jtmp="$(mktemp /tmp/journal_sshd_XXXXXX.log)"
+            journalctl _COMM=sshd --no-pager > "${jtmp}" 2>/dev/null || true
+            echo "${jtmp}"
+            return 0
+        fi
+    fi
+
+    # 4. Fallback to synthetic demonstration log
+    if [[ -f "${SYNTHETIC_LOG}" ]]; then
+        echo "${SYNTHETIC_LOG}"
+        return 0
+    fi
+
+    echo ""
+    return 1
+}
+
+# ------------------------------------------------------------------------------
+# FUNCTION: get_source_label
+# Description: Determines whether the log file is real system data or fallback
+# ------------------------------------------------------------------------------
+get_source_label() {
+    local target="$1"
+    if [[ "${target}" == "${SYNTHETIC_LOG}" || "${target}" == *"test_auth.log"* ]]; then
+        echo "synthetic demonstration data — no real auth log was available on this system"
+    elif [[ "${target}" == "/tmp/journal_ssh_"* || "${target}" == "/tmp/journal_sshd_"* ]]; then
+        echo "real system journald log (journalctl)"
+    elif [[ "${target}" == "/var/log/auth.log" || "${target}" == "/var/log/secure" ]]; then
+        echo "real system authentication log (${target})"
+    else
+        echo "custom log source (${target})"
+    fi
 }
 
 # ------------------------------------------------------------------------------
@@ -107,6 +189,13 @@ EOF
 validate_inputs() {
     local target_log="$1"
     local threshold_val="$2"
+
+    # Check 0: Was a log file resolved?
+    if [[ -z "${target_log}" ]]; then
+        echo -e "${COLOR_RED}[ERROR] No log file specified and no accessible authentication log could be detected.${COLOR_RESET}" >&2
+        echo "Please provide a valid file path or ensure read permissions on /var/log/auth.log." >&2
+        exit 1
+    fi
 
     # Check 1: Does the specified log file exist?
     if [[ ! -e "${target_log}" ]]; then
@@ -195,13 +284,17 @@ analyze_ssh_log() {
     local target_log="$1"
     local threshold="$2"
 
-    # Ensure destination report directory exists inside the sandbox
+    # Ensure destination report directory exists inside the project
     mkdir -p "${REPORT_DIR}"
+
+    local source_label
+    source_label="$(get_source_label "${target_log}")"
 
     echo -e "${COLOR_CYAN}================================================================================${COLOR_RESET}"
     echo -e "${COLOR_BOLD}         SSH SECURITY MONITOR - SUSPICIOUS IP DETECTION ENGINE${COLOR_RESET}"
     echo -e "${COLOR_CYAN}================================================================================${COLOR_RESET}"
     echo -e " Target Log File : ${COLOR_BOLD}${target_log}${COLOR_RESET}"
+    echo -e " Log Source Type : ${COLOR_YELLOW}${source_label}${COLOR_RESET}"
     echo -e " Alert Threshold : ${COLOR_BOLD}${threshold}${COLOR_RESET} failed attempts"
     echo -e " Scan Started At : $(date '+%Y-%m-%d %H:%M:%S %Z')"
     echo -e "${COLOR_CYAN}--------------------------------------------------------------------------------${COLOR_RESET}"
@@ -242,7 +335,7 @@ analyze_ssh_log() {
 
     if [[ -z "${failed_lines}" ]]; then
         echo -e "${COLOR_GREEN}[RESULT] No failed SSH login attempts found in '${target_log}'.${COLOR_RESET}"
-        echo -e "${COLOR_GREEN}[STATUS] System is clean. No threats detected.${COLOR_RESET}"
+        echo -e "${COLOR_GREEN}[STATUS] No suspicious IP activity found in the current system logs.${COLOR_RESET}"
         
         # Log result to report file
         {
@@ -251,8 +344,10 @@ analyze_ssh_log() {
             echo "================================================================================"
             echo "Generated At : $(date '+%Y-%m-%d %H:%M:%S %Z')"
             echo "Log File     : ${target_log}"
-            echo "Threshold    : ${threshold}"
-            echo "Result       : No failed SSH login attempts found. No threats detected."
+            echo "Log Source   : ${source_label}"
+            echo "Threshold    : ${threshold} failed attempts"
+            echo "Result       : No suspicious IP activity found in the current system logs."
+            echo "Status       : Clean (0 threats detected)"
             echo "================================================================================"
         } > "${REPORT_FILE}"
         echo -e "${COLOR_BLUE}[INFO] Report written to: ${REPORT_FILE}${COLOR_RESET}"
@@ -280,6 +375,7 @@ analyze_ssh_log() {
         echo "================================================================================"
         echo "Generated At : $(date '+%Y-%m-%d %H:%M:%S %Z')"
         echo "Log File     : ${target_log}"
+        echo "Log Source   : ${source_label}"
         echo "Threshold    : ${threshold} failed attempts"
         echo "================================================================================"
         printf "%-18s | %-8s | %-19s | %-19s | %-12s\n" "IP ADDRESS" "ATTEMPTS" "FIRST SEEN" "LAST SEEN" "STATUS"
@@ -360,9 +456,24 @@ main() {
         exit 0
     fi
 
-    # Assign arguments or fallback to sandbox defaults
-    local target_log="${1:-${DEFAULT_LOG}}"
-    local threshold="${2:-${DEFAULT_THRESHOLD}}"
+    local target_log=""
+    local threshold="${DEFAULT_THRESHOLD}"
+
+    if [[ $# -ge 1 ]]; then
+        if [[ "$1" =~ ^[1-9][0-9]*$ && $# -eq 1 ]]; then
+            # User passed only threshold: auto-detect log source
+            threshold="$1"
+            target_log="$(detect_auth_log_source)"
+        else
+            target_log="$1"
+            threshold="${2:-${DEFAULT_THRESHOLD}}"
+        fi
+    else
+        target_log="$(detect_auth_log_source)"
+    fi
+
+    # Set trap to clean up temporary journal log files if used
+    trap '[[ -n "${target_log:-}" && "${target_log}" == /tmp/journal_* ]] && rm -f "${target_log}"' EXIT
 
     # Validate inputs before processing
     validate_inputs "${target_log}" "${threshold}"

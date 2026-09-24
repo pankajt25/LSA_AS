@@ -1,0 +1,17 @@
+================================================================================
+           SUSPICIOUS IP DETECTION REPORT - SSH SECURITY MONITOR
+================================================================================
+Generated At : 2026-09-24 12:39:25 IST
+Log File     : ./AS_14/test_auth.log
+Log Source   : synthetic demonstration data — no real auth log was available on this system
+Threshold    : 5 failed attempts
+================================================================================
+IP ADDRESS         | ATTEMPTS | FIRST SEEN          | LAST SEEN           | STATUS      
+-------------------+----------+---------------------+---------------------+-------------
+203.0.113.45       | 8        | Sep 23 00:10:01     | Sep 23 00:15:10     | FLAGGED     
+--------------------------------------------------------------------------------
+ALERT: Detected 1 suspicious IP(s) exceeding threshold (>= 5).
+Total Failed Login Events Scanned : 11
+Total Flagged Suspicious IP Count : 1
+Scan Completed At                 : 2026-09-24 12:39:26 IST
+================================================================================
