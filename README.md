@@ -129,6 +129,62 @@ Automate extraction, severity categorization, frequency ranking, and statistical
 </details>
 
 <details>
+<summary><strong>AS_16 — Service Availability Check</strong></summary>
+
+### Problem Statement
+Monitor the operational availability and boot persistence of critical Linux services. Disambiguate active, inactive, failed, and missing units across init systems, and generate structured audit reports.
+
+### Summary of Approach
+- **Init Subsystem Detection & Fallback:** Senses whether PID 1 is managed by systemd (`/run/systemd/system`), gracefully falling back to `/usr/sbin/service <service> status` and `/etc/init.d/` inspections in non-systemd environments (WSL 1, containers, legacy SysV).
+- **Defensive Unit State Disambiguation:** Evaluates `systemctl show -p LoadState` and `systemctl cat` to reliably distinguish between an inactive/stopped service and a completely nonexistent unit file.
+- **Independent Boot Persistence Verification:** Queries `systemctl is-enabled` separately from runtime active state to determine if a service will launch on boot (`enabled`, `disabled`, `masked`, or `static`).
+- **Structured Audit Logging:** Records every check invocation to `logs/service_check.log` with timestamp, init system, active status, boot persistence state, and exit code.
+- **Telemetry & Standards:** Supports `--json` flag for automated CI/CD and monitoring pipelines with standardized exit codes (0 = Active, 1 = Inactive, 2 = Not Found, 3 = Error).
+- **Interactive Dashboard:** Complete dark-themed HTML report (`report.html`) featuring color-coded status cards and an embedded toggleable audit log viewer.
+
+### Key Commands Used
+- `./service_availability_check.sh` — Inspect default active service (`cron`)
+- `./service_availability_check.sh rsync` — Inspect inactive/disabled service (exit code 1)
+- `./service_availability_check.sh apparmor` — Inspect enabled-but-inactive service (amber status card)
+- `./service_availability_check.sh not-a-real-service` — Detect nonexistent service (exit code 2)
+- `./service_availability_check.sh cron --report` — Generate and refresh standalone HTML dashboard (`report.html`)
+- `explorer.exe $(wslpath -w report.html)` — View standalone HTML dashboard in browser
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_16/report.html`](./AS_16/report.html)
+- 📖 **Sprint Documentation:** [`AS_16/README.md`](./AS_16/README.md)
+
+</details>
+
+<details>
+<summary><strong>AS_17 — Automatic Service Recovery</strong></summary>
+
+### Problem Statement
+Develop a script that checks a specified service and restarts it automatically if it is not running.
+
+### Summary of Approach
+- **Automated Health Probing:** Inspects target unit status via `systemctl is-active`, immediately exiting cleanly (exit code 0) if the service is already healthy.
+- **Automated Fault Remediation:** Intercepts dead, inactive, or failed services and triggers remediation restarts via `systemctl restart`, automatically elevating with `sudo` if run by an unprivileged user.
+- **Post-Restart Stabilization Window:** Enforces a 2-second stabilization delay (`sleep 2`) post-restart to allow background processes to initialize or report immediate startup failure.
+- **Post-Restart Verification:** Performs double verification by re-probing `systemctl is-active` post-restart rather than naively assuming command return codes indicate operational health.
+- **Graceful Error Handling:** Cleanly catches unrecoverable errors (e.g., nonexistent or broken unit files) with exit code 1 and diagnostic stderr reporting.
+- **Structured Audit Logging:** Logs every check and recovery event with timestamps, prior state, remedial action, and final state to `logs/recovery.log`.
+- **Safe Sandboxing & Before/After Dashboard:** Conducted strictly against a non-destructive unit (`dummy-test.service`), generating a standalone dark-themed HTML report comparing real before-and-after terminal states.
+
+### Key Commands Used
+- `./auto_service_recovery.sh` — Checks default target (`dummy-test`), confirms healthy state if active
+- `sudo systemctl stop dummy-test` — Simulates service outage for failure injection testing
+- `./auto_service_recovery.sh` — Detects inactive state, triggers restart, waits 2s, and verifies recovery
+- `./auto_service_recovery.sh nonexistent-service` — Tests error handling against invalid unit (exit code 1)
+- `explorer.exe $(wslpath -w report.html)` — View standalone HTML dashboard in browser
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_17/report.html`](./AS_17/report.html)
+- 📖 **Sprint Documentation:** [`AS_17/README.md`](./AS_17/README.md)
+
+</details>
+
+<details>
 <summary><strong>AS_18 — Server Process Check</strong></summary>
 
 ### Problem Statement
