@@ -61,6 +61,32 @@ LSA_AS/
 
 ---
 
+## ⚡ Commands to Execute (Run & View HTML Reports)
+
+Each project can be executed with a **single command** that automatically runs the automation script and immediately redirects/opens its interactive HTML report dashboard in your default browser. These commands natively support **Linux**, **macOS**, and **Windows** (WSL / Git Bash):
+
+### 🌐 Universal One-Line Execution Table (Cross-Platform)
+
+| Sprint | Project Title | Single Command to Execute & Open HTML Site (From Repo Root) |
+|---|---|---|
+| **AS_14** | Suspicious IP Detection | `cd AS_14 && ./suspicious_ip_detector.sh; { command -v xdg-open >/dev/null && xdg-open report.html; } \|\| { command -v open >/dev/null && open report.html; } \|\| explorer.exe $(wslpath -w report.html 2>/dev/null \|\| echo report.html) 2>/dev/null \|\| python3 -m webbrowser report.html` |
+| **AS_15** | Error Log Report | `cd AS_15 && ./error_log_report.sh; { command -v xdg-open >/dev/null && xdg-open report.html; } \|\| { command -v open >/dev/null && open report.html; } \|\| explorer.exe $(wslpath -w report.html 2>/dev/null \|\| echo report.html) 2>/dev/null \|\| python3 -m webbrowser report.html` |
+| **AS_16** | Service Availability Check | `cd AS_16 && ./service_availability_check.sh --report; { command -v xdg-open >/dev/null && xdg-open report.html; } \|\| { command -v open >/dev/null && open report.html; } \|\| explorer.exe $(wslpath -w report.html 2>/dev/null \|\| echo report.html) 2>/dev/null \|\| python3 -m webbrowser report.html` |
+| **AS_17** | Automatic Service Recovery | `cd AS_17 && ./auto_service_recovery.sh; { command -v xdg-open >/dev/null && xdg-open report.html; } \|\| { command -v open >/dev/null && open report.html; } \|\| explorer.exe $(wslpath -w report.html 2>/dev/null \|\| echo report.html) 2>/dev/null \|\| python3 -m webbrowser report.html` |
+| **AS_18** | Server Process Check | `cd AS_18 && ./server_process_check.sh --default; { command -v xdg-open >/dev/null && xdg-open report.html; } \|\| { command -v open >/dev/null && open report.html; } \|\| explorer.exe $(wslpath -w report.html 2>/dev/null \|\| echo report.html) 2>/dev/null \|\| python3 -m webbrowser report.html` |
+
+### 💻 Quick Command Reference by Operating System
+
+| Sprint | 🐧 Linux (`xdg-open`) | 🍎 macOS (`open`) | 🪟 Windows WSL (`explorer.exe`) | 🪟 Windows Git Bash (`start`) |
+|---|---|---|---|---|
+| **AS_14** | `cd AS_14 && ./suspicious_ip_detector.sh; xdg-open report.html` | `cd AS_14 && ./suspicious_ip_detector.sh; open report.html` | `cd AS_14 && ./suspicious_ip_detector.sh; explorer.exe $(wslpath -w report.html)` | `cd AS_14 && ./suspicious_ip_detector.sh; start report.html` |
+| **AS_15** | `cd AS_15 && ./error_log_report.sh; xdg-open report.html` | `cd AS_15 && ./error_log_report.sh; open report.html` | `cd AS_15 && ./error_log_report.sh; explorer.exe $(wslpath -w report.html)` | `cd AS_15 && ./error_log_report.sh; start report.html` |
+| **AS_16** | `cd AS_16 && ./service_availability_check.sh --report; xdg-open report.html` | `cd AS_16 && ./service_availability_check.sh --report; open report.html` | `cd AS_16 && ./service_availability_check.sh --report; explorer.exe $(wslpath -w report.html)` | `cd AS_16 && ./service_availability_check.sh --report; start report.html` |
+| **AS_17** | `cd AS_17 && ./auto_service_recovery.sh; xdg-open report.html` | `cd AS_17 && ./auto_service_recovery.sh; open report.html` | `cd AS_17 && ./auto_service_recovery.sh; explorer.exe $(wslpath -w report.html)` | `cd AS_17 && ./auto_service_recovery.sh; start report.html` |
+| **AS_18** | `cd AS_18 && ./server_process_check.sh --default; xdg-open report.html` | `cd AS_18 && ./server_process_check.sh --default; open report.html` | `cd AS_18 && ./server_process_check.sh --default; explorer.exe $(wslpath -w report.html)` | `cd AS_18 && ./server_process_check.sh --default; start report.html` |
+
+---
+
 ## 🔍 Sprint Deep Dives
 
 <details>
@@ -82,11 +108,11 @@ Detect suspicious IP addresses attempting brute-force attacks from SSH authentic
 - **Interactive Dashboard:** Complete dark-themed HTML report displaying live clean-state audit status and verification logs.
 
 ### Key Commands Used
+- `./suspicious_ip_detector.sh; { command -v xdg-open >/dev/null && xdg-open report.html; } || { command -v open >/dev/null && open report.html; } || explorer.exe $(wslpath -w report.html)` — Single command to execute script and open HTML report (Linux / macOS / Windows)
 - `./suspicious_ip_detector.sh` — Auto-detects real auth log (`/var/log/auth.log`) with default threshold (&ge; 5)
 - `./suspicious_ip_detector.sh 3` — Auto-detects real auth log with custom threshold (&ge; 3)
 - `./suspicious_ip_detector.sh ./test_auth.log 5` — Explicit override against synthetic test data labeled as demonstration fallback
 - `./suspicious_ip_detector.sh --help` — Displays command-line manual and option syntax
-- `explorer.exe $(wslpath -w report.html)` — View standalone HTML dashboard in browser
 
 ### Dashboard Report & Documentation
 - 📊 **Interactive Dashboard:** [`AS_14/report.html`](./AS_14/report.html)
@@ -115,11 +141,11 @@ Automate extraction, severity categorization, frequency ranking, and statistical
 - **Interactive Dashboard:** Complete dark-themed HTML report displaying real executive metrics, severity distribution, recurring patterns, and execution output.
 
 ### Key Commands Used
+- `./error_log_report.sh; { command -v xdg-open >/dev/null && xdg-open report.html; } || { command -v open >/dev/null && open report.html; } || explorer.exe $(wslpath -w report.html)` — Single command to execute analysis and open HTML report (Linux / macOS / Windows)
 - `./error_log_report.sh` — Auto-detects and analyzes live `/var/log/syslog`
 - `./error_log_report.sh /var/log/syslog` — Explicit override for system log inspection
 - `./error_log_report.sh ./sample_syslog.log` — Fallback run on labeled synthetic demonstration data
 - `./error_log_report.sh --help` — Displays command-line help manual
-- `explorer.exe $(wslpath -w report.html)` — View standalone HTML dashboard in browser
 
 ### Dashboard Report & Documentation
 - 📊 **Interactive Dashboard:** [`AS_15/report.html`](./AS_15/report.html)
@@ -143,12 +169,12 @@ Monitor the operational availability and boot persistence of critical Linux serv
 - **Interactive Dashboard:** Complete dark-themed HTML report (`report.html`) featuring color-coded status cards and an embedded toggleable audit log viewer.
 
 ### Key Commands Used
+- `./service_availability_check.sh --report; { command -v xdg-open >/dev/null && xdg-open report.html; } || { command -v open >/dev/null && open report.html; } || explorer.exe $(wslpath -w report.html)` — Single command to inspect service, update dashboard, and open HTML report (Linux / macOS / Windows)
 - `./service_availability_check.sh` — Inspect default active service (`cron`)
 - `./service_availability_check.sh rsync` — Inspect inactive/disabled service (exit code 1)
 - `./service_availability_check.sh apparmor` — Inspect enabled-but-inactive service (amber status card)
 - `./service_availability_check.sh not-a-real-service` — Detect nonexistent service (exit code 2)
 - `./service_availability_check.sh cron --report` — Generate and refresh standalone HTML dashboard (`report.html`)
-- `explorer.exe $(wslpath -w report.html)` — View standalone HTML dashboard in browser
 
 ### Dashboard Report & Documentation
 - 📊 **Interactive Dashboard:** [`AS_16/report.html`](./AS_16/report.html)
@@ -172,11 +198,11 @@ Develop a script that checks a specified service and restarts it automatically i
 - **Safe Sandboxing & Before/After Dashboard:** Conducted strictly against a non-destructive unit (`dummy-test.service`), generating a standalone dark-themed HTML report comparing real before-and-after terminal states.
 
 ### Key Commands Used
+- `./auto_service_recovery.sh; { command -v xdg-open >/dev/null && xdg-open report.html; } || { command -v open >/dev/null && open report.html; } || explorer.exe $(wslpath -w report.html)` — Single command to execute recovery monitor and open HTML report (Linux / macOS / Windows)
 - `./auto_service_recovery.sh` — Checks default target (`dummy-test`), confirms healthy state if active
 - `sudo systemctl stop dummy-test` — Simulates service outage for failure injection testing
 - `./auto_service_recovery.sh` — Detects inactive state, triggers restart, waits 2s, and verifies recovery
 - `./auto_service_recovery.sh nonexistent-service` — Tests error handling against invalid unit (exit code 1)
-- `explorer.exe $(wslpath -w report.html)` — View standalone HTML dashboard in browser
 
 ### Dashboard Report & Documentation
 - 📊 **Interactive Dashboard:** [`AS_17/report.html`](./AS_17/report.html)
@@ -199,11 +225,11 @@ An administrator wants to verify whether a particular application process is run
 - **Interactive Dashboard:** Complete dark-themed HTML report with color-coded test cards and log viewer.
 
 ### Key Commands Used
+- `./server_process_check.sh --default; { command -v xdg-open >/dev/null && xdg-open report.html; } || { command -v open >/dev/null && open report.html; } || explorer.exe $(wslpath -w report.html)` — Single command to inspect process and open HTML report (Linux / macOS / Windows)
 - `./server_process_check.sh bash` — Check running process (reports PIDs, instance count, and oldest uptime)
 - `./server_process_check.sh not-a-real-proc-xyz` — Check nonexistent process (reports stopped state, exit code 1)
 - `./server_process_check.sh` — Traps missing arguments with usage error (exit code 2)
 - `./server_process_check.sh -s BASH` — Strict case-sensitive match verification
-- `explorer.exe $(wslpath -w report.html)` — View standalone HTML dashboard in browser
 
 ### Dashboard Report & Documentation
 - 📊 **Interactive Dashboard:** [`AS_18/report.html`](./AS_18/report.html)

@@ -51,6 +51,35 @@ AS_16/
 
 ---
 
+## ⚡ Command to Execute
+
+Run this **single write command** in your terminal to execute the service check (generating/updating the dashboard) and automatically redirect/open the HTML report in your default browser. It supports **Windows**, **Linux**, and **macOS**:
+
+### 🌐 Universal One-Line Command (Cross-Platform)
+```bash
+./service_availability_check.sh --report; { command -v xdg-open >/dev/null && xdg-open report.html; } || { command -v open >/dev/null && open report.html; } || { command -v explorer.exe >/dev/null && explorer.exe $(wslpath -w report.html 2>/dev/null || echo report.html); } || python3 -m webbrowser report.html
+```
+
+> **How it works across platforms:**
+> - Executes `./service_availability_check.sh --report` (checks service status and refreshes `report.html`).
+> - Immediately launches and redirects to `report.html` in your default browser.
+> - Works automatically across **Linux** (`xdg-open`), **macOS** (`open`), **Windows WSL** (`explorer.exe`), **Git Bash**, and Python environments.
+
+### 💻 Single Command by Operating System
+
+| Operating System / Environment | Single Command to Execute & Open HTML Site |
+|---|---|
+| **🐧 Linux** (Ubuntu / Debian / Fedora / Arch) | `./service_availability_check.sh --report; xdg-open report.html` |
+| **🍎 macOS** | `./service_availability_check.sh --report; open report.html` |
+| **🪟 Windows (WSL)** | `./service_availability_check.sh --report; explorer.exe $(wslpath -w report.html)` |
+| **🪟 Windows (Git Bash)** | `./service_availability_check.sh --report; start report.html` |
+| **🪟 Windows (PowerShell)** | `bash ./service_availability_check.sh --report; Start-Process .\report.html` |
+| **🪟 Windows (CMD)** | `bash ./service_availability_check.sh --report && start report.html` |
+
+*(Note: If inspecting a specific service, replace `--report` with e.g. `cron --report` or `rsync --report`. From the repository root, prefix with `cd AS_16 && `)*
+
+---
+
 ## 🚀 Usage
 
 ### Syntax
@@ -138,13 +167,16 @@ The dashboard is generated with zero external dependencies and renders an execut
 
 ## Viewing the HTML Report
 
-1. The exact command to open `report.html` in the default Windows browser, run from inside WSL:
-   ```bash
-   explorer.exe $(wslpath -w report.html)
-   ```
+The report dashboard `report.html` is completely self-contained (inline CSS, zero external dependencies). You can open it across platforms using:
 
-2. The alternative manual path via Windows Explorer:
-   - If working from `/mnt/d/...` (Windows-mounted): the direct Windows path, e.g. `D:\Users\Dell\Downloads\Projects\LSA\Automation_sprint\AS_16\report.html` — double-click it
-   - If working from the WSL home directory instead: `\\wsl$\Ubuntu\home\pankaj\sprint-sandbox\report.html` (or `\\wsl.localhost\Ubuntu\home\pankaj\sprint-sandbox\report.html` on newer Windows builds)
+1. **Quick CLI Command by OS:**
+   - **Linux:** `xdg-open report.html`
+   - **macOS:** `open report.html`
+   - **Windows (WSL):** `explorer.exe $(wslpath -w report.html)`
+   - **Windows (Git Bash):** `start report.html`
 
-3. *Note:* report.html is self-contained — no server needed, just open the file directly.
+2. **Direct Windows Explorer Path:**
+   - If working from `/mnt/d/...`: `D:\Users\Dell\Downloads\Projects\LSA\Automation_sprint\AS_16\report.html`
+   - If working from WSL home: `\\wsl$\Ubuntu\home\pankaj\sprint-sandbox\report.html`
+
+3. *See [⚡ Command to Execute](#-command-to-execute) above to run the service check, regenerate the dashboard, and view it in a single step.*

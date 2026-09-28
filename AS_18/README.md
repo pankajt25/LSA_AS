@@ -93,6 +93,35 @@ This sprint strictly adheres to the project sandboxing requirements:
 
 ---
 
+## ⚡ Command to Execute
+
+Run this **single write command** in your terminal to execute the process check and automatically redirect/open the HTML dashboard report in your default browser. It supports **Windows**, **Linux**, and **macOS**:
+
+### 🌐 Universal One-Line Command (Cross-Platform)
+```bash
+./server_process_check.sh --default; { command -v xdg-open >/dev/null && xdg-open report.html; } || { command -v open >/dev/null && open report.html; } || { command -v explorer.exe >/dev/null && explorer.exe $(wslpath -w report.html 2>/dev/null || echo report.html); } || python3 -m webbrowser report.html
+```
+
+> **How it works across platforms:**
+> - Executes `./server_process_check.sh --default` (safely checks process status, instance count, PIDs, and oldest uptime).
+> - Immediately launches and redirects to `report.html` in your default browser.
+> - Works automatically across **Linux** (`xdg-open`), **macOS** (`open`), **Windows WSL** (`explorer.exe`), **Git Bash**, and Python environments.
+
+### 💻 Single Command by Operating System
+
+| Operating System / Environment | Single Command to Execute & Open HTML Site |
+|---|---|
+| **🐧 Linux** (Ubuntu / Debian / Fedora / Arch) | `./server_process_check.sh --default; xdg-open report.html` |
+| **🍎 macOS** | `./server_process_check.sh --default; open report.html` |
+| **🪟 Windows (WSL)** | `./server_process_check.sh --default; explorer.exe $(wslpath -w report.html)` |
+| **🪟 Windows (Git Bash)** | `./server_process_check.sh --default; start report.html` |
+| **🪟 Windows (PowerShell)** | `bash ./server_process_check.sh --default; Start-Process .\report.html` |
+| **🪟 Windows (CMD)** | `bash ./server_process_check.sh --default && start report.html` |
+
+*(Note: If inspecting a specific process, replace `--default` with the process name, e.g. `bash` or `ssh`. From repository root, prefix with `cd AS_18 && `)*
+
+---
+
 ## 4. Usage Instructions & Test Verification
 
 ### Test Case 1: Running Process (`bash`)
@@ -180,11 +209,12 @@ Verify that special regex characters do not crash `pgrep`:
 
 A single, self-contained, dark-themed HTML report dashboard is available at [`report.html`](report.html). It features color-coded status cards for each test run, operational metric tiles, terminal execution session transcripts, a scrollable view of `logs/process_check.log`, and rubric compliance verification.
 
-### Option A: From Inside WSL (Recommended)
-Launch the report directly in your default Windows browser:
-```bash
-explorer.exe $(wslpath -w report.html)
-```
+### Option A: Cross-Platform CLI Command
+Open `report.html` directly from terminal:
+- **Linux:** `xdg-open report.html`
+- **macOS:** `open report.html`
+- **Windows (WSL):** `explorer.exe $(wslpath -w report.html)`
+- **Windows (Git Bash):** `start report.html`
 
 ### Option B: Direct Windows Path
 Open your web browser and navigate directly to:
@@ -193,7 +223,8 @@ D:\Users\Dell\Downloads\Projects\LSA\Automation_sprint\AS_18\report.html
 ```
 *(Or paste this path into Windows File Explorer address bar or Run dialog `Win + R`)*
 
-> **Self-Contained Note:** `report.html` is completely standalone with inline CSS styling. It does not require any local web server (Node/Python/Apache) or external internet connection.
+> **Self-Contained Note:** `report.html` is completely standalone with inline CSS styling. It does not require any local web server (Node/Python/Apache) or external internet connection.  
+> *See [⚡ Command to Execute](#-command-to-execute) above to run the process check and launch this report in a single step.*
 
 ---
 

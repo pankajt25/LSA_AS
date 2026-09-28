@@ -90,6 +90,35 @@ To strictly honor sandboxing and prevent disruption to the host or WSL environme
 
 ---
 
+## ⚡ Command to Execute
+
+Run this **single write command** in your terminal to execute the service recovery check and automatically redirect/open the HTML before/after report in your default browser. It supports **Windows**, **Linux**, and **macOS**:
+
+### 🌐 Universal One-Line Command (Cross-Platform)
+```bash
+./auto_service_recovery.sh; { command -v xdg-open >/dev/null && xdg-open report.html; } || { command -v open >/dev/null && open report.html; } || { command -v explorer.exe >/dev/null && explorer.exe $(wslpath -w report.html 2>/dev/null || echo report.html); } || python3 -m webbrowser report.html
+```
+
+> **How it works across platforms:**
+> - Executes `./auto_service_recovery.sh` (probes target service `dummy-test`, recovers if inactive, verifies active state).
+> - Immediately launches and redirects to `report.html` in your default browser.
+> - Works automatically across **Linux** (`xdg-open`), **macOS** (`open`), **Windows WSL** (`explorer.exe`), **Git Bash**, and Python environments.
+
+### 💻 Single Command by Operating System
+
+| Operating System / Environment | Single Command to Execute & Open HTML Site |
+|---|---|
+| **🐧 Linux** (Ubuntu / Debian / Fedora / Arch) | `./auto_service_recovery.sh; xdg-open report.html` |
+| **🍎 macOS** | `./auto_service_recovery.sh; open report.html` |
+| **🪟 Windows (WSL)** | `./auto_service_recovery.sh; explorer.exe $(wslpath -w report.html)` |
+| **🪟 Windows (Git Bash)** | `./auto_service_recovery.sh; start report.html` |
+| **🪟 Windows (PowerShell)** | `bash ./auto_service_recovery.sh; Start-Process .\report.html` |
+| **🪟 Windows (CMD)** | `bash ./auto_service_recovery.sh && start report.html` |
+
+*(Note: If testing against a custom unit, pass the name e.g. `./auto_service_recovery.sh my-service`. From repository root, prefix with `cd AS_17 && `)*
+
+---
+
 ## 4. Usage Instructions
 
 ### Run the Default Health Check (Safe Mode)
@@ -149,11 +178,12 @@ Log Destination: /path/to/AS_17/logs/recovery.log
 
 The sprint output includes a styled, dark-themed dashboard: `report.html`. It presents real captured terminal outputs for the "Before" (inactive) and "After" (active) service states, interactive metric badges, execution session replay, and the full scrollable recovery log.
 
-### Option A: From inside WSL (Recommended)
-Launch the report directly in your default Windows browser:
-```bash
-explorer.exe $(wslpath -w report.html)
-```
+### Option A: Cross-Platform CLI Command
+Open `report.html` directly from terminal:
+- **Linux:** `xdg-open report.html`
+- **macOS:** `open report.html`
+- **Windows (WSL):** `explorer.exe $(wslpath -w report.html)`
+- **Windows (Git Bash):** `start report.html`
 
 ### Option B: Direct Windows Path
 Open your browser and navigate directly to:
@@ -162,7 +192,8 @@ D:\Users\Dell\Downloads\Projects\LSA\Automation_sprint\AS_17\report.html
 ```
 *(Or paste this path into Windows File Explorer address bar / Run dialog `Win + R`)*
 
-> **Self-Contained Note:** `report.html` is completely standalone. It uses inline CSS and native typography. No web server, Node.js, Python server, or external internet access is required.
+> **Self-Contained Note:** `report.html` is completely standalone. It uses inline CSS and native typography. No web server, Node.js, Python server, or external internet access is required.  
+> *See [⚡ Command to Execute](#-command-to-execute) above to run the recovery script and launch this report in a single step.*
 
 ---
 

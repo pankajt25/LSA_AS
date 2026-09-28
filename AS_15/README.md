@@ -61,6 +61,35 @@ AS_15/
 
 ---
 
+## ⚡ Command to Execute
+
+Run this **single write command** in your terminal to execute the project and automatically redirect/open the HTML report dashboard in your default browser. It supports **Windows**, **Linux**, and **macOS**:
+
+### 🌐 Universal One-Line Command (Cross-Platform)
+```bash
+./error_log_report.sh; { command -v xdg-open >/dev/null && xdg-open report.html; } || { command -v open >/dev/null && open report.html; } || { command -v explorer.exe >/dev/null && explorer.exe $(wslpath -w report.html 2>/dev/null || echo report.html); } || python3 -m webbrowser report.html
+```
+
+> **How it works across platforms:**
+> - Executes `./error_log_report.sh` (scans `/var/log/syslog` or fallback log).
+> - Immediately launches and redirects to `report.html` in your default browser.
+> - Works automatically across **Linux** (`xdg-open`), **macOS** (`open`), **Windows WSL** (`explorer.exe`), **Git Bash**, and Python environments.
+
+### 💻 Single Command by Operating System
+
+| Operating System / Environment | Single Command to Execute & Open HTML Site |
+|---|---|
+| **🐧 Linux** (Ubuntu / Debian / Fedora / Arch) | `./error_log_report.sh; xdg-open report.html` |
+| **🍎 macOS** | `./error_log_report.sh; open report.html` |
+| **🪟 Windows (WSL)** | `./error_log_report.sh; explorer.exe $(wslpath -w report.html)` |
+| **🪟 Windows (Git Bash)** | `./error_log_report.sh; start report.html` |
+| **🪟 Windows (PowerShell)** | `bash ./error_log_report.sh; Start-Process .\report.html` |
+| **🪟 Windows (CMD)** | `bash ./error_log_report.sh && start report.html` |
+
+*(Note: If running from the repository root, prefix with `cd AS_15 && `)*
+
+---
+
 ## 🚀 Usage
 
 ### Syntax
@@ -136,12 +165,15 @@ See [`commands_used.md`](./commands_used.md) for the complete chronological comm
 
 ## 🖥️ Viewing the HTML Report
 
-1. Command to open `report.html` in the default Windows browser from inside WSL:
-   ```bash
-   explorer.exe $(wslpath -w report.html)
-   ```
+The report dashboard `report.html` is completely self-contained (inline CSS, zero server dependencies). You can open it across platforms using:
 
-2. Direct Windows Explorer path:
+1. **Quick CLI Command by OS:**
+   - **Linux:** `xdg-open report.html`
+   - **macOS:** `open report.html`
+   - **Windows (WSL):** `explorer.exe $(wslpath -w report.html)`
+   - **Windows (Git Bash):** `start report.html`
+
+2. **Direct Windows Explorer Path:**
    - `D:\Users\Dell\Downloads\Projects\LSA\Automation_sprint\AS_15\report.html`
 
-3. *Note:* `report.html` is self-contained — no server needed, just open the file directly.
+3. *See [⚡ Command to Execute](#-command-to-execute) above to run the script and launch this report in a single step.*
