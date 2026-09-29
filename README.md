@@ -57,6 +57,13 @@ LSA_AS/
 │   ├── report.html                 # Standalone dark-themed dashboard report
 │   ├── logs/                       # Structured audit log directory
 │   └── README.md                   # Problem documentation & usage
+├── AS_21/                          # Automation Sprint Problem #21
+│   ├── connectivity_check.sh       # Core network monitoring & reachability script
+│   ├── run.sh                      # Unified cross-platform execution & report launcher
+│   ├── commands_used.md            # Command log & development history
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── logs/                       # Structured audit log directory
+│   └── README.md                   # Problem documentation & usage
 └── (Upcoming Projects)/            # Future Automation Sprint additions
 ```
 
@@ -73,6 +80,7 @@ LSA_AS/
 | **AS_18** | **Server Process Check** | Process verification via `pgrep -f`, case-sensitivity flags, regex escaping, PID & oldest uptime inspection, and dark-themed HTML report. | ✅ Completed | [`AS_18/`](./AS_18) |
 | **AS_19** | **High CPU Process Detection** | Real-time live process table inspection (`ps -eo ... --sort=-%cpu`), top-5 extraction, dynamic CPU alert thresholding (&ge; 50%), and dark-themed HTML report. | ✅ Completed | [`AS_19/`](./AS_19) |
 | **AS_20** | **High Memory Process Detection** | Real-time live process table inspection (`ps -eo ... --sort=-%mem`), RSS MB conversion, `free -h` context, dynamic memory thresholding (&ge; 30%), and dark-themed HTML report. | ✅ Completed | [`AS_20/`](./AS_20) |
+| **AS_21** | **Network Connectivity Check** | Automated gateway reachability test, public baseline sanity probing (`8.8.8.8`), ICMP loss/RTT grep-awk parsing, and dark-themed HTML report. | ✅ Completed | [`AS_21/`](./AS_21) |
 | *Upcoming* | *Future Sprints* | Additional automation tasks and administration solutions. | ⏳ Planned | — |
 
 ---
@@ -92,6 +100,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_18** | Server Process Check | `cd AS_18 && ./server_process_check.sh --default; { command -v xdg-open >/dev/null && xdg-open report.html; } \|\| { command -v open >/dev/null && open report.html; } \|\| explorer.exe $(wslpath -w report.html 2>/dev/null \|\| echo report.html) 2>/dev/null \|\| python3 -m webbrowser report.html` |
 | **AS_19** | High CPU Process Detection | `cd AS_19 && bash run.sh` |
 | **AS_20** | High Memory Process Detection | `cd AS_20 && bash run.sh` |
+| **AS_21** | Network Connectivity Check | `cd AS_21 && bash run.sh` |
 
 ### 💻 Quick Command Reference by Operating System
 
@@ -104,6 +113,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_18** | `cd AS_18 && ./server_process_check.sh --default; xdg-open report.html` | `cd AS_18 && ./server_process_check.sh --default; open report.html` | `cd AS_18 && ./server_process_check.sh --default; explorer.exe $(wslpath -w report.html)` | `cd AS_18 && ./server_process_check.sh --default; start report.html` |
 | **AS_19** | `cd AS_19 && bash run.sh` | `cd AS_19 && bash run.sh` | `cd AS_19 && bash run.sh` | `cd AS_19 && bash run.sh` |
 | **AS_20** | `cd AS_20 && bash run.sh` | `cd AS_20 && bash run.sh` | `cd AS_20 && bash run.sh` | `cd AS_20 && bash run.sh` |
+| **AS_21** | `cd AS_21 && bash run.sh` | `cd AS_21 && bash run.sh` | `cd AS_21 && bash run.sh` | `cd AS_21 && bash run.sh` |
 
 ---
 
@@ -312,6 +322,36 @@ Develop a script to identify the top five processes consuming memory.
 - 📊 **Interactive Dashboard:** [`AS_20/report.html`](./AS_20/report.html)
 - 📖 **Sprint Documentation:** [`AS_20/README.md`](./AS_20/README.md)
 - 📜 **Audit Report Output:** [`AS_20/logs/high_memory.log`](./AS_20/logs/high_memory.log)
+
+</details>
+
+<details>
+<summary><strong>AS_21 — Network Connectivity Check (Live System Data)</strong></summary>
+
+### Problem Statement
+An organization wants to periodically verify connectivity to its gateway/server. Write a script using `ping` and report whether the host is reachable.
+
+### Summary of Approach
+- **Automated Default Gateway Discovery:** Automatically identifies the system's live next-hop gateway using `ip route | grep default | awk '{print $3}'` (Linux), with cross-platform fallback logic for macOS (`route -n get default`) and Windows (`netstat -rn` / PowerShell).
+- **Dual-Target Sanity Triangulation:** Pings both the local gateway and a resilient public Anycast reference (`8.8.8.8`) to distinguish between "Gateway down", "Local LAN only / ISP outage", "ICMP-filtered gateway (common on WSL2 virtual switch and enterprise firewalls)", and "Full connectivity".
+- **Strictly Bounded Probes:** Executes a bounded number of ICMP echo requests (`ping -c 4 -W 2` on Linux/macOS, `-n 4` on Windows), preventing unbounded hangs or runaway background processes.
+- **Precision Grep/Awk Extraction:** Extracts transmitted packets, received packets, packet loss percentage, and round-trip time (Min, Avg, Max RTT) from raw ping output rather than dumping unparsed text.
+- **Clear Status Messages:** Outputs standardized status lines: `✅ Gateway 192.168.x.x is REACHABLE (0% loss, avg 2.1ms)` or `❌ Gateway 192.168.x.x is UNREACHABLE (100% loss)`.
+- **Persistent Chronological Audit Logging:** Appends every scan with timestamp, hostname, OS, kernel, target metrics, baseline metrics, and diagnostic evaluation to `logs/connectivity.log`.
+- **Single Cross-Platform Launcher (`run.sh`):** Executes `connectivity_check.sh`, captures live output, regenerates `report.html` from scratch using live system telemetry, and auto-launches the dark-themed dashboard in the default browser across WSL (`explorer.exe`), Linux (`xdg-open`), macOS (`open`), and Git Bash (`start`).
+
+### Key Commands Used
+- `bash run.sh` — Single command to execute connectivity check, regenerate dashboard, and open HTML report (Linux / macOS / Windows)
+- `./connectivity_check.sh` — Default scan: auto-detects gateway and tests against baseline 8.8.8.8
+- `./connectivity_check.sh 1.1.1.1` — Probes custom target 1.1.1.1 alongside sanity baseline 8.8.8.8
+- `./connectivity_check.sh -c 2 -b 1.0.0.1` — Sends 2 pings and uses 1.0.0.1 as sanity baseline
+- `./connectivity_check.sh fake.domain.test.invalid` — Validates defensive DNS resolution error trapping
+- `./connectivity_check.sh --help` — Displays command-line manual and option syntax
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_21/report.html`](./AS_21/report.html)
+- 📖 **Sprint Documentation:** [`AS_21/README.md`](./AS_21/README.md)
+- 📜 **Audit Report Output:** [`AS_21/logs/connectivity.log`](./AS_21/logs/connectivity.log)
 
 </details>
 
