@@ -1,0 +1,106 @@
+================================================================================
+[2026-09-29 23:29:22] HIGH MEMORY AUDIT SCAN
+Host: SP | OS: Linux | Kernel: 6.18.33.2-microsoft-standard-WSL2 | Scanned by: pankaj
+Parameters: Top Count = 5 | Memory Threshold = 30.0%
+System State: Total Processes = 30 | Load Avg = 0.59 0.68 0.70
+--------------------------------------------------------------------------------
+System Memory Summary:
+               total        used        free      shared  buff/cache   available
+Mem:           3.8Gi       667Mi       1.8Gi       4.2Mi       1.5Gi       3.1Gi
+Swap:          1.0Gi          0B       1.0Gi
+--------------------------------------------------------------------------------
+PID      PPID     USER              %MEM    RSS (MB)    %CPU   COMMAND              STATUS
+-------- -------- -------------- ------- ----------- -------   -------------------- ------
+1531     239      pankaj            7.7%     301.4 MB   65.3%   agy                  ✓ NORMAL
+232      1        root              0.9%      37.9 MB    0.2%   containerd           ✓ NORMAL
+237      1        root              0.8%      32.0 MB    0.0%   unattended-upgr      ✓ NORMAL
+177      1        root              0.7%      29.2 MB    0.0%   networkd-dispat      ✓ NORMAL
+62       1        root              0.4%      16.4 MB    0.1%   systemd-journal      ✓ NORMAL
+--------------------------------------------------------------------------------
+Result: 0 process(es) >= 30.0% threshold. Peak %MEM: 7.7%. Cumulative Top RSS: 416.9 MB.
+================================================================================
+
+================================================================================
+[2026-09-29 23:29:28] HIGH MEMORY AUDIT SCAN
+Host: SP | OS: Linux | Kernel: 6.18.33.2-microsoft-standard-WSL2 | Scanned by: pankaj
+Parameters: Top Count = 3 | Memory Threshold = 5.0%
+System State: Total Processes = 30 | Load Avg = 0.63 0.68 0.70
+--------------------------------------------------------------------------------
+System Memory Summary:
+               total        used        free      shared  buff/cache   available
+Mem:           3.8Gi       663Mi       1.8Gi       4.2Mi       1.5Gi       3.1Gi
+Swap:          1.0Gi          0B       1.0Gi
+--------------------------------------------------------------------------------
+PID      PPID     USER              %MEM    RSS (MB)    %CPU   COMMAND              STATUS
+-------- -------- -------------- ------- ----------- -------   -------------------- ------
+1531     239      pankaj            7.6%     294.9 MB   64.9%   agy                  ⚠️  ALERT (>= 5.0%)
+232      1        root              0.9%      37.9 MB    0.2%   containerd           ✓ NORMAL
+237      1        root              0.8%      32.0 MB    0.0%   unattended-upgr      ✓ NORMAL
+--------------------------------------------------------------------------------
+Result: 1 process(es) >= 5.0% threshold. Peak %MEM: 7.6%. Cumulative Top RSS: 364.8 MB.
+================================================================================
+
+================================================================================
+[2026-09-29 23:30:38] HIGH MEMORY AUDIT SCAN
+Host: SP | OS: Linux | Kernel: 6.18.33.2-microsoft-standard-WSL2 | Scanned by: pankaj
+Parameters: Top Count = 5 | Memory Threshold = 30.0%
+System State: Total Processes = 32 | Load Avg = 1.06 0.76 0.72
+--------------------------------------------------------------------------------
+System Memory Summary:
+               total        used        free      shared  buff/cache   available
+Mem:           3.8Gi       682Mi       1.8Gi       4.2Mi       1.5Gi       3.1Gi
+Swap:          1.0Gi          0B       1.0Gi
+--------------------------------------------------------------------------------
+PID      PPID     USER              %MEM    RSS (MB)    %CPU   COMMAND              STATUS
+-------- -------- -------------- ------- ----------- -------   -------------------- ------
+1531     239      pankaj            7.8%     303.5 MB   81.7%   agy                  ✓ NORMAL
+232      1        root              0.9%      37.9 MB    0.2%   containerd           ✓ NORMAL
+237      1        root              0.8%      32.0 MB    0.0%   unattended-upgr      ✓ NORMAL
+177      1        root              0.7%      29.2 MB    0.0%   networkd-dispat      ✓ NORMAL
+62       1        root              0.4%      16.4 MB    0.1%   systemd-journal      ✓ NORMAL
+--------------------------------------------------------------------------------
+Result: 0 process(es) >= 30.0% threshold. Peak %MEM: 7.8%. Cumulative Top RSS: 418.9 MB.
+================================================================================
+
+================================================================================
+[2026-09-29 23:30:51] HIGH MEMORY AUDIT SCAN
+Host: SP | OS: Linux | Kernel: 6.18.33.2-microsoft-standard-WSL2 | Scanned by: pankaj
+Parameters: Top Count = 3 | Memory Threshold = 5.0%
+System State: Total Processes = 34 | Load Avg = 0.82 0.72 0.71
+--------------------------------------------------------------------------------
+System Memory Summary:
+               total        used        free      shared  buff/cache   available
+Mem:           3.8Gi       686Mi       1.7Gi       4.2Mi       1.5Gi       3.1Gi
+Swap:          1.0Gi          0B       1.0Gi
+--------------------------------------------------------------------------------
+PID      PPID     USER              %MEM    RSS (MB)    %CPU   COMMAND              STATUS
+-------- -------- -------------- ------- ----------- -------   -------------------- ------
+1531     239      pankaj            8.0%     311.5 MB   80.5%   agy                  ⚠️  ALERT (>= 5.0%)
+232      1        root              0.9%      37.9 MB    0.2%   containerd           ✓ NORMAL
+237      1        root              0.8%      32.0 MB    0.0%   unattended-upgr      ✓ NORMAL
+--------------------------------------------------------------------------------
+Result: 1 process(es) >= 5.0% threshold. Peak %MEM: 8.0%. Cumulative Top RSS: 381.4 MB.
+================================================================================
+
+================================================================================
+[2026-09-29 23:31:00] HIGH MEMORY AUDIT SCAN
+Host: SP | OS: Linux | Kernel: 6.18.33.2-microsoft-standard-WSL2 | Scanned by: pankaj
+Parameters: Top Count = 5 | Memory Threshold = 30.0%
+System State: Total Processes = 32 | Load Avg = 1.06 0.78 0.73
+--------------------------------------------------------------------------------
+System Memory Summary:
+               total        used        free      shared  buff/cache   available
+Mem:           3.8Gi       682Mi       1.8Gi       4.2Mi       1.5Gi       3.1Gi
+Swap:          1.0Gi          0B       1.0Gi
+--------------------------------------------------------------------------------
+PID      PPID     USER              %MEM    RSS (MB)    %CPU   COMMAND              STATUS
+-------- -------- -------------- ------- ----------- -------   -------------------- ------
+1531     239      pankaj            7.7%     300.9 MB   80.3%   agy                  ✓ NORMAL
+232      1        root              0.9%      37.9 MB    0.2%   containerd           ✓ NORMAL
+237      1        root              0.8%      32.0 MB    0.0%   unattended-upgr      ✓ NORMAL
+177      1        root              0.7%      29.2 MB    0.0%   networkd-dispat      ✓ NORMAL
+62       1        root              0.4%      16.4 MB    0.1%   systemd-journal      ✓ NORMAL
+--------------------------------------------------------------------------------
+Result: 0 process(es) >= 30.0% threshold. Peak %MEM: 7.7%. Cumulative Top RSS: 416.4 MB.
+================================================================================
+
