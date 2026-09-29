@@ -1,0 +1,176 @@
+================================================================================
+[2026-09-29 23:41:53] NETWORK CONNECTIVITY AUDIT CHECK
+Host: SP | OS: Linux | Kernel: 6.18.33.2-microsoft-standard-WSL2 | User: pankaj
+Scan Configuration: Count=4 packets | Timeout=2s
+--------------------------------------------------------------------------------
+PROBE 1: Gateway (192.168.32.1)
+  Status        : UNREACHABLE
+  Packets       : Transmitted = 4, Received = 0, Packet Loss = 100%
+  Round-Trip    : Min = N/A, Avg = N/A, Max = N/A
+  Summary Line  : ❌ Gateway 192.168.32.1 is UNREACHABLE (100% loss)
+--------------------------------------------------------------------------------
+PROBE 2: Sanity Baseline (8.8.8.8)
+  Status        : REACHABLE
+  Packets       : Transmitted = 4, Received = 4, Packet Loss = 0%
+  Round-Trip    : Min = 30.457ms, Avg = 71.851ms, Max = 125.136ms
+  Summary Line  : ✅ Baseline Host 8.8.8.8 is REACHABLE (0% loss, avg 71.851ms)
+--------------------------------------------------------------------------------
+DIAGNOSIS: [ICMP_FILTERED]
+  🌐 Internet Accessible: Gateway Unreachable / ICMP Echo Filtered
+  The public baseline (8.8.8.8) responded normally, confirming WAN routing is active. However, Gateway (192.168.32.1) dropped ICMP packets. In virtualized environments (such as WSL2 virtual switch) or enterprise firewalls, host routers routinely block ICMP echo requests while continuing to route forwarded traffic.
+================================================================================
+
+================================================================================
+[2026-09-29 23:42:06] NETWORK CONNECTIVITY AUDIT CHECK
+Host: SP | OS: Linux | Kernel: 6.18.33.2-microsoft-standard-WSL2 | User: pankaj
+Scan Configuration: Count=4 packets | Timeout=2s
+--------------------------------------------------------------------------------
+PROBE 1: Target Host (1.1.1.1)
+  Status        : REACHABLE
+  Packets       : Transmitted = 4, Received = 4, Packet Loss = 0%
+  Round-Trip    : Min = 12.473ms, Avg = 15.833ms, Max = 19.321ms
+  Summary Line  : ✅ Target Host 1.1.1.1 is REACHABLE (0% loss, avg 15.833ms)
+--------------------------------------------------------------------------------
+PROBE 2: Sanity Baseline (8.8.8.8)
+  Status        : REACHABLE
+  Packets       : Transmitted = 4, Received = 4, Packet Loss = 0%
+  Round-Trip    : Min = 30.536ms, Avg = 60.486ms, Max = 147.274ms
+  Summary Line  : ✅ Baseline Host 8.8.8.8 is REACHABLE (0% loss, avg 60.486ms)
+--------------------------------------------------------------------------------
+DIAGNOSIS: [FULL_CONNECTIVITY]
+  ✅ All Systems Operational: Full Local & Internet Connectivity
+  Both the Target Host (1.1.1.1) and the public baseline (8.8.8.8) are responsive. Packets flow freely through both local and WAN network paths.
+================================================================================
+
+================================================================================
+[2026-09-29 23:42:17] NETWORK CONNECTIVITY AUDIT CHECK
+Host: SP | OS: Linux | Kernel: 6.18.33.2-microsoft-standard-WSL2 | User: pankaj
+Scan Configuration: Count=4 packets | Timeout=2s
+--------------------------------------------------------------------------------
+PROBE 1: Target Host (fake.domain.test.invalid.nonexistent)
+  Status        : ERROR
+  Packets       : Transmitted = 0, Received = 0, Packet Loss = 100%
+  Round-Trip    : Min = N/A, Avg = N/A, Max = N/A
+  Summary Line  : ❌ Target Host fake.domain.test.invalid.nonexistent is UNREACHABLE (DNS resolution failure or invalid target)
+--------------------------------------------------------------------------------
+PROBE 2: Sanity Baseline (8.8.8.8)
+  Status        : REACHABLE
+  Packets       : Transmitted = 4, Received = 4, Packet Loss = 0%
+  Round-Trip    : Min = 30.393ms, Avg = 65.156ms, Max = 110.485ms
+  Summary Line  : ✅ Baseline Host 8.8.8.8 is REACHABLE (0% loss, avg 65.156ms)
+--------------------------------------------------------------------------------
+DIAGNOSIS: [ICMP_FILTERED]
+  🌐 Internet Accessible: Gateway Unreachable / ICMP Echo Filtered
+  The public baseline (8.8.8.8) responded normally, confirming WAN routing is active. However, Target Host (fake.domain.test.invalid.nonexistent) dropped ICMP packets. In virtualized environments (such as WSL2 virtual switch) or enterprise firewalls, host routers routinely block ICMP echo requests while continuing to route forwarded traffic.
+================================================================================
+
+================================================================================
+[2026-09-29 23:42:40] NETWORK CONNECTIVITY AUDIT CHECK
+Host: SP | OS: Linux | Kernel: 6.18.33.2-microsoft-standard-WSL2 | User: pankaj
+Scan Configuration: Count=4 packets | Timeout=2s
+--------------------------------------------------------------------------------
+PROBE 1: Target Host (fake.domain.test.invalid.nonexistent)
+  Status        : ERROR
+  Packets       : Transmitted = 0, Received = 0, Packet Loss = 100%
+  Round-Trip    : Min = N/A, Avg = N/A, Max = N/A
+  Summary Line  : ❌ Target Host fake.domain.test.invalid.nonexistent is UNREACHABLE (DNS resolution failure or invalid target)
+--------------------------------------------------------------------------------
+PROBE 2: Sanity Baseline (8.8.8.8)
+  Status        : REACHABLE
+  Packets       : Transmitted = 4, Received = 4, Packet Loss = 0%
+  Round-Trip    : Min = 29.831ms, Avg = 30.803ms, Max = 31.729ms
+  Summary Line  : ✅ Baseline Host 8.8.8.8 is REACHABLE (0% loss, avg 30.803ms)
+--------------------------------------------------------------------------------
+DIAGNOSIS: [DNS_ERROR]
+  🔍 Hostname Resolution Failure: DNS Lookup Failed
+  The public baseline (8.8.8.8) responded normally, confirming network access. However, Target Host (fake.domain.test.invalid.nonexistent) could not be resolved by DNS nameservers. Check DNS configuration in /etc/resolv.conf or verify domain name spelling.
+================================================================================
+
+================================================================================
+[2026-09-29 23:43:27] NETWORK CONNECTIVITY AUDIT CHECK
+Host: SP | OS: Linux | Kernel: 6.18.33.2-microsoft-standard-WSL2 | User: pankaj
+Scan Configuration: Count=4 packets | Timeout=2s
+--------------------------------------------------------------------------------
+PROBE 1: Gateway (192.168.32.1)
+  Status        : UNREACHABLE
+  Packets       : Transmitted = 4, Received = 0, Packet Loss = 100%
+  Round-Trip    : Min = N/A, Avg = N/A, Max = N/A
+  Summary Line  : ❌ Gateway 192.168.32.1 is UNREACHABLE (100% loss)
+--------------------------------------------------------------------------------
+PROBE 2: Sanity Baseline (8.8.8.8)
+  Status        : REACHABLE
+  Packets       : Transmitted = 4, Received = 4, Packet Loss = 0%
+  Round-Trip    : Min = 27.572ms, Avg = 29.149ms, Max = 32.115ms
+  Summary Line  : ✅ Baseline Host 8.8.8.8 is REACHABLE (0% loss, avg 29.149ms)
+--------------------------------------------------------------------------------
+DIAGNOSIS: [ICMP_FILTERED]
+  🌐 Internet Accessible: Gateway Unreachable / ICMP Echo Filtered
+  The public baseline (8.8.8.8) responded normally, confirming WAN routing is active. However, Gateway (192.168.32.1) dropped ICMP packets. In virtualized environments (such as WSL2 virtual switch) or enterprise firewalls, host routers routinely block ICMP echo requests while continuing to route forwarded traffic.
+================================================================================
+
+================================================================================
+[2026-09-29 23:44:17] NETWORK CONNECTIVITY AUDIT CHECK
+Host: SP | OS: Linux | Kernel: 6.18.33.2-microsoft-standard-WSL2 | User: pankaj
+Scan Configuration: Count=4 packets | Timeout=2s
+--------------------------------------------------------------------------------
+PROBE 1: Gateway (192.168.32.1)
+  Status        : UNREACHABLE
+  Packets       : Transmitted = 4, Received = 0, Packet Loss = 100%
+  Round-Trip    : Min = N/A, Avg = N/A, Max = N/A
+  Summary Line  : ❌ Gateway 192.168.32.1 is UNREACHABLE (100% loss)
+--------------------------------------------------------------------------------
+PROBE 2: Sanity Baseline (8.8.8.8)
+  Status        : REACHABLE
+  Packets       : Transmitted = 4, Received = 4, Packet Loss = 0%
+  Round-Trip    : Min = 41.990ms, Avg = 59.748ms, Max = 92.303ms
+  Summary Line  : ✅ Baseline Host 8.8.8.8 is REACHABLE (0% loss, avg 59.748ms)
+--------------------------------------------------------------------------------
+DIAGNOSIS: [ICMP_FILTERED]
+  🌐 Internet Accessible: Gateway Unreachable / ICMP Echo Filtered
+  The public baseline (8.8.8.8) responded normally, confirming WAN routing is active. However, Gateway (192.168.32.1) dropped ICMP packets. In virtualized environments (such as WSL2 virtual switch) or enterprise firewalls, host routers routinely block ICMP echo requests while continuing to route forwarded traffic.
+================================================================================
+
+================================================================================
+[2026-09-29 23:44:49] NETWORK CONNECTIVITY AUDIT CHECK
+Host: SP | OS: Linux | Kernel: 6.18.33.2-microsoft-standard-WSL2 | User: pankaj
+Scan Configuration: Count=4 packets | Timeout=2s
+--------------------------------------------------------------------------------
+PROBE 1: Target Host (1.1.1.1)
+  Status        : REACHABLE
+  Packets       : Transmitted = 4, Received = 4, Packet Loss = 0%
+  Round-Trip    : Min = 12.332ms, Avg = 14.054ms, Max = 15.255ms
+  Summary Line  : ✅ Target Host 1.1.1.1 is REACHABLE (0% loss, avg 14.054ms)
+--------------------------------------------------------------------------------
+PROBE 2: Sanity Baseline (8.8.8.8)
+  Status        : REACHABLE
+  Packets       : Transmitted = 4, Received = 4, Packet Loss = 0%
+  Round-Trip    : Min = 28.359ms, Avg = 33.343ms, Max = 40.160ms
+  Summary Line  : ✅ Baseline Host 8.8.8.8 is REACHABLE (0% loss, avg 33.343ms)
+--------------------------------------------------------------------------------
+DIAGNOSIS: [FULL_CONNECTIVITY]
+  ✅ All Systems Operational: Full Local & Internet Connectivity
+  Both the Target Host (1.1.1.1) and the public baseline (8.8.8.8) are responsive. Packets flow freely through both local and WAN network paths.
+================================================================================
+
+================================================================================
+[2026-09-29 23:45:10] NETWORK CONNECTIVITY AUDIT CHECK
+Host: SP | OS: Linux | Kernel: 6.18.33.2-microsoft-standard-WSL2 | User: pankaj
+Scan Configuration: Count=4 packets | Timeout=2s
+--------------------------------------------------------------------------------
+PROBE 1: Gateway (192.168.32.1)
+  Status        : UNREACHABLE
+  Packets       : Transmitted = 4, Received = 0, Packet Loss = 100%
+  Round-Trip    : Min = N/A, Avg = N/A, Max = N/A
+  Summary Line  : ❌ Gateway 192.168.32.1 is UNREACHABLE (100% loss)
+--------------------------------------------------------------------------------
+PROBE 2: Sanity Baseline (8.8.8.8)
+  Status        : REACHABLE
+  Packets       : Transmitted = 4, Received = 4, Packet Loss = 0%
+  Round-Trip    : Min = 25.949ms, Avg = 56.527ms, Max = 118.884ms
+  Summary Line  : ✅ Baseline Host 8.8.8.8 is REACHABLE (0% loss, avg 56.527ms)
+--------------------------------------------------------------------------------
+DIAGNOSIS: [ICMP_FILTERED]
+  🌐 Internet Accessible: Gateway Unreachable / ICMP Echo Filtered
+  The public baseline (8.8.8.8) responded normally, confirming WAN routing is active. However, Gateway (192.168.32.1) dropped ICMP packets. In virtualized environments (such as WSL2 virtual switch) or enterprise firewalls, host routers routinely block ICMP echo requests while continuing to route forwarded traffic.
+================================================================================
+
