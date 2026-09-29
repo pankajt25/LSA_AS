@@ -43,6 +43,13 @@ LSA_AS/
 │   ├── report.html                 # Standalone dark-themed dashboard report
 │   ├── logs/                       # Structured audit log directory
 │   └── README.md                   # Problem documentation & usage
+├── AS_19/                          # Automation Sprint Problem #19
+│   ├── high_cpu_detector.sh        # Core process monitoring & CPU detection script
+│   ├── run.sh                      # Unified cross-platform execution & report launcher
+│   ├── commands_used.md            # Command log & development history
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── logs/                       # Structured audit log directory
+│   └── README.md                   # Problem documentation & usage
 └── (Upcoming Projects)/            # Future Automation Sprint additions
 ```
 
@@ -57,6 +64,7 @@ LSA_AS/
 | **AS_16** | **Service Availability Check** | Real-time service monitoring, boot persistence verification, systemd/SysV fallback, audit logging, and dark-themed HTML report dashboard. | ✅ Completed | [`AS_16/`](./AS_16) |
 | **AS_17** | **Automatic Service Recovery** | Automated service health probing, dead/inactive remediation with safe delays, post-restart active state verification, and dark-themed before/after report. | ✅ Completed | [`AS_17/`](./AS_17) |
 | **AS_18** | **Server Process Check** | Process verification via `pgrep -f`, case-sensitivity flags, regex escaping, PID & oldest uptime inspection, and dark-themed HTML report. | ✅ Completed | [`AS_18/`](./AS_18) |
+| **AS_19** | **High CPU Process Detection** | Real-time live process table inspection (`ps -eo ... --sort=-%cpu`), top-5 extraction, dynamic CPU alert thresholding (&ge; 50%), and dark-themed HTML report. | ✅ Completed | [`AS_19/`](./AS_19) |
 | *Upcoming* | *Future Sprints* | Additional automation tasks and administration solutions. | ⏳ Planned | — |
 
 ---
@@ -74,6 +82,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_16** | Service Availability Check | `cd AS_16 && ./service_availability_check.sh --report; { command -v xdg-open >/dev/null && xdg-open report.html; } \|\| { command -v open >/dev/null && open report.html; } \|\| explorer.exe $(wslpath -w report.html 2>/dev/null \|\| echo report.html) 2>/dev/null \|\| python3 -m webbrowser report.html` |
 | **AS_17** | Automatic Service Recovery | `cd AS_17 && ./auto_service_recovery.sh; { command -v xdg-open >/dev/null && xdg-open report.html; } \|\| { command -v open >/dev/null && open report.html; } \|\| explorer.exe $(wslpath -w report.html 2>/dev/null \|\| echo report.html) 2>/dev/null \|\| python3 -m webbrowser report.html` |
 | **AS_18** | Server Process Check | `cd AS_18 && ./server_process_check.sh --default; { command -v xdg-open >/dev/null && xdg-open report.html; } \|\| { command -v open >/dev/null && open report.html; } \|\| explorer.exe $(wslpath -w report.html 2>/dev/null \|\| echo report.html) 2>/dev/null \|\| python3 -m webbrowser report.html` |
+| **AS_19** | High CPU Process Detection | `cd AS_19 && bash run.sh` |
 
 ### 💻 Quick Command Reference by Operating System
 
@@ -84,6 +93,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_16** | `cd AS_16 && ./service_availability_check.sh --report; xdg-open report.html` | `cd AS_16 && ./service_availability_check.sh --report; open report.html` | `cd AS_16 && ./service_availability_check.sh --report; explorer.exe $(wslpath -w report.html)` | `cd AS_16 && ./service_availability_check.sh --report; start report.html` |
 | **AS_17** | `cd AS_17 && ./auto_service_recovery.sh; xdg-open report.html` | `cd AS_17 && ./auto_service_recovery.sh; open report.html` | `cd AS_17 && ./auto_service_recovery.sh; explorer.exe $(wslpath -w report.html)` | `cd AS_17 && ./auto_service_recovery.sh; start report.html` |
 | **AS_18** | `cd AS_18 && ./server_process_check.sh --default; xdg-open report.html` | `cd AS_18 && ./server_process_check.sh --default; open report.html` | `cd AS_18 && ./server_process_check.sh --default; explorer.exe $(wslpath -w report.html)` | `cd AS_18 && ./server_process_check.sh --default; start report.html` |
+| **AS_19** | `cd AS_19 && bash run.sh` | `cd AS_19 && bash run.sh` | `cd AS_19 && bash run.sh` | `cd AS_19 && bash run.sh` |
 
 ---
 
@@ -234,6 +244,34 @@ An administrator wants to verify whether a particular application process is run
 ### Dashboard Report & Documentation
 - 📊 **Interactive Dashboard:** [`AS_18/report.html`](./AS_18/report.html)
 - 📖 **Sprint Documentation:** [`AS_18/README.md`](./AS_18/README.md)
+
+</details>
+
+<details>
+<summary><strong>AS_19 — High CPU Process Detection (Live System Data)</strong></summary>
+
+### Problem Statement
+Develop a script to identify the top five processes consuming CPU resources.
+
+### Summary of Approach
+- **Direct Live Process Query:** Retrieves real system CPU data using `ps -eo pid,ppid,user,%cpu,%mem,comm --sort=-%cpu` (Linux GNU ps) and `ps -eo ... -r` (macOS BSD ps), ensuring instantaneous kernel-level sorting without external pipe race conditions or broken column formatting.
+- **Why This Column Set:** Queries `pid` for unique process identification, `ppid` to trace process tree lineage (systemd, cron, container, interactive shell), `user` to distinguish daemon vs unprivileged workloads, `%cpu` for utilization ranking, `%mem` to correlate memory thrashing or leaks, and `comm` for uniform fixed-width column alignment.
+- **Awk Floating-Point Threshold Evaluation:** Avoids Bash integer arithmetic truncation bugs by delegating numerical checks to `awk`, accurately detecting and flagging processes exceeding a configurable threshold (`THRESHOLD=50.0%`).
+- **Flexible Argument Parsing:** Supports `-n <count>` (custom display count), `-t <threshold>` (custom alert trigger), `-l <logfile>`, and `-h` (`--help`), backed by strict regex validation.
+- **Persistent Chronological Audit Logging:** Appends every scan with timestamp, hostname, OS, kernel, system load averages, total process counts, and peak CPU to `logs/high_cpu.log`.
+- **Single Cross-Platform Launcher (`run.sh`):** Dispatches the detector, captures live output, regenerates `report.html` from scratch, and auto-detects host OS to launch the HTML report (WSL `explorer.exe`, macOS `open`, Linux `xdg-open`, Git Bash `start`).
+
+### Key Commands Used
+- `bash run.sh` — Single command to execute detector, regenerate dashboard, and open HTML report (Linux / macOS / Windows)
+- `./high_cpu_detector.sh` — Inspect top 5 CPU processes with default 50.0% threshold
+- `./high_cpu_detector.sh -n 3 -t 20.0` — Inspect top 3 processes with sensitive 20.0% alert threshold
+- `./high_cpu_detector.sh -n invalid` — Validates defensive argument error trapping (exit code 2)
+- `./high_cpu_detector.sh --help` — Displays command-line manual and option syntax
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_19/report.html`](./AS_19/report.html)
+- 📖 **Sprint Documentation:** [`AS_19/README.md`](./AS_19/README.md)
+- 📜 **Audit Report Output:** [`AS_19/logs/high_cpu.log`](./AS_19/logs/high_cpu.log)
 
 </details>
 
