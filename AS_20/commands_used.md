@@ -24,3 +24,10 @@ The following list documents every command executed during the development, test
 20. `bash run.sh -n 3 -t 5.0` — Verified passing of CLI flags through `run.sh` into `high_memory_detector.sh` and HTML regeneration.
 21. `bash run.sh` — Generated fresh default baseline live dashboard report (`report.html`).
 22. `view_file report.html` — Inspected generated dark-themed HTML report dashboard for data accuracy, CSS styling, and live metrics.
+23. `git add AS_20` — Staged all AS_20 sprint deliverables to git tracking.
+24. `git commit -m "AS_20: High Memory Process Detection - script, run.sh, live HTML report, docs"` — Committed AS_20 deliverables.
+25. `git push -u origin main` — Pushed AS_20 deliverables to remote GitHub repository.
+26. `git add README.md` — Staged updated root README with AS_20 index entry, cross-platform commands, and deep-dive dropdown.
+27. `git commit -m "Update README: add AS_20 to index and dropdown details"` — Committed root README updates.
+28. `git push` — Pushed root documentation updates to remote GitHub repository.
+
