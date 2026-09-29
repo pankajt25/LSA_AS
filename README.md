@@ -64,6 +64,14 @@ LSA_AS/
 │   ├── report.html                 # Standalone dark-themed dashboard report
 │   ├── logs/                       # Structured audit log directory
 │   └── README.md                   # Problem documentation & usage
+├── AS_22/                          # Automation Sprint Problem #22
+│   ├── multi_server_check.sh       # Core multi-server monitoring & reachability script
+│   ├── servers.txt                 # Target server inventory configuration
+│   ├── run.sh                      # Unified cross-platform execution & report launcher
+│   ├── commands_used.md            # Command log & development history
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── logs/                       # Structured audit log directory
+│   └── README.md                   # Problem documentation & usage
 └── (Upcoming Projects)/            # Future Automation Sprint additions
 ```
 
@@ -81,6 +89,7 @@ LSA_AS/
 | **AS_19** | **High CPU Process Detection** | Real-time live process table inspection (`ps -eo ... --sort=-%cpu`), top-5 extraction, dynamic CPU alert thresholding (&ge; 50%), and dark-themed HTML report. | ✅ Completed | [`AS_19/`](./AS_19) |
 | **AS_20** | **High Memory Process Detection** | Real-time live process table inspection (`ps -eo ... --sort=-%mem`), RSS MB conversion, `free -h` context, dynamic memory thresholding (&ge; 30%), and dark-themed HTML report. | ✅ Completed | [`AS_20/`](./AS_20) |
 | **AS_21** | **Network Connectivity Check** | Automated gateway reachability test, public baseline sanity probing (`8.8.8.8`), ICMP loss/RTT grep-awk parsing, and dark-themed HTML report. | ✅ Completed | [`AS_21/`](./AS_21) |
+| **AS_22** | **Multiple Server Check** | Inventory-based server reachability probing, OS ping flag adaptation, parallel subshell execution (`&` + `wait`), and dark-themed HTML report. | ✅ Completed | [`AS_22/`](./AS_22) |
 | *Upcoming* | *Future Sprints* | Additional automation tasks and administration solutions. | ⏳ Planned | — |
 
 ---
@@ -101,6 +110,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_19** | High CPU Process Detection | `cd AS_19 && bash run.sh` |
 | **AS_20** | High Memory Process Detection | `cd AS_20 && bash run.sh` |
 | **AS_21** | Network Connectivity Check | `cd AS_21 && bash run.sh` |
+| **AS_22** | Multiple Server Check | `cd AS_22 && bash run.sh` |
 
 ### 💻 Quick Command Reference by Operating System
 
@@ -114,6 +124,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_19** | `cd AS_19 && bash run.sh` | `cd AS_19 && bash run.sh` | `cd AS_19 && bash run.sh` | `cd AS_19 && bash run.sh` |
 | **AS_20** | `cd AS_20 && bash run.sh` | `cd AS_20 && bash run.sh` | `cd AS_20 && bash run.sh` | `cd AS_20 && bash run.sh` |
 | **AS_21** | `cd AS_21 && bash run.sh` | `cd AS_21 && bash run.sh` | `cd AS_21 && bash run.sh` | `cd AS_21 && bash run.sh` |
+| **AS_22** | `cd AS_22 && bash run.sh` | `cd AS_22 && bash run.sh` | `cd AS_22 && bash run.sh` | `cd AS_22 && bash run.sh` |
 
 ---
 
@@ -352,6 +363,37 @@ An organization wants to periodically verify connectivity to its gateway/server.
 - 📊 **Interactive Dashboard:** [`AS_21/report.html`](./AS_21/report.html)
 - 📖 **Sprint Documentation:** [`AS_21/README.md`](./AS_21/README.md)
 - 📜 **Audit Report Output:** [`AS_21/logs/connectivity.log`](./AS_21/logs/connectivity.log)
+
+</details>
+
+<details>
+<summary><strong>AS_22 — Multiple Server Check (Live System Data)</strong></summary>
+
+### Problem Statement
+An administrator maintains a list of servers. Develop a script that checks connectivity to every server and reports UP/DOWN status.
+
+### Summary of Approach
+- **Config-Driven Target Inventory:** Reads server targets from `servers.txt` with support for full-line comments (`#`), inline role descriptions, blank lines, and dynamic `GATEWAY` keyword resolution to the live default gateway.
+- **High-Concurrency Parallel Probing:** Executes ICMP echo requests concurrently by backgrounding subshells (`&`) into numbered slot files and synchronizing via Bash `wait`. Drastically reduces wall-clock execution time from $O(N \times \text{timeout})$ (~16s) down to $O(\text{timeout})$ (~3–4s).
+- **Sequential Fallback Mode:** Provides `--sequential` (`-s`) execution flag for resource-constrained or embedded environments where ICMP socket contention or file descriptor limits are a concern.
+- **Cross-Platform OS Synthesis:** Automatically adapts ping count and timeout parameters across Linux (`ping -c 2 -W 2`), macOS (`ping -c 2 -t 2`), and Windows native (`ping -n 2 -w 2000`).
+- **Precision Grep/Awk Extraction:** Robustly parses raw ping output for packet loss %, average RTT, min/max latency, and transmitted/received packet counts.
+- **Formatted Terminal Table & Badges:** Outputs clean ASCII-aligned table with colorized status badges (`[  UP  ]` in green, `[ DOWN ]` in red).
+- **Persistent Chronological Audit Logging:** Appends every scan run with timestamps, metadata, and per-server telemetry to `logs/multi_server_check.log`.
+- **Single Cross-Platform Launcher (`run.sh`):** Executes `multi_server_check.sh`, captures live terminal output, regenerates `report.html` from scratch using live system telemetry, and auto-launches the dark-themed dashboard across WSL (`explorer.exe`), Linux (`xdg-open`), macOS (`open`), and Git Bash (`start`).
+
+### Key Commands Used
+- `bash run.sh` — Single command to execute multi-server check, regenerate dashboard, and open HTML report (Linux / macOS / Windows)
+- `./multi_server_check.sh` — Default parallel scan across all targets in `servers.txt`
+- `./multi_server_check.sh -s` — Executes sequential serial scan across inventory
+- `./multi_server_check.sh -c 3 -w 1` — Sends 3 packets per target with 1-second timeout
+- `./multi_server_check.sh -f custom_hosts.txt` — Probes a custom server inventory configuration file
+- `./multi_server_check.sh --help` — Displays command-line manual and option syntax
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_22/report.html`](./AS_22/report.html)
+- 📖 **Sprint Documentation:** [`AS_22/README.md`](./AS_22/README.md)
+- 📜 **Audit Report Output:** [`AS_22/logs/multi_server_check.log`](./AS_22/logs/multi_server_check.log)
 
 </details>
 
