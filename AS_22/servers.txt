@@ -1,0 +1,39 @@
+# ==============================================================================
+# Multi-Server Health Check Configuration — Inventory List
+# Course: Linux System Administration (E1ITA307) — Automation Sprint (AS_22)
+#
+# FORMAT:
+#   <hostname_or_ip> [optional inline description after #]
+#
+# RULES:
+#   - Lines starting with '#' are treated as section comments and ignored.
+#   - Empty or whitespace-only lines are automatically skipped.
+#   - Inline comments (after '#') are parsed as descriptive server roles.
+#   - The special keyword 'GATEWAY' automatically maps to the host's default gateway.
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. Local Network Infrastructure & Gateway
+# ------------------------------------------------------------------------------
+192.168.32.1        # Local Default Gateway (Hyper-V / Virtual Switch)
+127.0.0.1           # Localhost Loopback Interface
+
+# ------------------------------------------------------------------------------
+# 2. Tier-1 Public Anycast DNS Resolvers
+# ------------------------------------------------------------------------------
+8.8.8.8             # Google Primary Public DNS
+1.1.1.1             # Cloudflare Primary Public DNS
+9.9.9.9             # Quad9 Threat-Blocking Secure DNS
+
+# ------------------------------------------------------------------------------
+# 3. Major Global Web & Cloud Infrastructure
+# ------------------------------------------------------------------------------
+google.com          # Google Global Search Infrastructure
+github.com          # GitHub Version Control & Developer Platform
+wikipedia.org       # Wikimedia Foundation Global CDN
+
+# ------------------------------------------------------------------------------
+# 4. Reserved Benchmark Blackhole Target (RFC 5737 TEST-NET-1)
+# ------------------------------------------------------------------------------
+# Used to verify DOWN status detection and 100% packet loss metrics.
+192.0.2.1           # RFC 5737 Test IP (Intentionally Unroutable Benchmark)
