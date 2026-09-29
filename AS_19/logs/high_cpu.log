@@ -1,0 +1,83 @@
+================================================================================
+[2026-09-29 23:19:22] HIGH CPU AUDIT SCAN
+Host: SP | OS: Linux | Kernel: 6.18.33.2-microsoft-standard-WSL2 | Scanned by: pankaj
+Parameters: Top Count = 5 | CPU Threshold = 50.0%
+System State: Total Processes = 29 | Load Avg = 1.27 1.23 0.74
+--------------------------------------------------------------------------------
+PID      PPID     USER               %CPU     %MEM   COMMAND              STATUS
+-------- -------- -------------- -------- --------   -------------------- ------
+1045     1044     pankaj            200.0      0.1   ps                   ⚠️  ALERT (>= 50.0%)
+911      239      pankaj             55.0      7.7   agy                  ⚠️  ALERT (>= 50.0%)
+1037     911      pankaj              9.8      0.0   bash                 NORMAL
+1        0        root                1.9      0.3   systemd              NORMAL
+232      1        root                0.3      1.1   containerd           NORMAL
+--------------------------------------------------------------------------------
+Result: 2 process(es) >= 50.0% threshold. Peak CPU: 200.0%.
+================================================================================
+
+================================================================================
+[2026-09-29 23:19:36] HIGH CPU AUDIT SCAN
+Host: SP | OS: Linux | Kernel: 6.18.33.2-microsoft-standard-WSL2 | Scanned by: pankaj
+Parameters: Top Count = 3 | CPU Threshold = 20.0%
+System State: Total Processes = 29 | Load Avg = 1.06 1.19 0.74
+--------------------------------------------------------------------------------
+PID      PPID     USER               %CPU     %MEM   COMMAND              STATUS
+-------- -------- -------------- -------- --------   -------------------- ------
+1083     1082     pankaj            100.0      0.1   ps                   ⚠️  ALERT (>= 20.0%)
+911      239      pankaj             55.1      7.9   agy                  ⚠️  ALERT (>= 20.0%)
+1076     911      pankaj             14.2      0.0   bash                 NORMAL
+--------------------------------------------------------------------------------
+Result: 2 process(es) >= 20.0% threshold. Peak CPU: 100.0%.
+================================================================================
+
+================================================================================
+[2026-09-29 23:20:43] HIGH CPU AUDIT SCAN
+Host: SP | OS: Linux | Kernel: 6.18.33.2-microsoft-standard-WSL2 | Scanned by: pankaj
+Parameters: Top Count = 5 | CPU Threshold = 50.0%
+System State: Total Processes = 31 | Load Avg = 1.69 1.34 0.82
+--------------------------------------------------------------------------------
+PID      PPID     USER               %CPU     %MEM   COMMAND              STATUS
+-------- -------- -------------- -------- --------   -------------------- ------
+911      239      pankaj             64.7      8.0   agy                  ⚠️  ALERT (>= 50.0%)
+1138     1133     pankaj              9.0      0.0   bash                 NORMAL
+1133     911      pankaj              5.1      0.0   bash                 NORMAL
+1139     1133     pankaj              4.5      0.1   tee                  NORMAL
+1        0        root                1.6      0.3   systemd              NORMAL
+--------------------------------------------------------------------------------
+Result: 1 process(es) >= 50.0% threshold. Peak CPU: 64.7%.
+================================================================================
+
+================================================================================
+[2026-09-29 23:21:36] HIGH CPU AUDIT SCAN
+Host: SP | OS: Linux | Kernel: 6.18.33.2-microsoft-standard-WSL2 | Scanned by: pankaj
+Parameters: Top Count = 5 | CPU Threshold = 50.0%
+System State: Total Processes = 32 | Load Avg = 0.82 1.16 0.79
+--------------------------------------------------------------------------------
+PID      PPID     USER               %CPU     %MEM   COMMAND              STATUS
+-------- -------- -------------- -------- --------   -------------------- ------
+911      239      pankaj             64.4      8.2   agy                  ⚠️  ALERT (>= 50.0%)
+1289     1285     pankaj             17.6      0.0   bash                 NORMAL
+1285     911      pankaj              2.5      0.0   bash                 NORMAL
+1        0        root                1.5      0.3   systemd              NORMAL
+1212     380      pankaj              0.4      0.1   dbus-daemon          NORMAL
+--------------------------------------------------------------------------------
+Result: 1 process(es) >= 50.0% threshold. Peak CPU: 64.4%.
+================================================================================
+
+================================================================================
+[2026-09-29 23:22:50] HIGH CPU AUDIT SCAN
+Host: SP | OS: Linux | Kernel: 6.18.33.2-microsoft-standard-WSL2 | Scanned by: pankaj
+Parameters: Top Count = 5 | CPU Threshold = 50.0%
+System State: Total Processes = 32 | Load Avg = 1.07 1.13 0.81
+--------------------------------------------------------------------------------
+PID      PPID     USER               %CPU     %MEM   COMMAND              STATUS
+-------- -------- -------------- -------- --------   -------------------- ------
+1378     1377     pankaj            100.0      0.1   ps                   ⚠️  ALERT (>= 50.0%)
+911      239      pankaj             62.9      8.0   agy                  ⚠️  ALERT (>= 50.0%)
+1370     1366     pankaj              8.3      0.0   bash                 NORMAL
+1        0        root                1.3      0.3   systemd              NORMAL
+232      1        root                0.2      1.1   containerd           NORMAL
+--------------------------------------------------------------------------------
+Result: 2 process(es) >= 50.0% threshold. Peak CPU: 100.0%.
+================================================================================
+
