@@ -90,6 +90,7 @@ LSA_AS/
 | **AS_20** | **High Memory Process Detection** | Real-time live process table inspection (`ps -eo ... --sort=-%mem`), RSS MB conversion, `free -h` context, dynamic memory thresholding (&ge; 30%), and dark-themed HTML report. | ✅ Completed | [`AS_20/`](./AS_20) |
 | **AS_21** | **Network Connectivity Check** | Automated gateway reachability test, public baseline sanity probing (`8.8.8.8`), ICMP loss/RTT grep-awk parsing, and dark-themed HTML report. | ✅ Completed | [`AS_21/`](./AS_21) |
 | **AS_22** | **Multiple Server Check** | Inventory-based server reachability probing, OS ping flag adaptation, parallel subshell execution (`&` + `wait`), and dark-themed HTML report. | ✅ Completed | [`AS_22/`](./AS_22) |
+| **AS_23** | **IP Configuration Report** | Hostname discovery (`hostname -I`), active interface auditing (`ip -br addr show up`), MAC/MTU extraction, default gateway parsing, `/etc/resolv.conf` DNS inspection, and dark-themed HTML report. | ✅ Completed | [`AS_23/`](./AS_23) |
 | *Upcoming* | *Future Sprints* | Additional automation tasks and administration solutions. | ⏳ Planned | — |
 
 ---
@@ -111,6 +112,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_20** | High Memory Process Detection | `cd AS_20 && bash run.sh` |
 | **AS_21** | Network Connectivity Check | `cd AS_21 && bash run.sh` |
 | **AS_22** | Multiple Server Check | `cd AS_22 && bash run.sh` |
+| **AS_23** | IP Configuration Report | `cd AS_23 && bash run.sh` |
 
 ### 💻 Quick Command Reference by Operating System
 
@@ -125,6 +127,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_20** | `cd AS_20 && bash run.sh` | `cd AS_20 && bash run.sh` | `cd AS_20 && bash run.sh` | `cd AS_20 && bash run.sh` |
 | **AS_21** | `cd AS_21 && bash run.sh` | `cd AS_21 && bash run.sh` | `cd AS_21 && bash run.sh` | `cd AS_21 && bash run.sh` |
 | **AS_22** | `cd AS_22 && bash run.sh` | `cd AS_22 && bash run.sh` | `cd AS_22 && bash run.sh` | `cd AS_22 && bash run.sh` |
+| **AS_23** | `cd AS_23 && bash run.sh` | `cd AS_23 && bash run.sh` | `cd AS_23 && bash run.sh` | `cd AS_23 && bash run.sh` |
 
 ---
 
@@ -393,7 +396,35 @@ An administrator maintains a list of servers. Develop a script that checks conne
 ### Dashboard Report & Documentation
 - 📊 **Interactive Dashboard:** [`AS_22/report.html`](./AS_22/report.html)
 - 📖 **Sprint Documentation:** [`AS_22/README.md`](./AS_22/README.md)
-- 📜 **Audit Report Output:** [`AS_22/logs/multi_server_check.log`](./AS_22/logs/multi_server_check.log)
+</details>
+
+<details>
+<summary><strong>AS_23 — IP Configuration Report (Live System Data)</strong></summary>
+
+### Problem Statement
+Create a script that displays the hostname, IP address, active interfaces, and default gateway of a Linux system.
+
+### Summary of Approach
+- **Modern `iproute2` Subsystem Architecture:** Interacts directly with the Linux kernel networking stack via Netlink sockets (`AF_NETLINK`), avoiding legacy synchronous `ioctl()` syscall overhead and outdated `net-tools` (`ifconfig`/`route`) deprecation issues.
+- **Precision Host Identification:** Queries system hostname and all assigned IPv4 addresses in a concise one-line summary via `hostname -I` with robust fallback parsing.
+- **Active Interface Auditing:** Extracts active network adapters using `ip -br addr show up` (or tokenized `ip addr show` fallback), isolating operational status, loopback devices, and physical/virtual adapters.
+- **Per-Interface Hardware & MTU Metrics:** Queries MAC hardware addresses (`ip link show <iface>`) and Maximum Transmission Unit (MTU) boundaries with sysfs fallback paths (`/sys/class/net/<iface>/address` and `mtu`).
+- **Default Gateway & Routing Telemetry:** Inspects kernel routing tables via `ip route show default`, extracting gateway IP, egress interface, protocol, and route metrics.
+- **DNS Resolver Discovery:** Parses active nameservers and domain search lists from `/etc/resolv.conf` with supplemental fallback to `resolvectl dns`.
+- **Clean Formatted Terminal Report:** Displays aligned ASCII tables with ANSI status badges and exports unadorned text reports to `reports/ip_report_<timestamp>.txt` and pointer `latest_ip_report.txt`.
+- **Cross-Platform HTML Dashboard (`run.sh`):** Regenerates `report.html` from scratch on every run with live dark-themed metric cards, interactive interface tables, and auto-dispatches browser across WSL (`explorer.exe`), Linux (`xdg-open`), macOS (`open`), and Windows Git Bash (`start`).
+
+### Key Commands Used
+- `bash run.sh` — Single command to audit live network config, regenerate dashboard, and open HTML report (Linux / macOS / Windows)
+- `./ip_config_report.sh` — Default execution generating terminal table and timestamped report
+- `./ip_config_report.sh --no-color` — Generates monochrome output for loggers or non-ANSI environments
+- `./ip_config_report.sh --json` — Emits structured JSON telemetry to stdout
+- `./ip_config_report.sh --help` — Displays command-line manual and option syntax
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_23/report.html`](./AS_23/report.html)
+- 📖 **Sprint Documentation:** [`AS_23/README.md`](./AS_23/README.md)
+- 📜 **Audit Report Output:** [`AS_23/reports/latest_ip_report.txt`](./AS_23/reports/latest_ip_report.txt)
 
 </details>
 
