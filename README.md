@@ -72,6 +72,20 @@ LSA_AS/
 │   ├── report.html                 # Standalone dark-themed dashboard report
 │   ├── logs/                       # Structured audit log directory
 │   └── README.md                   # Problem documentation & usage
+├── AS_23/                          # Automation Sprint Problem #23
+│   ├── ip_config_report.sh         # Core network configuration audit script
+│   ├── run.sh                      # Unified cross-platform execution & report launcher
+│   ├── commands_used.md            # Command log & development history
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── reports/                    # Timestamped network reports directory
+│   └── README.md                   # Problem documentation & usage
+├── AS_24/                          # Automation Sprint Problem #24
+│   ├── ssh_service_check.sh        # Core SSH service & socket auditing script
+│   ├── run.sh                      # Unified cross-platform execution & report launcher
+│   ├── commands_used.md            # Command log & development history
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── logs/                       # Structured audit log directory
+│   └── README.md                   # Problem documentation & usage
 └── (Upcoming Projects)/            # Future Automation Sprint additions
 ```
 
@@ -91,6 +105,7 @@ LSA_AS/
 | **AS_21** | **Network Connectivity Check** | Automated gateway reachability test, public baseline sanity probing (`8.8.8.8`), ICMP loss/RTT grep-awk parsing, and dark-themed HTML report. | ✅ Completed | [`AS_21/`](./AS_21) |
 | **AS_22** | **Multiple Server Check** | Inventory-based server reachability probing, OS ping flag adaptation, parallel subshell execution (`&` + `wait`), and dark-themed HTML report. | ✅ Completed | [`AS_22/`](./AS_22) |
 | **AS_23** | **IP Configuration Report** | Hostname discovery (`hostname -I`), active interface auditing (`ip -br addr show up`), MAC/MTU extraction, default gateway parsing, `/etc/resolv.conf` DNS inspection, and dark-themed HTML report. | ✅ Completed | [`AS_23/`](./AS_23) |
+| **AS_24** | **SSH Service Check** | Dynamic distribution service discovery ('ssh' vs 'sshd'), systemd active & boot persistence inspection, independent TCP port 22 socket cross-check, and dark-themed HTML report. | ✅ Completed | [`AS_24/`](./AS_24) |
 | *Upcoming* | *Future Sprints* | Additional automation tasks and administration solutions. | ⏳ Planned | — |
 
 ---
@@ -113,6 +128,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_21** | Network Connectivity Check | `cd AS_21 && bash run.sh` |
 | **AS_22** | Multiple Server Check | `cd AS_22 && bash run.sh` |
 | **AS_23** | IP Configuration Report | `cd AS_23 && bash run.sh` |
+| **AS_24** | SSH Service Check | `cd AS_24 && bash run.sh` |
 
 ### 💻 Quick Command Reference by Operating System
 
@@ -128,6 +144,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_21** | `cd AS_21 && bash run.sh` | `cd AS_21 && bash run.sh` | `cd AS_21 && bash run.sh` | `cd AS_21 && bash run.sh` |
 | **AS_22** | `cd AS_22 && bash run.sh` | `cd AS_22 && bash run.sh` | `cd AS_22 && bash run.sh` | `cd AS_22 && bash run.sh` |
 | **AS_23** | `cd AS_23 && bash run.sh` | `cd AS_23 && bash run.sh` | `cd AS_23 && bash run.sh` | `cd AS_23 && bash run.sh` |
+| **AS_24** | `cd AS_24 && bash run.sh` | `cd AS_24 && bash run.sh` | `cd AS_24 && bash run.sh` | `cd AS_24 && bash run.sh` |
 
 ---
 
@@ -428,6 +445,37 @@ Create a script that displays the hostname, IP address, active interfaces, and d
 
 </details>
 
+<details>
+<summary><strong>AS_24 — SSH Service Check (Live System Data)</strong></summary>
+
+### Problem Statement
+Write a script to verify whether SSH is running and display the current service status.
+
+### Summary of Approach
+- **Dynamic Cross-Distribution Service Discovery:** Intelligently discovers whether the target system uses Debian/Ubuntu convention (`ssh.service`) or RHEL/CentOS/Fedora convention (`sshd.service`) using `systemctl cat`, `systemctl list-unit-files`, unit `LoadState`, and `/etc/init.d/` checks. Never hardcodes a single name.
+- **Runtime Active State Inspection:** Probes live running state via `systemctl is-active <service>`, differentiating between `active`, `inactive`, and `not-found`. Automatically engages `service <service> status` fallback when systemd is unavailable (WSL1, legacy, minimal containers).
+- **Boot Persistence Verification:** Queries `systemctl is-enabled <service>` to verify if the daemon is registered to start on multi-user boot targets, with fallback SysV runlevel symlink inspection (`/etc/rc*.d/S*`).
+- **Independent Network Socket Cross-Check:** Executes `ss -tlnp | grep :22` (with `ss -tln`, `netstat -tlnp`, and `lsof` fallbacks) with strict word-boundary regex (`:22\b`) to independently verify that a listening TCP socket is bound to port 22, catching edge cases where service reports active but socket is unbound.
+- **Multi-State Status Synthesis:** Categorizes system health into `OPTIMAL`, `WARNING`, and `CRITICAL` tiers with clear, unambiguous human-readable banners and administrative remediation recommendations.
+- **Persistent Chronological Audit Trail:** Appends timestamped audit traces for every check step and command to `logs/ssh_check.log` and structured telemetry to `logs/ssh_check.json`.
+- **Defensive Error Handling:** Gracefully handles hosts where OpenSSH server is not installed, outputting a clear uninstalled message without crashing, and providing OS-specific installation commands.
+- **Cross-Platform HTML Dashboard (`run.sh`):** Regenerates `report.html` from scratch on every run with live dark-themed metric cards, inspection tables, and terminal execution log, automatically launching across WSL (`explorer.exe`), Linux (`xdg-open`), macOS (`open`), and Windows Git Bash (`start`).
+
+### Key Commands Used
+- `bash run.sh` — Single command to audit SSH status, regenerate dashboard, and open HTML report (Linux / macOS / Windows)
+- `./ssh_service_check.sh` — Default live SSH service audit on the current host
+- `./ssh_service_check.sh --json` — Emits structured JSON telemetry to stdout
+- `./ssh_service_check.sh -p 2222` — Probes a custom TCP port for hardened SSH configurations
+- `./ssh_service_check.sh -s cron` — Tests diagnostic service override against active system daemon
+- `./ssh_service_check.sh --help` — Displays command-line manual and option syntax
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_24/report.html`](./AS_24/report.html)
+- 📖 **Sprint Documentation:** [`AS_24/README.md`](./AS_24/README.md)
+- 📜 **Audit Log File:** [`AS_24/logs/ssh_check.log`](./AS_24/logs/ssh_check.log)
+
+</details>
+
 ---
 
 ## 🛠️ General Guidelines
@@ -435,4 +483,5 @@ Create a script that displays the hostname, IP address, active interfaces, and d
 - All scripts are self-contained within their respective project directories (`AS_XX/`).
 - Scripts adhere to defensive bash standards (`set -euo pipefail`), proper validation, and clear exit codes.
 - Refer to individual project folders for setup instructions, command logs, and sample outputs.
+
 
