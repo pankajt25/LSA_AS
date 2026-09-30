@@ -93,6 +93,13 @@ LSA_AS/
 │   ├── report.html                 # Standalone dark-themed dashboard report
 │   ├── logs/                       # Structured audit log & JSON telemetry directory
 │   └── README.md                   # Problem documentation & usage
+├── AS_26/                          # Automation Sprint Problem #26
+│   ├── package_update_check.sh     # Cross-platform package manager update audit script
+│   ├── run.sh                      # Unified cross-platform execution & report launcher
+│   ├── commands_used.md            # Command log & development history
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── logs/                       # Structured audit log & JSON telemetry directory
+│   └── README.md                   # Problem documentation & usage
 └── (Upcoming Projects)/            # Future Automation Sprint additions
 ```
 
@@ -114,6 +121,7 @@ LSA_AS/
 | **AS_23** | **IP Configuration Report** | Hostname discovery (`hostname -I`), active interface auditing (`ip -br addr show up`), MAC/MTU extraction, default gateway parsing, `/etc/resolv.conf` DNS inspection, and dark-themed HTML report. | ✅ Completed | [`AS_23/`](./AS_23) |
 | **AS_24** | **SSH Service Check** | Dynamic distribution service discovery ('ssh' vs 'sshd'), systemd active & boot persistence inspection, independent TCP port 22 socket cross-check, and dark-themed HTML report. | ✅ Completed | [`AS_24/`](./AS_24) |
 | **AS_25** | **Port Availability Check** | Native Bash `/dev/tcp` network probing, resilient OpenBSD netcat fallback, active RST vs timeout differentiation, multi-port loop auditing, and dark-themed HTML report. | ✅ Completed | [`AS_25/`](./AS_25) |
+| **AS_26** | **Package Update Check** | Dynamic package manager detection (`apt`, `dnf`, `brew`, `pacman`, `zypper`), safe read-only index refresh, package version extraction, security vs standard classification, and dark-themed HTML report. | ✅ Completed | [`AS_26/`](./AS_26) |
 | *Upcoming* | *Future Sprints* | Additional automation tasks and administration solutions. | ⏳ Planned | — |
 
 ---
@@ -138,6 +146,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_23** | IP Configuration Report | `cd AS_23 && bash run.sh` |
 | **AS_24** | SSH Service Check | `cd AS_24 && bash run.sh` |
 | **AS_25** | Port Availability Check | `cd AS_25 && bash run.sh` |
+| **AS_26** | Package Update Check | `cd AS_26 && bash run.sh` |
 
 ### 💻 Quick Command Reference by Operating System
 
@@ -155,6 +164,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_23** | `cd AS_23 && bash run.sh` | `cd AS_23 && bash run.sh` | `cd AS_23 && bash run.sh` | `cd AS_23 && bash run.sh` |
 | **AS_24** | `cd AS_24 && bash run.sh` | `cd AS_24 && bash run.sh` | `cd AS_24 && bash run.sh` | `cd AS_24 && bash run.sh` |
 | **AS_25** | `cd AS_25 && bash run.sh` | `cd AS_25 && bash run.sh` | `cd AS_25 && bash run.sh` | `cd AS_25 && bash run.sh` |
+| **AS_26** | `cd AS_26 && bash run.sh` | `cd AS_26 && bash run.sh` | `cd AS_26 && bash run.sh` | `cd AS_26 && bash run.sh` |
 
 ---
 
@@ -514,6 +524,35 @@ A system administrator wants to verify whether a specified server port is access
 - 📊 **Interactive Dashboard:** [`AS_25/report.html`](./AS_25/report.html)
 - 📖 **Sprint Documentation:** [`AS_25/README.md`](./AS_25/README.md)
 - 📜 **Audit Log File:** [`AS_25/logs/port_check.log`](./AS_25/logs/port_check.log)
+
+</details>
+
+<details>
+<summary><strong>AS_26 — Package Update Check (Live System Data)</strong></summary>
+
+### Problem Statement
+Create a script to check whether system packages require updates and display the update status.
+
+### Summary of Approach
+- **Dynamic Cross-Platform Package Manager Detection:** Avoids hardcoding `apt` only. Dynamically detects package managers across distributions: `apt`/`apt-get` (Debian/Ubuntu), `dnf`/`yum` (RHEL/Rocky/AlmaLinux/Fedora), `brew` (macOS/Darwin), `pacman` (Arch Linux), and `zypper` (openSUSE).
+- **Safe Read-Only Index Metadata Refresh:** Safely synchronizes repository metadata (e.g. `sudo apt-get update -qq`) without altering any installed binaries. Gracefully falls back to querying the cached local package index without crashing if offline or unprivileged.
+- **Upgradable Package Parsing & Differential Extraction:** Extracts package names, current installed versions, candidate available versions, repository suites, and CPU architecture.
+- **Security Vulnerability vs Standard Update Classification:** Identifies critical CVE security patches originating from `*-security` repositories versus standard functional/phased updates.
+- **Strict Read-Only Guarantee:** Guarantees zero packages are installed, removed, or upgraded. Confirms check-only policy in terminal output, structured JSON, logs, and HTML dashboard.
+- **Persistent Chronological Audit Trail:** Appends timestamped audit traces to `logs/package_check.log` and exports structured machine-readable JSON telemetry to `logs/package_check.json`.
+- **Cross-Platform HTML Dashboard (`run.sh`):** Regenerates `report.html` from scratch on every run with executive KPI metric cards, scrollable table with live client-side search/filter, captured terminal execution transcript, and sysadmin remediation guide, automatically launching across WSL (`explorer.exe`), Linux (`xdg-open`), macOS (`open`), and Windows Git Bash (`start`).
+
+### Key Commands Used
+- `bash run.sh` — Single command to audit live package updates, regenerate dashboard, and open HTML report (Linux / macOS / Windows)
+- `./package_update_check.sh` — Executes the full package update check with repository index metadata synchronization
+- `./package_update_check.sh --skip-refresh` — Queries cached package metadata without index refresh (fast/offline mode)
+- `./package_update_check.sh --json` — Streams raw structured JSON telemetry directly to standard output
+- `./package_update_check.sh --help` — Displays command-line manual and option syntax
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_26/report.html`](./AS_26/report.html)
+- 📖 **Sprint Documentation:** [`AS_26/README.md`](./AS_26/README.md)
+- 📜 **Audit Log File:** [`AS_26/logs/package_check.log`](./AS_26/logs/package_check.log)
 
 </details>
 
