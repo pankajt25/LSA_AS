@@ -1,0 +1,45 @@
+{
+  "timestamp": "2026-09-30 11:33:35 IST",
+  "hostname": "SP",
+  "os_distro": "Ubuntu 26.04.1 LTS",
+  "kernel": "6.18.33.2-microsoft-standard-WSL2",
+  "arch": "x86_64",
+  "tool_used": "iproute2 (ip)",
+  "all_ips_summary": "192.168.42.183",
+  "default_gateway": {
+    "ip": "192.168.32.1",
+    "interface": "eth0",
+    "protocol": "kernel",
+    "metric": "N/A",
+    "raw": "default via 192.168.32.1 dev eth0 proto kernel "
+  },
+  "dns": {
+    "servers": ["10.255.255.254"],
+    "search_domains": "ALLIANCEBLR.COM"
+  },
+  "summary": {
+    "total_active_interfaces": 2,
+    "primary_interface": "eth0",
+    "primary_ip": "192.168.42.183/20"
+  },
+  "interfaces": [
+    {
+      "name": "lo",
+      "state": "UNKNOWN",
+      "type": "Loopback",
+      "mac": "00:00:00:00:00:00",
+      "mtu": 65536,
+      "ipv4": "127.0.0.1/8,10.255.255.254/32",
+      "ipv6": "::1/128"
+    },
+    {
+      "name": "eth0",
+      "state": "UP",
+      "type": "Physical Ethernet",
+      "mac": "00:15:5d:bb:c0:36",
+      "mtu": 1500,
+      "ipv4": "192.168.42.183/20",
+      "ipv6": "fe80::215:5dff:febb:c036/64"
+    }
+  ]
+}

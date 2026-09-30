@@ -1,0 +1,55 @@
+================================================================================
+        LINUX SYSTEM ADMINISTRATION (E1ITA307) — IP CONFIGURATION REPORT        
+================================================================================
+Generated On : 2026-09-30 11:28:30 IST
+Operating Sys: Ubuntu 26.04.1 LTS (Kernel: 6.18.33.2-microsoft-standard-WSL2, Arch: x86_64)
+Query Engine : iproute2 (ip)
+
+--- [1] HOST IDENTIFICATION & IP SUMMARY ---------------------------------------
+  Hostname        : SP
+  Assigned IPs    : 192.168.42.183
+  Primary IPv4    : 192.168.42.183/20 (on interface: eth0)
+
+--- [2] DEFAULT GATEWAY & ROUTING TABLE ----------------------------------------
+  Default Gateway : 192.168.32.1
+  Egress Interface: eth0
+  Protocol/Metric : kernel (metric: N/A)
+  Route Directive : default via 192.168.32.1 dev eth0 proto kernel 
+
+--- [3] DNS RESOLUTION CONFIGURATION -------------------------------------------
+  Nameservers     : 10.255.255.254
+  Search Domains  : ALLIANCEBLR.COM
+  Source File     : /etc/resolv.conf
+
+--- [4] ACTIVE NETWORK INTERFACES (2 Detected) ---------------------------
+  INTERFACE  STATE    MAC ADDRESS        MTU    IPv4 ADDRESS / CIDR       TYPE                
+  --------------------------------------------------------------------------------
+  lo         UNKNOWN  00:00:00:00:00:00  65536  127.0.0.1/8               Loopback            
+  eth0       UP       00:15:5d:bb:c0:36  1500   192.168.42.183/20         Physical Ethernet   
+
+Detailed Interface Breakdown:
+  * Interface [lo]:
+      Type       : Loopback
+      Oper State : UNKNOWN
+      Hardware/MAC: 00:00:00:00:00:00
+      MTU Payload: 65536 bytes
+      IPv4 / CIDR: 127.0.0.1/8,10.255.255.254/32
+      IPv6 / CIDR: ::1/128
+  * Interface [eth0]:
+      Type       : Physical Ethernet
+      Oper State : UP
+      Hardware/MAC: 00:15:5d:bb:c0:36
+      MTU Payload: 1500 bytes
+      IPv4 / CIDR: 192.168.42.183/20
+      IPv6 / CIDR: fe80::215:5dff:febb:c036/64
+
+--- [5] ARCHITECTURAL NOTE: MODERN iproute2 VS LEGACY net-tools --------------
+  * Protocol Standard : iproute2 communicates via Netlink sockets (AF_NETLINK),
+                        avoiding legacy synchronous ioctl() overhead.
+  * Subnet Semantics  : Native CIDR prefix notation (/24, /20, /64) replaces
+                        archaic dotted classful/classless netmasks.
+  * Multi-IP Support  : Multiple IP addresses per device are first-class objects,
+                        eliminating fragile sub-interface aliases (eth0:1).
+  * Deprecation Status: net-tools (ifconfig/route) was deprecated in ~2009 and
+                        is omitted by default in modern enterprise Linux.
+================================================================================
