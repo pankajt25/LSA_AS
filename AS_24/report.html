@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSH Service Check Report — AS_24 (E1ITA307)</title>
+    <style>
+        :root {
+            --bg-base: #0a0f1d;
+            --bg-card: #111827;
+            --bg-card-alt: #1a2234;
+            --bg-hover: #1f293d;
+            --border-dim: #26334d;
+            --border-bright: #3b4d70;
+            --text-primary: #f9fafb;
+            --text-secondary: #9ca3af;
+            --text-muted: #6b7280;
+            --accent-cyan: #38bdf8;
+            --accent-blue: #3b82f6;
+            --accent-emerald: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-red: #ef4444;
+            --accent-purple: #a855f7;
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            padding: 24px;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        /* Header Card */
+        .header-card {
+            background: linear-gradient(135deg, #111827 0%, #17223b 50%, #0d1424 100%);
+            border: 1px solid var(--border-bright);
+            border-radius: 14px;
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue), var(--accent-purple));
+        }
+
+        .header-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .header-titles h1 {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-titles .subtitle {
+            font-size: 14px;
+            color: var(--accent-cyan);
+            font-weight: 500;
+            margin-top: 4px;
+        }
+
+        .meta-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .meta-pill {
+            background-color: var(--bg-card-alt);
+            border: 1px solid var(--border-dim);
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .meta-pill strong {
+            color: var(--text-primary);
+        }
+
+        /* HERO STATUS CARD */
+        .hero-status-card {
+            border-radius: 14px;
+            padding: 28px;
+            margin-bottom: 24px;
+            border: 1px solid var(--border-bright);
+            box-shadow: 0 12px 35px -8px rgba(239, 68, 68, 0.2);
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .hero-optimal {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(17, 24, 39, 0.95) 100%);
+            border-left: 6px solid var(--accent-emerald);
+        }
+
+        .hero-warning {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.12) 0%, rgba(17, 24, 39, 0.95) 100%);
+            border-left: 6px solid var(--accent-amber);
+        }
+
+        .hero-critical {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(17, 24, 39, 0.95) 100%);
+            border-left: 6px solid var(--accent-red);
+        }
+
+        .hero-headline-wrap {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+
+        .hero-icon {
+            font-size: 40px;
+            line-height: 1;
+        }
+
+        .hero-headline {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.4;
+        }
+
+        .hero-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 14px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .breakdown-item {
+            background: rgba(0, 0, 0, 0.25);
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border-dim);
+        }
+
+        .breakdown-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .breakdown-val {
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* KPI METRIC CARDS */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .metric-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-dim);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .metric-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .metric-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 6px;
+            font-family: var(--font-mono);
+        }
+
+        .metric-sub {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Status Badges & Pills */
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 9999px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        .badge-green {
+            background-color: rgba(16, 185, 129, 0.15);
+            color: var(--accent-emerald);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .badge-amber {
+            background-color: rgba(245, 158, 11, 0.15);
+            color: var(--accent-amber);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .badge-red {
+            background-color: rgba(239, 68, 68, 0.15);
+            color: var(--accent-red);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .pill-green { color: var(--accent-emerald); }
+        .pill-amber { color: var(--accent-amber); }
+        .pill-red { color: var(--accent-red); }
+
+        /* SECTION CARDS & TABLES */
+        .section-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-dim);
+            border-radius: 14px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.3);
+        }
+
+        .section-header {
+            font-size: 18px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid var(--border-dim);
+            padding-bottom: 12px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .data-table th {
+            background-color: var(--bg-card-alt);
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-align: left;
+            padding: 12px 14px;
+            border-bottom: 2px solid var(--border-dim);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .data-table td {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border-dim);
+            vertical-align: middle;
+        }
+
+        .data-table tr:hover td {
+            background-color: var(--bg-hover);
+        }
+
+        .cmd-snippet {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            background: #0f172a;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--accent-cyan);
+            border: 1px solid #1e293b;
+        }
+
+        /* TERMINAL LOG EMBED */
+        .terminal-box {
+            background-color: #070b14;
+            border: 1px solid var(--border-dim);
+            border-radius: 10px;
+            overflow: hidden;
+            font-family: var(--font-mono);
+        }
+
+        .terminal-bar {
+            background-color: #0f172a;
+            padding: 8px 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid var(--border-dim);
+        }
+
+        .term-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .dot-red { background-color: #ef4444; }
+        .dot-yellow { background-color: #f59e0b; }
+        .dot-green { background-color: #10b981; }
+        .term-title {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-left: 8px;
+        }
+
+        .terminal-content {
+            padding: 16px;
+            max-height: 380px;
+            overflow-y: auto;
+            color: #d1d5db;
+            font-size: 12px;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        /* LOG AUDIT FEED */
+        .log-feed {
+            background-color: #070b14;
+            border: 1px solid var(--border-dim);
+            border-radius: 8px;
+            padding: 14px;
+            max-height: 260px;
+            overflow-y: auto;
+            font-family: var(--font-mono);
+            font-size: 12px;
+        }
+
+        .log-row {
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            white-space: pre-wrap;
+        }
+
+        .log-line-default { color: var(--text-secondary); }
+        .log-line-success { color: var(--accent-emerald); }
+        .log-line-warn { color: var(--accent-amber); }
+        .log-line-error { color: var(--accent-red); }
+
+        /* REMEDIATION / ADMIN GUIDE BOX */
+        .guide-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 16px;
+            margin-top: 14px;
+        }
+
+        .guide-card {
+            background-color: var(--bg-card-alt);
+            border: 1px solid var(--border-dim);
+            border-radius: 10px;
+            padding: 18px;
+        }
+
+        .guide-card h4 {
+            font-size: 14px;
+            color: var(--accent-cyan);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .code-block {
+            background-color: #0b1120;
+            border: 1px solid var(--border-dim);
+            border-radius: 6px;
+            padding: 10px 12px;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: #e2e8f0;
+            margin-top: 6px;
+            overflow-x: auto;
+        }
+
+        /* FOOTER */
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 32px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-dim);
+        }
+
+        .footer strong {
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- HEADER CARD -->
+        <header class="header-card">
+            <div class="header-title-row">
+                <div class="header-titles">
+                    <h1>🛡️ SSH Service Check Dashboard</h1>
+                    <div class="subtitle">Course: Linux System Administration (E1ITA307) — Automation Sprint #24</div>
+                </div>
+                <div>
+                    <span class="badge badge-red">CRITICAL STATUS</span>
+                </div>
+            </div>
+
+            <div class="meta-pills">
+                <div class="meta-pill">🖥️ Host: <strong>SP</strong></div>
+                <div class="meta-pill">🐧 OS: <strong>Ubuntu 26.04.1 LTS</strong></div>
+                <div class="meta-pill">⚙️ Kernel: <strong>6.18.33.2-microsoft-standard-WSL2</strong></div>
+                <div class="meta-pill">🏗️ Arch: <strong>x86_64</strong></div>
+                <div class="meta-pill">🔄 Init: <strong>systemd</strong></div>
+                <div class="meta-pill">🕒 Checked: <strong>2026-09-30 11:46:46 IST</strong></div>
+                <div class="meta-pill">⚡ Environment: <strong>WSL2 Linux</strong></div>
+            </div>
+        </header>
+
+        <!-- HERO STATUS CARD -->
+        <section class="hero-status-card hero-critical">
+            <div class="hero-headline-wrap">
+                <div class="hero-icon">❌</div>
+                <div>
+                    <div class="hero-headline">❌ SSH is NOT INSTALLED (neither &#x27;ssh&#x27; nor &#x27;sshd&#x27; service found on this system, and port 22 is not listening)</div>
+                    <div style="font-size: 13px; color: var(--text-secondary); margin-top: 4px;">
+                        To install OpenSSH server on Debian/Ubuntu: sudo apt-get update &amp;&amp; sudo apt-get install openssh-server
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-breakdown">
+                <div class="breakdown-item">
+                    <div class="breakdown-label">Service Candidate</div>
+                    <div class="breakdown-val">
+                        <span class="pill-red">●</span> none
+                    </div>
+                </div>
+                <div class="breakdown-item">
+                    <div class="breakdown-label">Runtime State</div>
+                    <div class="breakdown-val">
+                        <span class="pill-red">●</span> NOT-INSTALLED
+                    </div>
+                </div>
+                <div class="breakdown-item">
+                    <div class="breakdown-label">Boot Persistence</div>
+                    <div class="breakdown-val">
+                        <span class="pill-red">●</span> NOT-INSTALLED
+                    </div>
+                </div>
+                <div class="breakdown-item">
+                    <div class="breakdown-label">Port 22 Socket</div>
+                    <div class="breakdown-val">
+                        <span class="pill-red">●</span> NOT LISTENING
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- KPI METRICS GRID -->
+        <section class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-title">
+                    <span>1. Service Name Detection</span>
+                    <span class="badge badge-red">none</span>
+                </div>
+                <div class="metric-value">none</div>
+                <div class="metric-sub">not-found</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-title">
+                    <span>2. Runtime Active State</span>
+                    <span class="badge badge-red">NOT-INSTALLED</span>
+                </div>
+                <div class="metric-value">NOT-INSTALLED</div>
+                <div class="metric-sub">Neither &#x27;ssh&#x27; nor &#x27;sshd&#x27; service is installed or registered</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-title">
+                    <span>3. Boot Persistence</span>
+                    <span class="badge badge-red">NOT-INSTALLED</span>
+                </div>
+                <div class="metric-value">NOT-INSTALLED</div>
+                <div class="metric-sub">Cannot inspect boot persistence for non-existent service</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-title">
+                    <span>4. Port 22 Socket</span>
+                    <span class="badge badge-red">CLOSED</span>
+                </div>
+                <div class="metric-value">NOT BOUND</div>
+                <div class="metric-sub">Process: None</div>
+            </div>
+        </section>
+
+        <!-- TECHNICAL AUDIT MATRIX TABLE -->
+        <section class="section-card">
+            <div class="section-header">
+                <span>📋 Technical Inspection & Diagnostic Matrix</span>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th style="width: 22%;">Audit Step</th>
+                        <th style="width: 18%;">Target Subject</th>
+                        <th style="width: 25%;">Execution Command / Probe</th>
+                        <th style="width: 15%;">State / Output</th>
+                        <th style="width: 20%;">Diagnostic Findings</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr>
+        <td><strong>1. Service Detection</strong></td>
+        <td><code>ssh then sshd</code></td>
+        <td><code class="cmd-snippet">systemctl cat ssh.service / sshd.service</code></td>
+        <td><span class="badge badge-amber">NONE (not-found)</span></td>
+        <td class="text-secondary">Neither &#x27;ssh&#x27; nor &#x27;sshd&#x27; service found; OpenSSH server not installed</td>
+    </tr>
+    
+    <tr>
+        <td><strong>2. Runtime Active State</strong></td>
+        <td><code>Active Daemon (none)</code></td>
+        <td><code class="cmd-snippet">systemctl is-active ssh</code></td>
+        <td><span class="badge badge-red">NOT-INSTALLED</span></td>
+        <td class="text-secondary">Neither &#x27;ssh&#x27; nor &#x27;sshd&#x27; service is installed or registered</td>
+    </tr>
+    
+    <tr>
+        <td><strong>3. Boot Persistence</strong></td>
+        <td><code>Auto-start (none)</code></td>
+        <td><code class="cmd-snippet">systemctl is-enabled ssh</code></td>
+        <td><span class="badge badge-amber">NOT-INSTALLED</span></td>
+        <td class="text-secondary">Cannot inspect boot persistence for non-existent service</td>
+    </tr>
+    
+    <tr>
+        <td><strong>4. Port Socket Cross-Check</strong></td>
+        <td><code>TCP Port 22</code></td>
+        <td><code class="cmd-snippet">ss -tlnp (fallback: ss -tln) | grep :22</code></td>
+        <td><span class="badge badge-red">NOT LISTENING</span></td>
+        <td class="text-secondary">No active TCP listening sockets bound to port 22 — Process: None</td>
+    </tr>
+    
+    <tr>
+        <td><strong>5. Init Architecture</strong></td>
+        <td><code>Init System Manager</code></td>
+        <td><code class="cmd-snippet">systemctl is-system-running / init detection</code></td>
+        <td><span class="badge badge-green">SYSTEMD</span></td>
+        <td class="text-secondary">systemd init manager (PID 1 active, status: running)</td>
+    </tr>
+    
+                </tbody>
+            </table>
+        </section>
+
+        <!-- LIVE TERMINAL EXECUTION LOG -->
+        <section class="section-card">
+            <div class="section-header">
+                <span>💻 Live Terminal Execution Output</span>
+            </div>
+            <div class="terminal-box">
+                <div class="terminal-bar">
+                    <span class="term-dot dot-red"></span>
+                    <span class="term-dot dot-yellow"></span>
+                    <span class="term-dot dot-green"></span>
+                    <span class="term-title">bash ./ssh_service_check.sh — stdout & stderr</span>
+                </div>
+                <pre class="terminal-content"><code>[11:46:46] [INFO   ] [DETECT    ] Evaluating Candidate 1: &#x27;ssh&#x27; (Debian/Ubuntu standard)...
+[11:46:46] [INFO   ] [DETECT    ] Candidate 1 (&#x27;ssh&#x27;) not found. Evaluating Candidate 2: &#x27;sshd&#x27; (RHEL/CentOS standard)...
+[11:46:46] [WARN   ] [DETECT    ] Neither &#x27;ssh&#x27; nor &#x27;sshd&#x27; service found on this system
+[11:46:46] [WARN   ] [ACTIVE    ] Active state: NOT INSTALLED (Neither &#x27;ssh&#x27; nor &#x27;sshd&#x27; service is installed or registered)
+[11:46:46] [WARN   ] [ENABLED   ] Boot persistence: NOT INSTALLED
+[11:46:46] [INFO   ] [SOCKET    ] Performing independent network socket cross-check for port 22...
+[11:46:46] [WARN   ] [SOCKET    ] Port 22 is NOT LISTENING (no bound TCP sockets detected)
+[11:46:46] [INFO   ] [EVAL      ] Combined Result: ❌ SSH is NOT INSTALLED (neither &#x27;ssh&#x27; nor &#x27;sshd&#x27; service found on this system, and port 22 is not listening)
+
+================================================================================
+       SSH SERVICE AUDIT REPORT — AUTOMATION SPRINT #24 (E1ITA307)       
+================================================================================
+ Timestamp : 2026-09-30 11:46:46 IST
+ Hostname  : SP | OS: Ubuntu 26.04.1 LTS | Kernel: 6.18.33.2-microsoft-standard-WSL2
+ Init System: systemd init manager (PID 1 active, status: running)
+--------------------------------------------------------------------------------
+ SERVICE INSPECTION MATRIX:
+--------------------------------------------------------------------------------
+  Detected Service Name    : none (not-found)
+  Active Status            : NOT-INSTALLED (Neither &#x27;ssh&#x27; nor &#x27;sshd&#x27; service is installed or registered)
+  Boot Persistence         : NOT-INSTALLED (Cannot inspect boot persistence for non-existent service)
+  TCP Port 22 Socket       : NOT LISTENING (No active TCP listening sockets bound to port 22)
+--------------------------------------------------------------------------------
+ OVERALL STATUS EVALUATION:
+--------------------------------------------------------------------------------
+  ❌ SSH is NOT INSTALLED (neither &#x27;ssh&#x27; nor &#x27;sshd&#x27; service found on this system, and port 22 is not listening)
+
+  Remediation / Admin Note:
+  To install OpenSSH server on Debian/Ubuntu: sudo apt-get update &amp;&amp; sudo apt-get install openssh-server
+================================================================================
+ Audit Log File  : /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_24/logs/ssh_check.log
+ JSON Telemetry  : /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_24/logs/ssh_check.json
+================================================================================</code></pre>
+            </div>
+        </section>
+
+        <!-- RECENT AUDIT LOG FEED -->
+        <section class="section-card">
+            <div class="section-header">
+                <span>📜 Persistent Chronological Audit Trail (logs/ssh_check.log)</span>
+            </div>
+            <div class="log-feed">
+                <div class="log-row log-line-warn">[2026-09-30 11:45:44] [WARN   ] [ENABLED     ] Boot persistence: NOT INSTALLED</div>
+<div class="log-row log-line-default">[2026-09-30 11:45:44] [INFO   ] [SOCKET      ] Performing independent network socket cross-check for port 22...</div>
+<div class="log-row log-line-warn">[2026-09-30 11:45:44] [WARN   ] [SOCKET      ] Port 22 is NOT LISTENING (no bound TCP sockets detected)</div>
+<div class="log-row log-line-default">[2026-09-30 11:45:44] [INFO   ] [EVAL        ] Combined Result: ❌ SSH is NOT INSTALLED (neither &#x27;ssh&#x27; nor &#x27;sshd&#x27; service found on this system, and port 22 is not listening)</div>
+<div class="log-row log-line-default">[2026-09-30 11:46:19] [INFO   ] [DETECT      ] Testing user-specified override service candidate: &#x27;cron&#x27;</div>
+<div class="log-row log-line-default">[2026-09-30 11:46:19] [INFO   ] [ACTIVE      ] Executing systemd check: &#x27;systemctl is-active cron&#x27;...</div>
+<div class="log-row log-line-success">[2026-09-30 11:46:19] [SUCCESS] [ACTIVE      ] Service &#x27;cron&#x27; is ACTIVE (exit code 0)</div>
+<div class="log-row log-line-default">[2026-09-30 11:46:20] [INFO   ] [ENABLED     ] Executing systemd check: &#x27;systemctl is-enabled cron&#x27;...</div>
+<div class="log-row log-line-success">[2026-09-30 11:46:20] [SUCCESS] [ENABLED     ] Service &#x27;cron&#x27; is ENABLED at boot (code 0)</div>
+<div class="log-row log-line-default">[2026-09-30 11:46:20] [INFO   ] [SOCKET      ] Performing independent network socket cross-check for port 53...</div>
+<div class="log-row log-line-success">[2026-09-30 11:46:20] [SUCCESS] [SOCKET      ] Port 53 is LISTENING. Match: LISTEN 0 1000 10.255.255.254:53 0.0.0.0:*</div>
+<div class="log-row log-line-default">[2026-09-30 11:46:20] [INFO   ] [EVAL        ] Combined Result: ✅ SSH (&#x27;cron&#x27;) is ACTIVE, ENABLED at boot, and LISTENING on port 53</div>
+<div class="log-row log-line-default">[2026-09-30 11:46:46] [INFO   ] [DETECT      ] Evaluating Candidate 1: &#x27;ssh&#x27; (Debian/Ubuntu standard)...</div>
+<div class="log-row log-line-default">[2026-09-30 11:46:46] [INFO   ] [DETECT      ] Candidate 1 (&#x27;ssh&#x27;) not found. Evaluating Candidate 2: &#x27;sshd&#x27; (RHEL/CentOS standard)...</div>
+<div class="log-row log-line-warn">[2026-09-30 11:46:46] [WARN   ] [DETECT      ] Neither &#x27;ssh&#x27; nor &#x27;sshd&#x27; service found on this system</div>
+<div class="log-row log-line-warn">[2026-09-30 11:46:46] [WARN   ] [ACTIVE      ] Active state: NOT INSTALLED (Neither &#x27;ssh&#x27; nor &#x27;sshd&#x27; service is installed or registered)</div>
+<div class="log-row log-line-warn">[2026-09-30 11:46:46] [WARN   ] [ENABLED     ] Boot persistence: NOT INSTALLED</div>
+<div class="log-row log-line-default">[2026-09-30 11:46:46] [INFO   ] [SOCKET      ] Performing independent network socket cross-check for port 22...</div>
+<div class="log-row log-line-warn">[2026-09-30 11:46:46] [WARN   ] [SOCKET      ] Port 22 is NOT LISTENING (no bound TCP sockets detected)</div>
+<div class="log-row log-line-default">[2026-09-30 11:46:46] [INFO   ] [EVAL        ] Combined Result: ❌ SSH is NOT INSTALLED (neither &#x27;ssh&#x27; nor &#x27;sshd&#x27; service found on this system, and port 22 is not listening)</div>
+
+            </div>
+        </section>
+
+        <!-- SYSADMIN REMEDIATION & VIVA GUIDE -->
+        <section class="section-card">
+            <div class="section-header">
+                <span>💡 System Administrator Quick Reference & Remediation</span>
+            </div>
+            <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">
+                Reference commands for provisioning, enabling, and managing SSH daemons across different Linux distribution families:
+            </p>
+            <div class="guide-grid">
+                <div class="guide-card">
+                    <h4>🐧 Debian / Ubuntu Family ('ssh.service')</h4>
+                    <p style="font-size: 12px; color: var(--text-muted);">Package: <code>openssh-server</code> | Unit: <code>ssh.service</code></p>
+                    <div class="code-block">
+# Install OpenSSH server
+sudo apt-get update && sudo apt-get install openssh-server
+
+# Enable and start SSH service immediately
+sudo systemctl enable --now ssh
+
+# Verify active status and port listening
+systemctl status ssh
+ss -tlnp | grep :22</div>
+                </div>
+
+                <div class="guide-card">
+                    <h4>🎩 RHEL / CentOS / Fedora Family ('sshd.service')</h4>
+                    <p style="font-size: 12px; color: var(--text-muted);">Package: <code>openssh-server</code> | Unit: <code>sshd.service</code></p>
+                    <div class="code-block">
+# Install OpenSSH server
+sudo dnf install openssh-server
+
+# Enable and start SSH daemon immediately
+sudo systemctl enable --now sshd
+
+# Allow SSH through firewall
+sudo firewall-cmd --add-service=ssh --permanent
+sudo firewall-cmd --reload</div>
+                </div>
+
+                <div class="guide-card">
+                    <h4>🍏 macOS Darwin ('Remote Login')</h4>
+                    <p style="font-size: 12px; color: var(--text-muted);">Managed via <code>systemsetup</code> and <code>launchd</code></p>
+                    <div class="code-block">
+# Query Remote Login status
+sudo systemsetup -getremotelogin
+
+# Enable Remote Login (SSH)
+sudo systemsetup -setremotelogin on
+
+# Verify TCP port 22 binding
+lsof -iTCP:22 -sTCP:LISTEN -P -n</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div>
+                <strong>Automation Sprint (AS_24) — SSH Service Check</strong> | Course: Linux System Administration (E1ITA307)
+            </div>
+            <div style="margin-top: 6px;">
+                Live Machine Audit • Generated at 2026-09-30 11:46:46 IST • Strict Sandboxing & Read-Only Compliance
+            </div>
+        </footer>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,44 @@
+{
+  "timestamp": "2026-09-30 11:46:46 IST",
+  "timestamp_iso": "2026-09-30T06:16:46Z",
+  "hostname": "SP",
+  "os_distro": "Ubuntu 26.04.1 LTS",
+  "kernel": "6.18.33.2-microsoft-standard-WSL2",
+  "arch": "x86_64",
+  "is_wsl": 1,
+  "init_system": {
+    "type": "systemd",
+    "details": "systemd init manager (PID 1 active, status: running)"
+  },
+  "service": {
+    "detected_name": "none",
+    "detection_method": "not-found",
+    "detection_log": "Neither 'ssh' nor 'sshd' service found; OpenSSH server not installed"
+  },
+  "active_check": {
+    "status": "not-installed",
+    "exit_code": 4,
+    "raw_output": "Unit not found",
+    "explanation": "Neither 'ssh' nor 'sshd' service is installed or registered"
+  },
+  "enabled_check": {
+    "status": "not-installed",
+    "exit_code": 4,
+    "raw_output": "Unit not found",
+    "explanation": "Cannot inspect boot persistence for non-existent service"
+  },
+  "port_check": {
+    "port": 22,
+    "status": "not-listening",
+    "command_used": "ss -tlnp (fallback: ss -tln)",
+    "raw_match": "None",
+    "process": "None",
+    "explanation": "No active TCP listening sockets bound to port 22"
+  },
+  "evaluation": {
+    "overall_health": "CRITICAL",
+    "status_icon": "❌",
+    "combined_message": "❌ SSH is NOT INSTALLED (neither 'ssh' nor 'sshd' service found on this system, and port 22 is not listening)",
+    "remediation_hint": "To install OpenSSH server on Debian/Ubuntu: sudo apt-get update && sudo apt-get install openssh-server"
+  }
+}
