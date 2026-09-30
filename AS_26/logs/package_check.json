@@ -1,0 +1,243 @@
+{
+  "timestamp": "2026-09-30 16:10:51",
+  "timestamp_iso": "2026-09-30T10:40:51Z",
+  "hostname": "SP",
+  "os_name": "Ubuntu 26.04.1 LTS",
+  "kernel": "6.18.40.1-microsoft-standard-WSL2",
+  "architecture": "x86_64",
+  "package_manager": "apt",
+  "package_manager_path": "/usr/bin/apt",
+  "index_refresh_status": "SUCCESS",
+  "index_refresh_detail": "Repository metadata successfully synchronized via 'sudo apt-get update -qq'.",
+  "total_upgradable": 25,
+  "security_updates": 7,
+  "standard_updates": 18,
+  "packages": [
+    {
+      "index": 1,
+      "name": "dmidecode",
+      "repository": "resolute-updates",
+      "current_version": "3.6-2build1",
+      "available_version": "3.6-2ubuntu1",
+      "arch": "amd64",
+      "update_type": "Standard Update"
+    },
+    {
+      "index": 2,
+      "name": "gh",
+      "repository": "unknown",
+      "current_version": "2.100.0",
+      "available_version": "2.102.0",
+      "arch": "amd64",
+      "update_type": "Standard Update"
+    },
+    {
+      "index": 3,
+      "name": "glycin-loaders",
+      "repository": "resolute-updates",
+      "current_version": "2.1.1+ds-0ubuntu1",
+      "available_version": "2.1.5+ds-0ubuntu0.2",
+      "arch": "amd64",
+      "update_type": "Standard Update"
+    },
+    {
+      "index": 4,
+      "name": "glycin-thumbnailers",
+      "repository": "resolute-updates",
+      "current_version": "2.1.1+ds-0ubuntu1",
+      "available_version": "2.1.5+ds-0ubuntu0.2",
+      "arch": "amd64",
+      "update_type": "Standard Update"
+    },
+    {
+      "index": 5,
+      "name": "libaudit-common",
+      "repository": "resolute-updates",
+      "current_version": "1:4.1.2-1build1",
+      "available_version": "1:4.1.2-1ubuntu0.1",
+      "arch": "all",
+      "update_type": "Standard Update"
+    },
+    {
+      "index": 6,
+      "name": "libaudit1",
+      "repository": "resolute-updates",
+      "current_version": "1:4.1.2-1build1",
+      "available_version": "1:4.1.2-1ubuntu0.1",
+      "arch": "amd64",
+      "update_type": "Standard Update"
+    },
+    {
+      "index": 7,
+      "name": "libcares2",
+      "repository": "resolute-updates,resolute-security",
+      "current_version": "1.34.6-1",
+      "available_version": "1.34.6-1ubuntu0.1",
+      "arch": "amd64",
+      "update_type": "Security Update"
+    },
+    {
+      "index": 8,
+      "name": "libglycin-2-0",
+      "repository": "resolute-updates",
+      "current_version": "2.1.1+ds-0ubuntu1",
+      "available_version": "2.1.5+ds-0ubuntu0.2",
+      "arch": "amd64",
+      "update_type": "Standard Update"
+    },
+    {
+      "index": 9,
+      "name": "libheif-plugin-aomdec",
+      "repository": "resolute-updates,resolute-security",
+      "current_version": "1.21.2-3ubuntu0.5",
+      "available_version": "1.21.2-3ubuntu0.6",
+      "arch": "amd64",
+      "update_type": "Security Update"
+    },
+    {
+      "index": 10,
+      "name": "libheif-plugin-aomenc",
+      "repository": "resolute-updates,resolute-security",
+      "current_version": "1.21.2-3ubuntu0.5",
+      "available_version": "1.21.2-3ubuntu0.6",
+      "arch": "amd64",
+      "update_type": "Security Update"
+    },
+    {
+      "index": 11,
+      "name": "libheif1",
+      "repository": "resolute-updates,resolute-security",
+      "current_version": "1.21.2-3ubuntu0.5",
+      "available_version": "1.21.2-3ubuntu0.6",
+      "arch": "amd64",
+      "update_type": "Security Update"
+    },
+    {
+      "index": 12,
+      "name": "libnetplan1",
+      "repository": "resolute-updates",
+      "current_version": "1.2-1ubuntu5",
+      "available_version": "1.2-1ubuntu5.1",
+      "arch": "amd64",
+      "update_type": "Standard Update"
+    },
+    {
+      "index": 13,
+      "name": "libssl3t64",
+      "repository": "resolute-updates,resolute-security",
+      "current_version": "3.5.5-1ubuntu3.5",
+      "available_version": "3.5.5-1ubuntu3.6",
+      "arch": "amd64",
+      "update_type": "Security Update"
+    },
+    {
+      "index": 14,
+      "name": "netplan-generator",
+      "repository": "resolute-updates",
+      "current_version": "1.2-1ubuntu5",
+      "available_version": "1.2-1ubuntu5.1",
+      "arch": "amd64",
+      "update_type": "Standard Update"
+    },
+    {
+      "index": 15,
+      "name": "netplan.io",
+      "repository": "resolute-updates",
+      "current_version": "1.2-1ubuntu5",
+      "available_version": "1.2-1ubuntu5.1",
+      "arch": "amd64",
+      "update_type": "Standard Update"
+    },
+    {
+      "index": 16,
+      "name": "openssl-provider-legacy",
+      "repository": "resolute-updates,resolute-security",
+      "current_version": "3.5.5-1ubuntu3.5",
+      "available_version": "3.5.5-1ubuntu3.6",
+      "arch": "amd64",
+      "update_type": "Security Update"
+    },
+    {
+      "index": 17,
+      "name": "openssl",
+      "repository": "resolute-updates,resolute-security",
+      "current_version": "3.5.5-1ubuntu3.5",
+      "available_version": "3.5.5-1ubuntu3.6",
+      "arch": "amd64",
+      "update_type": "Security Update"
+    },
+    {
+      "index": 18,
+      "name": "python3-distupgrade",
+      "repository": "resolute-updates",
+      "current_version": "1:26.04.23",
+      "available_version": "1:26.04.25",
+      "arch": "all",
+      "update_type": "Standard Update"
+    },
+    {
+      "index": 19,
+      "name": "python3-netplan",
+      "repository": "resolute-updates",
+      "current_version": "1.2-1ubuntu5",
+      "available_version": "1.2-1ubuntu5.1",
+      "arch": "amd64",
+      "update_type": "Standard Update"
+    },
+    {
+      "index": 20,
+      "name": "python3-software-properties",
+      "repository": "resolute-updates",
+      "current_version": "0.120",
+      "available_version": "0.120.1",
+      "arch": "all",
+      "update_type": "Standard Update"
+    },
+    {
+      "index": 21,
+      "name": "rust-coreutils",
+      "repository": "resolute-updates",
+      "current_version": "0.8.0-0ubuntu3",
+      "available_version": "0.10.0-1ubuntu2~26.04.1",
+      "arch": "amd64",
+      "update_type": "Standard Update"
+    },
+    {
+      "index": 22,
+      "name": "software-properties-common",
+      "repository": "resolute-updates",
+      "current_version": "0.120",
+      "available_version": "0.120.1",
+      "arch": "all",
+      "update_type": "Standard Update"
+    },
+    {
+      "index": 23,
+      "name": "ubuntu-minimal",
+      "repository": "resolute-updates",
+      "current_version": "1.570.3",
+      "available_version": "1.570.4",
+      "arch": "amd64",
+      "update_type": "Standard Update"
+    },
+    {
+      "index": 24,
+      "name": "ubuntu-release-upgrader-core",
+      "repository": "resolute-updates",
+      "current_version": "1:26.04.23",
+      "available_version": "1:26.04.25",
+      "arch": "all",
+      "update_type": "Standard Update"
+    },
+    {
+      "index": 25,
+      "name": "ubuntu-wsl",
+      "repository": "resolute-updates",
+      "current_version": "1.570.3",
+      "available_version": "1.570.4",
+      "arch": "amd64",
+      "update_type": "Standard Update"
+    }
+  ],
+  "safety_disclaimer": "READ-ONLY AUDIT. Zero packages were installed, removed, or upgraded."
+}

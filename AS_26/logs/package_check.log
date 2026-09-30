@@ -1,0 +1,146 @@
+================================================================================
+PACKAGE UPDATE CHECK AUDIT LOG ENTRY
+Timestamp           : 2026-09-30 16:07:32 (2026-09-30T10:37:32Z)
+Target Hostname     : SP
+Operating System    : Ubuntu 26.04.1 LTS
+Kernel Architecture : Linux 6.18.40.1-microsoft-standard-WSL2 (x86_64)
+Package Manager     : Debian/Ubuntu (APT) [/usr/bin/apt]
+Index Refresh Status: SKIPPED
+Index Refresh Detail: Bypassed via --skip-refresh flag. Inspecting existing local package cache.
+Total Upgradable    : 0
+Security Updates    : 0
+Standard Updates    : 0
+Safety Guarantee    : READ-ONLY CHECK. NO PACKAGES WERE INSTALLED OR UPGRADED.
+--------------------------------------------------------------------------------
+Status: System packages are fully up to date. Zero pending updates.
+================================================================================
+
+================================================================================
+PACKAGE UPDATE CHECK AUDIT LOG ENTRY
+Timestamp           : 2026-09-30 16:08:49 (2026-09-30T10:38:49Z)
+Target Hostname     : SP
+Operating System    : Ubuntu 26.04.1 LTS
+Kernel Architecture : Linux 6.18.40.1-microsoft-standard-WSL2 (x86_64)
+Package Manager     : Debian/Ubuntu (APT) [/usr/bin/apt]
+Index Refresh Status: SKIPPED
+Index Refresh Detail: Bypassed via --skip-refresh flag. Inspecting existing local package cache.
+Total Upgradable    : 25
+Security Updates    : 7
+Standard Updates    : 18
+Safety Guarantee    : READ-ONLY CHECK. NO PACKAGES WERE INSTALLED OR UPGRADED.
+--------------------------------------------------------------------------------
+No.  | Package Name                 | Current Version      | Available Version    | Repository         | Classification
+-------------------------------------------------------------------------------------------------------------------
+001  | dmidecode                    | 3.6-2build1          | 3.6-2ubuntu1         | resolute-updates   | Standard Update
+002  | gh                           | 2.100.0              | 2.102.0              | unknown            | Standard Update
+003  | glycin-loaders               | 2.1.1+ds-0ubuntu1    | 2.1.5+ds-0ubuntu0.2  | resolute-updates   | Standard Update
+004  | glycin-thumbnailers          | 2.1.1+ds-0ubuntu1    | 2.1.5+ds-0ubuntu0.2  | resolute-updates   | Standard Update
+005  | libaudit-common              | 1:4.1.2-1build1      | 1:4.1.2-1ubuntu0.1   | resolute-updates   | Standard Update
+006  | libaudit1                    | 1:4.1.2-1build1      | 1:4.1.2-1ubuntu0.1   | resolute-updates   | Standard Update
+007  | libcares2                    | 1.34.6-1             | 1.34.6-1ubuntu0.1    | resolute-updates,resolute-security | Security Update
+008  | libglycin-2-0                | 2.1.1+ds-0ubuntu1    | 2.1.5+ds-0ubuntu0.2  | resolute-updates   | Standard Update
+009  | libheif-plugin-aomdec        | 1.21.2-3ubuntu0.5    | 1.21.2-3ubuntu0.6    | resolute-updates,resolute-security | Security Update
+010  | libheif-plugin-aomenc        | 1.21.2-3ubuntu0.5    | 1.21.2-3ubuntu0.6    | resolute-updates,resolute-security | Security Update
+011  | libheif1                     | 1.21.2-3ubuntu0.5    | 1.21.2-3ubuntu0.6    | resolute-updates,resolute-security | Security Update
+012  | libnetplan1                  | 1.2-1ubuntu5         | 1.2-1ubuntu5.1       | resolute-updates   | Standard Update
+013  | libssl3t64                   | 3.5.5-1ubuntu3.5     | 3.5.5-1ubuntu3.6     | resolute-updates,resolute-security | Security Update
+014  | netplan-generator            | 1.2-1ubuntu5         | 1.2-1ubuntu5.1       | resolute-updates   | Standard Update
+015  | netplan.io                   | 1.2-1ubuntu5         | 1.2-1ubuntu5.1       | resolute-updates   | Standard Update
+016  | openssl-provider-legacy      | 3.5.5-1ubuntu3.5     | 3.5.5-1ubuntu3.6     | resolute-updates,resolute-security | Security Update
+017  | openssl                      | 3.5.5-1ubuntu3.5     | 3.5.5-1ubuntu3.6     | resolute-updates,resolute-security | Security Update
+018  | python3-distupgrade          | 1:26.04.23           | 1:26.04.25           | resolute-updates   | Standard Update
+019  | python3-netplan              | 1.2-1ubuntu5         | 1.2-1ubuntu5.1       | resolute-updates   | Standard Update
+020  | python3-software-properties  | 0.120                | 0.120.1              | resolute-updates   | Standard Update
+021  | rust-coreutils               | 0.8.0-0ubuntu3       | 0.10.0-1ubuntu2~26.04.1 | resolute-updates   | Standard Update
+022  | software-properties-common   | 0.120                | 0.120.1              | resolute-updates   | Standard Update
+023  | ubuntu-minimal               | 1.570.3              | 1.570.4              | resolute-updates   | Standard Update
+024  | ubuntu-release-upgrader-core | 1:26.04.23           | 1:26.04.25           | resolute-updates   | Standard Update
+025  | ubuntu-wsl                   | 1.570.3              | 1.570.4              | resolute-updates   | Standard Update
+================================================================================
+
+================================================================================
+PACKAGE UPDATE CHECK AUDIT LOG ENTRY
+Timestamp           : 2026-09-30 16:09:00 (2026-09-30T10:39:00Z)
+Target Hostname     : SP
+Operating System    : Ubuntu 26.04.1 LTS
+Kernel Architecture : Linux 6.18.40.1-microsoft-standard-WSL2 (x86_64)
+Package Manager     : Debian/Ubuntu (APT) [/usr/bin/apt]
+Index Refresh Status: SUCCESS
+Index Refresh Detail: Repository metadata successfully synchronized via 'sudo apt-get update -qq'.
+Total Upgradable    : 25
+Security Updates    : 7
+Standard Updates    : 18
+Safety Guarantee    : READ-ONLY CHECK. NO PACKAGES WERE INSTALLED OR UPGRADED.
+--------------------------------------------------------------------------------
+No.  | Package Name                 | Current Version      | Available Version    | Repository         | Classification
+-------------------------------------------------------------------------------------------------------------------
+001  | dmidecode                    | 3.6-2build1          | 3.6-2ubuntu1         | resolute-updates   | Standard Update
+002  | gh                           | 2.100.0              | 2.102.0              | unknown            | Standard Update
+003  | glycin-loaders               | 2.1.1+ds-0ubuntu1    | 2.1.5+ds-0ubuntu0.2  | resolute-updates   | Standard Update
+004  | glycin-thumbnailers          | 2.1.1+ds-0ubuntu1    | 2.1.5+ds-0ubuntu0.2  | resolute-updates   | Standard Update
+005  | libaudit-common              | 1:4.1.2-1build1      | 1:4.1.2-1ubuntu0.1   | resolute-updates   | Standard Update
+006  | libaudit1                    | 1:4.1.2-1build1      | 1:4.1.2-1ubuntu0.1   | resolute-updates   | Standard Update
+007  | libcares2                    | 1.34.6-1             | 1.34.6-1ubuntu0.1    | resolute-updates,resolute-security | Security Update
+008  | libglycin-2-0                | 2.1.1+ds-0ubuntu1    | 2.1.5+ds-0ubuntu0.2  | resolute-updates   | Standard Update
+009  | libheif-plugin-aomdec        | 1.21.2-3ubuntu0.5    | 1.21.2-3ubuntu0.6    | resolute-updates,resolute-security | Security Update
+010  | libheif-plugin-aomenc        | 1.21.2-3ubuntu0.5    | 1.21.2-3ubuntu0.6    | resolute-updates,resolute-security | Security Update
+011  | libheif1                     | 1.21.2-3ubuntu0.5    | 1.21.2-3ubuntu0.6    | resolute-updates,resolute-security | Security Update
+012  | libnetplan1                  | 1.2-1ubuntu5         | 1.2-1ubuntu5.1       | resolute-updates   | Standard Update
+013  | libssl3t64                   | 3.5.5-1ubuntu3.5     | 3.5.5-1ubuntu3.6     | resolute-updates,resolute-security | Security Update
+014  | netplan-generator            | 1.2-1ubuntu5         | 1.2-1ubuntu5.1       | resolute-updates   | Standard Update
+015  | netplan.io                   | 1.2-1ubuntu5         | 1.2-1ubuntu5.1       | resolute-updates   | Standard Update
+016  | openssl-provider-legacy      | 3.5.5-1ubuntu3.5     | 3.5.5-1ubuntu3.6     | resolute-updates,resolute-security | Security Update
+017  | openssl                      | 3.5.5-1ubuntu3.5     | 3.5.5-1ubuntu3.6     | resolute-updates,resolute-security | Security Update
+018  | python3-distupgrade          | 1:26.04.23           | 1:26.04.25           | resolute-updates   | Standard Update
+019  | python3-netplan              | 1.2-1ubuntu5         | 1.2-1ubuntu5.1       | resolute-updates   | Standard Update
+020  | python3-software-properties  | 0.120                | 0.120.1              | resolute-updates   | Standard Update
+021  | rust-coreutils               | 0.8.0-0ubuntu3       | 0.10.0-1ubuntu2~26.04.1 | resolute-updates   | Standard Update
+022  | software-properties-common   | 0.120                | 0.120.1              | resolute-updates   | Standard Update
+023  | ubuntu-minimal               | 1.570.3              | 1.570.4              | resolute-updates   | Standard Update
+024  | ubuntu-release-upgrader-core | 1:26.04.23           | 1:26.04.25           | resolute-updates   | Standard Update
+025  | ubuntu-wsl                   | 1.570.3              | 1.570.4              | resolute-updates   | Standard Update
+================================================================================
+
+================================================================================
+PACKAGE UPDATE CHECK AUDIT LOG ENTRY
+Timestamp           : 2026-09-30 16:10:51 (2026-09-30T10:40:51Z)
+Target Hostname     : SP
+Operating System    : Ubuntu 26.04.1 LTS
+Kernel Architecture : Linux 6.18.40.1-microsoft-standard-WSL2 (x86_64)
+Package Manager     : Debian/Ubuntu (APT) [/usr/bin/apt]
+Index Refresh Status: SUCCESS
+Index Refresh Detail: Repository metadata successfully synchronized via 'sudo apt-get update -qq'.
+Total Upgradable    : 25
+Security Updates    : 7
+Standard Updates    : 18
+Safety Guarantee    : READ-ONLY CHECK. NO PACKAGES WERE INSTALLED OR UPGRADED.
+--------------------------------------------------------------------------------
+No.  | Package Name                 | Current Version      | Available Version    | Repository         | Classification
+-------------------------------------------------------------------------------------------------------------------
+001  | dmidecode                    | 3.6-2build1          | 3.6-2ubuntu1         | resolute-updates   | Standard Update
+002  | gh                           | 2.100.0              | 2.102.0              | unknown            | Standard Update
+003  | glycin-loaders               | 2.1.1+ds-0ubuntu1    | 2.1.5+ds-0ubuntu0.2  | resolute-updates   | Standard Update
+004  | glycin-thumbnailers          | 2.1.1+ds-0ubuntu1    | 2.1.5+ds-0ubuntu0.2  | resolute-updates   | Standard Update
+005  | libaudit-common              | 1:4.1.2-1build1      | 1:4.1.2-1ubuntu0.1   | resolute-updates   | Standard Update
+006  | libaudit1                    | 1:4.1.2-1build1      | 1:4.1.2-1ubuntu0.1   | resolute-updates   | Standard Update
+007  | libcares2                    | 1.34.6-1             | 1.34.6-1ubuntu0.1    | resolute-updates,resolute-security | Security Update
+008  | libglycin-2-0                | 2.1.1+ds-0ubuntu1    | 2.1.5+ds-0ubuntu0.2  | resolute-updates   | Standard Update
+009  | libheif-plugin-aomdec        | 1.21.2-3ubuntu0.5    | 1.21.2-3ubuntu0.6    | resolute-updates,resolute-security | Security Update
+010  | libheif-plugin-aomenc        | 1.21.2-3ubuntu0.5    | 1.21.2-3ubuntu0.6    | resolute-updates,resolute-security | Security Update
+011  | libheif1                     | 1.21.2-3ubuntu0.5    | 1.21.2-3ubuntu0.6    | resolute-updates,resolute-security | Security Update
+012  | libnetplan1                  | 1.2-1ubuntu5         | 1.2-1ubuntu5.1       | resolute-updates   | Standard Update
+013  | libssl3t64                   | 3.5.5-1ubuntu3.5     | 3.5.5-1ubuntu3.6     | resolute-updates,resolute-security | Security Update
+014  | netplan-generator            | 1.2-1ubuntu5         | 1.2-1ubuntu5.1       | resolute-updates   | Standard Update
+015  | netplan.io                   | 1.2-1ubuntu5         | 1.2-1ubuntu5.1       | resolute-updates   | Standard Update
+016  | openssl-provider-legacy      | 3.5.5-1ubuntu3.5     | 3.5.5-1ubuntu3.6     | resolute-updates,resolute-security | Security Update
+017  | openssl                      | 3.5.5-1ubuntu3.5     | 3.5.5-1ubuntu3.6     | resolute-updates,resolute-security | Security Update
+018  | python3-distupgrade          | 1:26.04.23           | 1:26.04.25           | resolute-updates   | Standard Update
+019  | python3-netplan              | 1.2-1ubuntu5         | 1.2-1ubuntu5.1       | resolute-updates   | Standard Update
+020  | python3-software-properties  | 0.120                | 0.120.1              | resolute-updates   | Standard Update
+021  | rust-coreutils               | 0.8.0-0ubuntu3       | 0.10.0-1ubuntu2~26.04.1 | resolute-updates   | Standard Update
+022  | software-properties-common   | 0.120                | 0.120.1              | resolute-updates   | Standard Update
+023  | ubuntu-minimal               | 1.570.3              | 1.570.4              | resolute-updates   | Standard Update
+024  | ubuntu-release-upgrader-core | 1:26.04.23           | 1:26.04.25           | resolute-updates   | Standard Update
+025  | ubuntu-wsl                   | 1.570.3              | 1.570.4              | resolute-updates   | Standard Update
+================================================================================
+
