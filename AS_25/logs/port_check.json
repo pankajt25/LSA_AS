@@ -1,0 +1,57 @@
+{
+  "timestamp": "2026-09-30T12:51:53+05:30",
+  "hostname": "SP",
+  "os": "Linux",
+  "kernel": "6.18.33.2-microsoft-standard-WSL2",
+  "total_checked": 5,
+  "open_count": 3,
+  "closed_count": 1,
+  "timeout_count": 1,
+  "results": [
+    {
+      "host": "localhost",
+      "port": 22,
+      "service": "ssh",
+      "status": "REFUSED",
+      "latency_ms": 138,
+      "method": "/dev/tcp",
+      "detail": "Connection refused (Active TCP RST packet received from host)"
+    },
+    {
+      "host": "google.com",
+      "port": 443,
+      "service": "https",
+      "status": "OPEN",
+      "latency_ms": 139,
+      "method": "/dev/tcp",
+      "detail": "TCP handshake completed successfully (SYN-ACK received)"
+    },
+    {
+      "host": "google.com",
+      "port": 12345,
+      "service": "unknown",
+      "status": "TIMEOUT",
+      "latency_ms": 3056,
+      "method": "/dev/tcp",
+      "detail": "Connection timed out after 3s (no response; packet filtered/dropped)"
+    },
+    {
+      "host": "google.com",
+      "port": 80,
+      "service": "http",
+      "status": "OPEN",
+      "latency_ms": 177,
+      "method": "/dev/tcp",
+      "detail": "TCP handshake completed successfully (SYN-ACK received)"
+    },
+    {
+      "host": "google.com",
+      "port": 443,
+      "service": "https",
+      "status": "OPEN",
+      "latency_ms": 243,
+      "method": "/dev/tcp",
+      "detail": "TCP handshake completed successfully (SYN-ACK received)"
+    }
+  ]
+}

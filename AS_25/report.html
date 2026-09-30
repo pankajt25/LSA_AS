@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Port Availability Check Report — AS_25 (E1ITA307)</title>
+    <style>
+        :root {
+            --bg-base: #0a0f1d;
+            --bg-card: #111827;
+            --bg-card-alt: #1a2234;
+            --bg-hover: #1f293d;
+            --border-dim: #26334d;
+            --border-bright: #3b4d70;
+            --text-primary: #f9fafb;
+            --text-secondary: #9ca3af;
+            --text-muted: #6b7280;
+            --accent-cyan: #38bdf8;
+            --accent-blue: #3b82f6;
+            --accent-emerald: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-red: #ef4444;
+            --accent-purple: #a855f7;
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            padding: 24px;
+        }
+
+        .container {
+            max-width: 1320px;
+            margin: 0 auto;
+        }
+
+        /* Header Card */
+        .header-card {
+            background: linear-gradient(135deg, #111827 0%, #17223b 50%, #0d1424 100%);
+            border: 1px solid var(--border-bright);
+            border-radius: 12px;
+            padding: 24px 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue), var(--accent-emerald));
+        }
+
+        .badge-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .top-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .top-badge-cyan {
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+
+        .top-badge-emerald {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-emerald);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .header-title {
+            font-size: 26px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .header-subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 18px;
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            background: rgba(10, 15, 29, 0.6);
+            border: 1px solid var(--border-dim);
+            border-radius: 8px;
+            padding: 12px 16px;
+        }
+
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .meta-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 2px;
+        }
+
+        .meta-value {
+            font-size: 13px;
+            font-family: var(--font-mono);
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* KPI Metrics Grid */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .kpi-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-dim);
+            border-radius: 10px;
+            padding: 18px 20px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--border-bright);
+        }
+
+        .kpi-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .kpi-value {
+            font-size: 28px;
+            font-weight: 800;
+            font-family: var(--font-mono);
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .kpi-subtext {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Status Cards Grid */
+        .section-heading {
+            font-size: 18px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .port-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .port-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-dim);
+            border-radius: 10px;
+            padding: 18px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.2s ease;
+        }
+
+        .port-card:hover {
+            border-color: var(--border-bright);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .port-card-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 14px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-dim);
+        }
+
+        .port-endpoint {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .port-icon {
+            font-size: 16px;
+        }
+
+        .port-host {
+            font-weight: 700;
+            font-size: 15px;
+            color: #ffffff;
+        }
+
+        .port-number {
+            font-family: var(--font-mono);
+            font-weight: 700;
+            font-size: 15px;
+            color: var(--accent-cyan);
+        }
+
+        .port-status-badge {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+
+        .port-card-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .port-prop {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .prop-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 2px;
+        }
+
+        .prop-value {
+            font-size: 13px;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .service-tag {
+            color: var(--accent-amber);
+            font-weight: 700;
+        }
+
+        .engine-tag {
+            color: var(--accent-purple);
+            font-family: var(--font-mono);
+            font-size: 12px;
+        }
+
+        .port-card-footer {
+            background: rgba(10, 15, 29, 0.4);
+            border: 1px solid rgba(38, 51, 77, 0.6);
+            border-radius: 6px;
+            padding: 8px 12px;
+        }
+
+        .diag-detail {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        /* Table Card */
+        .table-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-dim);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 28px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            text-align: left;
+        }
+
+        th {
+            background: var(--bg-card-alt);
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border-bright);
+        }
+
+        td {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border-dim);
+            color: var(--text-primary);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: var(--bg-hover);
+        }
+
+        .status-pill {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .status-open {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .status-closed {
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .status-timeout {
+            background: rgba(245, 158, 11, 0.15);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .service-pill {
+            background: rgba(245, 158, 11, 0.1);
+            color: #fbbf24;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* Terminal Console */
+        .terminal-card {
+            background: #070b14;
+            border: 1px solid var(--border-dim);
+            border-radius: 10px;
+            margin-bottom: 28px;
+            overflow: hidden;
+        }
+
+        .terminal-header {
+            background: #0f1626;
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--border-dim);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .terminal-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .dot-red { background: #ef4444; }
+        .dot-yellow { background: #f59e0b; }
+        .dot-green { background: #10b981; }
+
+        .terminal-title {
+            font-size: 12px;
+            font-family: var(--font-mono);
+            color: var(--text-secondary);
+        }
+
+        .terminal-body {
+            padding: 16px 20px;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: #d1d5db;
+            line-height: 1.5;
+            max-height: 380px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        /* Architecture Technical Cards */
+        .arch-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .arch-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-dim);
+            border-radius: 10px;
+            padding: 18px 20px;
+        }
+
+        .arch-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .arch-body {
+            font-size: 12.5px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .arch-body code {
+            background: var(--bg-card-alt);
+            color: var(--accent-amber);
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 11.5px;
+        }
+
+        /* Utilities */
+        .font-mono { font-family: var(--font-mono); }
+        .text-cyan { color: var(--accent-cyan); }
+        .text-emerald { color: var(--accent-emerald); }
+        .text-amber { color: var(--accent-amber); }
+        .text-red { color: var(--accent-red); }
+        .text-secondary { color: var(--text-secondary); }
+        .text-muted { color: var(--text-muted); }
+        .text-sm { font-size: 12px; }
+
+        footer {
+            text-align: center;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-dim);
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- Top Header Card -->
+        <header class="header-card">
+            <div class="badge-row">
+                <span class="top-badge top-badge-cyan">AS_25: Port Availability Check</span>
+                <span class="top-badge top-badge-emerald">Live Network Telemetry</span>
+                <span class="top-badge top-badge-cyan">E1ITA307 — Automation Sprint</span>
+            </div>
+            <h1 class="header-title">🌐 TCP Port Reachability & Network Testing Dashboard</h1>
+            <p class="header-subtitle">
+                Real-time active TCP socket reachability analysis using Bash <code>/dev/tcp</code> virtual redirection with automated Netcat (<code>nc -zv -w3</code>) fallback.
+            </p>
+            <div class="meta-grid">
+                <div class="meta-item">
+                    <span class="meta-label">Audit Timestamp</span>
+                    <span class="meta-value">2026-09-30T12:51:53+05:30</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Audit Target Host</span>
+                    <span class="meta-value text-cyan">SP</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Platform OS & Kernel</span>
+                    <span class="meta-value text-emerald">Linux (6.18.33.2-microsoft-standard-WSL2)</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Primary Probe Engine</span>
+                    <span class="meta-value text-amber">GNU Bash /dev/tcp + nc</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Executive KPI Metrics -->
+        <section class="kpi-grid">
+            <div class="kpi-card" style="border-left: 4px solid var(--accent-blue);">
+                <div class="kpi-title">
+                    <span>Total Ports Probed</span>
+                    <span>🎯</span>
+                </div>
+                <div class="kpi-value">5</div>
+                <div class="kpi-subtext">Sockets probed across targets</div>
+            </div>
+
+            <div class="kpi-card" style="border-left: 4px solid var(--accent-emerald);">
+                <div class="kpi-title">
+                    <span>Open / Reachable</span>
+                    <span>🟢</span>
+                </div>
+                <div class="kpi-value text-emerald">3</div>
+                <div class="kpi-subtext">Active listeners (SYN-ACK)</div>
+            </div>
+
+            <div class="kpi-card" style="border-left: 4px solid var(--accent-red);">
+                <div class="kpi-title">
+                    <span>Closed / Refused</span>
+                    <span>🔴</span>
+                </div>
+                <div class="kpi-value text-red">1</div>
+                <div class="kpi-subtext">Active resets (TCP RST received)</div>
+            </div>
+
+            <div class="kpi-card" style="border-left: 4px solid var(--accent-amber);">
+                <div class="kpi-title">
+                    <span>Timed Out / Filtered</span>
+                    <span>🟠</span>
+                </div>
+                <div class="kpi-value text-amber">1</div>
+                <div class="kpi-subtext">Firewall silent packet drops</div>
+            </div>
+
+            <div class="kpi-card" style="border-left: 4px solid var(--accent-purple);">
+                <div class="kpi-title">
+                    <span>Reachability Rate</span>
+                    <span>📊</span>
+                </div>
+                <div class="kpi-value">60.0%</div>
+                <div class="kpi-subtext">Proportion of reachable sockets</div>
+            </div>
+        </section>
+
+        <!-- Status Cards Per Host:Port -->
+        <h2 class="section-heading">📌 Target Endpoint Status Cards</h2>
+        <section class="port-cards-grid">
+            
+    <div class="port-card" style="border-top: 4px solid #ef4444;">
+        <div class="port-card-header">
+            <div class="port-endpoint">
+                <span class="port-icon">🔴</span>
+                <span class="port-host">localhost</span>
+                <span class="port-number">:22</span>
+            </div>
+            <div class="port-status-badge" style="background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid #ef444440;">
+                ❌ CLOSED (REFUSED)
+            </div>
+        </div>
+        <div class="port-card-body">
+            <div class="port-prop">
+                <span class="prop-label">Service:</span>
+                <span class="prop-value service-tag">ssh</span>
+            </div>
+            <div class="port-prop">
+                <span class="prop-label">Latency:</span>
+                <span class="prop-value font-mono">138 ms</span>
+            </div>
+            <div class="port-prop">
+                <span class="prop-label">Engine:</span>
+                <span class="prop-value engine-tag">/dev/tcp</span>
+            </div>
+        </div>
+        <div class="port-card-footer">
+            <div class="prop-label" style="margin-bottom: 4px;">Diagnostic State:</div>
+            <div class="diag-detail font-mono">Connection refused (Active TCP RST packet received from host)</div>
+        </div>
+    </div>
+    
+    <div class="port-card" style="border-top: 4px solid #10b981;">
+        <div class="port-card-header">
+            <div class="port-endpoint">
+                <span class="port-icon">🟢</span>
+                <span class="port-host">google.com</span>
+                <span class="port-number">:443</span>
+            </div>
+            <div class="port-status-badge" style="background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid #10b98140;">
+                ✅ OPEN / REACHABLE
+            </div>
+        </div>
+        <div class="port-card-body">
+            <div class="port-prop">
+                <span class="prop-label">Service:</span>
+                <span class="prop-value service-tag">https</span>
+            </div>
+            <div class="port-prop">
+                <span class="prop-label">Latency:</span>
+                <span class="prop-value font-mono">139 ms</span>
+            </div>
+            <div class="port-prop">
+                <span class="prop-label">Engine:</span>
+                <span class="prop-value engine-tag">/dev/tcp</span>
+            </div>
+        </div>
+        <div class="port-card-footer">
+            <div class="prop-label" style="margin-bottom: 4px;">Diagnostic State:</div>
+            <div class="diag-detail font-mono">TCP handshake completed successfully (SYN-ACK received)</div>
+        </div>
+    </div>
+    
+    <div class="port-card" style="border-top: 4px solid #f59e0b;">
+        <div class="port-card-header">
+            <div class="port-endpoint">
+                <span class="port-icon">🟠</span>
+                <span class="port-host">google.com</span>
+                <span class="port-number">:12345</span>
+            </div>
+            <div class="port-status-badge" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid #f59e0b40;">
+                ⏱️ TIMED OUT (FILTERED)
+            </div>
+        </div>
+        <div class="port-card-body">
+            <div class="port-prop">
+                <span class="prop-label">Service:</span>
+                <span class="prop-value service-tag">unknown</span>
+            </div>
+            <div class="port-prop">
+                <span class="prop-label">Latency:</span>
+                <span class="prop-value font-mono">3056 ms</span>
+            </div>
+            <div class="port-prop">
+                <span class="prop-label">Engine:</span>
+                <span class="prop-value engine-tag">/dev/tcp</span>
+            </div>
+        </div>
+        <div class="port-card-footer">
+            <div class="prop-label" style="margin-bottom: 4px;">Diagnostic State:</div>
+            <div class="diag-detail font-mono">Connection timed out after 3s (no response; packet filtered/dropped)</div>
+        </div>
+    </div>
+    
+    <div class="port-card" style="border-top: 4px solid #10b981;">
+        <div class="port-card-header">
+            <div class="port-endpoint">
+                <span class="port-icon">🟢</span>
+                <span class="port-host">google.com</span>
+                <span class="port-number">:80</span>
+            </div>
+            <div class="port-status-badge" style="background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid #10b98140;">
+                ✅ OPEN / REACHABLE
+            </div>
+        </div>
+        <div class="port-card-body">
+            <div class="port-prop">
+                <span class="prop-label">Service:</span>
+                <span class="prop-value service-tag">http</span>
+            </div>
+            <div class="port-prop">
+                <span class="prop-label">Latency:</span>
+                <span class="prop-value font-mono">177 ms</span>
+            </div>
+            <div class="port-prop">
+                <span class="prop-label">Engine:</span>
+                <span class="prop-value engine-tag">/dev/tcp</span>
+            </div>
+        </div>
+        <div class="port-card-footer">
+            <div class="prop-label" style="margin-bottom: 4px;">Diagnostic State:</div>
+            <div class="diag-detail font-mono">TCP handshake completed successfully (SYN-ACK received)</div>
+        </div>
+    </div>
+    
+    <div class="port-card" style="border-top: 4px solid #10b981;">
+        <div class="port-card-header">
+            <div class="port-endpoint">
+                <span class="port-icon">🟢</span>
+                <span class="port-host">google.com</span>
+                <span class="port-number">:443</span>
+            </div>
+            <div class="port-status-badge" style="background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid #10b98140;">
+                ✅ OPEN / REACHABLE
+            </div>
+        </div>
+        <div class="port-card-body">
+            <div class="port-prop">
+                <span class="prop-label">Service:</span>
+                <span class="prop-value service-tag">https</span>
+            </div>
+            <div class="port-prop">
+                <span class="prop-label">Latency:</span>
+                <span class="prop-value font-mono">243 ms</span>
+            </div>
+            <div class="port-prop">
+                <span class="prop-label">Engine:</span>
+                <span class="prop-value engine-tag">/dev/tcp</span>
+            </div>
+        </div>
+        <div class="port-card-footer">
+            <div class="prop-label" style="margin-bottom: 4px;">Diagnostic State:</div>
+            <div class="diag-detail font-mono">TCP handshake completed successfully (SYN-ACK received)</div>
+        </div>
+    </div>
+    
+        </section>
+
+        <!-- Detailed Inspection Table -->
+        <h2 class="section-heading">📋 Comprehensive Port Audit Matrix</h2>
+        <section class="table-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Host</th>
+                        <th>Port / Protocol</th>
+                        <th>Well-Known Service</th>
+                        <th>Reachability Status</th>
+                        <th>RTT Latency</th>
+                        <th>Probe Engine</th>
+                        <th>Diagnostic State & System Trace</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr>
+        <td class="font-mono">1</td>
+        <td class="font-mono text-cyan"><strong>localhost</strong></td>
+        <td class="font-mono text-amber"><strong>22/tcp</strong></td>
+        <td><span class="service-pill">ssh</span></td>
+        <td><span class="status-pill status-closed">❌ CLOSED</span></td>
+        <td class="font-mono">138 ms</td>
+        <td class="font-mono text-muted">/dev/tcp</td>
+        <td class="text-secondary text-sm">Connection refused (Active TCP RST packet received from host)</td>
+    </tr>
+    
+    <tr>
+        <td class="font-mono">2</td>
+        <td class="font-mono text-cyan"><strong>google.com</strong></td>
+        <td class="font-mono text-amber"><strong>443/tcp</strong></td>
+        <td><span class="service-pill">https</span></td>
+        <td><span class="status-pill status-open">✅ OPEN</span></td>
+        <td class="font-mono">139 ms</td>
+        <td class="font-mono text-muted">/dev/tcp</td>
+        <td class="text-secondary text-sm">TCP handshake completed successfully (SYN-ACK received)</td>
+    </tr>
+    
+    <tr>
+        <td class="font-mono">3</td>
+        <td class="font-mono text-cyan"><strong>google.com</strong></td>
+        <td class="font-mono text-amber"><strong>12345/tcp</strong></td>
+        <td><span class="service-pill">unknown</span></td>
+        <td><span class="status-pill status-timeout">⏱️ TIMEOUT</span></td>
+        <td class="font-mono">3056 ms</td>
+        <td class="font-mono text-muted">/dev/tcp</td>
+        <td class="text-secondary text-sm">Connection timed out after 3s (no response; packet filtered/dropped)</td>
+    </tr>
+    
+    <tr>
+        <td class="font-mono">4</td>
+        <td class="font-mono text-cyan"><strong>google.com</strong></td>
+        <td class="font-mono text-amber"><strong>80/tcp</strong></td>
+        <td><span class="service-pill">http</span></td>
+        <td><span class="status-pill status-open">✅ OPEN</span></td>
+        <td class="font-mono">177 ms</td>
+        <td class="font-mono text-muted">/dev/tcp</td>
+        <td class="text-secondary text-sm">TCP handshake completed successfully (SYN-ACK received)</td>
+    </tr>
+    
+    <tr>
+        <td class="font-mono">5</td>
+        <td class="font-mono text-cyan"><strong>google.com</strong></td>
+        <td class="font-mono text-amber"><strong>443/tcp</strong></td>
+        <td><span class="service-pill">https</span></td>
+        <td><span class="status-pill status-open">✅ OPEN</span></td>
+        <td class="font-mono">243 ms</td>
+        <td class="font-mono text-muted">/dev/tcp</td>
+        <td class="text-secondary text-sm">TCP handshake completed successfully (SYN-ACK received)</td>
+    </tr>
+    
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Terminal Output Stream -->
+        <h2 class="section-heading">💻 Live Terminal Execution Console Stream</h2>
+        <section class="terminal-card">
+            <div class="terminal-header">
+                <div class="terminal-dots">
+                    <div class="dot dot-red"></div>
+                    <div class="dot dot-yellow"></div>
+                    <div class="dot dot-green"></div>
+                </div>
+                <div class="terminal-title">bash ./port_check.sh — Live Session Capture</div>
+                <div style="font-size: 11px; color: var(--text-muted); font-family: var(--font-mono);">UTF-8 TTY</div>
+            </div>
+            <div class="terminal-body">Execution completed successfully. (See logs/port_check.log for persistent history)</div>
+        </section>
+
+        <!-- Technical Deep-Dive & Architectural Foundations -->
+        <h2 class="section-heading">🧠 Architectural Reference & Network Mechanics</h2>
+        <section class="arch-grid">
+            <div class="arch-card">
+                <div class="arch-title">🔌 Bash /dev/tcp Virtual Redirection</div>
+                <div class="arch-body">
+                    Bash implements <code>/dev/tcp/HOST/PORT</code> as an internal parser abstraction rather than a physical filesystem node. When redirection occurs, Bash invokes libc <code>getaddrinfo()</code>, allocates a <code>SOCK_STREAM</code> socket, and executes <code>connect()</code> to complete the TCP 3-way handshake (SYN, SYN-ACK, ACK).
+                </div>
+            </div>
+
+            <div class="arch-card">
+                <div class="arch-title">⚠️ Portability & Shell Constraints</div>
+                <div class="arch-body">
+                    <code>/dev/tcp</code> is a GNU Bash compile-time option (<code>--enable-net-redirections</code>). It is completely missing in POSIX <code>/bin/sh</code>, Debian <code>dash</code>, and BusyBox <code>ash</code>. Running scripts with <code>sh</code> results in "No such file or directory". This script strictly verifies Bash invocation and incorporates Netcat fallback.
+                </div>
+            </div>
+
+            <div class="arch-card">
+                <div class="arch-title">🔄 TCP State & Rejection Differentiation</div>
+                <div class="arch-body">
+                    <strong>OPEN (Exit 0):</strong> Host replied with SYN-ACK; socket connected.<br>
+                    <strong>REFUSED (Exit 1):</strong> Host replied with TCP RST packet; port is actively closed.<br>
+                    <strong>TIMEOUT (Exit 124):</strong> No packet response within timeout limit; indicates firewall packet filtering (DROP) or unresponsive route.
+                </div>
+            </div>
+
+            <div class="arch-card">
+                <div class="arch-title">🛡️ Resilient Netcat Fallback Engine</div>
+                <div class="arch-body">
+                    When <code>/dev/tcp</code> is disabled or forced via <code>--nc</code>, the script invokes OpenBSD netcat: <code>nc -zv -w3 &lt;host&gt; &lt;port&gt;</code>. The <code>-z</code> flag enables zero-I/O port scanning mode, ensuring no application payload is sent while testing socket reachability.
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <div>
+                <strong>Automation Sprint (AS_25) — Port Availability Check</strong> | Course: Linux System Administration (E1ITA307)
+            </div>
+            <div style="margin-top: 6px;">
+                Live Machine & Remote Service Audit • Generated at 2026-09-30T12:51:53+05:30 • Strict Sandboxing & Read-Only Compliance
+            </div>
+        </footer>
+
+    </div>
+</body>
+</html>
