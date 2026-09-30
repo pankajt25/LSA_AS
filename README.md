@@ -86,6 +86,13 @@ LSA_AS/
 │   ├── report.html                 # Standalone dark-themed dashboard report
 │   ├── logs/                       # Structured audit log directory
 │   └── README.md                   # Problem documentation & usage
+├── AS_25/                          # Automation Sprint Problem #25
+│   ├── port_check.sh               # Core TCP socket reachability & port auditing script
+│   ├── run.sh                      # Unified cross-platform execution & report launcher
+│   ├── commands_used.md            # Command log & development history
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── logs/                       # Structured audit log & JSON telemetry directory
+│   └── README.md                   # Problem documentation & usage
 └── (Upcoming Projects)/            # Future Automation Sprint additions
 ```
 
@@ -106,6 +113,7 @@ LSA_AS/
 | **AS_22** | **Multiple Server Check** | Inventory-based server reachability probing, OS ping flag adaptation, parallel subshell execution (`&` + `wait`), and dark-themed HTML report. | ✅ Completed | [`AS_22/`](./AS_22) |
 | **AS_23** | **IP Configuration Report** | Hostname discovery (`hostname -I`), active interface auditing (`ip -br addr show up`), MAC/MTU extraction, default gateway parsing, `/etc/resolv.conf` DNS inspection, and dark-themed HTML report. | ✅ Completed | [`AS_23/`](./AS_23) |
 | **AS_24** | **SSH Service Check** | Dynamic distribution service discovery ('ssh' vs 'sshd'), systemd active & boot persistence inspection, independent TCP port 22 socket cross-check, and dark-themed HTML report. | ✅ Completed | [`AS_24/`](./AS_24) |
+| **AS_25** | **Port Availability Check** | Native Bash `/dev/tcp` network probing, resilient OpenBSD netcat fallback, active RST vs timeout differentiation, multi-port loop auditing, and dark-themed HTML report. | ✅ Completed | [`AS_25/`](./AS_25) |
 | *Upcoming* | *Future Sprints* | Additional automation tasks and administration solutions. | ⏳ Planned | — |
 
 ---
@@ -129,6 +137,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_22** | Multiple Server Check | `cd AS_22 && bash run.sh` |
 | **AS_23** | IP Configuration Report | `cd AS_23 && bash run.sh` |
 | **AS_24** | SSH Service Check | `cd AS_24 && bash run.sh` |
+| **AS_25** | Port Availability Check | `cd AS_25 && bash run.sh` |
 
 ### 💻 Quick Command Reference by Operating System
 
@@ -145,6 +154,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_22** | `cd AS_22 && bash run.sh` | `cd AS_22 && bash run.sh` | `cd AS_22 && bash run.sh` | `cd AS_22 && bash run.sh` |
 | **AS_23** | `cd AS_23 && bash run.sh` | `cd AS_23 && bash run.sh` | `cd AS_23 && bash run.sh` | `cd AS_23 && bash run.sh` |
 | **AS_24** | `cd AS_24 && bash run.sh` | `cd AS_24 && bash run.sh` | `cd AS_24 && bash run.sh` | `cd AS_24 && bash run.sh` |
+| **AS_25** | `cd AS_25 && bash run.sh` | `cd AS_25 && bash run.sh` | `cd AS_25 && bash run.sh` | `cd AS_25 && bash run.sh` |
 
 ---
 
@@ -473,6 +483,37 @@ Write a script to verify whether SSH is running and display the current service 
 - 📊 **Interactive Dashboard:** [`AS_24/report.html`](./AS_24/report.html)
 - 📖 **Sprint Documentation:** [`AS_24/README.md`](./AS_24/README.md)
 - 📜 **Audit Log File:** [`AS_24/logs/ssh_check.log`](./AS_24/logs/ssh_check.log)
+
+</details>
+
+<details>
+<summary><strong>AS_25 — Port Availability Check (Live Network Data)</strong></summary>
+
+### Problem Statement
+A system administrator wants to verify whether a specified server port is accessible. Develop a simple port-checking utility.
+
+### Summary of Approach
+- **Native Bash `/dev/tcp` Network Probing:** Leverages GNU Bash's built-in `/dev/tcp/$host/$port` virtual device redirection (`timeout 3 bash -c "echo > /dev/tcp/$host/$port"`), invoking kernel `socket()` and `connect()` system calls without external scanner overhead.
+- **Portability Awareness & Netcat Fallback:** Documents the compile-time nature of `/dev/tcp` and its absence in POSIX `sh`/`dash`, seamlessly providing an automated fallback to OpenBSD netcat (`nc -zv -w3 <host> <port>`) in zero-I/O mode.
+- **TCP Diagnostic State Classification:** Distinguishes between open sockets (`SYN-ACK` received, exit code 0), active connection resets (`RST` received, exit code 1), and packet-filtering firewall timeouts (exit code 124 from `timeout`), avoiding ambiguous closed states.
+- **Multi-Port Sequential Auditing:** Supports auditing individual ports, comma-separated lists (`80,443,8080`), and space-separated argument vectors across a single target host via an internal verification loop.
+- **Safe Out-of-the-Box Demo Mode:** Automatically runs a live demonstration suite against `localhost:22` (local closed/refused), `google.com:443` (remote open/reachable), and `google.com:12345` (remote filtered/timed-out) when invoked without arguments.
+- **Persistent Chronological Audit Trail:** Appends timestamped audit traces for every probe event to `logs/port_check.log` and exports structured telemetry to `logs/port_check.json`.
+- **Defensive Input Validation:** Validates port numbers strictly within integer bounds (1-65535) and verifies hostname resolvability through glibc resolver queries before network dispatch.
+- **Cross-Platform HTML Dashboard (`run.sh`):** Regenerates `report.html` from scratch on every run with live dark-themed metric cards, per-port status cards, diagnostic tables, and terminal execution log, automatically launching across WSL (`explorer.exe`), Linux (`xdg-open`), macOS (`open`), and Windows Git Bash (`start`).
+
+### Key Commands Used
+- `bash run.sh` — Single command to audit live port reachability, regenerate dashboard, and open HTML report (Linux / macOS / Windows)
+- `./port_check.sh` — Executes the default safe demonstration suite on live endpoints
+- `./port_check.sh google.com 443` — Probes a single remote HTTPS port
+- `./port_check.sh google.com 80,443,12345` — Audits a list of ports across one host via internal loop
+- `./port_check.sh --nc google.com 443` — Forces probe execution via the Netcat fallback engine
+- `./port_check.sh --help` — Displays command-line manual and option syntax
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_25/report.html`](./AS_25/report.html)
+- 📖 **Sprint Documentation:** [`AS_25/README.md`](./AS_25/README.md)
+- 📜 **Audit Log File:** [`AS_25/logs/port_check.log`](./AS_25/logs/port_check.log)
 
 </details>
 
