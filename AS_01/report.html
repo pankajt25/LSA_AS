@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Account Setup Dashboard — AS_01 (E1ITA307)</title>
+    <style>
+        :root {
+            --bg-primary: #0b0f19;
+            --bg-card: #151e32;
+            --bg-card-hover: #1b2742;
+            --bg-card-subtle: #0f172a;
+            --border-color: #243452;
+            --border-bright: #38bdf8;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --cyan: #38bdf8;
+            --green: #22c55e;
+            --green-glow: rgba(34, 197, 94, 0.2);
+            --amber: #f59e0b;
+            --amber-glow: rgba(245, 158, 11, 0.2);
+            --red: #ef4444;
+            --purple: #a855f7;
+            --blue: #3b82f6;
+            --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            font-family: var(--font-stack);
+            line-height: 1.6;
+            padding: 24px;
+        }
+
+        .container {
+            max-width: 1380px;
+            margin: 0 auto;
+        }
+
+        /* Header Bar */
+        .header {
+            background: linear-gradient(135deg, #151e32 0%, #1e293b 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 28px 32px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        }
+
+        .header-title h1 {
+            font-size: 1.85rem;
+            font-weight: 700;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-title p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-top: 6px;
+        }
+
+        .header-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .meta-pill {
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid var(--border-color);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .meta-pill strong {
+            color: #ffffff;
+        }
+
+        /* Teardown Warning Banner */
+        .warning-banner {
+            background: linear-gradient(90deg, rgba(245, 158, 11, 0.15) 0%, rgba(245, 158, 11, 0.05) 100%);
+            border-left: 4px solid var(--amber);
+            border-top: 1px solid rgba(245, 158, 11, 0.3);
+            border-right: 1px solid rgba(245, 158, 11, 0.3);
+            border-bottom: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 8px;
+            padding: 18px 24px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .warning-banner .warning-text h3 {
+            color: var(--amber);
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .warning-banner .warning-text p {
+            color: #e2e8f0;
+            font-size: 0.9rem;
+        }
+
+        .code-box {
+            background: #0f172a;
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            color: #fef08a;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-family: var(--font-mono);
+            font-size: 0.95rem;
+            font-weight: 600;
+            display: inline-block;
+            user-select: all;
+        }
+
+        /* KPI Cards Grid */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .kpi-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-2px);
+            border-color: #38bdf8;
+        }
+
+        .kpi-label {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+
+        .kpi-value {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin: 8px 0 4px 0;
+            color: #ffffff;
+        }
+
+        .kpi-subtext {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        .val-green { color: var(--green); }
+        .val-cyan { color: var(--cyan); }
+        .val-purple { color: var(--purple); }
+        .val-amber { color: var(--amber); }
+        .val-red { color: var(--red); }
+
+        /* Content Sections & Cards */
+        .section-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 14px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .section-header h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Tables */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.92rem;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--bg-card-subtle);
+            color: var(--text-muted);
+            font-weight: 600;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .badge-success {
+            background: rgba(34, 197, 94, 0.15);
+            color: var(--green);
+            border: 1px solid rgba(34, 197, 94, 0.4);
+        }
+
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--amber);
+            border: 1px solid rgba(245, 158, 11, 0.4);
+        }
+
+        .badge-danger {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--red);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+        }
+
+        .badge-info {
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--cyan);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+        }
+
+        .badge-purple {
+            background: rgba(168, 85, 247, 0.15);
+            color: var(--purple);
+            border: 1px solid rgba(168, 85, 247, 0.4);
+        }
+
+        .badge-dept {
+            background: rgba(99, 102, 241, 0.15);
+            color: #a5b4fc;
+            border: 1px solid rgba(99, 102, 241, 0.4);
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+        }
+
+        /* Terminal Window */
+        .terminal-box {
+            background-color: #080d1a;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            font-family: var(--font-mono);
+        }
+
+        .terminal-bar {
+            background-color: #0f172a;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .term-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .dot-red { background-color: #ef4444; }
+        .dot-yellow { background-color: #f59e0b; }
+        .dot-green { background-color: #22c55e; }
+
+        .terminal-bar-title {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            margin-left: 8px;
+        }
+
+        .terminal-content {
+            padding: 16px;
+            color: #38bdf8;
+            font-size: 0.86rem;
+            line-height: 1.5;
+            max-height: 380px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        /* Architecture Deep Dive Grid */
+        .arch-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 18px;
+        }
+
+        .arch-item {
+            background-color: var(--bg-card-subtle);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 18px;
+        }
+
+        .arch-item h4 {
+            color: #38bdf8;
+            font-size: 1rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .arch-item p {
+            color: #cbd5e1;
+            font-size: 0.88rem;
+            line-height: 1.5;
+        }
+
+        .arch-item code {
+            background-color: #0b0f19;
+            color: #fef08a;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.82rem;
+            font-family: var(--font-mono);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 36px;
+            padding: 20px 0;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer a {
+            color: var(--cyan);
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .kpi-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Header Section -->
+    <header class="header">
+        <div class="header-title">
+            <h1>👥 Employee Account Setup Dashboard</h1>
+            <p>Course: <strong>Linux System Administration (E1ITA307)</strong> &bull; Sprint: <strong>AS_01</strong> &bull; Focus: <strong>User &amp; Group Management</strong></p>
+        </div>
+        <div class="header-meta">
+            <span class="meta-pill">🖥 Host: <strong>SP</strong></span>
+            <span class="meta-pill">🐧 OS: <strong>Linux</strong></span>
+            <span class="meta-pill">⚙ Kernel: <strong>6.18.40.1-microsoft-standard-WSL2</strong></span>
+            <span class="meta-pill">🕒 Audit Time: <strong>2026-10-01T04:04:32Z</strong></span>
+        </div>
+    </header>
+
+    <!-- Teardown & Sandboxing Warning Banner -->
+    <div class="warning-banner">
+        <div class="warning-text">
+            <h3>⚠️ LIVE SYSTEM MODIFICATION NOTICE &amp; MANDATORY TEARDOWN</h3>
+            <p>This sprint created REAL Linux accounts (prefixed <code>lsatest_</code>) in <code>/etc/passwd</code>, <code>/etc/shadow</code>, and created real home directories. After inspecting this report and completing grading, execute the cleanup script to restore your system to its pristine pre-test state:</p>
+        </div>
+        <div>
+            <div class="code-box">bash cleanup.sh</div>
+        </div>
+    </div>
+
+    <!-- Executive KPI Grid -->
+    <section class="kpi-grid">
+        <div class="kpi-card">
+            <div class="kpi-label">Employees In CSV</div>
+            <div class="kpi-value val-cyan">4</div>
+            <div class="kpi-subtext">Total records parsed from input</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label">Accounts Created</div>
+            <div class="kpi-value val-green">4</div>
+            <div class="kpi-subtext">Provisioned via <code>useradd -m -g</code></div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label">Accounts Skipped</div>
+            <div class="kpi-value val-purple">0</div>
+            <div class="kpi-subtext">Pre-existing usernames ignored</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label">Depts Created / Verified</div>
+            <div class="kpi-value val-cyan">3</div>
+            <div class="kpi-subtext">3 new, 0 existing</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label">First-Login Reset Policy</div>
+            <div class="kpi-value val-amber">100%</div>
+            <div class="kpi-subtext">Enforced via <code>passwd -e</code></div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label">Failed / Rejected</div>
+            <div class="kpi-value val-green">0</div>
+            <div class="kpi-subtext">Prefix or CSV parsing violations</div>
+        </div>
+    </section>
+
+    <!-- Provisioned Users Table -->
+    <section class="section-card">
+        <div class="section-header">
+            <h2>👤 Provisioned Employee Accounts Audit Table</h2>
+            <span class="badge badge-info">Sandboxed Prefix: lsatest_*</span>
+        </div>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="text-align: center; width: 40px;">#</th>
+                        <th>Username</th>
+                        <th>Full Name</th>
+                        <th>Department</th>
+                        <th>UID / GID</th>
+                        <th>Home Directory</th>
+                        <th>System Verification (id)</th>
+                        <th style="text-align: center;">Aging Policy</th>
+                        <th style="text-align: center;">Account State</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr>
+        <td style="text-align: center; color: #94a3b8; font-weight: bold;">1</td>
+        <td><strong style="color: #38bdf8; font-family: monospace; font-size: 1.05rem;">lsatest_jdoe</strong></td>
+        <td style="color: #f1f5f9; font-weight: 500;">Jane Doe</td>
+        <td><span class="badge badge-dept">engineering</span></td>
+        <td style="font-family: monospace; color: #cbd5e1;">UID:1011<br>GID:1009</td>
+        <td><code>/home/lsatest_jdoe</code><br><small style='color: #94a3b8;'>drwxr-x--- (lsatest_jdoe:engineering)</small></td>
+        <td><code style="font-size: 0.82rem; color: #a5f3fc; background: #0f172a; padding: 4px 8px; border-radius: 4px; display: inline-block;">uid=1011(lsatest_jdoe) gid=1009(engineering) groups=1009(engineering)</code></td>
+        <td style="text-align: center;"><span class="badge badge-warning">⚠ MUST CHANGE (1st Login)</span></td>
+        <td style="text-align: center;"><span class="badge badge-success">✓ CREATED &amp; ACTIVE</span></td>
+    </tr>
+    
+    <tr>
+        <td style="text-align: center; color: #94a3b8; font-weight: bold;">2</td>
+        <td><strong style="color: #38bdf8; font-family: monospace; font-size: 1.05rem;">lsatest_asmith</strong></td>
+        <td style="color: #f1f5f9; font-weight: 500;">Alex Smith</td>
+        <td><span class="badge badge-dept">engineering</span></td>
+        <td style="font-family: monospace; color: #cbd5e1;">UID:1012<br>GID:1009</td>
+        <td><code>/home/lsatest_asmith</code><br><small style='color: #94a3b8;'>drwxr-x--- (lsatest_asmith:engineering)</small></td>
+        <td><code style="font-size: 0.82rem; color: #a5f3fc; background: #0f172a; padding: 4px 8px; border-radius: 4px; display: inline-block;">uid=1012(lsatest_asmith) gid=1009(engineering) groups=1009(engineering)</code></td>
+        <td style="text-align: center;"><span class="badge badge-warning">⚠ MUST CHANGE (1st Login)</span></td>
+        <td style="text-align: center;"><span class="badge badge-success">✓ CREATED &amp; ACTIVE</span></td>
+    </tr>
+    
+    <tr>
+        <td style="text-align: center; color: #94a3b8; font-weight: bold;">3</td>
+        <td><strong style="color: #38bdf8; font-family: monospace; font-size: 1.05rem;">lsatest_rkumar</strong></td>
+        <td style="color: #f1f5f9; font-weight: 500;">Ravi Kumar</td>
+        <td><span class="badge badge-dept">finance</span></td>
+        <td style="font-family: monospace; color: #cbd5e1;">UID:1013<br>GID:1010</td>
+        <td><code>/home/lsatest_rkumar</code><br><small style='color: #94a3b8;'>drwxr-x--- (lsatest_rkumar:finance)</small></td>
+        <td><code style="font-size: 0.82rem; color: #a5f3fc; background: #0f172a; padding: 4px 8px; border-radius: 4px; display: inline-block;">uid=1013(lsatest_rkumar) gid=1010(finance) groups=1010(finance)</code></td>
+        <td style="text-align: center;"><span class="badge badge-warning">⚠ MUST CHANGE (1st Login)</span></td>
+        <td style="text-align: center;"><span class="badge badge-success">✓ CREATED &amp; ACTIVE</span></td>
+    </tr>
+    
+    <tr>
+        <td style="text-align: center; color: #94a3b8; font-weight: bold;">4</td>
+        <td><strong style="color: #38bdf8; font-family: monospace; font-size: 1.05rem;">lsatest_mwong</strong></td>
+        <td style="color: #f1f5f9; font-weight: 500;">Mei Wong</td>
+        <td><span class="badge badge-dept">hr</span></td>
+        <td style="font-family: monospace; color: #cbd5e1;">UID:1014<br>GID:1011</td>
+        <td><code>/home/lsatest_mwong</code><br><small style='color: #94a3b8;'>drwxr-x--- (lsatest_mwong:hr)</small></td>
+        <td><code style="font-size: 0.82rem; color: #a5f3fc; background: #0f172a; padding: 4px 8px; border-radius: 4px; display: inline-block;">uid=1014(lsatest_mwong) gid=1011(hr) groups=1011(hr)</code></td>
+        <td style="text-align: center;"><span class="badge badge-warning">⚠ MUST CHANGE (1st Login)</span></td>
+        <td style="text-align: center;"><span class="badge badge-success">✓ CREATED &amp; ACTIVE</span></td>
+    </tr>
+    
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Two-Column Grid: Groups Summary & Input CSV -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 24px; margin-bottom: 24px;">
+        <!-- Department Groups Table -->
+        <section class="section-card" style="margin-bottom: 0;">
+            <div class="section-header">
+                <h2>🏢 Departmental Groups Status</h2>
+                <span class="badge badge-dept">getent group</span>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="text-align: center; width: 40px;">#</th>
+                            <th>Group Name</th>
+                            <th>Allocated GID</th>
+                            <th style="text-align: center;">Provision Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+    <tr>
+        <td style="text-align: center; color: #94a3b8; font-weight: bold;">1</td>
+        <td><strong style="color: #cbd5e1; font-family: monospace; font-size: 1rem;">engineering</strong></td>
+        <td><code style="color: #38bdf8;">GID: 1009</code></td>
+        <td style="text-align: center;"><span class="badge badge-success">✓ NEWLY CREATED</span></td>
+    </tr>
+    
+    <tr>
+        <td style="text-align: center; color: #94a3b8; font-weight: bold;">2</td>
+        <td><strong style="color: #cbd5e1; font-family: monospace; font-size: 1rem;">finance</strong></td>
+        <td><code style="color: #38bdf8;">GID: 1010</code></td>
+        <td style="text-align: center;"><span class="badge badge-success">✓ NEWLY CREATED</span></td>
+    </tr>
+    
+    <tr>
+        <td style="text-align: center; color: #94a3b8; font-weight: bold;">3</td>
+        <td><strong style="color: #cbd5e1; font-family: monospace; font-size: 1rem;">hr</strong></td>
+        <td><code style="color: #38bdf8;">GID: 1011</code></td>
+        <td style="text-align: center;"><span class="badge badge-success">✓ NEWLY CREATED</span></td>
+    </tr>
+    
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Input CSV Dataset -->
+        <section class="section-card" style="margin-bottom: 0;">
+            <div class="section-header">
+                <h2>📄 Input Employee Dataset (employees.csv)</h2>
+                <span class="badge badge-info">RFC 4180 CSV</span>
+            </div>
+            <div class="terminal-box">
+                <div class="terminal-bar">
+                    <span class="term-dot dot-red"></span>
+                    <span class="term-dot dot-yellow"></span>
+                    <span class="term-dot dot-green"></span>
+                    <span class="terminal-bar-title">employees.csv (username,fullname,department)</span>
+                </div>
+                <div class="terminal-content" style="max-height: 180px; color: #a5f3fc;">lsatest_jdoe,Jane Doe,engineering
+lsatest_asmith,Alex Smith,engineering
+lsatest_rkumar,Ravi Kumar,finance
+lsatest_mwong,Mei Wong,hr</div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Live Captured Terminal Execution Transcript -->
+    <section class="section-card">
+        <div class="section-header">
+            <h2>💻 Live Terminal Execution &amp; Audit Transcript</h2>
+            <span class="badge badge-success">Live Execution Stream</span>
+        </div>
+        <div class="terminal-box">
+            <div class="terminal-bar">
+                <span class="term-dot dot-red"></span>
+                <span class="term-dot dot-yellow"></span>
+                <span class="term-dot dot-green"></span>
+                <span class="terminal-bar-title">bash ./employee_account_setup.sh (stdout / stderr)</span>
+            </div>
+            <div class="terminal-content">[2026-10-01 09:34:18] [INFO] Input CSV: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_01/employees.csv
+[2026-10-01 09:34:18] [INFO] Log File: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_01/logs/account_setup.log
+[2026-10-01 09:34:19] [STEP] Reading employee records from /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_01/employees.csv...
+[2026-10-01 09:34:19] [INFO] Processing record [Line 1]: Employee &#x27;Jane Doe&#x27; (lsatest_jdoe) -&gt; Department &#x27;engineering&#x27;
+[2026-10-01 09:34:19] [INFO] Department group &#x27;engineering&#x27; does not exist. Creating group...
+[2026-10-01 09:34:20] [SUCCESS] Created department group &#x27;engineering&#x27; (GID: 1009).
+[2026-10-01 09:34:20] [INFO] Provisioning user account &#x27;lsatest_jdoe&#x27; for &#x27;Jane Doe&#x27; in department &#x27;engineering&#x27;...
+[2026-10-01 09:34:20] [SUCCESS] Account &#x27;lsatest_jdoe&#x27; created successfully.
+[2026-10-01 09:34:20] [INFO] Temporary password assigned non-interactively for &#x27;lsatest_jdoe&#x27;.
+[2026-10-01 09:34:21] [SUCCESS] Password expiration enforced for &#x27;lsatest_jdoe&#x27; (change required on first login).
+[2026-10-01 09:34:21] [SUCCESS] Home directory verified: /home/lsatest_jdoe (drwxr-x--- lsatest_jdoe:engineering)
+[2026-10-01 09:34:22] [INFO] Verification Audit: uid=1011(lsatest_jdoe) gid=1009(engineering) groups=1009(engineering) | Password Status: P | Expiry: password must be changed 7
+[2026-10-01 09:34:22] [INFO] Processing record [Line 2]: Employee &#x27;Alex Smith&#x27; (lsatest_asmith) -&gt; Department &#x27;engineering&#x27;
+[2026-10-01 09:34:22] [INFO] Department group &#x27;engineering&#x27; already verified in this session.
+[2026-10-01 09:34:22] [INFO] Provisioning user account &#x27;lsatest_asmith&#x27; for &#x27;Alex Smith&#x27; in department &#x27;engineering&#x27;...
+[2026-10-01 09:34:23] [SUCCESS] Account &#x27;lsatest_asmith&#x27; created successfully.
+[2026-10-01 09:34:23] [INFO] Temporary password assigned non-interactively for &#x27;lsatest_asmith&#x27;.
+[2026-10-01 09:34:23] [SUCCESS] Password expiration enforced for &#x27;lsatest_asmith&#x27; (change required on first login).
+[2026-10-01 09:34:24] [SUCCESS] Home directory verified: /home/lsatest_asmith (drwxr-x--- lsatest_asmith:engineering)
+[2026-10-01 09:34:25] [INFO] Verification Audit: uid=1012(lsatest_asmith) gid=1009(engineering) groups=1009(engineering) | Password Status: P | Expiry: password must be changed 7
+[2026-10-01 09:34:25] [INFO] Processing record [Line 3]: Employee &#x27;Ravi Kumar&#x27; (lsatest_rkumar) -&gt; Department &#x27;finance&#x27;
+[2026-10-01 09:34:25] [INFO] Department group &#x27;finance&#x27; does not exist. Creating group...
+[2026-10-01 09:34:26] [SUCCESS] Created department group &#x27;finance&#x27; (GID: 1010).
+[2026-10-01 09:34:26] [INFO] Provisioning user account &#x27;lsatest_rkumar&#x27; for &#x27;Ravi Kumar&#x27; in department &#x27;finance&#x27;...
+[2026-10-01 09:34:27] [SUCCESS] Account &#x27;lsatest_rkumar&#x27; created successfully.
+[2026-10-01 09:34:27] [INFO] Temporary password assigned non-interactively for &#x27;lsatest_rkumar&#x27;.
+[2026-10-01 09:34:27] [SUCCESS] Password expiration enforced for &#x27;lsatest_rkumar&#x27; (change required on first login).
+[2026-10-01 09:34:28] [SUCCESS] Home directory verified: /home/lsatest_rkumar (drwxr-x--- lsatest_rkumar:finance)
+[2026-10-01 09:34:28] [INFO] Verification Audit: uid=1013(lsatest_rkumar) gid=1010(finance) groups=1010(finance) | Password Status: P | Expiry: password must be changed 7
+[2026-10-01 09:34:28] [INFO] Processing record [Line 4]: Employee &#x27;Mei Wong&#x27; (lsatest_mwong) -&gt; Department &#x27;hr&#x27;
+[2026-10-01 09:34:29] [INFO] Department group &#x27;hr&#x27; does not exist. Creating group...
+[2026-10-01 09:34:29] [SUCCESS] Created department group &#x27;hr&#x27; (GID: 1011).
+[2026-10-01 09:34:30] [INFO] Provisioning user account &#x27;lsatest_mwong&#x27; for &#x27;Mei Wong&#x27; in department &#x27;hr&#x27;...
+[2026-10-01 09:34:30] [SUCCESS] Account &#x27;lsatest_mwong&#x27; created successfully.
+[2026-10-01 09:34:31] [INFO] Temporary password assigned non-interactively for &#x27;lsatest_mwong&#x27;.
+[2026-10-01 09:34:31] [SUCCESS] Password expiration enforced for &#x27;lsatest_mwong&#x27; (change required on first login).
+[2026-10-01 09:34:31] [SUCCESS] Home directory verified: /home/lsatest_mwong (drwxr-x--- lsatest_mwong:hr)
+[2026-10-01 09:34:32] [INFO] Verification Audit: uid=1014(lsatest_mwong) gid=1011(hr) groups=1011(hr) | Password Status: P | Expiry: password must be changed 7
+[2026-10-01 09:34:32] [STEP] Employee Account Setup Summary
+[2026-10-01 09:34:32] [SUCCESS] All eligible employee accounts processed successfully!
+</div>
+        </div>
+    </section>
+
+    <!-- Technical Architecture & Sysadmin Deep Dive -->
+    <section class="section-card">
+        <div class="section-header">
+            <h2>🧠 Technical Architecture &amp; System Administration Reference</h2>
+            <span class="badge badge-purple">Viva Preparation</span>
+        </div>
+        <div class="arch-grid">
+            <div class="arch-item">
+                <h4>🔒 Sandboxing &amp; Safety Constraint</h4>
+                <p>Because <code>useradd</code> and <code>groupadd</code> modify live kernel/glibc databases (<code>/etc/passwd</code>, <code>/etc/shadow</code>, <code>/etc/group</code>), every test username is strictly validated against the regex <code>^lsatest_[a-zA-Z0-9_]+$</code>. Any non-prefixed username is rejected immediately to protect human accounts.</p>
+            </div>
+            <div class="arch-item">
+                <h4>🔑 Non-Interactive Password &amp; PAM Expiry</h4>
+                <p>Passwords are provisioned securely via <code>echo "user:pass" | chpasswd</code> without interactive prompts. Immediately after, <code>passwd -e &lt;user&gt;</code> (or <code>chage -d 0</code>) sets the last password change date to day 0 (Jan 1, 1970), forcing Linux PAM to demand a new password on first login.</p>
+            </div>
+            <div class="arch-item">
+                <h4>📁 Home Directory Skeleton Seeding</h4>
+                <p>The <code>-m</code> flag instructs <code>useradd</code> to initialize <code>/home/&lt;user&gt;</code> by copying base shell profiles (<code>.bashrc</code>, <code>.profile</code>, <code>.bash_logout</code>) from <code>/etc/skel</code> and assigns strict ownership (<code>&lt;user&gt;:&lt;department&gt;</code>) and directory permissions (<code>0750</code> or <code>0700</code>).</p>
+            </div>
+            <div class="arch-item">
+                <h4>🏢 Departmental Group Association</h4>
+                <p>The <code>-g &lt;dept&gt;</code> flag assigns the department as the user's <strong>Primary Group</strong> in <code>/etc/passwd</code> field 4 (GID). Department existence is queried first via <code>getent group &lt;dept&gt;</code> and created on-the-fly with <code>groupadd</code> if absent.</p>
+            </div>
+            <div class="arch-item">
+                <h4>🔄 Two-Step Lifecycle &amp; Teardown</h4>
+                <p>Demonstrations follow a two-step pattern: <code>bash run.sh</code> provisions accounts and generates this live dashboard; <code>bash cleanup.sh</code> uses <code>userdel -r</code> and <code>groupdel</code> to completely restore the system to its pre-sprint state.</p>
+            </div>
+            <div class="arch-item">
+                <h4>🌐 Multi-Platform Portability</h4>
+                <p>The scripts dynamically detect WSL2, native Linux distributions, and macOS. When run on macOS, clear diagnostics explain that BSD/Darwin uses <code>dscl</code> instead of GNU/Linux <code>useradd</code>, avoiding cryptic failures.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Linux System Administration (E1ITA307) — Automation Sprint AS_01</p>
+        <p style="margin-top: 4px; font-size: 0.8rem; color: #64748b;">Report generated completely from scratch using live system audit telemetry. No static or mock data used.</p>
+    </footer>
+
+</div>
+
+</body>
+</html>

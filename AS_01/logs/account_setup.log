@@ -1,0 +1,227 @@
+[2026-10-01 09:29:02] [STEP] Initiating Employee Account Setup Automation (Course: E1ITA307)
+[2026-10-01 09:29:02] [INFO] Platform: Linux | Kernel: 6.18.40.1-microsoft-standard-WSL2 | Hostname: SP
+[2026-10-01 09:29:02] [INFO] Input CSV: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_01/employees.csv
+[2026-10-01 09:29:03] [INFO] Log File: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_01/logs/account_setup.log
+[2026-10-01 09:29:03] [STEP] Reading employee records from /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_01/employees.csv...
+[2026-10-01 09:29:20] [STEP] Initiating Employee Account Setup Automation (Course: E1ITA307)
+[2026-10-01 09:29:20] [INFO] Platform: Linux | Kernel: 6.18.40.1-microsoft-standard-WSL2 | Hostname: SP
+[2026-10-01 09:29:20] [INFO] Input CSV: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_01/employees.csv
+[2026-10-01 09:29:20] [INFO] Log File: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_01/logs/account_setup.log
+[2026-10-01 09:29:21] [STEP] Reading employee records from /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_01/employees.csv...
+[2026-10-01 09:29:57] [STEP] Initiating Employee Account Setup Automation (Course: E1ITA307)
+[2026-10-01 09:29:57] [INFO] Platform: Linux | Kernel: 6.18.40.1-microsoft-standard-WSL2 | Hostname: SP
+[2026-10-01 09:29:57] [INFO] Input CSV: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_01/employees.csv
+[2026-10-01 09:29:57] [INFO] Log File: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_01/logs/account_setup.log
+[2026-10-01 09:29:57] [STEP] Reading employee records from /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_01/employees.csv...
+[2026-10-01 09:29:57] [INFO] Processing record [Line 1]: Employee 'Jane Doe' (lsatest_jdoe) -> Department 'engineering'
+[2026-10-01 09:29:57] [INFO] Department group 'engineering' does not exist. Creating group...
+[2026-10-01 09:29:57] [INFO] [DRY-RUN] Would execute: sudo groupadd engineering
+[2026-10-01 09:29:58] [INFO] Provisioning user account 'lsatest_jdoe' for 'Jane Doe' in department 'engineering'...
+[2026-10-01 09:29:58] [INFO] [DRY-RUN] Would execute: sudo useradd -m -c "Jane Doe" -g "engineering" "lsatest_jdoe"
+[2026-10-01 09:29:58] [INFO] [DRY-RUN] Would execute: chpasswd temporary password & passwd -e
+[2026-10-01 09:29:58] [INFO] Processing record [Line 2]: Employee 'Alex Smith' (lsatest_asmith) -> Department 'engineering'
+[2026-10-01 09:29:58] [INFO] Department group 'engineering' does not exist. Creating group...
+[2026-10-01 09:29:58] [INFO] [DRY-RUN] Would execute: sudo groupadd engineering
+[2026-10-01 09:29:58] [INFO] Provisioning user account 'lsatest_asmith' for 'Alex Smith' in department 'engineering'...
+[2026-10-01 09:29:58] [INFO] [DRY-RUN] Would execute: sudo useradd -m -c "Alex Smith" -g "engineering" "lsatest_asmith"
+[2026-10-01 09:29:58] [INFO] [DRY-RUN] Would execute: chpasswd temporary password & passwd -e
+[2026-10-01 09:29:58] [INFO] Processing record [Line 3]: Employee 'Ravi Kumar' (lsatest_rkumar) -> Department 'finance'
+[2026-10-01 09:29:59] [INFO] Department group 'finance' does not exist. Creating group...
+[2026-10-01 09:29:59] [INFO] [DRY-RUN] Would execute: sudo groupadd finance
+[2026-10-01 09:29:59] [INFO] Provisioning user account 'lsatest_rkumar' for 'Ravi Kumar' in department 'finance'...
+[2026-10-01 09:29:59] [INFO] [DRY-RUN] Would execute: sudo useradd -m -c "Ravi Kumar" -g "finance" "lsatest_rkumar"
+[2026-10-01 09:29:59] [INFO] [DRY-RUN] Would execute: chpasswd temporary password & passwd -e
+[2026-10-01 09:29:59] [INFO] Processing record [Line 4]: Employee 'Mei Wong' (lsatest_mwong) -> Department 'hr'
+[2026-10-01 09:29:59] [INFO] Department group 'hr' does not exist. Creating group...
+[2026-10-01 09:30:00] [INFO] [DRY-RUN] Would execute: sudo groupadd hr
+[2026-10-01 09:30:00] [INFO] Provisioning user account 'lsatest_mwong' for 'Mei Wong' in department 'hr'...
+[2026-10-01 09:30:00] [INFO] [DRY-RUN] Would execute: sudo useradd -m -c "Mei Wong" -g "hr" "lsatest_mwong"
+[2026-10-01 09:30:00] [INFO] [DRY-RUN] Would execute: chpasswd temporary password & passwd -e
+[2026-10-01 09:30:01] [STEP] Employee Account Setup Summary
+[2026-10-01 09:30:01] [SUCCESS] All eligible employee accounts processed successfully!
+[2026-10-01 09:30:37] [STEP] Initiating Employee Account Setup Automation (Course: E1ITA307)
+[2026-10-01 09:30:37] [INFO] Platform: Linux | Kernel: 6.18.40.1-microsoft-standard-WSL2 | Hostname: SP
+[2026-10-01 09:30:37] [INFO] Input CSV: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_01/employees.csv
+[2026-10-01 09:30:38] [INFO] Log File: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_01/logs/account_setup.log
+[2026-10-01 09:30:38] [STEP] Reading employee records from /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_01/employees.csv...
+[2026-10-01 09:30:38] [INFO] Processing record [Line 1]: Employee 'Jane Doe' (lsatest_jdoe) -> Department 'engineering'
+[2026-10-01 09:30:38] [INFO] Department group 'engineering' does not exist. Creating group...
+[2026-10-01 09:30:38] [INFO] [DRY-RUN] Would execute: sudo groupadd engineering
+[2026-10-01 09:30:38] [INFO] Provisioning user account 'lsatest_jdoe' for 'Jane Doe' in department 'engineering'...
+[2026-10-01 09:30:38] [INFO] [DRY-RUN] Would execute: sudo useradd -m -c "Jane Doe" -g "engineering" "lsatest_jdoe"
+[2026-10-01 09:30:38] [INFO] [DRY-RUN] Would execute: chpasswd temporary password & passwd -e
+[2026-10-01 09:30:38] [INFO] Processing record [Line 2]: Employee 'Alex Smith' (lsatest_asmith) -> Department 'engineering'
+[2026-10-01 09:30:38] [INFO] Department group 'engineering' already verified in this session.
+[2026-10-01 09:30:38] [INFO] Provisioning user account 'lsatest_asmith' for 'Alex Smith' in department 'engineering'...
+[2026-10-01 09:30:39] [INFO] [DRY-RUN] Would execute: sudo useradd -m -c "Alex Smith" -g "engineering" "lsatest_asmith"
+[2026-10-01 09:30:39] [INFO] [DRY-RUN] Would execute: chpasswd temporary password & passwd -e
+[2026-10-01 09:30:39] [INFO] Processing record [Line 3]: Employee 'Ravi Kumar' (lsatest_rkumar) -> Department 'finance'
+[2026-10-01 09:30:39] [INFO] Department group 'finance' does not exist. Creating group...
+[2026-10-01 09:30:39] [INFO] [DRY-RUN] Would execute: sudo groupadd finance
+[2026-10-01 09:30:39] [INFO] Provisioning user account 'lsatest_rkumar' for 'Ravi Kumar' in department 'finance'...
+[2026-10-01 09:30:39] [INFO] [DRY-RUN] Would execute: sudo useradd -m -c "Ravi Kumar" -g "finance" "lsatest_rkumar"
+[2026-10-01 09:30:40] [INFO] [DRY-RUN] Would execute: chpasswd temporary password & passwd -e
+[2026-10-01 09:30:40] [INFO] Processing record [Line 4]: Employee 'Mei Wong' (lsatest_mwong) -> Department 'hr'
+[2026-10-01 09:30:40] [INFO] Department group 'hr' does not exist. Creating group...
+[2026-10-01 09:30:40] [INFO] [DRY-RUN] Would execute: sudo groupadd hr
+[2026-10-01 09:30:40] [INFO] Provisioning user account 'lsatest_mwong' for 'Mei Wong' in department 'hr'...
+[2026-10-01 09:30:40] [INFO] [DRY-RUN] Would execute: sudo useradd -m -c "Mei Wong" -g "hr" "lsatest_mwong"
+[2026-10-01 09:30:40] [INFO] [DRY-RUN] Would execute: chpasswd temporary password & passwd -e
+[2026-10-01 09:30:40] [STEP] Employee Account Setup Summary
+[2026-10-01 09:30:40] [SUCCESS] All eligible employee accounts processed successfully!
+[2026-10-01 09:31:10] [CLEANUP-STEP] Initiating Safe Teardown & Environment Restoration (AS_01)
+[2026-10-01 09:31:10] [CLEANUP-INFO] Host: SP | OS: Linux | Target Inventory: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_01/employees.csv
+[2026-10-01 09:31:10] [CLEANUP-STEP] Stage 1: Removing Test User Accounts & Home Directories...
+[2026-10-01 09:31:10] [CLEANUP-INFO] User account 'lsatest_jdoe' does not exist on this host; nothing to remove.
+[2026-10-01 09:31:11] [CLEANUP-INFO] User account 'lsatest_asmith' does not exist on this host; nothing to remove.
+[2026-10-01 09:31:11] [CLEANUP-INFO] User account 'lsatest_rkumar' does not exist on this host; nothing to remove.
+[2026-10-01 09:31:11] [CLEANUP-INFO] User account 'lsatest_mwong' does not exist on this host; nothing to remove.
+[2026-10-01 09:31:11] [CLEANUP-STEP] Stage 2: Auditing & Removing Empty Departmental Groups...
+[2026-10-01 09:31:11] [CLEANUP-INFO] Group 'finance' does not exist; no removal required.
+[2026-10-01 09:31:11] [CLEANUP-INFO] Group 'hr' does not exist; no removal required.
+[2026-10-01 09:31:11] [CLEANUP-INFO] Group 'engineering' does not exist; no removal required.
+[2026-10-01 09:31:11] [CLEANUP-STEP] Stage 3: Verification of Pristine Environment...
+[2026-10-01 09:31:12] [CLEANUP-SUCCESS] Host environment has been cleanly restored to pristine pre-test state.
+[2026-10-01 09:32:43] [STEP] Initiating Employee Account Setup Automation (Course: E1ITA307)
+[2026-10-01 09:32:43] [INFO] Platform: Linux | Kernel: 6.18.40.1-microsoft-standard-WSL2 | Hostname: SP
+[2026-10-01 09:32:43] [INFO] Input CSV: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_01/employees.csv
+[2026-10-01 09:32:43] [INFO] Log File: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_01/logs/account_setup.log
+[2026-10-01 09:32:44] [STEP] Reading employee records from /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_01/employees.csv...
+[2026-10-01 09:32:44] [INFO] Processing record [Line 1]: Employee 'Jane Doe' (lsatest_jdoe) -> Department 'engineering'
+[2026-10-01 09:32:44] [INFO] Department group 'engineering' does not exist. Creating group...
+[2026-10-01 09:32:44] [SUCCESS] Created department group 'engineering' (GID: 1009).
+[2026-10-01 09:32:45] [INFO] Provisioning user account 'lsatest_jdoe' for 'Jane Doe' in department 'engineering'...
+[2026-10-01 09:32:45] [SUCCESS] Account 'lsatest_jdoe' created successfully.
+[2026-10-01 09:32:46] [INFO] Temporary password assigned non-interactively for 'lsatest_jdoe'.
+[2026-10-01 09:32:46] [SUCCESS] Password expiration enforced for 'lsatest_jdoe' (change required on first login).
+[2026-10-01 09:32:46] [SUCCESS] Home directory verified: /home/lsatest_jdoe (drwxr-x--- lsatest_jdoe:engineering)
+[2026-10-01 09:32:46] [INFO] Verification Audit: uid=1011(lsatest_jdoe) gid=1009(engineering) groups=1009(engineering) | Password Status: P | Expiry: password must be changed 7
+[2026-10-01 09:32:47] [INFO] Processing record [Line 2]: Employee 'Alex Smith' (lsatest_asmith) -> Department 'engineering'
+[2026-10-01 09:32:47] [INFO] Department group 'engineering' already verified in this session.
+[2026-10-01 09:32:47] [INFO] Provisioning user account 'lsatest_asmith' for 'Alex Smith' in department 'engineering'...
+[2026-10-01 09:32:47] [SUCCESS] Account 'lsatest_asmith' created successfully.
+[2026-10-01 09:32:48] [INFO] Temporary password assigned non-interactively for 'lsatest_asmith'.
+[2026-10-01 09:32:48] [SUCCESS] Password expiration enforced for 'lsatest_asmith' (change required on first login).
+[2026-10-01 09:32:48] [SUCCESS] Home directory verified: /home/lsatest_asmith (drwxr-x--- lsatest_asmith:engineering)
+[2026-10-01 09:32:48] [INFO] Verification Audit: uid=1012(lsatest_asmith) gid=1009(engineering) groups=1009(engineering) | Password Status: P | Expiry: password must be changed 7
+[2026-10-01 09:32:48] [INFO] Processing record [Line 3]: Employee 'Ravi Kumar' (lsatest_rkumar) -> Department 'finance'
+[2026-10-01 09:32:48] [INFO] Department group 'finance' does not exist. Creating group...
+[2026-10-01 09:32:49] [SUCCESS] Created department group 'finance' (GID: 1010).
+[2026-10-01 09:32:49] [INFO] Provisioning user account 'lsatest_rkumar' for 'Ravi Kumar' in department 'finance'...
+[2026-10-01 09:32:49] [SUCCESS] Account 'lsatest_rkumar' created successfully.
+[2026-10-01 09:32:50] [INFO] Temporary password assigned non-interactively for 'lsatest_rkumar'.
+[2026-10-01 09:32:50] [SUCCESS] Password expiration enforced for 'lsatest_rkumar' (change required on first login).
+[2026-10-01 09:32:50] [SUCCESS] Home directory verified: /home/lsatest_rkumar (drwxr-x--- lsatest_rkumar:finance)
+[2026-10-01 09:32:50] [INFO] Verification Audit: uid=1013(lsatest_rkumar) gid=1010(finance) groups=1010(finance) | Password Status: P | Expiry: password must be changed 7
+[2026-10-01 09:32:51] [INFO] Processing record [Line 4]: Employee 'Mei Wong' (lsatest_mwong) -> Department 'hr'
+[2026-10-01 09:32:51] [INFO] Department group 'hr' does not exist. Creating group...
+[2026-10-01 09:32:51] [SUCCESS] Created department group 'hr' (GID: 1011).
+[2026-10-01 09:32:51] [INFO] Provisioning user account 'lsatest_mwong' for 'Mei Wong' in department 'hr'...
+[2026-10-01 09:32:51] [SUCCESS] Account 'lsatest_mwong' created successfully.
+[2026-10-01 09:32:52] [INFO] Temporary password assigned non-interactively for 'lsatest_mwong'.
+[2026-10-01 09:32:52] [SUCCESS] Password expiration enforced for 'lsatest_mwong' (change required on first login).
+[2026-10-01 09:32:52] [SUCCESS] Home directory verified: /home/lsatest_mwong (drwxr-x--- lsatest_mwong:hr)
+[2026-10-01 09:32:52] [INFO] Verification Audit: uid=1014(lsatest_mwong) gid=1011(hr) groups=1011(hr) | Password Status: P | Expiry: password must be changed 7
+[2026-10-01 09:32:52] [STEP] Employee Account Setup Summary
+[2026-10-01 09:32:52] [SUCCESS] All eligible employee accounts processed successfully!
+[2026-10-01 09:33:33] [STEP] Initiating Employee Account Setup Automation (Course: E1ITA307)
+[2026-10-01 09:33:33] [INFO] Platform: Linux | Kernel: 6.18.40.1-microsoft-standard-WSL2 | Hostname: SP
+[2026-10-01 09:33:33] [INFO] Input CSV: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_01/employees.csv
+[2026-10-01 09:33:33] [INFO] Log File: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_01/logs/account_setup.log
+[2026-10-01 09:33:34] [STEP] Reading employee records from /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_01/employees.csv...
+[2026-10-01 09:33:34] [INFO] Processing record [Line 1]: Employee 'Jane Doe' (lsatest_jdoe) -> Department 'engineering'
+[2026-10-01 09:33:34] [INFO] Department group 'engineering' (GID: 1009) already exists.
+[2026-10-01 09:33:34] [SKIPPED] User account 'lsatest_jdoe' already exists (uid=1011(lsatest_jdoe) gid=1009(engineering) groups=1009(engineering)). Skipping creation.
+[2026-10-01 09:33:35] [INFO] Processing record [Line 2]: Employee 'Alex Smith' (lsatest_asmith) -> Department 'engineering'
+[2026-10-01 09:33:35] [INFO] Department group 'engineering' already verified in this session.
+[2026-10-01 09:33:35] [SKIPPED] User account 'lsatest_asmith' already exists (uid=1012(lsatest_asmith) gid=1009(engineering) groups=1009(engineering)). Skipping creation.
+[2026-10-01 09:33:35] [INFO] Processing record [Line 3]: Employee 'Ravi Kumar' (lsatest_rkumar) -> Department 'finance'
+[2026-10-01 09:33:35] [INFO] Department group 'finance' (GID: 1010) already exists.
+[2026-10-01 09:33:35] [SKIPPED] User account 'lsatest_rkumar' already exists (uid=1013(lsatest_rkumar) gid=1010(finance) groups=1010(finance)). Skipping creation.
+[2026-10-01 09:33:36] [INFO] Processing record [Line 4]: Employee 'Mei Wong' (lsatest_mwong) -> Department 'hr'
+[2026-10-01 09:33:36] [INFO] Department group 'hr' (GID: 1011) already exists.
+[2026-10-01 09:33:36] [SKIPPED] User account 'lsatest_mwong' already exists (uid=1014(lsatest_mwong) gid=1011(hr) groups=1011(hr)). Skipping creation.
+[2026-10-01 09:33:36] [STEP] Employee Account Setup Summary
+[2026-10-01 09:33:36] [SUCCESS] All eligible employee accounts processed successfully!
+[2026-10-01 09:33:46] [CLEANUP-STEP] Initiating Safe Teardown & Environment Restoration (AS_01)
+[2026-10-01 09:33:46] [CLEANUP-INFO] Host: SP | OS: Linux | Target Inventory: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_01/employees.csv
+[2026-10-01 09:33:47] [CLEANUP-STEP] Stage 1: Removing Test User Accounts & Home Directories...
+[2026-10-01 09:33:47] [CLEANUP-INFO] Targeting test account: 'lsatest_jdoe' (Safety prefix 'lsatest_' verified)
+[2026-10-01 09:33:47] [CLEANUP-SUCCESS] User 'lsatest_jdoe' and home directory successfully deleted.
+[2026-10-01 09:33:47] [CLEANUP-INFO] Targeting test account: 'lsatest_asmith' (Safety prefix 'lsatest_' verified)
+[2026-10-01 09:33:47] [CLEANUP-SUCCESS] User 'lsatest_asmith' and home directory successfully deleted.
+[2026-10-01 09:33:48] [CLEANUP-INFO] Targeting test account: 'lsatest_rkumar' (Safety prefix 'lsatest_' verified)
+[2026-10-01 09:33:48] [CLEANUP-SUCCESS] User 'lsatest_rkumar' and home directory successfully deleted.
+[2026-10-01 09:33:48] [CLEANUP-INFO] Targeting test account: 'lsatest_mwong' (Safety prefix 'lsatest_' verified)
+[2026-10-01 09:33:48] [CLEANUP-SUCCESS] User 'lsatest_mwong' and home directory successfully deleted.
+[2026-10-01 09:33:48] [CLEANUP-STEP] Stage 2: Auditing & Removing Empty Departmental Groups...
+[2026-10-01 09:33:48] [CLEANUP-INFO] Targeting empty test departmental group: 'finance' (GID: 1010)
+[2026-10-01 09:33:49] [CLEANUP-SUCCESS] Department group 'finance' deleted successfully.
+[2026-10-01 09:33:49] [CLEANUP-INFO] Targeting empty test departmental group: 'hr' (GID: 1011)
+[2026-10-01 09:33:50] [CLEANUP-SUCCESS] Department group 'hr' deleted successfully.
+[2026-10-01 09:33:50] [CLEANUP-INFO] Targeting empty test departmental group: 'engineering' (GID: 1009)
+[2026-10-01 09:33:50] [CLEANUP-SUCCESS] Department group 'engineering' deleted successfully.
+[2026-10-01 09:33:50] [CLEANUP-STEP] Stage 3: Verification of Pristine Environment...
+[2026-10-01 09:33:50] [CLEANUP-SUCCESS] Host environment has been cleanly restored to pristine pre-test state.
+[2026-10-01 09:34:18] [STEP] Initiating Employee Account Setup Automation (Course: E1ITA307)
+[2026-10-01 09:34:18] [INFO] Platform: Linux | Kernel: 6.18.40.1-microsoft-standard-WSL2 | Hostname: SP
+[2026-10-01 09:34:18] [INFO] Input CSV: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_01/employees.csv
+[2026-10-01 09:34:18] [INFO] Log File: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_01/logs/account_setup.log
+[2026-10-01 09:34:19] [STEP] Reading employee records from /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_01/employees.csv...
+[2026-10-01 09:34:19] [INFO] Processing record [Line 1]: Employee 'Jane Doe' (lsatest_jdoe) -> Department 'engineering'
+[2026-10-01 09:34:19] [INFO] Department group 'engineering' does not exist. Creating group...
+[2026-10-01 09:34:20] [SUCCESS] Created department group 'engineering' (GID: 1009).
+[2026-10-01 09:34:20] [INFO] Provisioning user account 'lsatest_jdoe' for 'Jane Doe' in department 'engineering'...
+[2026-10-01 09:34:20] [SUCCESS] Account 'lsatest_jdoe' created successfully.
+[2026-10-01 09:34:20] [INFO] Temporary password assigned non-interactively for 'lsatest_jdoe'.
+[2026-10-01 09:34:21] [SUCCESS] Password expiration enforced for 'lsatest_jdoe' (change required on first login).
+[2026-10-01 09:34:21] [SUCCESS] Home directory verified: /home/lsatest_jdoe (drwxr-x--- lsatest_jdoe:engineering)
+[2026-10-01 09:34:22] [INFO] Verification Audit: uid=1011(lsatest_jdoe) gid=1009(engineering) groups=1009(engineering) | Password Status: P | Expiry: password must be changed 7
+[2026-10-01 09:34:22] [INFO] Processing record [Line 2]: Employee 'Alex Smith' (lsatest_asmith) -> Department 'engineering'
+[2026-10-01 09:34:22] [INFO] Department group 'engineering' already verified in this session.
+[2026-10-01 09:34:22] [INFO] Provisioning user account 'lsatest_asmith' for 'Alex Smith' in department 'engineering'...
+[2026-10-01 09:34:23] [SUCCESS] Account 'lsatest_asmith' created successfully.
+[2026-10-01 09:34:23] [INFO] Temporary password assigned non-interactively for 'lsatest_asmith'.
+[2026-10-01 09:34:23] [SUCCESS] Password expiration enforced for 'lsatest_asmith' (change required on first login).
+[2026-10-01 09:34:24] [SUCCESS] Home directory verified: /home/lsatest_asmith (drwxr-x--- lsatest_asmith:engineering)
+[2026-10-01 09:34:25] [INFO] Verification Audit: uid=1012(lsatest_asmith) gid=1009(engineering) groups=1009(engineering) | Password Status: P | Expiry: password must be changed 7
+[2026-10-01 09:34:25] [INFO] Processing record [Line 3]: Employee 'Ravi Kumar' (lsatest_rkumar) -> Department 'finance'
+[2026-10-01 09:34:25] [INFO] Department group 'finance' does not exist. Creating group...
+[2026-10-01 09:34:26] [SUCCESS] Created department group 'finance' (GID: 1010).
+[2026-10-01 09:34:26] [INFO] Provisioning user account 'lsatest_rkumar' for 'Ravi Kumar' in department 'finance'...
+[2026-10-01 09:34:27] [SUCCESS] Account 'lsatest_rkumar' created successfully.
+[2026-10-01 09:34:27] [INFO] Temporary password assigned non-interactively for 'lsatest_rkumar'.
+[2026-10-01 09:34:27] [SUCCESS] Password expiration enforced for 'lsatest_rkumar' (change required on first login).
+[2026-10-01 09:34:28] [SUCCESS] Home directory verified: /home/lsatest_rkumar (drwxr-x--- lsatest_rkumar:finance)
+[2026-10-01 09:34:28] [INFO] Verification Audit: uid=1013(lsatest_rkumar) gid=1010(finance) groups=1010(finance) | Password Status: P | Expiry: password must be changed 7
+[2026-10-01 09:34:28] [INFO] Processing record [Line 4]: Employee 'Mei Wong' (lsatest_mwong) -> Department 'hr'
+[2026-10-01 09:34:29] [INFO] Department group 'hr' does not exist. Creating group...
+[2026-10-01 09:34:29] [SUCCESS] Created department group 'hr' (GID: 1011).
+[2026-10-01 09:34:30] [INFO] Provisioning user account 'lsatest_mwong' for 'Mei Wong' in department 'hr'...
+[2026-10-01 09:34:30] [SUCCESS] Account 'lsatest_mwong' created successfully.
+[2026-10-01 09:34:31] [INFO] Temporary password assigned non-interactively for 'lsatest_mwong'.
+[2026-10-01 09:34:31] [SUCCESS] Password expiration enforced for 'lsatest_mwong' (change required on first login).
+[2026-10-01 09:34:31] [SUCCESS] Home directory verified: /home/lsatest_mwong (drwxr-x--- lsatest_mwong:hr)
+[2026-10-01 09:34:32] [INFO] Verification Audit: uid=1014(lsatest_mwong) gid=1011(hr) groups=1011(hr) | Password Status: P | Expiry: password must be changed 7
+[2026-10-01 09:34:32] [STEP] Employee Account Setup Summary
+[2026-10-01 09:34:32] [SUCCESS] All eligible employee accounts processed successfully!
+[2026-10-01 09:35:44] [CLEANUP-STEP] Initiating Safe Teardown & Environment Restoration (AS_01)
+[2026-10-01 09:35:44] [CLEANUP-INFO] Host: SP | OS: Linux | Target Inventory: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_01/employees.csv
+[2026-10-01 09:35:45] [CLEANUP-STEP] Stage 1: Removing Test User Accounts & Home Directories...
+[2026-10-01 09:35:45] [CLEANUP-INFO] Targeting test account: 'lsatest_jdoe' (Safety prefix 'lsatest_' verified)
+[2026-10-01 09:35:46] [CLEANUP-SUCCESS] User 'lsatest_jdoe' and home directory successfully deleted.
+[2026-10-01 09:35:47] [CLEANUP-INFO] Targeting test account: 'lsatest_asmith' (Safety prefix 'lsatest_' verified)
+[2026-10-01 09:35:47] [CLEANUP-SUCCESS] User 'lsatest_asmith' and home directory successfully deleted.
+[2026-10-01 09:35:47] [CLEANUP-INFO] Targeting test account: 'lsatest_rkumar' (Safety prefix 'lsatest_' verified)
+[2026-10-01 09:35:48] [CLEANUP-SUCCESS] User 'lsatest_rkumar' and home directory successfully deleted.
+[2026-10-01 09:35:48] [CLEANUP-INFO] Targeting test account: 'lsatest_mwong' (Safety prefix 'lsatest_' verified)
+[2026-10-01 09:35:49] [CLEANUP-SUCCESS] User 'lsatest_mwong' and home directory successfully deleted.
+[2026-10-01 09:35:49] [CLEANUP-STEP] Stage 2: Auditing & Removing Empty Departmental Groups...
+[2026-10-01 09:35:50] [CLEANUP-INFO] Targeting empty test departmental group: 'finance' (GID: 1010)
+[2026-10-01 09:35:50] [CLEANUP-SUCCESS] Department group 'finance' deleted successfully.
+[2026-10-01 09:35:50] [CLEANUP-INFO] Targeting empty test departmental group: 'hr' (GID: 1011)
+[2026-10-01 09:35:51] [CLEANUP-SUCCESS] Department group 'hr' deleted successfully.
+[2026-10-01 09:35:51] [CLEANUP-INFO] Targeting empty test departmental group: 'engineering' (GID: 1009)
+[2026-10-01 09:35:51] [CLEANUP-SUCCESS] Department group 'engineering' deleted successfully.
+[2026-10-01 09:35:52] [CLEANUP-STEP] Stage 3: Verification of Pristine Environment...
+[2026-10-01 09:35:52] [CLEANUP-SUCCESS] Host environment has been cleanly restored to pristine pre-test state.

@@ -1,0 +1,22 @@
+{
+  "timestamp": "2026-10-01T04:04:32Z",
+  "hostname": "SP",
+  "os_system": "Linux",
+  "kernel": "6.18.40.1-microsoft-standard-WSL2",
+  "input_csv": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_01/employees.csv",
+  "dry_run": false,
+  "summary": {
+    "total_processed": 4,
+    "created": 4,
+    "skipped": 0,
+    "failed": 0,
+    "groups_created": 3,
+    "groups_existed": 0
+  },
+  "users": [
+    {"line": 1, "username": "lsatest_jdoe", "fullname": "Jane Doe", "department": "engineering", "status": "CREATED", "uid": "1011", "gid": "1009", "home": "/home/lsatest_jdoe", "home_perms": "drwxr-x---", "home_owner": "lsatest_jdoe:engineering", "home_verified": true, "id_output": "uid=1011(lsatest_jdoe) gid=1009(engineering) groups=1009(engineering)", "passwd_status": "P", "expire_policy": "password must be changed 7", "note": "Successfully provisioned & verified"}, {"line": 2, "username": "lsatest_asmith", "fullname": "Alex Smith", "department": "engineering", "status": "CREATED", "uid": "1012", "gid": "1009", "home": "/home/lsatest_asmith", "home_perms": "drwxr-x---", "home_owner": "lsatest_asmith:engineering", "home_verified": true, "id_output": "uid=1012(lsatest_asmith) gid=1009(engineering) groups=1009(engineering)", "passwd_status": "P", "expire_policy": "password must be changed 7", "note": "Successfully provisioned & verified"}, {"line": 3, "username": "lsatest_rkumar", "fullname": "Ravi Kumar", "department": "finance", "status": "CREATED", "uid": "1013", "gid": "1010", "home": "/home/lsatest_rkumar", "home_perms": "drwxr-x---", "home_owner": "lsatest_rkumar:finance", "home_verified": true, "id_output": "uid=1013(lsatest_rkumar) gid=1010(finance) groups=1010(finance)", "passwd_status": "P", "expire_policy": "password must be changed 7", "note": "Successfully provisioned & verified"}, {"line": 4, "username": "lsatest_mwong", "fullname": "Mei Wong", "department": "hr", "status": "CREATED", "uid": "1014", "gid": "1011", "home": "/home/lsatest_mwong", "home_perms": "drwxr-x---", "home_owner": "lsatest_mwong:hr", "home_verified": true, "id_output": "uid=1014(lsatest_mwong) gid=1011(hr) groups=1011(hr)", "passwd_status": "P", "expire_policy": "password must be changed 7", "note": "Successfully provisioned & verified"}
+  ],
+  "groups": [
+    {"group": "engineering", "gid": "1009", "action": "CREATED"}, {"group": "finance", "gid": "1010", "action": "CREATED"}, {"group": "hr", "gid": "1011", "action": "CREATED"}
+  ]
+}
