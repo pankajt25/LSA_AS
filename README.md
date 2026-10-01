@@ -10,6 +10,15 @@ Central repository for **Linux System Administration (E1ITA307)** Automation Spr
 LSA_AS/
 ├── .gitignore
 ├── README.md
+├── AS_01/                          # Automation Sprint Problem #1
+│   ├── employee_account_setup.sh   # Core batch employee provisioning script
+│   ├── cleanup.sh                  # Safe environment teardown & restoration script
+│   ├── run.sh                      # Unified execution & HTML dashboard generator
+│   ├── commands_used.md            # Command log & viva preparation
+│   ├── employees.csv               # Employee list dataset
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── logs/                       # Audit trail & JSON telemetry directory
+│   └── README.md                   # Problem documentation & usage
 ├── AS_14/                          # Automation Sprint Problem #14
 │   ├── suspicious_ip_detector.sh   # Core bash script for IP detection
 │   ├── commands_used.md            # Command log & viva preparation
@@ -109,6 +118,7 @@ LSA_AS/
 
 | Sprint / Problem | Title | Description | Status | Folder |
 |---|---|---|---|---|
+| **AS_01** | **Employee Account Setup** | Automated employee account provisioning (`useradd -m -c -g`), department group creation (`groupadd`), non-interactive forced first-login password expiration (`passwd -e`), sandboxed test isolation (`lsatest_`), and safe teardown (`cleanup.sh`). | ✅ Completed | [`AS_01/`](./AS_01) |
 | **AS_14** | **Suspicious IP Detection** | Automated SSH brute-force monitor, real log auto-detection (`/var/log/auth.log`), regex parsing, descending ranking, and audit reporting. | ✅ Completed | [`AS_14/`](./AS_14) |
 | **AS_15** | **Error Log Report** | Automated error extraction, real log auto-detection (`/var/log/syslog`), severity breakdown, frequency ranking, and tail-style review. | ✅ Completed | [`AS_15/`](./AS_15) |
 | **AS_16** | **Service Availability Check** | Real-time service monitoring, boot persistence verification, systemd/SysV fallback, audit logging, and dark-themed HTML report dashboard. | ✅ Completed | [`AS_16/`](./AS_16) |
@@ -134,6 +144,7 @@ Each project can be executed with a **single command** that automatically runs t
 
 | Sprint | Project Title | Single Command to Execute & Open HTML Site (From Repo Root) |
 |---|---|---|
+| **AS_01** | Employee Account Setup | `cd AS_01 && bash run.sh` *(Run `bash cleanup.sh` afterward to restore system)* |
 | **AS_14** | Suspicious IP Detection | `cd AS_14 && ./suspicious_ip_detector.sh; { command -v xdg-open >/dev/null && xdg-open report.html; } \|\| { command -v open >/dev/null && open report.html; } \|\| explorer.exe $(wslpath -w report.html 2>/dev/null \|\| echo report.html) 2>/dev/null \|\| python3 -m webbrowser report.html` |
 | **AS_15** | Error Log Report | `cd AS_15 && ./error_log_report.sh; { command -v xdg-open >/dev/null && xdg-open report.html; } \|\| { command -v open >/dev/null && open report.html; } \|\| explorer.exe $(wslpath -w report.html 2>/dev/null \|\| echo report.html) 2>/dev/null \|\| python3 -m webbrowser report.html` |
 | **AS_16** | Service Availability Check | `cd AS_16 && ./service_availability_check.sh --report; { command -v xdg-open >/dev/null && xdg-open report.html; } \|\| { command -v open >/dev/null && open report.html; } \|\| explorer.exe $(wslpath -w report.html 2>/dev/null \|\| echo report.html) 2>/dev/null \|\| python3 -m webbrowser report.html` |
@@ -152,6 +163,7 @@ Each project can be executed with a **single command** that automatically runs t
 
 | Sprint | 🐧 Linux (`xdg-open`) | 🍎 macOS (`open`) | 🪟 Windows WSL (`explorer.exe`) | 🪟 Windows Git Bash (`start`) |
 |---|---|---|---|---|
+| **AS_01** | `cd AS_01 && bash run.sh` | `cd AS_01 && bash run.sh` | `cd AS_01 && bash run.sh` | `cd AS_01 && bash run.sh` |
 | **AS_14** | `cd AS_14 && ./suspicious_ip_detector.sh; xdg-open report.html` | `cd AS_14 && ./suspicious_ip_detector.sh; open report.html` | `cd AS_14 && ./suspicious_ip_detector.sh; explorer.exe $(wslpath -w report.html)` | `cd AS_14 && ./suspicious_ip_detector.sh; start report.html` |
 | **AS_15** | `cd AS_15 && ./error_log_report.sh; xdg-open report.html` | `cd AS_15 && ./error_log_report.sh; open report.html` | `cd AS_15 && ./error_log_report.sh; explorer.exe $(wslpath -w report.html)` | `cd AS_15 && ./error_log_report.sh; start report.html` |
 | **AS_16** | `cd AS_16 && ./service_availability_check.sh --report; xdg-open report.html` | `cd AS_16 && ./service_availability_check.sh --report; open report.html` | `cd AS_16 && ./service_availability_check.sh --report; explorer.exe $(wslpath -w report.html)` | `cd AS_16 && ./service_availability_check.sh --report; start report.html` |
@@ -169,6 +181,38 @@ Each project can be executed with a **single command** that automatically runs t
 ---
 
 ## 🔍 Sprint Deep Dives
+
+<details>
+<summary><strong>AS_01 — Employee Account Setup (User Management & Group Provisioning)</strong></summary>
+
+### Problem Statement
+A company has a list of new employees. Write a Bash script to create Linux user accounts from a given employee list (`employees.csv`) and assign them to the appropriate department group.
+
+### Summary of Approach
+- **Strict Test Sandboxing:** Enforces mandatory `lsatest_` prefix validation on all usernames (`^lsatest_[a-zA-Z0-9_]+$`) to strictly isolate test operations and prevent collisions or modifications to real human/system user accounts.
+- **Dynamic Department Group Auditing:** Inspects departmental group existence via `getent group <dept>`, provisioning missing groups dynamically with `sudo groupadd <dept>`.
+- **Pre-Existing Account Check:** Checks `/etc/passwd` and `getent passwd <user>` before provisioning, skipping pre-existing accounts with `[SKIPPED]` status without terminating the batch loop.
+- **Robust User Creation (`useradd`):** Executes `sudo useradd -m -c "<fullname>" -g <dept> <username>`, creating user home directories from `/etc/skel` skeleton profiles (`-m`), setting GECOS comment fields (`-c`), and configuring primary departmental groups (`-g`).
+- **Non-Interactive Password & Forced First-Login Reset:** Provisions initial temporary passwords securely via `echo "<user>:<pass>" | sudo chpasswd` and enforces immediate expiration via `sudo passwd -e <username>` (or `sudo chage -d 0`), forcing Linux PAM to intercept first logins for password change.
+- **Multi-Vector Verification:** Audits account creation via `id <user>`, inspects home directory existence and permissions (`drwxr-x---`), and validates shadow aging policy via `sudo chage -l <user>`.
+- **Safe Teardown Script (`cleanup.sh`):** Provides a comprehensive restoration script reading `employees.csv`, purging test accounts and home directories (`sudo userdel -r <user>`), removing empty departmental groups (`sudo groupdel <dept>`), and verifying pristine environment restoration.
+- **Cross-Platform HTML Dashboard (`run.sh`):** Regenerates `report.html` from scratch on every run with executive KPI metric cards, detailed accounts table, live execution log, and automatic browser dispatch across WSL (`explorer.exe`), Linux (`xdg-open`), macOS (`open`), and Windows Git Bash (`start`).
+
+### Key Commands Used
+- `bash run.sh` — Single command to provision accounts, audit system state, regenerate dashboard, and open HTML report (Linux / macOS / Windows)
+- `bash cleanup.sh` — Safely deletes all created test accounts (`userdel -r`), home directories, and empty departmental groups, restoring pristine system state
+- `./employee_account_setup.sh` — Default batch account provisioning execution against `employees.csv`
+- `./employee_account_setup.sh --dry-run` — Simulates account creation and group checks without modifying system files
+- `./employee_account_setup.sh --file custom_list.csv` — Provisions accounts from a custom employee CSV file
+- `./employee_account_setup.sh --help` — Displays command-line manual and option syntax
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_01/report.html`](./AS_01/report.html)
+- 📖 **Sprint Documentation:** [`AS_01/README.md`](./AS_01/README.md)
+- 📜 **Audit Log File:** [`AS_01/logs/account_setup.log`](./AS_01/logs/account_setup.log)
+- 📋 **Command Log:** [`AS_01/commands_used.md`](./AS_01/commands_used.md)
+
+</details>
 
 <details>
 <summary><strong>AS_14 — Suspicious IP Detection (Real System Data)</strong></summary>
