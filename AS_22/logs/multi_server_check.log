@@ -143,3 +143,22 @@ wikipedia.org          UP       0%       47.93ms    2/2       Healthy      Wikim
 192.0.2.1              DOWN     100%     N/A        0/2       100% Packet Loss / No Response RFC 5737 Test IP (Intentionally Unroutable Benchmark)
 ================================================================================
 
+================================================================================
+TIMESTAMP: [2026-09-30 16:40:17 IST]
+HOST: SP | OS: Linux 6.18.40.1-microsoft-standard-WSL2
+CONFIG: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_22/servers.txt | TOTAL: 9 | UP: 7 | DOWN: 2 | AVAILABILITY: 77.8%
+EXECUTION_MODE: Parallel Concurrent | RUNTIME: 3s
+--------------------------------------------------------------------------------
+TARGET                 STATUS   LOSS     AVG_RTT    PACKETS   NOTES        ROLE                    
+------                 ------   ----     -------    -------   -----        ----                    
+192.168.32.1           DOWN     100%     N/A        0/2       100% Packet Loss / No Response Local Default Gateway (Hyper-V / Virtual Switch)
+127.0.0.1              UP       0%       1.06ms     2/2       Healthy      Localhost Loopback Interface
+8.8.8.8                UP       0%       25.67ms    2/2       Healthy      Google Primary Public DNS
+1.1.1.1                UP       0%       13.23ms    2/2       Healthy      Cloudflare Primary Public DNS
+9.9.9.9                UP       0%       6.62ms     2/2       Healthy      Quad9 Threat-Blocking Secure DNS
+google.com             UP       0%       31.54ms    2/2       Healthy      Google Global Search Infrastructure
+github.com             UP       0%       22.47ms    2/2       Healthy      GitHub Version Control & Developer Platform
+wikipedia.org          UP       0%       42.59ms    2/2       Healthy      Wikimedia Foundation Global CDN
+192.0.2.1              DOWN     100%     N/A        0/2       100% Packet Loss / No Response RFC 5737 Test IP (Intentionally Unroutable Benchmark)
+================================================================================
+

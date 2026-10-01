@@ -174,3 +174,25 @@ DIAGNOSIS: [ICMP_FILTERED]
   The public baseline (8.8.8.8) responded normally, confirming WAN routing is active. However, Gateway (192.168.32.1) dropped ICMP packets. In virtualized environments (such as WSL2 virtual switch) or enterprise firewalls, host routers routinely block ICMP echo requests while continuing to route forwarded traffic.
 ================================================================================
 
+================================================================================
+[2026-09-30 16:38:52] NETWORK CONNECTIVITY AUDIT CHECK
+Host: SP | OS: Linux | Kernel: 6.18.40.1-microsoft-standard-WSL2 | User: pankaj
+Scan Configuration: Count=4 packets | Timeout=2s
+--------------------------------------------------------------------------------
+PROBE 1: Gateway (192.168.32.1)
+  Status        : UNREACHABLE
+  Packets       : Transmitted = 4, Received = 0, Packet Loss = 100%
+  Round-Trip    : Min = N/A, Avg = N/A, Max = N/A
+  Summary Line  : ❌ Gateway 192.168.32.1 is UNREACHABLE (100% loss)
+--------------------------------------------------------------------------------
+PROBE 2: Sanity Baseline (8.8.8.8)
+  Status        : REACHABLE
+  Packets       : Transmitted = 4, Received = 4, Packet Loss = 0%
+  Round-Trip    : Min = 23.039ms, Avg = 23.391ms, Max = 23.889ms
+  Summary Line  : ✅ Baseline Host 8.8.8.8 is REACHABLE (0% loss, avg 23.391ms)
+--------------------------------------------------------------------------------
+DIAGNOSIS: [ICMP_FILTERED]
+  🌐 Internet Accessible: Gateway Unreachable / ICMP Echo Filtered
+  The public baseline (8.8.8.8) responded normally, confirming WAN routing is active. However, Gateway (192.168.32.1) dropped ICMP packets. In virtualized environments (such as WSL2 virtual switch) or enterprise firewalls, host routers routinely block ICMP echo requests while continuing to route forwarded traffic.
+================================================================================
+

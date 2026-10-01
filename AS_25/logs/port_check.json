@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-09-30T12:51:53+05:30",
+  "timestamp": "2026-09-30T16:46:35+05:30",
   "hostname": "SP",
   "os": "Linux",
-  "kernel": "6.18.33.2-microsoft-standard-WSL2",
+  "kernel": "6.18.40.1-microsoft-standard-WSL2",
   "total_checked": 5,
   "open_count": 3,
   "closed_count": 1,
@@ -13,7 +13,7 @@
       "port": 22,
       "service": "ssh",
       "status": "REFUSED",
-      "latency_ms": 138,
+      "latency_ms": 124,
       "method": "/dev/tcp",
       "detail": "Connection refused (Active TCP RST packet received from host)"
     },
@@ -22,7 +22,7 @@
       "port": 443,
       "service": "https",
       "status": "OPEN",
-      "latency_ms": 139,
+      "latency_ms": 133,
       "method": "/dev/tcp",
       "detail": "TCP handshake completed successfully (SYN-ACK received)"
     },
@@ -31,7 +31,7 @@
       "port": 12345,
       "service": "unknown",
       "status": "TIMEOUT",
-      "latency_ms": 3056,
+      "latency_ms": 3037,
       "method": "/dev/tcp",
       "detail": "Connection timed out after 3s (no response; packet filtered/dropped)"
     },
@@ -40,7 +40,7 @@
       "port": 80,
       "service": "http",
       "status": "OPEN",
-      "latency_ms": 177,
+      "latency_ms": 130,
       "method": "/dev/tcp",
       "detail": "TCP handshake completed successfully (SYN-ACK received)"
     },
@@ -49,7 +49,7 @@
       "port": 443,
       "service": "https",
       "status": "OPEN",
-      "latency_ms": 243,
+      "latency_ms": 123,
       "method": "/dev/tcp",
       "detail": "TCP handshake completed successfully (SYN-ACK received)"
     }

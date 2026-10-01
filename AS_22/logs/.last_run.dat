@@ -1,10 +1,10 @@
-# METADATA|TOTAL=9|UP=7|DOWN=2|AVAIL=77.8|TIME=3|MODE=Parallel Concurrent|TIMESTAMP=2026-09-29 23:58:15 IST
+# METADATA|TOTAL=9|UP=7|DOWN=2|AVAIL=77.8|TIME=3|MODE=Parallel Concurrent|TIMESTAMP=2026-09-30 16:40:17 IST
 0|192.168.32.1|Local Default Gateway (Hyper-V / Virtual Switch)|DOWN|100%|N/A|N/A|N/A|2|0|100% Packet Loss / No Response
-1|127.0.0.1|Localhost Loopback Interface|UP|0%|0.03ms|0.03ms|0.04ms|2|2|Healthy
-2|8.8.8.8|Google Primary Public DNS|UP|0%|27.90ms|27.36ms|28.44ms|2|2|Healthy
-3|1.1.1.1|Cloudflare Primary Public DNS|UP|0%|13.27ms|13.20ms|13.33ms|2|2|Healthy
-4|9.9.9.9|Quad9 Threat-Blocking Secure DNS|UP|0%|8.44ms|5.84ms|11.04ms|2|2|Healthy
-5|google.com|Google Global Search Infrastructure|UP|0%|23.17ms|22.05ms|24.28ms|2|2|Healthy
-6|github.com|GitHub Version Control & Developer Platform|UP|0%|21.71ms|21.12ms|22.31ms|2|2|Healthy
-7|wikipedia.org|Wikimedia Foundation Global CDN|UP|0%|47.93ms|45.05ms|50.80ms|2|2|Healthy
+1|127.0.0.1|Localhost Loopback Interface|UP|0%|1.06ms|0.07ms|2.04ms|2|2|Healthy
+2|8.8.8.8|Google Primary Public DNS|UP|0%|25.67ms|25.28ms|26.06ms|2|2|Healthy
+3|1.1.1.1|Cloudflare Primary Public DNS|UP|0%|13.23ms|12.81ms|13.65ms|2|2|Healthy
+4|9.9.9.9|Quad9 Threat-Blocking Secure DNS|UP|0%|6.62ms|5.79ms|7.45ms|2|2|Healthy
+5|google.com|Google Global Search Infrastructure|UP|0%|31.54ms|30.80ms|32.29ms|2|2|Healthy
+6|github.com|GitHub Version Control & Developer Platform|UP|0%|22.47ms|21.26ms|23.67ms|2|2|Healthy
+7|wikipedia.org|Wikimedia Foundation Global CDN|UP|0%|42.59ms|41.71ms|43.47ms|2|2|Healthy
 8|192.0.2.1|RFC 5737 Test IP (Intentionally Unroutable Benchmark)|DOWN|100%|N/A|N/A|N/A|2|0|100% Packet Loss / No Response

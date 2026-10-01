@@ -104,3 +104,25 @@ PID      PPID     USER              %MEM    RSS (MB)    %CPU   COMMAND          
 Result: 0 process(es) >= 30.0% threshold. Peak %MEM: 7.7%. Cumulative Top RSS: 416.4 MB.
 ================================================================================
 
+================================================================================
+[2026-09-30 16:37:55] HIGH MEMORY AUDIT SCAN
+Host: SP | OS: Linux | Kernel: 6.18.40.1-microsoft-standard-WSL2 | Scanned by: pankaj
+Parameters: Top Count = 5 | Memory Threshold = 30.0%
+System State: Total Processes = 29 | Load Avg = 0.00 0.02 0.03
+--------------------------------------------------------------------------------
+System Memory Summary:
+               total        used        free      shared  buff/cache   available
+Mem:           3.8Gi       509Mi       3.2Gi       4.3Mi       220Mi       3.3Gi
+Swap:          1.0Gi          0B       1.0Gi
+--------------------------------------------------------------------------------
+PID      PPID     USER              %MEM    RSS (MB)    %CPU   COMMAND              STATUS
+-------- -------- -------------- ------- ----------- -------   -------------------- ------
+196      1        root              1.2%      50.2 MB    0.3%   containerd           ✓ NORMAL
+215      1        root              0.8%      31.9 MB    0.0%   unattended-upgr      ✓ NORMAL
+142      1        root              0.7%      29.2 MB    0.0%   networkd-dispat      ✓ NORMAL
+54       1        root              0.5%      19.7 MB    0.1%   systemd-journal      ✓ NORMAL
+1        0        root              0.3%      15.3 MB    0.3%   systemd              ✓ NORMAL
+--------------------------------------------------------------------------------
+Result: 0 process(es) >= 30.0% threshold. Peak %MEM: 1.2%. Cumulative Top RSS: 146.3 MB.
+================================================================================
+

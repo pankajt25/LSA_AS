@@ -23,3 +23,8 @@
 [2026-09-30 12:51:52] [TIMEOUT     ] host=google.com           port=12345 service=unknown    latency=3056  ms method=/dev/tcp   detail=Connection timed out after 3s (no response; packet filtered/dropped)
 [2026-09-30 12:51:52] [OPEN        ] host=google.com           port=80    service=http       latency=177   ms method=/dev/tcp   detail=TCP handshake completed successfully (SYN-ACK received)
 [2026-09-30 12:51:53] [OPEN        ] host=google.com           port=443   service=https      latency=243   ms method=/dev/tcp   detail=TCP handshake completed successfully (SYN-ACK received)
+[2026-09-30 16:46:31] [REFUSED     ] host=localhost            port=22    service=ssh        latency=124   ms method=/dev/tcp   detail=Connection refused (Active TCP RST packet received from host)
+[2026-09-30 16:46:31] [OPEN        ] host=google.com           port=443   service=https      latency=133   ms method=/dev/tcp   detail=TCP handshake completed successfully (SYN-ACK received)
+[2026-09-30 16:46:34] [TIMEOUT     ] host=google.com           port=12345 service=unknown    latency=3037  ms method=/dev/tcp   detail=Connection timed out after 3s (no response; packet filtered/dropped)
+[2026-09-30 16:46:35] [OPEN        ] host=google.com           port=80    service=http       latency=130   ms method=/dev/tcp   detail=TCP handshake completed successfully (SYN-ACK received)
+[2026-09-30 16:46:35] [OPEN        ] host=google.com           port=443   service=https      latency=123   ms method=/dev/tcp   detail=TCP handshake completed successfully (SYN-ACK received)

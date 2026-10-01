@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-09-30 11:46:46 IST",
-  "timestamp_iso": "2026-09-30T06:16:46Z",
+  "timestamp": "2026-09-30 16:45:01 IST",
+  "timestamp_iso": "2026-09-30T11:15:01Z",
   "hostname": "SP",
   "os_distro": "Ubuntu 26.04.1 LTS",
-  "kernel": "6.18.33.2-microsoft-standard-WSL2",
+  "kernel": "6.18.40.1-microsoft-standard-WSL2",
   "arch": "x86_64",
   "is_wsl": 1,
   "init_system": {
     "type": "systemd",
-    "details": "systemd init manager (PID 1 active, status: running)"
+    "details": "systemd init manager (PID 1 active, status: degraded)"
   },
   "service": {
     "detected_name": "none",

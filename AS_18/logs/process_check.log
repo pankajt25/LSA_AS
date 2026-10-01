@@ -6,3 +6,4 @@
 [2026-09-24 12:30:46] [RUNNING] Mode: Case-Insensitive | Process: BASH                 | Instances: 3 | PIDs: [365 569 3955] | Oldest PID: 365 | Uptime: 01:09:36
 [2026-09-24 12:31:01] [STOPPED] Mode: Case-Insensitive | Process: nonexistent[app]+test* | Instances: 0 | PIDs: none | Process is NOT running
 [2026-09-24 12:31:21] [RUNNING] Mode: Case-Insensitive | Process: bash                 | Instances: 3 | PIDs: [365 569 3955] | Oldest PID: 365 | Uptime: 01:10:12
+[2026-09-30 16:35:49] [RUNNING] Mode: Case-Insensitive | Process: bash                 | Instances: 1 | PIDs: [425] | Oldest PID: 425 | Uptime: 16:36
