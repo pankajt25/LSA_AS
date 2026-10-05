@@ -19,6 +19,13 @@ LSA_AS/
 │   ├── report.html                 # Standalone dark-themed dashboard report
 │   ├── logs/                       # Audit trail & JSON telemetry directory
 │   └── README.md                   # Problem documentation & usage
+├── AS_02/                          # Automation Sprint Problem #2
+│   ├── inactive_employee_detector.sh # Core local account inactivity audit script
+│   ├── run.sh                      # Unified execution & HTML dashboard generator
+│   ├── commands_used.md            # Command log & development history
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── logs/                       # Audit trail directory
+│   └── README.md                   # Problem documentation & usage
 ├── AS_14/                          # Automation Sprint Problem #14
 │   ├── suspicious_ip_detector.sh   # Core bash script for IP detection
 │   ├── commands_used.md            # Command log & viva preparation
@@ -119,6 +126,7 @@ LSA_AS/
 | Sprint / Problem | Title | Description | Status | Folder |
 |---|---|---|---|---|
 | **AS_01** | **Employee Account Setup** | Automated employee account provisioning (`useradd -m -c -g`), department group creation (`groupadd`), non-interactive forced first-login password expiration (`passwd -e`), sandboxed test isolation (`lsatest_`), and safe teardown (`cleanup.sh`). | ✅ Completed | [`AS_01/`](./AS_01) |
+| **AS_02** | **Inactive Employee Detection** | Real local account discovery (`/etc/passwd`), human user filtering (`UID >= 1000`), multi-tier login history resolution (`lastlog` / `last` / `loginctl` fallback), configurable thresholding, and dark-themed HTML report. | ✅ Completed | [`AS_02/`](./AS_02) |
 | **AS_14** | **Suspicious IP Detection** | Automated SSH brute-force monitor, real log auto-detection (`/var/log/auth.log`), regex parsing, descending ranking, and audit reporting. | ✅ Completed | [`AS_14/`](./AS_14) |
 | **AS_15** | **Error Log Report** | Automated error extraction, real log auto-detection (`/var/log/syslog`), severity breakdown, frequency ranking, and tail-style review. | ✅ Completed | [`AS_15/`](./AS_15) |
 | **AS_16** | **Service Availability Check** | Real-time service monitoring, boot persistence verification, systemd/SysV fallback, audit logging, and dark-themed HTML report dashboard. | ✅ Completed | [`AS_16/`](./AS_16) |
@@ -145,6 +153,7 @@ Each project can be executed with a **single command** that automatically runs t
 | Sprint | Project Title | Single Command to Execute & Open HTML Site (From Repo Root) |
 |---|---|---|
 | **AS_01** | Employee Account Setup | `cd AS_01 && bash run.sh` *(Run `bash cleanup.sh` afterward to restore system)* |
+| **AS_02** | Inactive Employee Detection | `cd AS_02 && bash run.sh` |
 | **AS_14** | Suspicious IP Detection | `cd AS_14 && ./suspicious_ip_detector.sh; { command -v xdg-open >/dev/null && xdg-open report.html; } \|\| { command -v open >/dev/null && open report.html; } \|\| explorer.exe $(wslpath -w report.html 2>/dev/null \|\| echo report.html) 2>/dev/null \|\| python3 -m webbrowser report.html` |
 | **AS_15** | Error Log Report | `cd AS_15 && ./error_log_report.sh; { command -v xdg-open >/dev/null && xdg-open report.html; } \|\| { command -v open >/dev/null && open report.html; } \|\| explorer.exe $(wslpath -w report.html 2>/dev/null \|\| echo report.html) 2>/dev/null \|\| python3 -m webbrowser report.html` |
 | **AS_16** | Service Availability Check | `cd AS_16 && ./service_availability_check.sh --report; { command -v xdg-open >/dev/null && xdg-open report.html; } \|\| { command -v open >/dev/null && open report.html; } \|\| explorer.exe $(wslpath -w report.html 2>/dev/null \|\| echo report.html) 2>/dev/null \|\| python3 -m webbrowser report.html` |
@@ -164,6 +173,7 @@ Each project can be executed with a **single command** that automatically runs t
 | Sprint | 🐧 Linux (`xdg-open`) | 🍎 macOS (`open`) | 🪟 Windows WSL (`explorer.exe`) | 🪟 Windows Git Bash (`start`) |
 |---|---|---|---|---|
 | **AS_01** | `cd AS_01 && bash run.sh` | `cd AS_01 && bash run.sh` | `cd AS_01 && bash run.sh` | `cd AS_01 && bash run.sh` |
+| **AS_02** | `cd AS_02 && bash run.sh` | `cd AS_02 && bash run.sh` | `cd AS_02 && bash run.sh` | `cd AS_02 && bash run.sh` |
 | **AS_14** | `cd AS_14 && ./suspicious_ip_detector.sh; xdg-open report.html` | `cd AS_14 && ./suspicious_ip_detector.sh; open report.html` | `cd AS_14 && ./suspicious_ip_detector.sh; explorer.exe $(wslpath -w report.html)` | `cd AS_14 && ./suspicious_ip_detector.sh; start report.html` |
 | **AS_15** | `cd AS_15 && ./error_log_report.sh; xdg-open report.html` | `cd AS_15 && ./error_log_report.sh; open report.html` | `cd AS_15 && ./error_log_report.sh; explorer.exe $(wslpath -w report.html)` | `cd AS_15 && ./error_log_report.sh; start report.html` |
 | **AS_16** | `cd AS_16 && ./service_availability_check.sh --report; xdg-open report.html` | `cd AS_16 && ./service_availability_check.sh --report; open report.html` | `cd AS_16 && ./service_availability_check.sh --report; explorer.exe $(wslpath -w report.html)` | `cd AS_16 && ./service_availability_check.sh --report; start report.html` |
@@ -210,7 +220,39 @@ A company has a list of new employees. Write a Bash script to create Linux user 
 - 📊 **Interactive Dashboard:** [`AS_01/report.html`](./AS_01/report.html)
 - 📖 **Sprint Documentation:** [`AS_01/README.md`](./AS_01/README.md)
 - 📜 **Audit Log File:** [`AS_01/logs/account_setup.log`](./AS_01/logs/account_setup.log)
-- 📋 **Command Log:** [`AS_01/commands_used.md`](./AS_01/commands_used.md)
+</details>
+
+<details>
+<summary><strong>AS_02 — Inactive Employee Detection (User Administration & Login History)</strong></summary>
+
+### Problem Statement
+The system administrator wants to identify users who have not logged in recently. Write a Bash script to display inactive user accounts.
+
+### Summary of Approach
+- **Local Account Discovery & Human User Filtering:** Parses `/etc/passwd` directly, applying standard Linux conventions (`UID >= 1000`, `UID != 65534 nobody`) and verifying valid interactive shells against `/etc/shells` while excluding non-login service daemons (`/usr/sbin/nologin`, `/bin/false`). Optional `--include-system` audits service daemons and `root`.
+- **Multi-Tier Login History Engine:**
+  - *Tier 1 (Preferred):* `lastlog -u <user>` reading `/var/log/lastlog` (fixed-size direct-indexed UID table).
+  - *Tier 2 (Fallback):* `last -F <user> | head -1` reading `/var/log/wtmp` (sequential append circular log).
+  - *Tier 3 (Modern Linux / WSL2 Fallback):* For modern minimal distributions (Ubuntu 24.04/26.04) and WSL2 lacking legacy 32-bit utmp binaries, queries active sessions (`who`, `w`), systemd user session timestamps (`loginctl show-user`), and PAM authentication records (`/var/log/auth.log`).
+- **Resilient Zero-Record Handling:** Treats accounts with no login history gracefully as "Never logged in" / `INACTIVE` without failing or crashing.
+- **Dynamic Inactivity Threshold:** Configurable threshold (default: 30 days) via argument or environment variable. Evaluates days since last login using GNU `date -d` epoch arithmetic: `days = (current_epoch - login_epoch) / 86400`.
+- **Strict Read-Only Sandboxing:** Performs zero account modifications, locking, or deletions. All logs and reports are isolated inside `AS_02/`.
+- **Cross-Platform HTML Dashboard (`run.sh`):** Regenerates `report.html` from scratch on every run with executive KPI metric cards, interactive search/filter table, dark theme, and automated browser dispatch across WSL (`explorer.exe`), Linux (`xdg-open`), macOS (`open`), and Windows Git Bash (`start`).
+
+### Key Commands Used
+- `bash run.sh` — Single command to audit accounts, regenerate dashboard, and open HTML report (Linux / macOS / Windows)
+- `bash run.sh 15` — Single command with custom 15-day inactivity threshold
+- `./inactive_employee_detector.sh` — Default CLI table audit report with 30-day threshold
+- `./inactive_employee_detector.sh 60` — CLI table report with custom 60-day threshold
+- `./inactive_employee_detector.sh --include-system` — Audits all local accounts including system daemons and root
+- `./inactive_employee_detector.sh --json` — Emits structured JSON telemetry for programmatic consumption
+- `./inactive_employee_detector.sh --help` — Displays CLI manual, options, and examples
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_02/report.html`](./AS_02/report.html)
+- 📖 **Sprint Documentation:** [`AS_02/README.md`](./AS_02/README.md)
+- 📜 **Audit Log File:** [`AS_02/logs/inactive_check.log`](./AS_02/logs/inactive_check.log)
+- 📋 **Command Log:** [`AS_02/commands_used.md`](./AS_02/commands_used.md)
 
 </details>
 
