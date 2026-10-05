@@ -1,0 +1,120 @@
+================================================================================
+[AUDIT TIMESTAMP] 2026-10-05 09:35:05 IST (Threshold: 30 days)
+[SYSTEM INFO]     Host: SP | OS: Ubuntu 26.04.1 LTS | Kernel: 6.18.40.1-microsoft-standard-WSL2
+[ENGINE DETECTED] Primary: none | Secondary: none | Tertiary: loginctl / who / auth.log
+[AUDIT SUMMARY]   Total: 11 | Active: 1 | Inactive: 10 (90.9%)
+--------------------------------------------------------------------------------
+USERNAME         UID    LOGIN SHELL      LAST LOGIN DATE        DAYS INACTIVE   STATUS      
+--------------------------------------------------------------------------------
+pankaj           1000   /bin/bash        2026-10-05 09:20:00    0               ACTIVE      
+myuser           1001   /bin/sh          Never                  Never           INACTIVE    
+labuser          1002   /bin/bash        Never                  Never           INACTIVE    
+alice_hr         1003   /bin/bash        Never                  Never           INACTIVE    
+bob_hr           1004   /bin/bash        Never                  Never           INACTIVE    
+charlie_fin      1005   /bin/bash        Never                  Never           INACTIVE    
+diana_fin        1006   /bin/bash        Never                  Never           INACTIVE    
+evan_eng         1007   /bin/bash        Never                  Never           INACTIVE    
+fiona_eng        1008   /bin/bash        Never                  Never           INACTIVE    
+george_sales     1009   /bin/bash        Never                  Never           INACTIVE    
+hannah_sales     1010   /bin/bash        Never                  Never           INACTIVE    
+================================================================================
+
+================================================================================
+[AUDIT TIMESTAMP] 2026-10-05 09:35:25 IST (Threshold: 15 days)
+[SYSTEM INFO]     Host: SP | OS: Ubuntu 26.04.1 LTS | Kernel: 6.18.40.1-microsoft-standard-WSL2
+[ENGINE DETECTED] Primary: none | Secondary: none | Tertiary: loginctl / who / auth.log
+[AUDIT SUMMARY]   Total: 11 | Active: 1 | Inactive: 10 (90.9%)
+--------------------------------------------------------------------------------
+USERNAME         UID    LOGIN SHELL      LAST LOGIN DATE        DAYS INACTIVE   STATUS      
+--------------------------------------------------------------------------------
+pankaj           1000   /bin/bash        2026-10-05 09:20:00    0               ACTIVE      
+myuser           1001   /bin/sh          Never                  Never           INACTIVE    
+labuser          1002   /bin/bash        Never                  Never           INACTIVE    
+alice_hr         1003   /bin/bash        Never                  Never           INACTIVE    
+bob_hr           1004   /bin/bash        Never                  Never           INACTIVE    
+charlie_fin      1005   /bin/bash        Never                  Never           INACTIVE    
+diana_fin        1006   /bin/bash        Never                  Never           INACTIVE    
+evan_eng         1007   /bin/bash        Never                  Never           INACTIVE    
+fiona_eng        1008   /bin/bash        Never                  Never           INACTIVE    
+george_sales     1009   /bin/bash        Never                  Never           INACTIVE    
+hannah_sales     1010   /bin/bash        Never                  Never           INACTIVE    
+================================================================================
+
+================================================================================
+[AUDIT TIMESTAMP] 2026-10-05 09:36:26 IST (Threshold: 30 days)
+[SYSTEM INFO]     Host: SP | OS: Ubuntu 26.04.1 LTS | Kernel: 6.18.40.1-microsoft-standard-WSL2
+[ENGINE DETECTED] Primary: none | Secondary: none | Tertiary: loginctl / who / auth.log
+[AUDIT SUMMARY]   Total: 11 | Active: 1 | Inactive: 10 (90.9%)
+--------------------------------------------------------------------------------
+USERNAME         UID    LOGIN SHELL      LAST LOGIN DATE        DAYS INACTIVE   STATUS      
+--------------------------------------------------------------------------------
+pankaj           1000   /bin/bash        2026-10-05 09:20:00    0               ACTIVE      
+myuser           1001   /bin/sh          Never                  Never           INACTIVE    
+labuser          1002   /bin/bash        Never                  Never           INACTIVE    
+alice_hr         1003   /bin/bash        Never                  Never           INACTIVE    
+bob_hr           1004   /bin/bash        Never                  Never           INACTIVE    
+charlie_fin      1005   /bin/bash        Never                  Never           INACTIVE    
+diana_fin        1006   /bin/bash        Never                  Never           INACTIVE    
+evan_eng         1007   /bin/bash        Never                  Never           INACTIVE    
+fiona_eng        1008   /bin/bash        Never                  Never           INACTIVE    
+george_sales     1009   /bin/bash        Never                  Never           INACTIVE    
+hannah_sales     1010   /bin/bash        Never                  Never           INACTIVE    
+================================================================================
+
+================================================================================
+[AUDIT TIMESTAMP] 2026-10-05 09:36:31 IST (Threshold: 30 days)
+[SYSTEM INFO]     Host: SP | OS: Ubuntu 26.04.1 LTS | Kernel: 6.18.40.1-microsoft-standard-WSL2
+[AUDIT SUMMARY]   Total: 11 | Active: 1 | Inactive: 10 (90.9%)
+--------------------------------------------------------------------------------
+User: pankaj          UID: 1000  Shell: /bin/bash       LastLogin: 2026-10-05 09:20:00  Days: 0      Status: ACTIVE
+User: myuser          UID: 1001  Shell: /bin/sh         LastLogin: Never                Days: Never  Status: INACTIVE
+User: labuser         UID: 1002  Shell: /bin/bash       LastLogin: Never                Days: Never  Status: INACTIVE
+User: alice_hr        UID: 1003  Shell: /bin/bash       LastLogin: Never                Days: Never  Status: INACTIVE
+User: bob_hr          UID: 1004  Shell: /bin/bash       LastLogin: Never                Days: Never  Status: INACTIVE
+User: charlie_fin     UID: 1005  Shell: /bin/bash       LastLogin: Never                Days: Never  Status: INACTIVE
+User: diana_fin       UID: 1006  Shell: /bin/bash       LastLogin: Never                Days: Never  Status: INACTIVE
+User: evan_eng        UID: 1007  Shell: /bin/bash       LastLogin: Never                Days: Never  Status: INACTIVE
+User: fiona_eng       UID: 1008  Shell: /bin/bash       LastLogin: Never                Days: Never  Status: INACTIVE
+User: george_sales    UID: 1009  Shell: /bin/bash       LastLogin: Never                Days: Never  Status: INACTIVE
+User: hannah_sales    UID: 1010  Shell: /bin/bash       LastLogin: Never                Days: Never  Status: INACTIVE
+================================================================================
+
+================================================================================
+[AUDIT TIMESTAMP] 2026-10-05 09:37:31 IST (Threshold: 30 days)
+[SYSTEM INFO]     Host: SP | OS: Ubuntu 26.04.1 LTS | Kernel: 6.18.40.1-microsoft-standard-WSL2
+[ENGINE DETECTED] Primary: none | Secondary: none | Tertiary: loginctl / who / auth.log
+[AUDIT SUMMARY]   Total: 11 | Active: 1 | Inactive: 10 (90.9%)
+--------------------------------------------------------------------------------
+USERNAME         UID    LOGIN SHELL      LAST LOGIN DATE        DAYS INACTIVE   STATUS      
+--------------------------------------------------------------------------------
+pankaj           1000   /bin/bash        2026-10-05 09:20:00    0               ACTIVE      
+myuser           1001   /bin/sh          Never                  Never           INACTIVE    
+labuser          1002   /bin/bash        Never                  Never           INACTIVE    
+alice_hr         1003   /bin/bash        Never                  Never           INACTIVE    
+bob_hr           1004   /bin/bash        Never                  Never           INACTIVE    
+charlie_fin      1005   /bin/bash        Never                  Never           INACTIVE    
+diana_fin        1006   /bin/bash        Never                  Never           INACTIVE    
+evan_eng         1007   /bin/bash        Never                  Never           INACTIVE    
+fiona_eng        1008   /bin/bash        Never                  Never           INACTIVE    
+george_sales     1009   /bin/bash        Never                  Never           INACTIVE    
+hannah_sales     1010   /bin/bash        Never                  Never           INACTIVE    
+================================================================================
+
+================================================================================
+[AUDIT TIMESTAMP] 2026-10-05 09:37:36 IST (Threshold: 30 days)
+[SYSTEM INFO]     Host: SP | OS: Ubuntu 26.04.1 LTS | Kernel: 6.18.40.1-microsoft-standard-WSL2
+[AUDIT SUMMARY]   Total: 11 | Active: 1 | Inactive: 10 (90.9%)
+--------------------------------------------------------------------------------
+User: pankaj          UID: 1000  Shell: /bin/bash       LastLogin: 2026-10-05 09:20:00  Days: 0      Status: ACTIVE
+User: myuser          UID: 1001  Shell: /bin/sh         LastLogin: Never                Days: Never  Status: INACTIVE
+User: labuser         UID: 1002  Shell: /bin/bash       LastLogin: Never                Days: Never  Status: INACTIVE
+User: alice_hr        UID: 1003  Shell: /bin/bash       LastLogin: Never                Days: Never  Status: INACTIVE
+User: bob_hr          UID: 1004  Shell: /bin/bash       LastLogin: Never                Days: Never  Status: INACTIVE
+User: charlie_fin     UID: 1005  Shell: /bin/bash       LastLogin: Never                Days: Never  Status: INACTIVE
+User: diana_fin       UID: 1006  Shell: /bin/bash       LastLogin: Never                Days: Never  Status: INACTIVE
+User: evan_eng        UID: 1007  Shell: /bin/bash       LastLogin: Never                Days: Never  Status: INACTIVE
+User: fiona_eng       UID: 1008  Shell: /bin/bash       LastLogin: Never                Days: Never  Status: INACTIVE
+User: george_sales    UID: 1009  Shell: /bin/bash       LastLogin: Never                Days: Never  Status: INACTIVE
+User: hannah_sales    UID: 1010  Shell: /bin/bash       LastLogin: Never                Days: Never  Status: INACTIVE
+================================================================================
+
