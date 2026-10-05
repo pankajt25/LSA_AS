@@ -154,11 +154,11 @@ Each project can be executed with a **single command** that automatically runs t
 |---|---|---|
 | **AS_01** | Employee Account Setup | `cd AS_01 && bash run.sh` *(Run `bash cleanup.sh` afterward to restore system)* |
 | **AS_02** | Inactive Employee Detection | `cd AS_02 && bash run.sh` |
-| **AS_14** | Suspicious IP Detection | `cd AS_14 && ./suspicious_ip_detector.sh; { command -v xdg-open >/dev/null && xdg-open report.html; } \|\| { command -v open >/dev/null && open report.html; } \|\| explorer.exe $(wslpath -w report.html 2>/dev/null \|\| echo report.html) 2>/dev/null \|\| python3 -m webbrowser report.html` |
-| **AS_15** | Error Log Report | `cd AS_15 && ./error_log_report.sh; { command -v xdg-open >/dev/null && xdg-open report.html; } \|\| { command -v open >/dev/null && open report.html; } \|\| explorer.exe $(wslpath -w report.html 2>/dev/null \|\| echo report.html) 2>/dev/null \|\| python3 -m webbrowser report.html` |
-| **AS_16** | Service Availability Check | `cd AS_16 && ./service_availability_check.sh --report; { command -v xdg-open >/dev/null && xdg-open report.html; } \|\| { command -v open >/dev/null && open report.html; } \|\| explorer.exe $(wslpath -w report.html 2>/dev/null \|\| echo report.html) 2>/dev/null \|\| python3 -m webbrowser report.html` |
-| **AS_17** | Automatic Service Recovery | `cd AS_17 && ./auto_service_recovery.sh; { command -v xdg-open >/dev/null && xdg-open report.html; } \|\| { command -v open >/dev/null && open report.html; } \|\| explorer.exe $(wslpath -w report.html 2>/dev/null \|\| echo report.html) 2>/dev/null \|\| python3 -m webbrowser report.html` |
-| **AS_18** | Server Process Check | `cd AS_18 && ./server_process_check.sh --default; { command -v xdg-open >/dev/null && xdg-open report.html; } \|\| { command -v open >/dev/null && open report.html; } \|\| explorer.exe $(wslpath -w report.html 2>/dev/null \|\| echo report.html) 2>/dev/null \|\| python3 -m webbrowser report.html` |
+| **AS_14** | Suspicious IP Detection | `cd AS_14 && bash run.sh` |
+| **AS_15** | Error Log Report | `cd AS_15 && bash run.sh` |
+| **AS_16** | Service Availability Check | `cd AS_16 && bash run.sh` |
+| **AS_17** | Automatic Service Recovery | `cd AS_17 && bash run.sh` |
+| **AS_18** | Server Process Check | `cd AS_18 && bash run.sh` |
 | **AS_19** | High CPU Process Detection | `cd AS_19 && bash run.sh` |
 | **AS_20** | High Memory Process Detection | `cd AS_20 && bash run.sh` |
 | **AS_21** | Network Connectivity Check | `cd AS_21 && bash run.sh` |
