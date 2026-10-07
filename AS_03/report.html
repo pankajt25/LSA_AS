@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Department Access Dashboard — AS_03 (E1ITA307)</title>
+    <style>
+        :root {
+            --bg-primary: #0b0f19;
+            --bg-card: #151e32;
+            --bg-card-hover: #1b2742;
+            --border-color: #243452;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --cyan: #38bdf8;
+            --green: #22c55e;
+            --amber: #f59e0b;
+            --red: #ef4444;
+            --purple: #a855f7;
+            --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            font-family: var(--font-stack);
+            line-height: 1.6;
+            padding: 24px;
+        }
+        .container { max-width: 1380px; margin: 0 auto; }
+        .header {
+            background: linear-gradient(135deg, #151e32 0%, #1e293b 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 28px 32px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        }
+        .header-title h1 {
+            font-size: 1.85rem;
+            font-weight: 700;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .header-title p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-top: 6px;
+        }
+        .meta-pill {
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid var(--border-color);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .meta-pill strong { color: #ffffff; }
+        
+        .alert-banner {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.35);
+            border-left: 5px solid var(--amber);
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+        .alert-banner code {
+            background: rgba(0,0,0,0.4);
+            padding: 3px 8px;
+            border-radius: 4px;
+            color: #fde68a;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .card-metric-title {
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        .card-metric-value {
+            font-size: 1.85rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 6px;
+            font-family: var(--font-mono);
+        }
+        .card-metric-desc {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        .section-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .section-header h2 {
+            font-size: 1.25rem;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.92rem;
+        }
+        th {
+            background: #0f172a;
+            color: var(--text-muted);
+            text-align: left;
+            padding: 12px 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.78rem;
+            letter-spacing: 0.04em;
+            border-bottom: 2px solid var(--border-color);
+        }
+        td {
+            padding: 14px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-main);
+        }
+        tr:hover td {
+            background-color: var(--bg-card-hover);
+        }
+        code {
+            background: #0f172a;
+            color: var(--cyan);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 0.88rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        .badge-success { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
+        .badge-warning { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+        .badge-danger { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+        .badge-info { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+
+        .terminal-box {
+            background: #090d16;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: #e2e8f0;
+            max-height: 380px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-title">
+                <h1>📁 Department Access Dashboard — AS_03</h1>
+                <p>Linux System Administration (E1ITA307) &bull; Department Group &amp; Shared Directory Security Provisioning</p>
+            </div>
+            <div class="header-meta">
+                <span class="meta-pill">Host: <strong>SP</strong></span>
+                <span class="meta-pill">OS: <strong>Ubuntu 26.04.1 LTS</strong></span>
+                <span class="meta-pill">Kernel: <strong>6.18.40.1-microsoft-standard-WSL2</strong></span>
+                <span class="meta-pill">Operator: <strong>pankaj</strong></span>
+                <span class="meta-pill">Timestamp: <strong>2026-10-07 10:50:41 IST</strong></span>
+            </div>
+        </div>
+
+        <!-- Teardown Notice Banner -->
+        <div class="alert-banner">
+            <div>
+                <strong style="color: #fbbf24;">⚠️ Test Environment Sandboxing &amp; Teardown Available</strong>
+                <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">
+                    This sprint created department group <code>lsatest_dept_shared</code> and sandboxed directory <code>AS_03/sandbox_data/shared/</code>.
+                    Run <code>bash cleanup.sh</code> to restore the system to pristine condition.
+                </p>
+            </div>
+            <div>
+                <span class="badge badge-warning">Cleanup Command: bash cleanup.sh</span>
+            </div>
+        </div>
+
+        <!-- Metric KPI Cards -->
+        <div class="cards-grid">
+            <div class="card" style="border-top: 4px solid var(--cyan);">
+                <div class="card-metric-title">Department Group</div>
+                <div class="card-metric-value" style="font-size: 1.45rem; color: var(--cyan);">lsatest_dept_shared</div>
+                <div class="card-metric-desc">Group GID: <strong>1009</strong> (Active)</div>
+            </div>
+
+            <div class="card" style="border-top: 4px solid var(--purple);">
+                <div class="card-metric-title">Directory Permissions</div>
+                <div class="card-metric-value" style="color: var(--purple);">drwxrws---</div>
+                <div class="card-metric-desc">Octal: <strong>2770</strong> (Target: 2770)</div>
+            </div>
+
+            <div class="card" style="border-top: 4px solid var(--green);">
+                <div class="card-metric-title">SGID Inheritance</div>
+                <div class="card-metric-value" style="color: var(--green);">
+                    ENABLED
+                </div>
+                <div class="card-metric-desc">New files inherit department group</div>
+            </div>
+
+            <div class="card" style="border-top: 4px solid var(--green);">
+                <div class="card-metric-title">Access Isolation</div>
+                <div class="card-metric-value" style="color: var(--green);">
+                    ENFORCED
+                </div>
+                <div class="card-metric-desc">Non-members blocked (Kernel EACCES)</div>
+            </div>
+        </div>
+
+        <!-- Security Access Control Table -->
+        <div class="section-panel">
+            <div class="section-header">
+                <h2>🔐 Security Access Control Configuration</h2>
+                <span class="badge" style="background: rgba(34,197,94,0.15); color: #22c55e; border: 1px solid #22c55e;">ACTIVE & ENFORCED</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Resource / Path</th>
+                        <th>Owner &amp; Group</th>
+                        <th>Octal Mode</th>
+                        <th>Symbolic Permissions</th>
+                        <th>SGID Flag</th>
+                        <th>Others Access</th>
+                        <th>Access Policy</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_03/sandbox_data/shared</code></td>
+                        <td><code>pankaj:lsatest_dept_shared</code></td>
+                        <td><code>2770</code></td>
+                        <td><code>drwxrws---</code></td>
+                        <td>
+                            <span class="badge badge-success">
+                                Active (s bit)
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge badge-success">
+                                0 / Blocked (---)
+                            </span>
+                        </td>
+                        <td>Department Members Only (Read, Write, Execute)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Verification & Access Audit Matrix -->
+        <div class="section-panel">
+            <div class="section-header">
+                <h2>🧪 Live Access Audit &amp; Verification Matrix</h2>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Security Test</th>
+                        <th>Command / Probe</th>
+                        <th>Expected Behavior</th>
+                        <th>Observed Live Result</th>
+                        <th>Verdict</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Group Provisioning</strong></td>
+                        <td><code>getent group lsatest_dept_shared</code></td>
+                        <td>Group exists with valid system GID</td>
+                        <td>GID: <code>1009</code> present in <code>/etc/group</code></td>
+                        <td><span class="badge badge-success">PASSED</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Directory Ownership</strong></td>
+                        <td><code>stat -c "%U:%G" /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_03/sandbox_data/shared</code></td>
+                        <td>Group set to <code>lsatest_dept_shared</code></td>
+                        <td>Owner: <code>pankaj</code>, Group: <code>lsatest_dept_shared</code></td>
+                        <td><span class="badge badge-success">PASSED</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>SGID Inheritance</strong></td>
+                        <td><code>touch test_file &amp;&amp; stat -c "%G" test_file</code></td>
+                        <td>New files inherit directory's group automatically</td>
+                        <td>Inherited group: <code>lsatest_dept_shared</code></td>
+                        <td><span class="badge badge-success">PASSED</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Non-Member Isolation</strong></td>
+                        <td><code>sudo -u nobody test -r /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_03/sandbox_data/shared</code></td>
+                        <td>Access denied by kernel (Permission Denied)</td>
+                        <td>Non-member denied access (EACCES)</td>
+                        <td><span class="badge badge-success">ENFORCED</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Captured Execution Output -->
+        <div class="section-panel">
+            <div class="section-header">
+                <h2>🖥️ Live Terminal Execution Output</h2>
+                <span class="badge badge-info">Live Execution</span>
+            </div>
+            <div class="terminal-box">[36m[1m================================================================================[0m
+[36m[1m     DEPARTMENT ACCESS CONFIGURATION ENGINE &amp; PERMISSION AUDIT (AS_03)           [0m
+[36m[1m================================================================================[0m
+ Target Group      : [1mlsatest_dept_shared[0m
+ Shared Directory  : [1m/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_03/sandbox_data/shared[0m
+ Target Mode       : [1m2770 (drwxrws---)[0m
+ Execution Mode    : [32mLive Execution[0m
+ Timestamp         : 2026-10-07 10:50:39 IST
+ Hostname          : SP
+[36m--------------------------------------------------------------------------------[0m
+[34m[INFO][0m Step 1: Inspecting department group &#x27;lsatest_dept_shared&#x27;...
+[34m[INFO][0m Creating department group &#x27;lsatest_dept_shared&#x27; using groupadd...
+[32m[SUCCESS][0m Successfully provisioned department group &#x27;lsatest_dept_shared&#x27; (GID: 1009).
+[34m[INFO][0m Step 2: Configuring shared directory &#x27;/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_03/sandbox_data/shared&#x27;...
+[34m[INFO][0m Setting directory ownership to &#x27;pankaj:lsatest_dept_shared&#x27;...
+[34m[INFO][0m Setting restrictive permissions &#x27;2770&#x27; on &#x27;/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_03/sandbox_data/shared&#x27;...
+[32m[SUCCESS][0m Directory ownership and permissions applied successfully.
+[34m[INFO][0m Step 3: Auditing shared directory permissions &amp; access isolation...
+  - Path        : [1m/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_03/sandbox_data/shared[0m
+  - Octal Mode  : [1m2770[0m
+  - Symbolic    : [1mdrwxrws---[0m
+  - Owner       : [1mpankaj[0m
+  - Group       : [1mlsatest_dept_shared[0m
+[32m[SUCCESS][0m Others Access Audit: STRICTLY BLOCKED (0 / &#x27;---&#x27;). Non-members cannot read, write, or enter.
+[32m[SUCCESS][0m SGID Bit Audit: ACTIVE (SetGID). Files created inside will inherit group &#x27;lsatest_dept_shared&#x27;.
+[32m[SUCCESS][0m Group Inheritance Test: PASSED (New file inherited group &#x27;lsatest_dept_shared&#x27;).
+[34m[INFO][0m Testing access enforcement: attempting non-member read/exec via &#x27;nobody&#x27; account...
+[32m[SUCCESS][0m Non-Member Access Test: ACCESS DENIED (as expected). User &#x27;nobody&#x27; blocked by kernel.
+[36m--------------------------------------------------------------------------------[0m
+[1mSUMMARY RESULTS:[0m
+  Group Status        : [32mPROVISIONED (lsatest_dept_shared:1009)[0m
+  Directory Mode      : [1mdrwxrws--- (2770)[0m
+  SGID Inheritance    : [32mENABLED (2xxx)[0m
+  Others Locked Out   : [32mENFORCED (--- / 0)[0m
+  Non-Member Blocked  : [32mCONFIRMED (Kernel EACCES)[0m
+  Audit Telemetry     : [36m/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_03/logs/department_access.json[0m
+  Audit Log File      : [36m/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_03/logs/department_access.log[0m
+[36m================================================================================[0m</div>
+        </div>
+
+        <!-- Persistent Audit Log Viewer -->
+        <div class="section-panel">
+            <div class="section-header">
+                <h2>📜 Persistent Audit Log (<code>logs/department_access.log</code>)</h2>
+                <span class="badge badge-info">Audit Trail</span>
+            </div>
+            <div class="terminal-box">[2026-10-07 10:49:05 IST] [INFO] Step 1: Inspecting department group &#x27;lsatest_dept_shared&#x27;...
+[2026-10-07 10:49:05 IST] [INFO] [DRY-RUN] Would execute: sudo groupadd &#x27;lsatest_dept_shared&#x27;
+[2026-10-07 10:49:05 IST] [INFO] Step 2: Configuring shared directory &#x27;/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_03/sandbox_data/shared&#x27;...
+[2026-10-07 10:49:05 IST] [INFO] Step 3: Auditing shared directory permissions &amp; access isolation...
+[2026-10-07 10:49:05 IST] [WARN] Others Access Audit: OPEN (5). Non-members may have access.
+[2026-10-07 10:49:05 IST] [WARN] SGID Bit Audit: INACTIVE. SGID bit is not set.
+[2026-10-07 10:50:39 IST] [INFO] Step 1: Inspecting department group &#x27;lsatest_dept_shared&#x27;...
+[2026-10-07 10:50:40 IST] [INFO] Creating department group &#x27;lsatest_dept_shared&#x27; using groupadd...
+[2026-10-07 10:50:40 IST] [SUCCESS] Successfully provisioned department group &#x27;lsatest_dept_shared&#x27; (GID: 1009).
+[2026-10-07 10:50:40 IST] [INFO] Step 2: Configuring shared directory &#x27;/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_03/sandbox_data/shared&#x27;...
+[2026-10-07 10:50:40 IST] [INFO] Setting directory ownership to &#x27;pankaj:lsatest_dept_shared&#x27;...
+[2026-10-07 10:50:40 IST] [INFO] Setting restrictive permissions &#x27;2770&#x27; on &#x27;/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_03/sandbox_data/shared&#x27;...
+[2026-10-07 10:50:40 IST] [SUCCESS] Directory ownership and permissions applied successfully.
+[2026-10-07 10:50:40 IST] [INFO] Step 3: Auditing shared directory permissions &amp; access isolation...
+[2026-10-07 10:50:40 IST] [SUCCESS] Others Access Audit: STRICTLY BLOCKED (0 / &#x27;---&#x27;). Non-members cannot read, write, or enter.
+[2026-10-07 10:50:40 IST] [SUCCESS] SGID Bit Audit: ACTIVE (SetGID). Files created inside will inherit group &#x27;lsatest_dept_shared&#x27;.
+[2026-10-07 10:50:40 IST] [SUCCESS] Group Inheritance Test: PASSED (New file inherited group &#x27;lsatest_dept_shared&#x27;).
+[2026-10-07 10:50:41 IST] [INFO] Testing access enforcement: attempting non-member read/exec via &#x27;nobody&#x27; account...
+[2026-10-07 10:50:41 IST] [SUCCESS] Non-Member Access Test: ACCESS DENIED (as expected). User &#x27;nobody&#x27; blocked by kernel.</div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            Linux System Administration (E1ITA307) &bull; Automation Sprint AS_03 &bull; Generated dynamically via <code>run.sh</code>
+        </div>
+    </div>
+</body>
+</html>
