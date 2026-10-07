@@ -204,6 +204,14 @@ LSA_AS/
 │   ├── report.html                 # Standalone dark-themed dashboard report
 │   ├── logs/                       # Structured audit log & JSON telemetry directory
 │   └── README.md                   # Problem documentation & usage
+├── AS_27/                          # Automation Sprint Problem #27
+│   ├── package_installer.sh        # Menu-driven application installer & package automation script
+│   ├── cleanup.sh                  # Teardown script for uninstalling demo packages
+│   ├── run.sh                      # Unified execution & HTML dashboard generator
+│   ├── commands_used.md            # Command log & package management reference
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── logs/                       # Audit trail & JSON telemetry directory
+│   └── README.md                   # Problem documentation & usage
 └── (Upcoming Projects)/            # Future Automation Sprint additions
 ```
 
@@ -238,7 +246,8 @@ LSA_AS/
 | **AS_23** | **IP Configuration Report** | Hostname discovery (`hostname -I`), active interface auditing (`ip -br addr show up`), MAC/MTU extraction, default gateway parsing, `/etc/resolv.conf` DNS inspection, and dark-themed HTML report. | ✅ Completed | [`AS_23/`](./AS_23)
 | **AS_24** | **SSH Service Check** | Dynamic distribution service discovery ('ssh' vs 'sshd'), systemd active & boot persistence inspection, independent TCP port 22 socket cross-check, and dark-themed HTML report. | ✅ Completed | [`AS_24/`](./AS_24)
 | **AS_25** | **Port Availability Check** | Native Bash `/dev/tcp` network probing, resilient OpenBSD netcat fallback, active RST vs timeout differentiation, multi-port loop auditing, and dark-themed HTML report. | ✅ Completed | [`AS_25/`](./AS_25)
-| **AS_26** | **Package Update Check** | Dynamic package manager detection (`apt`, `dnf`, `brew`, `pacman`, `zypper`), safe read-only index refresh, package version extraction, security vs standard classification, and dark-themed HTML report. | ✅ Completed | [`AS_26/`](./AS_26)
+| **AS_26** | **Package Update Check** | Dynamic package manager detection (`apt`, `dnf`, `brew`, `pacman`, `zypper`), safe read-only index refresh, package version extraction, security vs standard classification, and dark-themed HTML report. | ✅ Completed | [`AS_26/`](./AS_26) |
+| **AS_27** | **Application Installation** | Menu-driven application catalog installer (`apt`, `dnf`, `pacman`), interactive & batch installation, safe demonstration testing (`cowsay`, `figlet`), clean uninstallation (`cleanup.sh`), and dark-themed HTML report. | ✅ Completed | [`AS_27/`](./AS_27) |
 | *Upcoming* | *Future Sprints* | Additional automation tasks and administration solutions. | ⏳ Planned | — |
 
 ---
@@ -277,6 +286,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_24** | SSH Service Check | `cd AS_24 && bash run.sh` |
 | **AS_25** | Port Availability Check | `cd AS_25 && bash run.sh` |
 | **AS_26** | Package Update Check | `cd AS_26 && bash run.sh` |
+| **AS_27** | Application Installation | `cd AS_27 && bash run.sh` *(Run `bash cleanup.sh` afterward to restore system)* |
 
 ### 💻 Quick Command Reference by Operating System
 
@@ -308,6 +318,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_24** | `cd AS_24 && bash run.sh` | `cd AS_24 && bash run.sh` | `cd AS_24 && bash run.sh` | `cd AS_24 && bash run.sh` |
 | **AS_25** | `cd AS_25 && bash run.sh` | `cd AS_25 && bash run.sh` | `cd AS_25 && bash run.sh` | `cd AS_25 && bash run.sh` |
 | **AS_26** | `cd AS_26 && bash run.sh` | `cd AS_26 && bash run.sh` | `cd AS_26 && bash run.sh` | `cd AS_26 && bash run.sh` |
+| **AS_27** | `cd AS_27 && bash run.sh` | `cd AS_27 && bash run.sh` | `cd AS_27 && bash run.sh` | `cd AS_27 && bash run.sh` |
 
 ---
 
@@ -1090,6 +1101,38 @@ Create a script to check whether system packages require updates and display the
 - 📊 **Interactive Dashboard:** [`AS_26/report.html`](./AS_26/report.html)
 - 📖 **Sprint Documentation:** [`AS_26/README.md`](./AS_26/README.md)
 - 📜 **Audit Log File:** [`AS_26/logs/package_check.log`](./AS_26/logs/package_check.log)
+
+</details>
+
+<details>
+<summary><strong>AS_27 — Application Installation (Package Management & Automation)</strong></summary>
+
+### Problem Statement
+Manual software installation is repetitive. Write a menu-driven script that presents a list of applications (e.g., git, curl, vim, nginx) and allows the user to select and install them.
+
+### Summary of Approach
+- **Dynamic Cross-Platform Package Manager Detection:** Auto-detects backend package management systems (`apt`, `dnf`, `yum`, `pacman`, `zypper`, `brew`), formulating appropriate non-interactive install, query, and remove commands.
+- **Curated Application Catalog & Status Matrix:** Maintains an extensible catalog of core administrative utilities (`curl`, `git`, `htop`, `tmux`, `jq`, `vim`, `tree`) alongside approved, easily-removable demonstration packages (`cowsay`, `figlet`, `sl`).
+- **Interactive & Batch Execution Modes:** Provides an interactive terminal menu for human operators (selection by number or demo keyword) alongside non-interactive CLI automation flags (`--demo`, `--install <pkgs>`, `--dry-run`, `--status`, `--json`) suitable for headless CI/CD and script orchestrators.
+- **Pre-Installation Existence Guard:** Inspects package status prior to installation (`dpkg -s`, `rpm -q`, `pacman -Q`), skipping already-installed tools to prevent unnecessary network and cache operations.
+- **Mandatory Safe Teardown (`cleanup.sh`):** In accordance with sprint safety rules, ships a dedicated teardown script that cleanly uninstalls demonstration packages (`cowsay`, `figlet`) while preserving pre-existing utilities (`sl`).
+- **Cross-Platform HTML Dashboard (`run.sh`):** Dispatches automated package installation, captures live terminal proof (rendered ASCII art from installed tools), builds an executive dark dashboard `report.html`, and auto-opens in the default browser across WSL, Linux, macOS, and Git Bash.
+
+### Key Commands Used
+- `bash run.sh` — Single command to execute demo installation, verify execution, regenerate dashboard, and open HTML report (Linux / macOS / Windows)
+- `bash cleanup.sh` — Safe teardown script reversing demonstration package installations
+- `./package_installer.sh` — Launches interactive menu on interactive terminals
+- `./package_installer.sh --demo` — Non-interactively installs safe demo packages (`cowsay`, `figlet`)
+- `./package_installer.sh --install cowsay,figlet` — Specific package installation queue
+- `./package_installer.sh --dry-run --demo` — Safe dry-run simulation mode
+- `./package_installer.sh --status --json` — Queries catalog status and exports JSON telemetry
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_27/report.html`](./AS_27/report.html)
+- 📖 **Sprint Documentation:** [`AS_27/README.md`](./AS_27/README.md)
+- 📜 **Audit Log File:** [`AS_27/logs/package_installer.log`](./AS_27/logs/package_installer.log)
+- 🧹 **Cleanup Script:** [`AS_27/cleanup.sh`](./AS_27/cleanup.sh)
+- 📋 **Command Log:** [`AS_27/commands_used.md`](./AS_27/commands_used.md)
 
 </details>
 
