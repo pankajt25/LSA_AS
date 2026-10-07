@@ -212,6 +212,14 @@ LSA_AS/
 │   ├── report.html                 # Standalone dark-themed dashboard report
 │   ├── logs/                       # Audit trail & JSON telemetry directory
 │   └── README.md                   # Problem documentation & usage
+├── AS_28/                          # Automation Sprint Problem #28
+│   ├── package_verifier.sh         # Core package verification, versioning & suggestion script
+│   ├── run.sh                      # Unified execution & HTML dashboard generator
+│   ├── packages.txt                # Curated baseline package verification manifest
+│   ├── commands_used.md            # Command log & package verification reference
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── logs/                       # Audit trail & JSON telemetry directory
+│   └── README.md                   # Problem documentation & usage
 └── (Upcoming Projects)/            # Future Automation Sprint additions
 ```
 
@@ -248,6 +256,7 @@ LSA_AS/
 | **AS_25** | **Port Availability Check** | Native Bash `/dev/tcp` network probing, resilient OpenBSD netcat fallback, active RST vs timeout differentiation, multi-port loop auditing, and dark-themed HTML report. | ✅ Completed | [`AS_25/`](./AS_25)
 | **AS_26** | **Package Update Check** | Dynamic package manager detection (`apt`, `dnf`, `brew`, `pacman`, `zypper`), safe read-only index refresh, package version extraction, security vs standard classification, and dark-themed HTML report. | ✅ Completed | [`AS_26/`](./AS_26) |
 | **AS_27** | **Application Installation** | Menu-driven application catalog installer (`apt`, `dnf`, `pacman`), interactive & batch installation, safe demonstration testing (`cowsay`, `figlet`), clean uninstallation (`cleanup.sh`), and dark-themed HTML report. | ✅ Completed | [`AS_27/`](./AS_27) |
+| **AS_28** | **Package Verification** | Package manifest verification (`dpkg -s`, `rpm -q`, `pacman -Q`), version extraction, install command recommendation, compliance scoring, and dark-themed HTML report. | ✅ Completed | [`AS_28/`](./AS_28) |
 | *Upcoming* | *Future Sprints* | Additional automation tasks and administration solutions. | ⏳ Planned | — |
 
 ---
@@ -287,6 +296,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_25** | Port Availability Check | `cd AS_25 && bash run.sh` |
 | **AS_26** | Package Update Check | `cd AS_26 && bash run.sh` |
 | **AS_27** | Application Installation | `cd AS_27 && bash run.sh` *(Run `bash cleanup.sh` afterward to restore system)* |
+| **AS_28** | Package Verification | `cd AS_28 && bash run.sh` |
 
 ### 💻 Quick Command Reference by Operating System
 
@@ -319,6 +329,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_25** | `cd AS_25 && bash run.sh` | `cd AS_25 && bash run.sh` | `cd AS_25 && bash run.sh` | `cd AS_25 && bash run.sh` |
 | **AS_26** | `cd AS_26 && bash run.sh` | `cd AS_26 && bash run.sh` | `cd AS_26 && bash run.sh` | `cd AS_26 && bash run.sh` |
 | **AS_27** | `cd AS_27 && bash run.sh` | `cd AS_27 && bash run.sh` | `cd AS_27 && bash run.sh` | `cd AS_27 && bash run.sh` |
+| **AS_28** | `cd AS_28 && bash run.sh` | `cd AS_28 && bash run.sh` | `cd AS_28 && bash run.sh` | `cd AS_28 && bash run.sh` |
 
 ---
 
@@ -1132,7 +1143,36 @@ Manual software installation is repetitive. Write a menu-driven script that pres
 - 📖 **Sprint Documentation:** [`AS_27/README.md`](./AS_27/README.md)
 - 📜 **Audit Log File:** [`AS_27/logs/package_installer.log`](./AS_27/logs/package_installer.log)
 - 🧹 **Cleanup Script:** [`AS_27/cleanup.sh`](./AS_27/cleanup.sh)
-- 📋 **Command Log:** [`AS_27/commands_used.md`](./AS_27/commands_used.md)
+</details>
+
+<details>
+<summary><strong>AS_28 — Package Verification (Package Management & Dependency Auditing)</strong></summary>
+
+### Problem Statement
+Verify if a given list of packages is installed on the system. For each package: print installed or not installed, if installed display its version, if not installed suggest the installation command.
+
+### Summary of Approach
+- **Dynamic Cross-Platform Package Manager Detection:** Auto-detects system package manager backend (`apt`, `dnf`, `yum`, `pacman`, `zypper`, `brew`) to format distribution-accurate installation suggestions (`sudo apt-get install -y <pkg>`, etc.).
+- **Flexible Verification Ingestion:** Supports verifying arbitrary CLI arguments, reading external package manifest files (`-f / --file`), and defaulting to a curated administrative manifest (`packages.txt`).
+- **High-Precision Status & Version Extraction:** Queries host package databases (`dpkg -s`, `rpm -q`, `pacman -Q`, `brew list`) to confirm complete installation, extracting precise upstream/patch version strings and locating binary paths (`command -v`).
+- **Actionable Remediation Guidance:** For any missing package, provides ready-to-run installation commands formatted with non-interactive flags.
+- **Dual Telemetry Architecture:** Generates real-time ANSI terminal tables, appends chronological audit logs to `logs/package_verifier.log`, and serializes structured JSON telemetry (`logs/package_verification.json`).
+- **Cross-Platform HTML Dashboard (`run.sh`):** Executes verification suite against live packages, builds a responsive dark dashboard `report.html` featuring status badges, version matrices, and install suggestion code pills, and auto-opens in the default browser across WSL, Linux, macOS, and Git Bash.
+
+### Key Commands Used
+- `bash run.sh` — Single command to audit package manifest, regenerate dashboard, and open HTML report (Linux / macOS / Windows)
+- `./package_verifier.sh` — Verifies baseline system package manifest (`packages.txt`)
+- `./package_verifier.sh curl git python3 nginx` — Verifies specific list of packages
+- `./package_verifier.sh -f packages.txt` — Verifies custom package manifest file
+- `./package_verifier.sh --json` — Emits machine-readable telemetry JSON
+- `dpkg -s <pkg> | grep "^Version:"` — Extracts exact Debian/Ubuntu package version
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_28/report.html`](./AS_28/report.html)
+- 📖 **Sprint Documentation:** [`AS_28/README.md`](./AS_28/README.md)
+- 📜 **Audit Log File:** [`AS_28/logs/package_verifier.log`](./AS_28/logs/package_verifier.log)
+- 📄 **Package Manifest:** [`AS_28/packages.txt`](./AS_28/packages.txt)
+- 📋 **Command Log:** [`AS_28/commands_used.md`](./AS_28/commands_used.md)
 
 </details>
 
