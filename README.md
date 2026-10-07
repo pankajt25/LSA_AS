@@ -267,6 +267,15 @@ LSA_AS/
 │   ├── logs/                       # Audit trail, live baseline & JSON telemetry directory
 │   ├── sandbox_data/               # Simulated baseline & tampered system datasets
 │   └── README.md                   # Problem documentation & usage
+├── AS_35/                          # Automation Sprint Problem #35
+│   ├── log_archiver.sh             # Core log discovery, timestamped compression & verification script
+│   ├── run.sh                      # Unified execution & HTML dashboard generator
+│   ├── commands_used.md            # Command log & log archival reference
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── archives/                   # Timestamped compressed archives & checksum manifests
+│   ├── logs/                       # Audit trail & JSON telemetry directory
+│   ├── sandbox_data/               # Simulated corporate active log repository
+│   └── README.md                   # Problem documentation & usage
 └── (Upcoming Projects)/            # Future Automation Sprint additions
 ```
 
@@ -310,6 +319,7 @@ LSA_AS/
 | **AS_32** | **File Modification Monitor** | Filesystem timestamp auditing (`find -mmin -1440`, `stat`), 24-hour change window detection, file size & ownership tracking, age bracketing, and dark-themed HTML report. | ✅ Completed | [`AS_32/`](./AS_32) |
 | **AS_33** | **Duplicate File Detection** | Cryptographic content hashing (`sha256sum`, `md5sum`), two-tier size collision optimization, redundant copy tracking, storage recovery calculations, and dark-themed HTML report. | ✅ Completed | [`AS_33/`](./AS_33) |
 | **AS_34** | **File Integrity Check** | Cryptographic baseline auditing (`sha256sum -c`), 4-state lifecycle tracking (intact, tampered, missing, untracked), compliance scoring, and dark-themed HTML report. | ✅ Completed | [`AS_34/`](./AS_34) |
+| **AS_35** | **Log Archival** | Automated log packaging (`tar -czf`), timestamped archiving, non-destructive decompression testing (`tar -tzf`), cryptographic SHA-256 validation, and dark-themed HTML report. | ✅ Completed | [`AS_35/`](./AS_35) |
 | *Upcoming* | *Future Sprints* | Additional automation tasks and administration solutions. | ⏳ Planned | — |
 
 ---
@@ -356,6 +366,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_32** | File Modification Monitor | `cd AS_32 && bash run.sh` |
 | **AS_33** | Duplicate File Detection | `cd AS_33 && bash run.sh` |
 | **AS_34** | File Integrity Check | `cd AS_34 && bash run.sh` |
+| **AS_35** | Log Archival | `cd AS_35 && bash run.sh` |
 
 ### 💻 Quick Command Reference by Operating System
 
@@ -395,6 +406,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_32** | `cd AS_32 && bash run.sh` | `cd AS_32 && bash run.sh` | `cd AS_32 && bash run.sh` | `cd AS_32 && bash run.sh` |
 | **AS_33** | `cd AS_33 && bash run.sh` | `cd AS_33 && bash run.sh` | `cd AS_33 && bash run.sh` | `cd AS_33 && bash run.sh` |
 | **AS_34** | `cd AS_34 && bash run.sh` | `cd AS_34 && bash run.sh` | `cd AS_34 && bash run.sh` | `cd AS_34 && bash run.sh` |
+| **AS_35** | `cd AS_35 && bash run.sh` | `cd AS_35 && bash run.sh` | `cd AS_35 && bash run.sh` | `cd AS_35 && bash run.sh` |
 
 ---
 
@@ -1416,6 +1428,39 @@ Create a checksum-based script to verify whether important files have been modif
 - 📖 **Sprint Documentation:** [`AS_34/README.md`](./AS_34/README.md)
 - 📜 **Audit Log File:** [`AS_34/logs/integrity_check.log`](./AS_34/logs/integrity_check.log)
 - 📋 **Command Log:** [`AS_34/commands_used.md`](./AS_34/commands_used.md)
+
+</details>
+
+<details>
+<summary><strong>AS_35 — Log Archival (Log Management & Compression Optimization)</strong></summary>
+
+### Problem Statement
+An organization needs to archive old log files. Develop a script to compress selected logs with a timestamp.
+
+### Summary of Approach
+- **Dynamic Log Discovery & Filtering:** Scans target log storage directories with pattern matching (`*.log`), file size inspections, and optional age cutoff thresholds (`--older-than <days>`).
+- **Timestamped Archive Architecture:** Packages selected log assets into ISO-timestamped compressed tarballs (`log_archive_YYYYMMDD_HHMMSS.tar.gz`), avoiding hardcoded root paths by executing relative path packaging (`-C <source>`).
+- **Non-Destructive Decompression Verification:** Executes an automated integrity test (`tar -tzf`) to verify tarball readability and structure before computing companion SHA-256 digests (`.sha256`).
+- **Storage Optimization Telemetry:** Measures original uncompressed footprints against compressed tarball byte counts, calculating exact space saved and compression ratio percentages.
+- **Dual Telemetry Architecture:** Outputs clean ANSI terminal diagnostics, appends chronological traces to `logs/log_archival.log`, and serializes structured JSON telemetry (`logs/log_archival.json`).
+- **Cross-Platform HTML Dashboard (`run.sh`):** Executes automated log packaging on active datasets (`sandbox_data/active_logs`), builds a responsive dark dashboard `report.html`, and auto-opens in the default browser across WSL, Linux, macOS, and Git Bash.
+
+### Key Commands Used
+- `bash run.sh` — Single command to archive logs, regenerate dashboard, and open HTML report (Linux / macOS / Windows)
+- `./log_archiver.sh` — Archives active logs with timestamped tarball
+- `./log_archiver.sh --source <dir> --output <dir>` — Targets custom log and archive directories
+- `./log_archiver.sh --format bz2` — Uses Bzip2 compression format
+- `./log_archiver.sh --purge` — Deletes original source logs following verified archival
+- `./log_archiver.sh --sandbox` — Audits simulated corporate active log dataset
+- `./log_archiver.sh --json` — Emits structured machine-readable JSON telemetry
+- `tar -czf <archive>.tar.gz -C <dir> <files>` — Creates gzip compressed tar archive
+- `tar -tzf <archive>.tar.gz` — Tests archive integrity non-destructively
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_35/report.html`](./AS_35/report.html)
+- 📖 **Sprint Documentation:** [`AS_35/README.md`](./AS_35/README.md)
+- 📜 **Audit Log File:** [`AS_35/logs/log_archival.log`](./AS_35/logs/log_archival.log)
+- 📋 **Command Log:** [`AS_35/commands_used.md`](./AS_35/commands_used.md)
 
 </details>
 
