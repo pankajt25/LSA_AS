@@ -81,6 +81,15 @@ LSA_AS/
 │   ├── logs/                       # Audit trail & JSON telemetry directory
 │   ├── sandbox_data/               # Aging test temporary directory tree
 │   └── README.md                   # Problem documentation & usage
+├── AS_10/                          # Automation Sprint Problem #10
+│   ├── daily_backup.sh             # Core automated daily backup & checksumming script
+│   ├── run.sh                      # Unified execution & HTML dashboard generator
+│   ├── commands_used.md            # Command log & backup management reference
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── logs/                       # Audit trail & JSON telemetry directory
+│   ├── backups/                    # Timestamped tar.gz archives & sha256 checksums
+│   ├── sandbox_data/               # Simulated corporate payment service project tree
+│   └── README.md                   # Problem documentation & usage
 ├── AS_14/                          # Automation Sprint Problem #14
 │   ├── suspicious_ip_detector.sh   # Core bash script for IP detection
 │   ├── commands_used.md            # Command log & viva preparation
@@ -189,6 +198,7 @@ LSA_AS/
 | **AS_07** | **Low Disk Space Alert** | Filesystem storage capacity auditing (`df -P`), dynamic threshold evaluation (&ge; 80%), critical severity classification, mitigation recommendations, and dark-themed HTML report. | ✅ Completed | [`AS_07/`](./AS_07) |
 | **AS_08** | **Large File Detection** | Recursive filesystem tree inspection (`find -size +<threshold>`), numerical sorting (`sort -nr`), file ownership & timestamp extraction (`stat`), cumulative consumption tallying, and dark-themed HTML report. | ✅ Completed | [`AS_08/`](./AS_08) |
 | **AS_09** | **Temporary File Cleanup** | Stale file aging evaluation (`stat` epoch / `find -mtime`), safe simulation dry-run (`--dry-run`), active unlinking (`rm -f`), empty tree pruning, and dark-themed HTML report. | ✅ Completed | [`AS_09/`](./AS_09) |
+| **AS_10** | **Daily Backup** | Automated directory archiving (`tar -czf`), non-destructive integrity testing (`tar -tzf`), cryptographic SHA-256 validation, compression ratio metrics, and dark-themed HTML report. | ✅ Completed | [`AS_10/`](./AS_10) |
 | **AS_14** | **Suspicious IP Detection** | Automated SSH brute-force monitor, real log auto-detection (`/var/log/auth.log`), regex parsing, descending ranking, and audit reporting. | ✅ Completed | [`AS_14/`](./AS_14)
 | **AS_15** | **Error Log Report** | Automated error extraction, real log auto-detection (`/var/log/syslog`), severity breakdown, frequency ranking, and tail-style review. | ✅ Completed | [`AS_15/`](./AS_15)
 | **AS_16** | **Service Availability Check** | Real-time service monitoring, boot persistence verification, systemd/SysV fallback, audit logging, and dark-themed HTML report dashboard. | ✅ Completed | [`AS_16/`](./AS_16)
@@ -223,6 +233,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_07** | Low Disk Space Alert | `cd AS_07 && bash run.sh` |
 | **AS_08** | Large File Detection | `cd AS_08 && bash run.sh` |
 | **AS_09** | Temporary File Cleanup | `cd AS_09 && bash run.sh` |
+| **AS_10** | Daily Backup | `cd AS_10 && bash run.sh` |
 | **AS_14** | Suspicious IP Detection | `cd AS_14 && bash run.sh` |
 | **AS_15** | Error Log Report | `cd AS_15 && bash run.sh` |
 | **AS_16** | Service Availability Check | `cd AS_16 && bash run.sh` |
@@ -250,6 +261,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_07** | `cd AS_07 && bash run.sh` | `cd AS_07 && bash run.sh` | `cd AS_07 && bash run.sh` | `cd AS_07 && bash run.sh` |
 | **AS_08** | `cd AS_08 && bash run.sh` | `cd AS_08 && bash run.sh` | `cd AS_08 && bash run.sh` | `cd AS_08 && bash run.sh` |
 | **AS_09** | `cd AS_09 && bash run.sh` | `cd AS_09 && bash run.sh` | `cd AS_09 && bash run.sh` | `cd AS_09 && bash run.sh` |
+| **AS_10** | `cd AS_10 && bash run.sh` | `cd AS_10 && bash run.sh` | `cd AS_10 && bash run.sh` | `cd AS_10 && bash run.sh` |
 | **AS_14** | `cd AS_14 && bash run.sh` | `cd AS_14 && bash run.sh` | `cd AS_14 && bash run.sh` | `cd AS_14 && bash run.sh` |
 | **AS_15** | `cd AS_15 && bash run.sh` | `cd AS_15 && bash run.sh` | `cd AS_15 && bash run.sh` | `cd AS_15 && bash run.sh` |
 | **AS_16** | `cd AS_16 && bash run.sh` | `cd AS_16 && bash run.sh` | `cd AS_16 && bash run.sh` | `cd AS_16 && bash run.sh` |
@@ -533,6 +545,36 @@ Temporary files can consume a large amount of disk space over time. Write a scri
 - 📖 **Sprint Documentation:** [`AS_09/README.md`](./AS_09/README.md)
 - 📜 **Audit Log File:** [`AS_09/logs/temp_cleaner.log`](./AS_09/logs/temp_cleaner.log)
 - 📋 **Command Log:** [`AS_09/commands_used.md`](./AS_09/commands_used.md)
+
+</details>
+
+<details>
+<summary><strong>AS_10 — Daily Backup (Backup Management)</strong></summary>
+
+### Problem Statement
+Regular backups are essential for disaster recovery. Write a script that creates a compressed and timestamped backup (e.g., using `tar` and `gzip`) of a specified directory and saves it in a designated backup location.
+
+### Summary of Approach
+- **Compressed & Timestamped Packaging:** Leverages `tar -czf` with ISO datetime naming (`backup_<DIR>_<YYYYMMDD_HHMMSS>.tar.gz`), isolating source paths with `-C` to eliminate relative path traversal anomalies.
+- **Immediate Non-Destructive Integrity Verification:** Performs an automated read-test via `tar -tzf` directly following archive creation to verify that the tar container is non-corrupt and readable.
+- **Cryptographic Hash Generation:** Generates a companion SHA-256 integrity checksum (`.tar.gz.sha256`) to ensure tamper-evident byte verification.
+- **Compression Efficiency Metrics:** Calculates raw byte footprint (`du -sb`), compressed archive size (`stat -c %s`), and compression reduction percentage.
+- **Full Inventory Manifest:** Extracts and catalogs all archived file paths, permissions, sizes, and timestamps.
+- **Cross-Platform HTML Dashboard (`run.sh`):** Dispatches automated daily backup, parses JSON telemetry and tar manifests, regenerates an executive dark dashboard `report.html`, and auto-opens in the default browser across WSL, Linux, macOS, and Git Bash.
+
+### Key Commands Used
+- `bash run.sh` — Single command to execute backup, verify integrity, regenerate dashboard, and open HTML report (Linux / macOS / Windows)
+- `./daily_backup.sh` — Creates standard daily backup of sandbox project in `backups/`
+- `./daily_backup.sh -s ./sandbox_data/project -d ./backups` — Custom source/destination parameters
+- `./daily_backup.sh -c bzip2` — Uses bzip2 compression algorithm (`.tar.bz2`)
+- `sha256sum -c backups/*.sha256` — Verifies archive cryptographic integrity
+- `./daily_backup.sh --json` — Emits structured JSON telemetry
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_10/report.html`](./AS_10/report.html)
+- 📖 **Sprint Documentation:** [`AS_10/README.md`](./AS_10/README.md)
+- 📜 **Audit Log File:** [`AS_10/logs/daily_backup.log`](./AS_10/logs/daily_backup.log)
+- 📋 **Command Log:** [`AS_10/commands_used.md`](./AS_10/commands_used.md)
 
 </details>
 
