@@ -335,6 +335,15 @@ LSA_AS/
 │   ├── logs/                       # Audit trail & JSON telemetry directory
 │   ├── sandbox_data/               # Sandboxed departmental directory structures
 │   └── README.md                   # Problem documentation & usage
+├── AS_43/                          # Automation Sprint Problem #43
+│   ├── offboard_employee.sh        # Core employee offboarding & home directory archival script
+│   ├── cleanup.sh                  # Safe user teardown & system restoration script
+│   ├── run.sh                      # Unified execution & HTML dashboard generator
+│   ├── commands_used.md            # Command log & offboarding reference
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── archives/                   # Generated home directory archives & SHA-256 digests
+│   ├── logs/                       # Audit trail & JSON telemetry directory
+│   └── README.md                   # Problem documentation & usage
 └── (Upcoming Projects)/            # Future Automation Sprint additions
 ```
 
@@ -386,6 +395,7 @@ LSA_AS/
 | **AS_40** | **Mounted File System Report** | Virtual filesystem discovery (`df -hT`, `/proc/mounts`), total/used/available storage reporting, architectural categorization (physical, virtual, shared, overlay), mount permission inspection, and dark-themed HTML report. | ✅ Completed | [`AS_40/`](./AS_40) |
 | **AS_41** | **Archive Old Project Files** | Automated project file age auditing (`find -type f -mtime +N`), cryptographic SHA-256 integrity verification, safe relocation preserving tree structure, `.tar.gz` bundle compression, and dark-themed HTML report. | ✅ Completed | [`AS_41/`](./AS_41) |
 | **AS_42** | **Department Folder Creation** | Automated department folder provisioning (`mkdir -p`), dedicated group creation (`groupadd`), SGID inheritance enforcement (`chmod 2770`), isolated permissions verification, safe teardown (`cleanup.sh`), and dark-themed HTML report. | ✅ Completed | [`AS_42/`](./AS_42) |
+| **AS_43** | **Employee Offboarding** | Complete account de-provisioning (`pkill -u`, `usermod -L`, `usermod -s /usr/sbin/nologin`), home directory archiving (`tar -czf`), SHA-256 integrity verification, safe teardown (`cleanup.sh`), and dark-themed HTML report. | ✅ Completed | [`AS_43/`](./AS_43) |
 | *Upcoming* | *Future Sprints* | Additional automation tasks and administration solutions. | ⏳ Planned | — |
 
 ---
@@ -1750,6 +1760,38 @@ Create department folders and assign group ownership.
 - 📖 **Sprint Documentation:** [`AS_42/README.md`](./AS_42/README.md)
 - 📜 **Audit Log File:** [`AS_42/logs/`](./AS_42/logs/)
 - 📋 **Command Log:** [`AS_42/commands_used.md`](./AS_42/commands_used.md)
+
+</details>
+
+<details>
+<summary><strong>AS_43 — Employee Offboarding (Credential Revocation & Home Archival)</strong></summary>
+
+### Problem Statement
+Disable a user account and archive their home directory.
+
+### Summary of Approach
+- **Controlled Test User Isolation:** Provisions and verifies a throwaway test user prefixed with `lsatest_` (`lsatest_offboard_demo`) to ensure zero risk to real host user accounts.
+- **Immediate Session & Process Eviction:** Kills all active user processes via `sudo pkill -u <user>` to invalidate active terminal sessions and background jobs.
+- **PAM & Shadow Security Lockdown:** Locks the user's password (`sudo usermod -L`), revokes interactive login capabilities by setting shell to `/usr/sbin/nologin`, and expires account validity dates (`sudo usermod -e 1`).
+- **Forensic Home Directory Archival:** Packages and compresses `/home/<user>` into a `.tar.gz` bundle inside `archives/`, verifying archive integrity non-destructively (`tar -tzf`) and creating a SHA-256 cryptographic manifest.
+- **Automated State Transition Audit:** Audits before-and-after account parameters (`/etc/passwd`, `/etc/shadow`, `passwd -S`, `chage -l`) to verify complete lockout.
+- **Safe Teardown (`cleanup.sh`):** Fully de-provisions the test user (`sudo userdel -r`) leaving no orphaned artifacts on the system.
+- **Cross-Platform HTML Dashboard (`run.sh`):** Generates an interactive dark dashboard `report.html` showcasing pre/post security state transitions, archive member listings, and execution traces, automatically opening across WSL, Linux, macOS, and Git Bash.
+
+### Key Commands Used
+- `cd AS_43 && bash run.sh` — Single command to execute employee offboarding, archive home, and launch HTML dashboard
+- `bash cleanup.sh` — Reverses test user provisioning and cleans up test account
+- `sudo usermod -L "${TARGET_USER}"` — Locks user password in `/etc/shadow`
+- `sudo usermod -s /usr/sbin/nologin "${TARGET_USER}"` — Disables interactive login shell
+- `sudo pkill -u "${TARGET_USER}"` — Terminates all active processes owned by the user
+- `sudo tar -czf "${ARCHIVE_FILE}" -C /home "${TARGET_USER}"` — Packages and compresses home directory
+- `tar -tzf "${ARCHIVE_FILE}"` — Non-destructively verifies compressed archive integrity
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_43/report.html`](./AS_43/report.html)
+- 📖 **Sprint Documentation:** [`AS_43/README.md`](./AS_43/README.md)
+- 📜 **Audit Log File:** [`AS_43/logs/`](./AS_43/logs/)
+- 📋 **Command Log:** [`AS_43/commands_used.md`](./AS_43/commands_used.md)
 
 </details>
 
