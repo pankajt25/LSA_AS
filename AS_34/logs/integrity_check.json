@@ -1,0 +1,69 @@
+{
+  "metadata": {
+    "baseline_manifest": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_34/logs/live_baseline.sha256",
+    "target_directory": "System Critical Files",
+    "mode": "Live System Audit",
+    "algorithm": "SHA-256",
+    "timestamp": "2026-10-07 15:38:57 "
+  },
+  "summary": {
+    "total_baseline_files": 6,
+    "intact_files_count": 6,
+    "tampered_files_count": 0,
+    "missing_files_count": 0,
+    "untracked_files_count": 0,
+    "total_violations": 0,
+    "integrity_score_pct": 100.0,
+    "verdict": "PASSED (100% Intact)"
+  },
+  "file_results": [
+    {
+      "path": "/etc/passwd",
+      "status": "UNCHANGED",
+      "expected_hash": "47f1c56994df79c16cab0a4df194a06c317faa0d3e9462152ab889fa5888d4ee",
+      "actual_hash": "47f1c56994df79c16cab0a4df194a06c317faa0d3e9462152ab889fa5888d4ee",
+      "size_bytes": 1924,
+      "detail": "Cryptographic digest matches baseline perfectly."
+    },
+    {
+      "path": "/etc/group",
+      "status": "UNCHANGED",
+      "expected_hash": "b14138cdc7b95e4d7cf2e171ea09011c97791939fac42ba7d0ad7a841709e144",
+      "actual_hash": "b14138cdc7b95e4d7cf2e171ea09011c97791939fac42ba7d0ad7a841709e144",
+      "size_bytes": 958,
+      "detail": "Cryptographic digest matches baseline perfectly."
+    },
+    {
+      "path": "/etc/hosts",
+      "status": "UNCHANGED",
+      "expected_hash": "1ed2d5de89ccf68be4cc2258bd86aa246deea032c8ca48ca6ee58397102f1310",
+      "actual_hash": "1ed2d5de89ccf68be4cc2258bd86aa246deea032c8ca48ca6ee58397102f1310",
+      "size_bytes": 401,
+      "detail": "Cryptographic digest matches baseline perfectly."
+    },
+    {
+      "path": "/etc/issue",
+      "status": "UNCHANGED",
+      "expected_hash": "dd09efbb626481e464c9ee1b3c88824c3cdbeaeb3a8de18bcdd2b379a64690f5",
+      "actual_hash": "dd09efbb626481e464c9ee1b3c88824c3cdbeaeb3a8de18bcdd2b379a64690f5",
+      "size_bytes": 26,
+      "detail": "Cryptographic digest matches baseline perfectly."
+    },
+    {
+      "path": "/etc/os-release",
+      "status": "UNCHANGED",
+      "expected_hash": "cf72627ff81aef345d0a9f3807eb80f1035e0f80fe2932d12d94efc02fd68104",
+      "actual_hash": "cf72627ff81aef345d0a9f3807eb80f1035e0f80fe2932d12d94efc02fd68104",
+      "size_bytes": 410,
+      "detail": "Cryptographic digest matches baseline perfectly."
+    },
+    {
+      "path": "/etc/fstab",
+      "status": "UNCHANGED",
+      "expected_hash": "bfc55bd59f612961ad4dd1c29a029ce0f660d9c8669666b5a5988e2a7add7a20",
+      "actual_hash": "bfc55bd59f612961ad4dd1c29a029ce0f660d9c8669666b5a5988e2a7add7a20",
+      "size_bytes": 407,
+      "detail": "Cryptographic digest matches baseline perfectly."
+    }
+  ]
+}

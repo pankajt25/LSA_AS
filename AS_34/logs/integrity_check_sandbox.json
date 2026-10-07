@@ -1,0 +1,69 @@
+{
+  "metadata": {
+    "baseline_manifest": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_34/sandbox_data/authoritative_baseline.sha256",
+    "target_directory": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_34/sandbox_data/tampered_system",
+    "mode": "Sandbox Simulation",
+    "algorithm": "SHA-256",
+    "timestamp": "2026-10-07 15:38:57 "
+  },
+  "summary": {
+    "total_baseline_files": 5,
+    "intact_files_count": 3,
+    "tampered_files_count": 1,
+    "missing_files_count": 1,
+    "untracked_files_count": 1,
+    "total_violations": 3,
+    "integrity_score_pct": 60.0,
+    "verdict": "COMPROMISED (3 Violations Detected)"
+  },
+  "file_results": [
+    {
+      "path": "app_binary.dat",
+      "status": "UNCHANGED",
+      "expected_hash": "d76aff1caba55816599978d293ff255fe60a2f23dfb58ab984ffe020678f2703",
+      "actual_hash": "d76aff1caba55816599978d293ff255fe60a2f23dfb58ab984ffe020678f2703",
+      "size_bytes": 410,
+      "detail": "Cryptographic digest matches baseline perfectly."
+    },
+    {
+      "path": "auth_policy.conf",
+      "status": "TAMPERED",
+      "expected_hash": "937a895b5238bb7f594b946553f19104c57ac39c190928a08a7aef30ca9ca3b3",
+      "actual_hash": "574d56274f8dba2e6ba98c533c4fec14ea4283994ae4dae2ed3b3b800f00f7ba",
+      "size_bytes": 206,
+      "detail": "Checksum mismatch detected! Content was modified."
+    },
+    {
+      "path": "database.cfg",
+      "status": "UNCHANGED",
+      "expected_hash": "66f0ef66e3d339064497aa566556bff3c31ca79617019d6484394736c59d8363",
+      "actual_hash": "66f0ef66e3d339064497aa566556bff3c31ca79617019d6484394736c59d8363",
+      "size_bytes": 78,
+      "detail": "Cryptographic digest matches baseline perfectly."
+    },
+    {
+      "path": "firewall_rules.sh",
+      "status": "UNCHANGED",
+      "expected_hash": "bc4e09590363380162c46c3fca88dba61f2d68cb6b6d2961b643ed42b3388674",
+      "actual_hash": "bc4e09590363380162c46c3fca88dba61f2d68cb6b6d2961b643ed42b3388674",
+      "size_bytes": 142,
+      "detail": "Cryptographic digest matches baseline perfectly."
+    },
+    {
+      "path": "payment_gateway.key",
+      "status": "MISSING",
+      "expected_hash": "b3045bd7930013c6f3a973d771e4adf6a961df3b767f048d646349064a5c570e",
+      "actual_hash": "FILE_NOT_FOUND",
+      "size_bytes": 0,
+      "detail": "Critical file was deleted or cannot be accessed."
+    },
+    {
+      "path": "unauthorized_tunnel.sh",
+      "status": "UNTRACKED",
+      "expected_hash": "NOT_IN_BASELINE",
+      "actual_hash": "063859637040dce05190bc1699d5d636dfffd77d7887c83aa4f44e7ad9cc7b01",
+      "size_bytes": 47,
+      "detail": "New file present in directory but absent from baseline."
+    }
+  ]
+}

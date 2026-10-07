@@ -1,0 +1,25 @@
+[2026-10-07 15:37:56] FILE INTEGRITY CHECK RUN
+Mode: Sandbox
+Verdict: COMPROMISED (3 Violations Detected)
+Violations: 3
+------------------------------------------------------------
+[2026-10-07 15:38:06] FILE INTEGRITY CHECK RUN
+Mode: Live
+Verdict: PASSED (100% Intact)
+Violations: 0
+------------------------------------------------------------
+[2026-10-07 15:38:57] FILE INTEGRITY CHECK RUN
+Mode: Live
+Verdict: PASSED (100% Intact)
+Violations: 0
+------------------------------------------------------------
+[2026-10-07 15:38:57] FILE INTEGRITY CHECK RUN
+Mode: Sandbox
+Verdict: COMPROMISED (3 Violations Detected)
+Violations: 3
+------------------------------------------------------------
+[2026-10-07 15:38:58] FILE INTEGRITY CHECK RUN
+Mode: Live
+Verdict: PASSED (100% Intact)
+Violations: 0
+------------------------------------------------------------

@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AS_34: File Integrity Check Dashboard</title>
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #1e293b;
+            --border-color: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-cyan: #38bdf8;
+            --accent-green: #10b981;
+            --accent-yellow: #f59e0b;
+            --accent-red: #ef4444;
+            --accent-purple: #a855f7;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.5;
+            padding: 24px;
+        }
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+        header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .header-title h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .header-title p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 4px;
+        }
+        .header-badges {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .badge-cyan { background: rgba(56, 189, 248, 0.2); color: var(--accent-cyan); border: 1px solid rgba(56, 189, 248, 0.3); }
+        .badge-green { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); border: 1px solid rgba(16, 185, 129, 0.3); }
+        .badge-yellow { background: rgba(245, 158, 11, 0.2); color: var(--accent-yellow); border: 1px solid rgba(245, 158, 11, 0.3); }
+        .badge-danger { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); border: 1px solid rgba(239, 68, 68, 0.3); }
+        .badge-purple { background: rgba(168, 85, 247, 0.2); color: var(--accent-purple); border: 1px solid rgba(168, 85, 247, 0.3); }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .kpi-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+        .kpi-blue::before { background: var(--accent-cyan); }
+        .kpi-green::before { background: var(--accent-green); }
+        .kpi-yellow::before { background: var(--accent-yellow); }
+        .kpi-purple::before { background: var(--accent-purple); }
+        .kpi-red::before { background: var(--accent-red); }
+
+        .kpi-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+        .kpi-value {
+            font-size: 1.85rem;
+            font-weight: 700;
+            color: #fff;
+        }
+        .kpi-sub {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+        .card-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .card-header h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+        }
+        .table-responsive {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        th {
+            background: #182234;
+            padding: 12px 16px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-color);
+        }
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.85rem;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .font-mono {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        }
+        .text-cyan { color: var(--accent-cyan); }
+        .text-green { color: var(--accent-green); }
+        .text-amber { color: var(--accent-yellow); }
+        .text-muted { color: var(--text-secondary); }
+        .center { text-align: center; }
+
+        pre.terminal-log {
+            background: #090d16;
+            color: #a5b4fc;
+            padding: 16px;
+            border-radius: 8px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.8rem;
+            overflow-x: auto;
+            max-height: 280px;
+            white-space: pre-wrap;
+            border: 1px solid #1e293b;
+        }
+        footer {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            margin-top: 32px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>🔒 File Integrity Check Dashboard</h1>
+                <p>Linux System Administration (E1ITA307) — Automation Sprint Problem #34</p>
+            </div>
+            <div class="header-badges">
+                <span class="badge badge-cyan">Ubuntu 26.04.1 LTS</span>
+                <span class="badge badge-green">Host: SP</span>
+                <span class="badge badge-purple">2026-10-07 15:38:58 IST</span>
+            </div>
+        </header>
+
+        <div class="kpi-grid">
+            <div class="kpi-card kpi-blue">
+                <div class="kpi-title">Baseline Tracked Files</div>
+                <div class="kpi-value">6</div>
+                <div class="kpi-sub">Cryptographic SHA-256 targets</div>
+            </div>
+            <div class="kpi-card kpi-green">
+                <div class="kpi-title">Integrity Compliance</div>
+                <div class="kpi-value">100.0%</div>
+                <div class="kpi-sub">6 / 6 files intact</div>
+            </div>
+            <div class="kpi-card kpi-red">
+                <div class="kpi-title">Tampered / Modified</div>
+                <div class="kpi-value">0</div>
+                <div class="kpi-sub">Hash mismatch alerts</div>
+            </div>
+            <div class="kpi-card kpi-yellow">
+                <div class="kpi-title">Missing / Deleted</div>
+                <div class="kpi-value">0</div>
+                <div class="kpi-sub">Critical file removals</div>
+            </div>
+            <div class="kpi-card kpi-purple">
+                <div class="kpi-title">Untracked / Injected</div>
+                <div class="kpi-value">0</div>
+                <div class="kpi-sub">Rogue unmonitored files</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2>🛡️ Live Host System Critical Files — Integrity Verification</h2>
+                <span class="badge badge-green">Verdict: PASSED (100% Intact)</span>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="center">Integrity Status</th>
+                            <th>Protected File Path</th>
+                            <th>Baseline SHA-256</th>
+                            <th>Current SHA-256</th>
+                            <th>Verification Detail</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+        <tr>
+            <td class="center"><span class="badge badge-green">UNCHANGED</span></td>
+            <td class="font-mono text-cyan"><strong>/etc/passwd</strong></td>
+            <td class="font-mono text-muted" title="47f1c56994df79c16cab0a4df194a06c317faa0d3e9462152ab889fa5888d4ee">47f1c56994df79c1...</td>
+            <td class="font-mono text-amber" title="47f1c56994df79c16cab0a4df194a06c317faa0d3e9462152ab889fa5888d4ee">47f1c56994df79c1...</td>
+            <td style="font-size: 0.8rem; color: var(--text-secondary);">Cryptographic digest matches baseline perfectly.</td>
+        </tr>
+        
+        <tr>
+            <td class="center"><span class="badge badge-green">UNCHANGED</span></td>
+            <td class="font-mono text-cyan"><strong>/etc/group</strong></td>
+            <td class="font-mono text-muted" title="b14138cdc7b95e4d7cf2e171ea09011c97791939fac42ba7d0ad7a841709e144">b14138cdc7b95e4d...</td>
+            <td class="font-mono text-amber" title="b14138cdc7b95e4d7cf2e171ea09011c97791939fac42ba7d0ad7a841709e144">b14138cdc7b95e4d...</td>
+            <td style="font-size: 0.8rem; color: var(--text-secondary);">Cryptographic digest matches baseline perfectly.</td>
+        </tr>
+        
+        <tr>
+            <td class="center"><span class="badge badge-green">UNCHANGED</span></td>
+            <td class="font-mono text-cyan"><strong>/etc/hosts</strong></td>
+            <td class="font-mono text-muted" title="1ed2d5de89ccf68be4cc2258bd86aa246deea032c8ca48ca6ee58397102f1310">1ed2d5de89ccf68b...</td>
+            <td class="font-mono text-amber" title="1ed2d5de89ccf68be4cc2258bd86aa246deea032c8ca48ca6ee58397102f1310">1ed2d5de89ccf68b...</td>
+            <td style="font-size: 0.8rem; color: var(--text-secondary);">Cryptographic digest matches baseline perfectly.</td>
+        </tr>
+        
+        <tr>
+            <td class="center"><span class="badge badge-green">UNCHANGED</span></td>
+            <td class="font-mono text-cyan"><strong>/etc/issue</strong></td>
+            <td class="font-mono text-muted" title="dd09efbb626481e464c9ee1b3c88824c3cdbeaeb3a8de18bcdd2b379a64690f5">dd09efbb626481e4...</td>
+            <td class="font-mono text-amber" title="dd09efbb626481e464c9ee1b3c88824c3cdbeaeb3a8de18bcdd2b379a64690f5">dd09efbb626481e4...</td>
+            <td style="font-size: 0.8rem; color: var(--text-secondary);">Cryptographic digest matches baseline perfectly.</td>
+        </tr>
+        
+        <tr>
+            <td class="center"><span class="badge badge-green">UNCHANGED</span></td>
+            <td class="font-mono text-cyan"><strong>/etc/os-release</strong></td>
+            <td class="font-mono text-muted" title="cf72627ff81aef345d0a9f3807eb80f1035e0f80fe2932d12d94efc02fd68104">cf72627ff81aef34...</td>
+            <td class="font-mono text-amber" title="cf72627ff81aef345d0a9f3807eb80f1035e0f80fe2932d12d94efc02fd68104">cf72627ff81aef34...</td>
+            <td style="font-size: 0.8rem; color: var(--text-secondary);">Cryptographic digest matches baseline perfectly.</td>
+        </tr>
+        
+        <tr>
+            <td class="center"><span class="badge badge-green">UNCHANGED</span></td>
+            <td class="font-mono text-cyan"><strong>/etc/fstab</strong></td>
+            <td class="font-mono text-muted" title="bfc55bd59f612961ad4dd1c29a029ce0f660d9c8669666b5a5988e2a7add7a20">bfc55bd59f612961...</td>
+            <td class="font-mono text-amber" title="bfc55bd59f612961ad4dd1c29a029ce0f660d9c8669666b5a5988e2a7add7a20">bfc55bd59f612961...</td>
+            <td style="font-size: 0.8rem; color: var(--text-secondary);">Cryptographic digest matches baseline perfectly.</td>
+        </tr>
+        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2>🧪 Sandbox Security Tampering Simulation Drill (4-State FIM Lifecycle)</h2>
+                <span class="badge badge-danger">Simulated Tampering Incident</span>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="center">Integrity Status</th>
+                            <th>Protected File Path</th>
+                            <th>Baseline SHA-256</th>
+                            <th>Current SHA-256</th>
+                            <th>Verification Detail</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+        <tr>
+            <td class="center"><span class="badge badge-green">UNCHANGED</span></td>
+            <td class="font-mono text-cyan"><strong>app_binary.dat</strong></td>
+            <td class="font-mono text-muted" title="d76aff1caba55816599978d293ff255fe60a2f23dfb58ab984ffe020678f2703">d76aff1caba55816...</td>
+            <td class="font-mono text-amber" title="d76aff1caba55816599978d293ff255fe60a2f23dfb58ab984ffe020678f2703">d76aff1caba55816...</td>
+            <td style="font-size: 0.8rem; color: var(--text-secondary);">Cryptographic digest matches baseline perfectly.</td>
+        </tr>
+        
+        <tr>
+            <td class="center"><span class="badge badge-danger">TAMPERED</span></td>
+            <td class="font-mono text-cyan"><strong>auth_policy.conf</strong></td>
+            <td class="font-mono text-muted" title="937a895b5238bb7f594b946553f19104c57ac39c190928a08a7aef30ca9ca3b3">937a895b5238bb7f...</td>
+            <td class="font-mono text-amber" title="574d56274f8dba2e6ba98c533c4fec14ea4283994ae4dae2ed3b3b800f00f7ba">574d56274f8dba2e...</td>
+            <td style="font-size: 0.8rem; color: var(--text-secondary);">Checksum mismatch detected! Content was modified.</td>
+        </tr>
+        
+        <tr>
+            <td class="center"><span class="badge badge-green">UNCHANGED</span></td>
+            <td class="font-mono text-cyan"><strong>database.cfg</strong></td>
+            <td class="font-mono text-muted" title="66f0ef66e3d339064497aa566556bff3c31ca79617019d6484394736c59d8363">66f0ef66e3d33906...</td>
+            <td class="font-mono text-amber" title="66f0ef66e3d339064497aa566556bff3c31ca79617019d6484394736c59d8363">66f0ef66e3d33906...</td>
+            <td style="font-size: 0.8rem; color: var(--text-secondary);">Cryptographic digest matches baseline perfectly.</td>
+        </tr>
+        
+        <tr>
+            <td class="center"><span class="badge badge-green">UNCHANGED</span></td>
+            <td class="font-mono text-cyan"><strong>firewall_rules.sh</strong></td>
+            <td class="font-mono text-muted" title="bc4e09590363380162c46c3fca88dba61f2d68cb6b6d2961b643ed42b3388674">bc4e095903633801...</td>
+            <td class="font-mono text-amber" title="bc4e09590363380162c46c3fca88dba61f2d68cb6b6d2961b643ed42b3388674">bc4e095903633801...</td>
+            <td style="font-size: 0.8rem; color: var(--text-secondary);">Cryptographic digest matches baseline perfectly.</td>
+        </tr>
+        
+        <tr>
+            <td class="center"><span class="badge badge-yellow">MISSING</span></td>
+            <td class="font-mono text-cyan"><strong>payment_gateway.key</strong></td>
+            <td class="font-mono text-muted" title="b3045bd7930013c6f3a973d771e4adf6a961df3b767f048d646349064a5c570e">b3045bd7930013c6...</td>
+            <td class="font-mono text-amber" title="FILE_NOT_FOUND">FILE_NOT_FOUND</td>
+            <td style="font-size: 0.8rem; color: var(--text-secondary);">Critical file was deleted or cannot be accessed.</td>
+        </tr>
+        
+        <tr>
+            <td class="center"><span class="badge badge-purple">UNTRACKED</span></td>
+            <td class="font-mono text-cyan"><strong>unauthorized_tunnel.sh</strong></td>
+            <td class="font-mono text-muted" title="NOT_IN_BASELINE">NOT_IN_BASELINE</td>
+            <td class="font-mono text-amber" title="063859637040dce05190bc1699d5d636dfffd77d7887c83aa4f44e7ad9cc7b01">063859637040dce0...</td>
+            <td style="font-size: 0.8rem; color: var(--text-secondary);">New file present in directory but absent from baseline.</td>
+        </tr>
+        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2>🖥️ Live Console Execution Log</h2>
+                <span class="badge badge-green">Execution Output</span>
+            </div>
+            <div style="padding: 16px;">
+                <pre class="terminal-log">================================================================================
+ [1mFILE INTEGRITY CHECKER — LINUX SYSTEM ADMINISTRATION (AS_34)[0m
+================================================================================
+ Target:   System Critical Files | Mode: Live System Audit
+ Baseline: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_34/logs/live_baseline.sha256 | Algorithm: SHA-256
+--------------------------------------------------------------------------------
+ [1mINTEGRITY VERDICT: [32mPASSED (100% Intact)[0m
+  • Baseline Items:   6 files
+  • Intact / Valid:   [32m6[0m (100.0% integrity compliance)
+  • Tampered / Mod:   [31m0[0m files
+  • Missing / Del:    [33m0[0m files
+  • Untracked / New:  [35m0[0m files
+--------------------------------------------------------------------------------
+ [1mDETAILED INTEGRITY STATUS PER FILE:[0m
+ STATUS       | EXPECTED HASH (SHA-256)  | ACTUAL HASH              | FILE PATH
+------------------------------------------------------------------------------------------------
+ [32m[UNCHANGED] [0m | 47f1c56994df79c16cab0a.. | 47f1c56994df79c16cab0a.. | [1m/etc/passwd[0m
+ [32m[UNCHANGED] [0m | b14138cdc7b95e4d7cf2e1.. | b14138cdc7b95e4d7cf2e1.. | [1m/etc/group[0m
+ [32m[UNCHANGED] [0m | 1ed2d5de89ccf68be4cc22.. | 1ed2d5de89ccf68be4cc22.. | [1m/etc/hosts[0m
+ [32m[UNCHANGED] [0m | dd09efbb626481e464c9ee.. | dd09efbb626481e464c9ee.. | [1m/etc/issue[0m
+ [32m[UNCHANGED] [0m | cf72627ff81aef345d0a9f.. | cf72627ff81aef345d0a9f.. | [1m/etc/os-release[0m
+ [32m[UNCHANGED] [0m | bfc55bd59f612961ad4dd1.. | bfc55bd59f612961ad4dd1.. | [1m/etc/fstab[0m
+================================================================================
+[32m[SUCCESS][0m Audit log saved to: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_34/logs/integrity_check.log
+[32m[SUCCESS][0m JSON telemetry saved to: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_34/logs/integrity_check.json</pre>
+            </div>
+        </div>
+
+        <footer>
+            Linux System Administration (E1ITA307) &bull; Automation Sprint AS_34 &bull; Generated dynamically by <code>run.sh</code>
+        </footer>
+    </div>
+</body>
+</html>
