@@ -259,6 +259,14 @@ LSA_AS/
 │   ├── logs/                       # Audit trail & JSON telemetry directory
 │   ├── sandbox_data/               # Simulated corporate repo with duplicate file clusters
 │   └── README.md                   # Problem documentation & usage
+├── AS_34/                          # Automation Sprint Problem #34
+│   ├── file_integrity_checker.sh   # Core cryptographic baseline & FIM verification script
+│   ├── run.sh                      # Unified execution & HTML dashboard generator
+│   ├── commands_used.md            # Command log & file integrity reference
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── logs/                       # Audit trail, live baseline & JSON telemetry directory
+│   ├── sandbox_data/               # Simulated baseline & tampered system datasets
+│   └── README.md                   # Problem documentation & usage
 └── (Upcoming Projects)/            # Future Automation Sprint additions
 ```
 
@@ -301,6 +309,7 @@ LSA_AS/
 | **AS_31** | **User Login Audit** | Automated session history auditing (`/var/log/auth.log`, `last`, `who -a`), PAM event parsing, SSH vs local attribution, distinct account profiling, and dark-themed HTML report. | ✅ Completed | [`AS_31/`](./AS_31) |
 | **AS_32** | **File Modification Monitor** | Filesystem timestamp auditing (`find -mmin -1440`, `stat`), 24-hour change window detection, file size & ownership tracking, age bracketing, and dark-themed HTML report. | ✅ Completed | [`AS_32/`](./AS_32) |
 | **AS_33** | **Duplicate File Detection** | Cryptographic content hashing (`sha256sum`, `md5sum`), two-tier size collision optimization, redundant copy tracking, storage recovery calculations, and dark-themed HTML report. | ✅ Completed | [`AS_33/`](./AS_33) |
+| **AS_34** | **File Integrity Check** | Cryptographic baseline auditing (`sha256sum -c`), 4-state lifecycle tracking (intact, tampered, missing, untracked), compliance scoring, and dark-themed HTML report. | ✅ Completed | [`AS_34/`](./AS_34) |
 | *Upcoming* | *Future Sprints* | Additional automation tasks and administration solutions. | ⏳ Planned | — |
 
 ---
@@ -346,6 +355,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_31** | User Login Audit | `cd AS_31 && bash run.sh` |
 | **AS_32** | File Modification Monitor | `cd AS_32 && bash run.sh` |
 | **AS_33** | Duplicate File Detection | `cd AS_33 && bash run.sh` |
+| **AS_34** | File Integrity Check | `cd AS_34 && bash run.sh` |
 
 ### 💻 Quick Command Reference by Operating System
 
@@ -384,6 +394,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_31** | `cd AS_31 && bash run.sh` | `cd AS_31 && bash run.sh` | `cd AS_31 && bash run.sh` | `cd AS_31 && bash run.sh` |
 | **AS_32** | `cd AS_32 && bash run.sh` | `cd AS_32 && bash run.sh` | `cd AS_32 && bash run.sh` | `cd AS_32 && bash run.sh` |
 | **AS_33** | `cd AS_33 && bash run.sh` | `cd AS_33 && bash run.sh` | `cd AS_33 && bash run.sh` | `cd AS_33 && bash run.sh` |
+| **AS_34** | `cd AS_34 && bash run.sh` | `cd AS_34 && bash run.sh` | `cd AS_34 && bash run.sh` | `cd AS_34 && bash run.sh` |
 
 ---
 
@@ -1374,6 +1385,37 @@ Develop a script to identify duplicate files in a specified directory using file
 - 📖 **Sprint Documentation:** [`AS_33/README.md`](./AS_33/README.md)
 - 📜 **Audit Log File:** [`AS_33/logs/duplicate_files.log`](./AS_33/logs/duplicate_files.log)
 - 📋 **Command Log:** [`AS_33/commands_used.md`](./AS_33/commands_used.md)
+
+</details>
+
+<details>
+<summary><strong>AS_34 — File Integrity Check (File Integrity & Security Baselines)</strong></summary>
+
+### Problem Statement
+Create a checksum-based script to verify whether important files have been modified.
+
+### Summary of Approach
+- **Cryptographic Baseline Architecture:** Generates and maintains authoritative SHA-256 checksum manifests (`baseline.sha256`) for mission-critical system configurations, security keys, and binaries.
+- **4-State Integrity Lifecycle Engine:** Traverses monitored assets, categorizing every entry into distinct security states: `MATCH/UNCHANGED` (valid checksum), `TAMPERED/MODIFIED` (hash collision failure), `MISSING/DELETED` (file vanished), and `UNTRACKED/NEW` (unauthorized injection).
+- **Integrity Compliance Scoring:** Calculates a real-time compliance percentage metric and overall security verdict (`PASSED` vs `COMPROMISED`), reporting fine-grained expected vs observed digest traces.
+- **Dual Telemetry Architecture:** Outputs clean ANSI terminal diagnostics, appends chronological traces to `logs/integrity_check.log`, and serializes structured JSON telemetry (`logs/integrity_check.json`).
+- **Cross-Platform HTML Dashboard (`run.sh`):** Executes live critical file integrity verification, drills down into simulated security tampering scenarios (`sandbox_data/tampered_system`), builds a responsive dark dashboard `report.html`, and auto-opens in the default browser across WSL, Linux, macOS, and Git Bash.
+
+### Key Commands Used
+- `bash run.sh` — Single command to audit file integrity, regenerate dashboard, and open HTML report (Linux / macOS / Windows)
+- `./file_integrity_checker.sh` — Verifies system critical files against baseline
+- `./file_integrity_checker.sh --init` — Generates / updates baseline checksum manifest
+- `./file_integrity_checker.sh --baseline <file> --dir <path>` — Verifies custom directory against specific baseline
+- `./file_integrity_checker.sh --sandbox` — Audits simulated tampered scenario (4-state demonstration)
+- `./file_integrity_checker.sh --json` — Emits structured machine-readable JSON telemetry
+- `sha256sum <file>` — Computes 256-bit cryptographic digest
+- `sha256sum -c baseline.sha256` — Verifies files against SHA-256 manifest
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_34/report.html`](./AS_34/report.html)
+- 📖 **Sprint Documentation:** [`AS_34/README.md`](./AS_34/README.md)
+- 📜 **Audit Log File:** [`AS_34/logs/integrity_check.log`](./AS_34/logs/integrity_check.log)
+- 📋 **Command Log:** [`AS_34/commands_used.md`](./AS_34/commands_used.md)
 
 </details>
 
