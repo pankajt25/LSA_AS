@@ -1,0 +1,18 @@
+{
+  "problem_id": "AS_28",
+  "title": "Package Verification Audit",
+  "timestamp": "2026-10-07 12:44:48 IST",
+  "timestamp_epoch": 1791357288,
+  "hostname": "SP",
+  "package_manager": "apt",
+  "install_command_template": "sudo apt-get install -y <package>",
+  "manifest_file": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_28/packages.txt",
+  "total_checked": 12,
+  "total_installed": 7,
+  "total_missing": 5,
+  "installed_percentage": "58.3%",
+  "missing_percentage": "41.7%",
+  "packages": [
+    {"name":"curl","status":"INSTALLED","installed":true,"version":"8.18.0-1ubuntu2.7","path":"/usr/bin/curl","suggestion":""},{"name":"git","status":"INSTALLED","installed":true,"version":"1:2.53.0-1ubuntu1","path":"/usr/bin/git","suggestion":""},{"name":"python3","status":"INSTALLED","installed":true,"version":"3.14.3-0ubuntu2","path":"/usr/bin/python3","suggestion":""},{"name":"tar","status":"INSTALLED","installed":true,"version":"1.35+dfsg-4ubuntu0.4","path":"/usr/bin/tar","suggestion":""},{"name":"tmux","status":"INSTALLED","installed":true,"version":"3.6a-2ubuntu0.1","path":"/usr/bin/tmux","suggestion":""},{"name":"tree","status":"INSTALLED","installed":true,"version":"2.3.1-1","path":"/usr/bin/tree","suggestion":""},{"name":"nginx","status":"NOT_INSTALLED","installed":false,"version":"N/A","path":"N/A","suggestion":"sudo apt-get install -y nginx"},{"name":"docker","status":"INSTALLED","installed":true,"version":"29.1.3-0ubuntu4.1","path":"/usr/bin/docker","suggestion":""},{"name":"cowsay","status":"NOT_INSTALLED","installed":false,"version":"N/A","path":"N/A","suggestion":"sudo apt-get install -y cowsay"},{"name":"redis-server","status":"NOT_INSTALLED","installed":false,"version":"N/A","path":"N/A","suggestion":"sudo apt-get install -y redis-server"},{"name":"ansible","status":"NOT_INSTALLED","installed":false,"version":"N/A","path":"N/A","suggestion":"sudo apt-get install -y ansible"},{"name":"htop","status":"NOT_INSTALLED","installed":false,"version":"N/A","path":"N/A","suggestion":"sudo apt-get install -y htop"}
+  ]
+}

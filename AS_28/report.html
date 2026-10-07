@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AS_28: Package Verification &amp; Audit Dashboard</title>
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #1e293b;
+            --border-color: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-cyan: #38bdf8;
+            --accent-green: #10b981;
+            --accent-yellow: #f59e0b;
+            --accent-red: #ef4444;
+            --accent-purple: #a855f7;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.5;
+            padding: 24px;
+        }
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+        header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .header-title h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .header-title p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 4px;
+        }
+        .header-badges {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .badge-cyan { background: rgba(56, 189, 248, 0.2); color: var(--accent-cyan); border: 1px solid rgba(56, 189, 248, 0.3); }
+        .badge-green { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); border: 1px solid rgba(16, 185, 129, 0.3); }
+        .badge-danger { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); border: 1px solid rgba(239, 68, 68, 0.3); }
+        .badge-warning { background: rgba(245, 158, 11, 0.2); color: var(--accent-yellow); border: 1px solid rgba(245, 158, 11, 0.3); }
+        .badge-purple { background: rgba(168, 85, 247, 0.2); color: var(--accent-purple); border: 1px solid rgba(168, 85, 247, 0.3); }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .kpi-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+        .kpi-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent-cyan);
+        }
+        .kpi-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .kpi-value {
+            font-size: 1.85rem;
+            font-weight: 700;
+            color: #fff;
+        }
+        .kpi-subtext {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 6px;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .card-header h2 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+        }
+        th {
+            background-color: rgba(15, 23, 42, 0.6);
+            color: var(--text-secondary);
+            text-align: left;
+            padding: 10px 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        td {
+            padding: 12px 14px;
+            border-bottom: 1px solid rgba(51, 65, 85, 0.4);
+            color: #e2e8f0;
+        }
+        tr:hover td {
+            background-color: rgba(51, 65, 85, 0.25);
+        }
+        .center { text-align: center; }
+        .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        .text-cyan { color: var(--accent-cyan); }
+        .text-green { color: var(--accent-green); }
+        .text-amber { color: var(--accent-yellow); }
+        .text-muted { color: var(--text-secondary); }
+
+        .code-pill {
+            background: #0b1120;
+            border: 1px solid var(--border-color);
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+        }
+
+        pre {
+            background-color: #0b1120;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.8rem;
+            color: #cbd5e1;
+            overflow-x: auto;
+            max-height: 320px;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 32px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>🔍 AS_28: Package Verification &amp; Audit Dashboard</h1>
+                <p>Linux System Administration (E1ITA307) &bull; Package Management &amp; System Dependency Audit</p>
+            </div>
+            <div class="header-badges">
+                <span class="badge badge-cyan">Ubuntu 26.04.1 LTS</span>
+                <span class="badge badge-purple">SP</span>
+                <span class="badge badge-green">KERNEL 6.18.40.1-microsoft-standard-WSL2</span>
+                <span class="badge badge-warning">2026-10-07 12:44:48 IST</span>
+            </div>
+        </header>
+
+        <!-- KPI SUMMARY CARDS -->
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-label">Audited Packages</div>
+                <div class="kpi-value">12</div>
+                <div class="kpi-subtext">Manifest items evaluated</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Installed Packages</div>
+                <div class="kpi-value text-green">7 <span style="font-size:1rem;font-weight:normal;color:var(--text-secondary);">(58.3%)</span></div>
+                <div class="kpi-subtext">Active binaries and libraries</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Missing Packages</div>
+                <div class="kpi-value text-amber">5 <span style="font-size:1rem;font-weight:normal;color:var(--text-secondary);">(41.7%)</span></div>
+                <div class="kpi-subtext">Requires installation action</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Package Manager</div>
+                <div class="kpi-value text-cyan">APT</div>
+                <div class="kpi-subtext">Host system package backend</div>
+            </div>
+        </div>
+
+        <!-- PACKAGE VERIFICATION MATRIX -->
+        <div class="card">
+            <div class="card-header">
+                <h2>📋 Package Presence, Versions &amp; Remediation Suggestions</h2>
+                <span class="badge badge-cyan">7/12 COMPLIANT</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th class="center" style="width: 50px;">Index</th>
+                        <th style="width: 160px;">Package Name</th>
+                        <th class="center" style="width: 140px;">Status</th>
+                        <th style="width: 220px;">Detected Version</th>
+                        <th>Binary Location / Suggested Install Command</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr>
+        <td class="center font-mono">#1</td>
+        <td class="font-mono text-cyan"><strong>curl</strong></td>
+        <td class="center"><span class="badge badge-green">INSTALLED</span></td>
+        <td class="font-mono text-green">8.18.0-1ubuntu2.7</td>
+        <td><span class="font-mono text-cyan">/usr/bin/curl</span></td>
+    </tr>
+    
+    <tr>
+        <td class="center font-mono">#2</td>
+        <td class="font-mono text-cyan"><strong>git</strong></td>
+        <td class="center"><span class="badge badge-green">INSTALLED</span></td>
+        <td class="font-mono text-green">1:2.53.0-1ubuntu1</td>
+        <td><span class="font-mono text-cyan">/usr/bin/git</span></td>
+    </tr>
+    
+    <tr>
+        <td class="center font-mono">#3</td>
+        <td class="font-mono text-cyan"><strong>python3</strong></td>
+        <td class="center"><span class="badge badge-green">INSTALLED</span></td>
+        <td class="font-mono text-green">3.14.3-0ubuntu2</td>
+        <td><span class="font-mono text-cyan">/usr/bin/python3</span></td>
+    </tr>
+    
+    <tr>
+        <td class="center font-mono">#4</td>
+        <td class="font-mono text-cyan"><strong>tar</strong></td>
+        <td class="center"><span class="badge badge-green">INSTALLED</span></td>
+        <td class="font-mono text-green">1.35+dfsg-4ubuntu0.4</td>
+        <td><span class="font-mono text-cyan">/usr/bin/tar</span></td>
+    </tr>
+    
+    <tr>
+        <td class="center font-mono">#5</td>
+        <td class="font-mono text-cyan"><strong>tmux</strong></td>
+        <td class="center"><span class="badge badge-green">INSTALLED</span></td>
+        <td class="font-mono text-green">3.6a-2ubuntu0.1</td>
+        <td><span class="font-mono text-cyan">/usr/bin/tmux</span></td>
+    </tr>
+    
+    <tr>
+        <td class="center font-mono">#6</td>
+        <td class="font-mono text-cyan"><strong>tree</strong></td>
+        <td class="center"><span class="badge badge-green">INSTALLED</span></td>
+        <td class="font-mono text-green">2.3.1-1</td>
+        <td><span class="font-mono text-cyan">/usr/bin/tree</span></td>
+    </tr>
+    
+    <tr>
+        <td class="center font-mono">#7</td>
+        <td class="font-mono text-cyan"><strong>nginx</strong></td>
+        <td class="center"><span class="badge badge-danger">NOT INSTALLED</span></td>
+        <td class="font-mono text-muted">N/A</td>
+        <td><code class="code-pill text-amber">sudo apt-get install -y nginx</code></td>
+    </tr>
+    
+    <tr>
+        <td class="center font-mono">#8</td>
+        <td class="font-mono text-cyan"><strong>docker</strong></td>
+        <td class="center"><span class="badge badge-green">INSTALLED</span></td>
+        <td class="font-mono text-green">29.1.3-0ubuntu4.1</td>
+        <td><span class="font-mono text-cyan">/usr/bin/docker</span></td>
+    </tr>
+    
+    <tr>
+        <td class="center font-mono">#9</td>
+        <td class="font-mono text-cyan"><strong>cowsay</strong></td>
+        <td class="center"><span class="badge badge-danger">NOT INSTALLED</span></td>
+        <td class="font-mono text-muted">N/A</td>
+        <td><code class="code-pill text-amber">sudo apt-get install -y cowsay</code></td>
+    </tr>
+    
+    <tr>
+        <td class="center font-mono">#10</td>
+        <td class="font-mono text-cyan"><strong>redis-server</strong></td>
+        <td class="center"><span class="badge badge-danger">NOT INSTALLED</span></td>
+        <td class="font-mono text-muted">N/A</td>
+        <td><code class="code-pill text-amber">sudo apt-get install -y redis-server</code></td>
+    </tr>
+    
+    <tr>
+        <td class="center font-mono">#11</td>
+        <td class="font-mono text-cyan"><strong>ansible</strong></td>
+        <td class="center"><span class="badge badge-danger">NOT INSTALLED</span></td>
+        <td class="font-mono text-muted">N/A</td>
+        <td><code class="code-pill text-amber">sudo apt-get install -y ansible</code></td>
+    </tr>
+    
+    <tr>
+        <td class="center font-mono">#12</td>
+        <td class="font-mono text-cyan"><strong>htop</strong></td>
+        <td class="center"><span class="badge badge-danger">NOT INSTALLED</span></td>
+        <td class="font-mono text-muted">N/A</td>
+        <td><code class="code-pill text-amber">sudo apt-get install -y htop</code></td>
+    </tr>
+    
+                </tbody>
+            </table>
+        </div>
+
+        <!-- TERMINAL EXECUTION STREAM -->
+        <div class="card">
+            <div class="card-header">
+                <h2>🖥️ Terminal Audit Stream</h2>
+                <span class="badge badge-green">STATUS: COMPLETED</span>
+            </div>
+            <pre>[36m[1m================================================================================[0m
+[36m[1m         PACKAGE VERIFICATION &amp; AUDIT ENGINE (AS_28)                            [0m
+[36m[1m================================================================================[0m
+ Package Manager    : [1mapt[0m (sudo apt-get install -y &lt;package&gt;)
+ Target Host        : SP (Linux 6.18.40.1-microsoft-standard-WSL2)
+ Timestamp          : 2026-10-07 12:44:42 IST
+ Total Packages     : [1m12[0m
+[36m--------------------------------------------------------------------------------[0m
+NO.  PACKAGE          STATUS           VERSION              INSTALLATION / PATH
+--------------------------------------------------------------------------------
+[1]  curl             [32mINSTALLED[0m        8.18.0-1ubuntu2.7    /usr/bin/curl
+[2]  git              [32mINSTALLED[0m        1:2.53.0-1ubuntu1    /usr/bin/git
+[3]  python3          [32mINSTALLED[0m        3.14.3-0ubuntu2      /usr/bin/python3
+[4]  tar              [32mINSTALLED[0m        1.35+dfsg-4ubuntu0.4 /usr/bin/tar
+[5]  tmux             [32mINSTALLED[0m        3.6a-2ubuntu0.1      /usr/bin/tmux
+[6]  tree             [32mINSTALLED[0m        2.3.1-1              /usr/bin/tree
+[7]  nginx            [31mNOT INSTALLED[0m    N/A                  [33msudo apt-get install -y nginx[0m
+[8]  docker           [32mINSTALLED[0m        29.1.3-0ubuntu4.1    /usr/bin/docker
+[9]  cowsay           [31mNOT INSTALLED[0m    N/A                  [33msudo apt-get install -y cowsay[0m
+[10] redis-server     [31mNOT INSTALLED[0m    N/A                  [33msudo apt-get install -y redis-server[0m
+[11] ansible          [31mNOT INSTALLED[0m    N/A                  [33msudo apt-get install -y ansible[0m
+[12] htop             [31mNOT INSTALLED[0m    N/A                  [33msudo apt-get install -y htop[0m
+--------------------------------------------------------------------------------
+ Summary: [32m7 Installed (58.3%)[0m | [31m5 Missing (41.7%)[0m | Total: [1m12[0m
+[36m================================================================================[0m</pre>
+        </div>
+
+        <!-- AUDIT LOG HISTORY -->
+        <div class="card">
+            <div class="card-header">
+                <h2>📜 Persistent Verification Log (logs/package_verifier.log)</h2>
+                <span class="badge badge-cyan">SYSTEM AUDIT TRAIL</span>
+            </div>
+            <pre>[2026-10-07 12:43:42 IST] [VERIFY] Package &#x27;curl&#x27; is INSTALLED (Version: 8.18.0-1ubuntu2.7, Path: /usr/bin/curl)
+[2026-10-07 12:43:43 IST] [VERIFY] Package &#x27;git&#x27; is INSTALLED (Version: 1:2.53.0-1ubuntu1, Path: /usr/bin/git)
+[2026-10-07 12:43:43 IST] [VERIFY] Package &#x27;python3&#x27; is INSTALLED (Version: 3.14.3-0ubuntu2, Path: /usr/bin/python3)
+[2026-10-07 12:43:43 IST] [VERIFY] Package &#x27;tar&#x27; is INSTALLED (Version: 1.35+dfsg-4ubuntu0.4, Path: /usr/bin/tar)
+[2026-10-07 12:43:43 IST] [VERIFY] Package &#x27;tmux&#x27; is INSTALLED (Version: 3.6a-2ubuntu0.1, Path: /usr/bin/tmux)
+[2026-10-07 12:43:44 IST] [VERIFY] Package &#x27;tree&#x27; is INSTALLED (Version: 2.3.1-1, Path: /usr/bin/tree)
+[2026-10-07 12:43:44 IST] [VERIFY] Package &#x27;nginx&#x27; is NOT INSTALLED (Suggestion: sudo apt-get install -y nginx)
+[2026-10-07 12:43:46 IST] [VERIFY] Package &#x27;docker&#x27; is INSTALLED (Version: 29.1.3-0ubuntu4.1, Path: /usr/bin/docker)
+[2026-10-07 12:43:47 IST] [VERIFY] Package &#x27;cowsay&#x27; is NOT INSTALLED (Suggestion: sudo apt-get install -y cowsay)
+[2026-10-07 12:43:47 IST] [VERIFY] Package &#x27;redis-server&#x27; is NOT INSTALLED (Suggestion: sudo apt-get install -y redis-server)
+[2026-10-07 12:43:48 IST] [VERIFY] Package &#x27;ansible&#x27; is NOT INSTALLED (Suggestion: sudo apt-get install -y ansible)
+[2026-10-07 12:43:48 IST] [VERIFY] Package &#x27;htop&#x27; is NOT INSTALLED (Suggestion: sudo apt-get install -y htop)
+[2026-10-07 12:44:43 IST] [VERIFY] Package &#x27;curl&#x27; is INSTALLED (Version: 8.18.0-1ubuntu2.7, Path: /usr/bin/curl)
+[2026-10-07 12:44:43 IST] [VERIFY] Package &#x27;git&#x27; is INSTALLED (Version: 1:2.53.0-1ubuntu1, Path: /usr/bin/git)
+[2026-10-07 12:44:43 IST] [VERIFY] Package &#x27;python3&#x27; is INSTALLED (Version: 3.14.3-0ubuntu2, Path: /usr/bin/python3)
+[2026-10-07 12:44:44 IST] [VERIFY] Package &#x27;tar&#x27; is INSTALLED (Version: 1.35+dfsg-4ubuntu0.4, Path: /usr/bin/tar)
+[2026-10-07 12:44:44 IST] [VERIFY] Package &#x27;tmux&#x27; is INSTALLED (Version: 3.6a-2ubuntu0.1, Path: /usr/bin/tmux)
+[2026-10-07 12:44:44 IST] [VERIFY] Package &#x27;tree&#x27; is INSTALLED (Version: 2.3.1-1, Path: /usr/bin/tree)
+[2026-10-07 12:44:45 IST] [VERIFY] Package &#x27;nginx&#x27; is NOT INSTALLED (Suggestion: sudo apt-get install -y nginx)
+[2026-10-07 12:44:46 IST] [VERIFY] Package &#x27;docker&#x27; is INSTALLED (Version: 29.1.3-0ubuntu4.1, Path: /usr/bin/docker)
+[2026-10-07 12:44:46 IST] [VERIFY] Package &#x27;cowsay&#x27; is NOT INSTALLED (Suggestion: sudo apt-get install -y cowsay)
+[2026-10-07 12:44:46 IST] [VERIFY] Package &#x27;redis-server&#x27; is NOT INSTALLED (Suggestion: sudo apt-get install -y redis-server)
+[2026-10-07 12:44:47 IST] [VERIFY] Package &#x27;ansible&#x27; is NOT INSTALLED (Suggestion: sudo apt-get install -y ansible)
+[2026-10-07 12:44:47 IST] [VERIFY] Package &#x27;htop&#x27; is NOT INSTALLED (Suggestion: sudo apt-get install -y htop)</pre>
+        </div>
+
+        <div class="footer">
+            Linux System Administration (E1ITA307) &bull; Automation Sprint AS_28 &bull; Generated dynamically by run.sh
+        </div>
+    </div>
+</body>
+</html>

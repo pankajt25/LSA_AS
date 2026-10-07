@@ -1,0 +1,16 @@
+# Package Verification Manifest (AS_28)
+# Format: package_name [optional category description]
+# Comments and blank lines are ignored.
+
+curl            # Core Network Transfer Client
+git             # Distributed Version Control
+python3         # Python 3 Interpreter & Runtime
+tar             # Archive Tape Utility
+tmux            # Terminal Multiplexer
+tree            # Recursive Directory Tree Visualizer
+nginx           # High Performance Web / Reverse Proxy Server
+docker          # Container Engine Runtime
+cowsay          # ASCII Character Generator
+redis-server    # In-Memory Key-Value Data Store
+ansible         # Configuration Management & Automation Engine
+htop            # Interactive Process Monitor
