@@ -51,6 +51,13 @@ LSA_AS/
 │   ├── logs/                       # Audit trail & JSON telemetry directory
 │   ├── sandbox_data/               # Simulated project codebase with multi-user file ownership
 │   └── README.md                   # Problem documentation & usage
+├── AS_06/                          # Automation Sprint Problem #6
+│   ├── server_health_check.sh      # Core pre-workday server health monitoring script
+│   ├── run.sh                      # Unified execution & HTML dashboard generator
+│   ├── commands_used.md            # Command log & development history
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── logs/                       # Audit trail & JSON telemetry directory
+│   └── README.md                   # Problem documentation & usage
 ├── AS_14/                          # Automation Sprint Problem #14
 │   ├── suspicious_ip_detector.sh   # Core bash script for IP detection
 │   ├── commands_used.md            # Command log & viva preparation
@@ -155,6 +162,7 @@ LSA_AS/
 | **AS_03** | **Department Access** | Department group creation (`groupadd`), sandboxed shared directory provisioning (`chmod 2770`), SGID bit inheritance enforcement, zero non-member access (`---`), and safe teardown (`cleanup.sh`). | ✅ Completed | [`AS_03/`](./AS_03) |
 | **AS_04** | **Permission Audit** | Automated world-writable file auditing (`find -type f -perm -0002`), risk severity classification, least-privilege compliance scoring, and dark-themed HTML report. | ✅ Completed | [`AS_04/`](./AS_04) |
 | **AS_05** | **Ownership Audit** | Project administrator ownership verification (`find ! -user <admin>`), privilege drift classification (root/foreign/orphan), compliance ratio reporting, and dark-themed HTML report. | ✅ Completed | [`AS_05/`](./AS_05) |
+| **AS_06** | **Server Health Check** | Comprehensive pre-workday system health monitoring covering CPU utilization, memory & swap allocation, storage use, system uptime, active logged-in sessions, and dark-themed HTML report. | ✅ Completed | [`AS_06/`](./AS_06) |
 | **AS_14** | **Suspicious IP Detection** | Automated SSH brute-force monitor, real log auto-detection (`/var/log/auth.log`), regex parsing, descending ranking, and audit reporting. | ✅ Completed | [`AS_14/`](./AS_14) |
 | **AS_15** | **Error Log Report** | Automated error extraction, real log auto-detection (`/var/log/syslog`), severity breakdown, frequency ranking, and tail-style review. | ✅ Completed | [`AS_15/`](./AS_15) |
 | **AS_16** | **Service Availability Check** | Real-time service monitoring, boot persistence verification, systemd/SysV fallback, audit logging, and dark-themed HTML report dashboard. | ✅ Completed | [`AS_16/`](./AS_16) |
@@ -185,6 +193,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_03** | Department Access | `cd AS_03 && bash run.sh` *(Run `bash cleanup.sh` afterward to restore system)* |
 | **AS_04** | Permission Audit | `cd AS_04 && bash run.sh` |
 | **AS_05** | Ownership Audit | `cd AS_05 && bash run.sh` |
+| **AS_06** | Server Health Check | `cd AS_06 && bash run.sh` |
 | **AS_14** | Suspicious IP Detection | `cd AS_14 && bash run.sh` |
 | **AS_15** | Error Log Report | `cd AS_15 && bash run.sh` |
 | **AS_16** | Service Availability Check | `cd AS_16 && bash run.sh` |
@@ -208,6 +217,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_03** | `cd AS_03 && bash run.sh` | `cd AS_03 && bash run.sh` | `cd AS_03 && bash run.sh` | `cd AS_03 && bash run.sh` |
 | **AS_04** | `cd AS_04 && bash run.sh` | `cd AS_04 && bash run.sh` | `cd AS_04 && bash run.sh` | `cd AS_04 && bash run.sh` |
 | **AS_05** | `cd AS_05 && bash run.sh` | `cd AS_05 && bash run.sh` | `cd AS_05 && bash run.sh` | `cd AS_05 && bash run.sh` |
+| **AS_06** | `cd AS_06 && bash run.sh` | `cd AS_06 && bash run.sh` | `cd AS_06 && bash run.sh` | `cd AS_06 && bash run.sh` |
 | **AS_14** | `cd AS_14 && bash run.sh` | `cd AS_14 && bash run.sh` | `cd AS_14 && bash run.sh` | `cd AS_14 && bash run.sh` |
 | **AS_15** | `cd AS_15 && bash run.sh` | `cd AS_15 && bash run.sh` | `cd AS_15 && bash run.sh` | `cd AS_15 && bash run.sh` |
 | **AS_16** | `cd AS_16 && bash run.sh` | `cd AS_16 && bash run.sh` | `cd AS_16 && bash run.sh` | `cd AS_16 && bash run.sh` |
@@ -377,6 +387,34 @@ Write a script to find files in a project directory that are not owned by the de
 - 📖 **Sprint Documentation:** [`AS_05/README.md`](./AS_05/README.md)
 - 📜 **Audit Log File:** [`AS_05/logs/ownership_audit.log`](./AS_05/logs/ownership_audit.log)
 - 📋 **Command Log:** [`AS_05/commands_used.md`](./AS_05/commands_used.md)
+
+</details>
+
+<details>
+<summary><strong>AS_06 — Server Health Check (System Monitoring)</strong></summary>
+
+### Problem Statement
+Before starting the workday, an administrator wants a quick report showing CPU, memory, disk usage, uptime, and logged-in users. Create a Bash health-check script.
+
+### Summary of Approach
+- **Comprehensive Subsystem Auditing:** Polls live host telemetry across all 5 vital subsystem metrics — CPU utilization & core load, physical RAM & swap allocation, root storage utilization, system uptime & boot chronology, and active logged-in user sessions.
+- **Kernel-Level Parsing & Delta Calculation:** Queries `/proc/stat` across high-resolution intervals to calculate live CPU utilization %, parses `/proc/loadavg` for 1m/5m/15m system load averages and load-per-core normalization, and audits `/proc/meminfo` via `free -m`.
+- **Session & Process Diagnostics:** Analyzes active interactive terminal sessions via `who`, counts total active tasks, and audits `/proc` for zombie (`Z`) state processes.
+- **Dynamic Operational Health Verdict:** Evaluates subsystem values against configurable operational safety thresholds (CPU, RAM, Disk < 85%, load/core < 1.5, zero zombies) to produce an executive status rating (OPTIMAL, DEGRADED, CRITICAL).
+- **Cross-Platform HTML Dashboard (`run.sh`):** Executes health probe, logs telemetry, regenerates dark-themed `report.html` featuring visual progress bars, system metric stat boxes, and active session tables, and opens the default browser across WSL, Linux, macOS, and Git Bash.
+
+### Key Commands Used
+- `bash run.sh` — Single command to poll health telemetry, regenerate dashboard, and open HTML report (Linux / macOS / Windows)
+- `./server_health_check.sh` — Standard terminal health report displaying CPU, memory, disk, uptime, and user sessions
+- `./server_health_check.sh --json` — Emits structured JSON telemetry for programmatic observability pipelines
+- `./server_health_check.sh --quiet` — Displays concise operational health status badge
+- `./server_health_check.sh --help` — Displays CLI manual and option syntax
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_06/report.html`](./AS_06/report.html)
+- 📖 **Sprint Documentation:** [`AS_06/README.md`](./AS_06/README.md)
+- 📜 **Audit Log File:** [`AS_06/logs/server_health_check.log`](./AS_06/logs/server_health_check.log)
+- 📋 **Command Log:** [`AS_06/commands_used.md`](./AS_06/commands_used.md)
 
 </details>
 
