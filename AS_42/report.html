@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AS_42 - Department Folder Creation</title>
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --border-color: #30363d;
+            --text-primary: #c9d1d9;
+            --text-muted: #8b949e;
+            --accent-green: #238636;
+            --accent-blue: #1f6feb;
+            --accent-purple: #8957e5;
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: var(--font-family);
+            margin: 0;
+            padding: 24px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px 24px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .header h1 {
+            margin: 0 0 6px 0;
+            font-size: 24px;
+            color: #58a6ff;
+        }
+        .header .meta {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .badge-success { background-color: rgba(46, 160, 67, 0.2); color: #3fb950; border: 1px solid rgba(46, 160, 67, 0.4); }
+        .badge-info { background-color: rgba(56, 139, 253, 0.2); color: #58a6ff; border: 1px solid rgba(56, 139, 253, 0.4); }
+        .badge-danger { background-color: rgba(248, 81, 73, 0.2); color: #f85149; border: 1px solid rgba(248, 81, 73, 0.4); }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 18px;
+        }
+        .card-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        .card-val {
+            font-size: 28px;
+            font-weight: bold;
+            color: #f0f6fc;
+        }
+        .card-sub {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        .section {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: #f0f6fc;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        th, td {
+            text-align: left;
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        th {
+            background-color: #1c2128;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+        tr:hover td {
+            background-color: rgba(110, 118, 129, 0.05);
+        }
+        pre.log-box {
+            background-color: #0b0e14;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 14px;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 12px;
+            color: #7ee787;
+            overflow-x: auto;
+            max-height: 280px;
+            margin: 0;
+        }
+        .footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 12px;
+            margin-top: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>📁 Department Folder Creation Dashboard (AS_42)</h1>
+                <div class="meta">
+                    <strong>Host:</strong> SP &bull; 
+                    <strong>OS:</strong> Linux-6.18.40.1-microsoft-standard-WSL2-x86_64-with-glibc2.43 &bull; 
+                    <strong>Executed:</strong> 2026-10-07 16:40:35
+                </div>
+            </div>
+            <div>
+                <span class="badge badge-success">Provisioning Active</span>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <div class="card-label">Departments Handled</div>
+                <div class="card-val" style="color: #58a6ff;">5</div>
+                <div class="card-sub">Functional business units provisioned</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Security Groups</div>
+                <div class="card-val" style="color: #3fb950;">5</div>
+                <div class="card-sub">Isolated groups (prefix: lsatest_)</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Permission Enforcement</div>
+                <div class="card-val" style="color: #8957e5;">2770</div>
+                <div class="card-sub">SGID (2) + rwxrwx--- (770)</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Group Inheritance</div>
+                <div class="card-val" style="color: #3fb950;">100%</div>
+                <div class="card-sub">New files inherit group ID automatically</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">📂 Department Provisioning & Ownership Matrix</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Department</th>
+                        <th>Assigned Security Group</th>
+                        <th>Permissions Mode</th>
+                        <th>Ownership (User:Group)</th>
+                        <th>SGID Inheritance Audit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr>
+        <td style="font-weight: 600; color: #58a6ff;">engineering</td>
+        <td><code style="color: #7ee787;">lsatest_engineering</code> <span style="color: #8b949e; font-size: 11px;">(GID: 1009)</span></td>
+        <td><code>drwxrws--- (2770)</code></td>
+        <td>pankaj:lsatest_engineering</td>
+        <td><span class="badge badge-success">✓ Verified (SGID)</span></td>
+    </tr>
+    
+    <tr>
+        <td style="font-weight: 600; color: #58a6ff;">finance</td>
+        <td><code style="color: #7ee787;">lsatest_finance</code> <span style="color: #8b949e; font-size: 11px;">(GID: 1010)</span></td>
+        <td><code>drwxrws--- (2770)</code></td>
+        <td>pankaj:lsatest_finance</td>
+        <td><span class="badge badge-success">✓ Verified (SGID)</span></td>
+    </tr>
+    
+    <tr>
+        <td style="font-weight: 600; color: #58a6ff;">marketing</td>
+        <td><code style="color: #7ee787;">lsatest_marketing</code> <span style="color: #8b949e; font-size: 11px;">(GID: 1011)</span></td>
+        <td><code>drwxrws--- (2770)</code></td>
+        <td>pankaj:lsatest_marketing</td>
+        <td><span class="badge badge-success">✓ Verified (SGID)</span></td>
+    </tr>
+    
+    <tr>
+        <td style="font-weight: 600; color: #58a6ff;">operations</td>
+        <td><code style="color: #7ee787;">lsatest_operations</code> <span style="color: #8b949e; font-size: 11px;">(GID: 1012)</span></td>
+        <td><code>drwxrws--- (2770)</code></td>
+        <td>pankaj:lsatest_operations</td>
+        <td><span class="badge badge-success">✓ Verified (SGID)</span></td>
+    </tr>
+    
+    <tr>
+        <td style="font-weight: 600; color: #58a6ff;">human_resources</td>
+        <td><code style="color: #7ee787;">lsatest_human_resources</code> <span style="color: #8b949e; font-size: 11px;">(GID: 1013)</span></td>
+        <td><code>drwxrws--- (2770)</code></td>
+        <td>pankaj:lsatest_human_resources</td>
+        <td><span class="badge badge-success">✓ Verified (SGID)</span></td>
+    </tr>
+    
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">📜 Provisioning Audit Trail</h2>
+            <pre class="log-box">[2026-10-07 16:40:32] [INFO] Group 'lsatest_engineering' does not exist. Creating...
+[2026-10-07 16:40:32] [SUCCESS] Created group 'lsatest_engineering' (GID: 1009).
+[2026-10-07 16:40:32] [SUCCESS] Created directory: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_42/sandbox_data/departments/engineering
+[2026-10-07 16:40:33] [SUCCESS] Folder: engineering -> Perms: drwxrws--- (2770) Owner: pankaj Group: lsatest_engineering
+[2026-10-07 16:40:33] [INFO] SGID Test File: dept_charter.txt -> Owner: pankaj Group: lsatest_engineering (Inherited: YES)
+[2026-10-07 16:40:33] [INFO] Processing department: [finance]...
+[2026-10-07 16:40:33] [INFO] Group 'lsatest_finance' does not exist. Creating...
+[2026-10-07 16:40:33] [SUCCESS] Created group 'lsatest_finance' (GID: 1010).
+[2026-10-07 16:40:33] [SUCCESS] Created directory: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_42/sandbox_data/departments/finance
+[2026-10-07 16:40:33] [SUCCESS] Folder: finance -> Perms: drwxrws--- (2770) Owner: pankaj Group: lsatest_finance
+[2026-10-07 16:40:33] [INFO] SGID Test File: dept_charter.txt -> Owner: pankaj Group: lsatest_finance (Inherited: YES)
+[2026-10-07 16:40:33] [INFO] Processing department: [marketing]...
+[2026-10-07 16:40:33] [INFO] Group 'lsatest_marketing' does not exist. Creating...
+[2026-10-07 16:40:33] [SUCCESS] Created group 'lsatest_marketing' (GID: 1011).
+[2026-10-07 16:40:33] [SUCCESS] Created directory: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_42/sandbox_data/departments/marketing
+[2026-10-07 16:40:33] [SUCCESS] Folder: marketing -> Perms: drwxrws--- (2770) Owner: pankaj Group: lsatest_marketing
+[2026-10-07 16:40:33] [INFO] SGID Test File: dept_charter.txt -> Owner: pankaj Group: lsatest_marketing (Inherited: YES)
+[2026-10-07 16:40:34] [INFO] Processing department: [operations]...
+[2026-10-07 16:40:34] [INFO] Group 'lsatest_operations' does not exist. Creating...
+[2026-10-07 16:40:34] [SUCCESS] Created group 'lsatest_operations' (GID: 1012).
+[2026-10-07 16:40:34] [SUCCESS] Created directory: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_42/sandbox_data/departments/operations
+[2026-10-07 16:40:34] [SUCCESS] Folder: operations -> Perms: drwxrws--- (2770) Owner: pankaj Group: lsatest_operations
+[2026-10-07 16:40:34] [INFO] SGID Test File: dept_charter.txt -> Owner: pankaj Group: lsatest_operations (Inherited: YES)
+[2026-10-07 16:40:34] [INFO] Processing department: [human_resources]...
+[2026-10-07 16:40:34] [INFO] Group 'lsatest_human_resources' does not exist. Creating...
+[2026-10-07 16:40:34] [SUCCESS] Created group 'lsatest_human_resources' (GID: 1013).
+[2026-10-07 16:40:34] [SUCCESS] Created directory: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_42/sandbox_data/departments/human_resources
+[2026-10-07 16:40:34] [SUCCESS] Folder: human_resources -> Perms: drwxrws--- (2770) Owner: pankaj Group: lsatest_human_resources
+[2026-10-07 16:40:34] [INFO] SGID Test File: dept_charter.txt -> Owner: pankaj Group: lsatest_human_resources (Inherited: YES)
+[2026-10-07 16:40:35] [INFO] Department folder provisioning completed successfully.
+</pre>
+        </div>
+
+        <div class="footer">
+            Linux System Administration (E1ITA307) &bull; Automation Sprint &bull; AS_42
+        </div>
+    </div>
+</body>
+</html>

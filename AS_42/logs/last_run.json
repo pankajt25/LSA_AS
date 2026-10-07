@@ -1,0 +1,63 @@
+{
+  "timestamp": "2026-10-07 16:40:35",
+  "base_dir": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_42/sandbox_data/departments",
+  "group_prefix": "lsatest_",
+  "permissions": "2770",
+  "total_departments": 5,
+  "groups_created": 5,
+  "groups_existing": 0,
+  "folders_created": 5,
+  "log_file": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_42/logs/dept_creation_20261007_164032.log",
+  "details": [
+    {
+      "dept": "engineering",
+      "group": "lsatest_engineering",
+      "folder": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_42/sandbox_data/departments/engineering",
+      "perms": "drwxrws---",
+      "octal": "2770",
+      "owner": "pankaj",
+      "gid": "1009",
+      "inherited": "true"
+    },
+    {
+      "dept": "finance",
+      "group": "lsatest_finance",
+      "folder": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_42/sandbox_data/departments/finance",
+      "perms": "drwxrws---",
+      "octal": "2770",
+      "owner": "pankaj",
+      "gid": "1010",
+      "inherited": "true"
+    },
+    {
+      "dept": "marketing",
+      "group": "lsatest_marketing",
+      "folder": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_42/sandbox_data/departments/marketing",
+      "perms": "drwxrws---",
+      "octal": "2770",
+      "owner": "pankaj",
+      "gid": "1011",
+      "inherited": "true"
+    },
+    {
+      "dept": "operations",
+      "group": "lsatest_operations",
+      "folder": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_42/sandbox_data/departments/operations",
+      "perms": "drwxrws---",
+      "octal": "2770",
+      "owner": "pankaj",
+      "gid": "1012",
+      "inherited": "true"
+    },
+    {
+      "dept": "human_resources",
+      "group": "lsatest_human_resources",
+      "folder": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_42/sandbox_data/departments/human_resources",
+      "perms": "drwxrws---",
+      "octal": "2770",
+      "owner": "pankaj",
+      "gid": "1013",
+      "inherited": "true"
+    }
+  ]
+}
