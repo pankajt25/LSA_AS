@@ -1,0 +1,6 @@
+[2026-10-07 11:50:05 IST] [INFO] Starting backup of '/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_10/sandbox_data/project' into '/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_10/backups/backup_project_20261007_115004.tar.gz'
+[2026-10-07 11:50:05 IST] [VERIFY] Archive integrity test passed. 12 entities inside archive.
+[2026-10-07 11:50:05 IST] [CHECKSUM] SHA-256 generated: 7e708df5c1a84884dc5e077cc07da5bee3f60518b1332711be798ef5f32a9686
+[2026-10-07 11:51:04 IST] [INFO] Starting backup of '/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_10/sandbox_data/project' into '/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_10/backups/backup_project_20261007_115104.tar.gz'
+[2026-10-07 11:51:04 IST] [VERIFY] Archive integrity test passed. 12 entities inside archive.
+[2026-10-07 11:51:04 IST] [CHECKSUM] SHA-256 generated: 7e708df5c1a84884dc5e077cc07da5bee3f60518b1332711be798ef5f32a9686
