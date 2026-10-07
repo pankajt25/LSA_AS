@@ -35,6 +35,14 @@ LSA_AS/
 │   ├── logs/                       # Audit trail & JSON telemetry directory
 │   ├── sandbox_data/               # Sandboxed shared folder data directory
 │   └── README.md                   # Problem documentation & usage
+├── AS_04/                          # Automation Sprint Problem #4
+│   ├── permission_audit.sh         # Core world-writable security auditing script
+│   ├── run.sh                      # Unified execution & HTML dashboard generator
+│   ├── commands_used.md            # Command log & development history
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── logs/                       # Audit trail & JSON telemetry directory
+│   ├── sandbox_data/               # Multi-tier permission test dataset directory
+│   └── README.md                   # Problem documentation & usage
 ├── AS_14/                          # Automation Sprint Problem #14
 │   ├── suspicious_ip_detector.sh   # Core bash script for IP detection
 │   ├── commands_used.md            # Command log & viva preparation
@@ -137,6 +145,7 @@ LSA_AS/
 | **AS_01** | **Employee Account Setup** | Automated employee account provisioning (`useradd -m -c -g`), department group creation (`groupadd`), non-interactive forced first-login password expiration (`passwd -e`), sandboxed test isolation (`lsatest_`), and safe teardown (`cleanup.sh`). | ✅ Completed | [`AS_01/`](./AS_01) |
 | **AS_02** | **Inactive Employee Detection** | Real local account discovery (`/etc/passwd`), human user filtering (`UID >= 1000`), multi-tier login history resolution (`lastlog` / `last` / `loginctl` fallback), configurable thresholding, and dark-themed HTML report. | ✅ Completed | [`AS_02/`](./AS_02) |
 | **AS_03** | **Department Access** | Department group creation (`groupadd`), sandboxed shared directory provisioning (`chmod 2770`), SGID bit inheritance enforcement, zero non-member access (`---`), and safe teardown (`cleanup.sh`). | ✅ Completed | [`AS_03/`](./AS_03) |
+| **AS_04** | **Permission Audit** | Automated world-writable file auditing (`find -type f -perm -0002`), risk severity classification, least-privilege compliance scoring, and dark-themed HTML report. | ✅ Completed | [`AS_04/`](./AS_04) |
 | **AS_14** | **Suspicious IP Detection** | Automated SSH brute-force monitor, real log auto-detection (`/var/log/auth.log`), regex parsing, descending ranking, and audit reporting. | ✅ Completed | [`AS_14/`](./AS_14) |
 | **AS_15** | **Error Log Report** | Automated error extraction, real log auto-detection (`/var/log/syslog`), severity breakdown, frequency ranking, and tail-style review. | ✅ Completed | [`AS_15/`](./AS_15) |
 | **AS_16** | **Service Availability Check** | Real-time service monitoring, boot persistence verification, systemd/SysV fallback, audit logging, and dark-themed HTML report dashboard. | ✅ Completed | [`AS_16/`](./AS_16) |
@@ -165,6 +174,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_01** | Employee Account Setup | `cd AS_01 && bash run.sh` *(Run `bash cleanup.sh` afterward to restore system)* |
 | **AS_02** | Inactive Employee Detection | `cd AS_02 && bash run.sh` |
 | **AS_03** | Department Access | `cd AS_03 && bash run.sh` *(Run `bash cleanup.sh` afterward to restore system)* |
+| **AS_04** | Permission Audit | `cd AS_04 && bash run.sh` |
 | **AS_14** | Suspicious IP Detection | `cd AS_14 && bash run.sh` |
 | **AS_15** | Error Log Report | `cd AS_15 && bash run.sh` |
 | **AS_16** | Service Availability Check | `cd AS_16 && bash run.sh` |
@@ -186,6 +196,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_01** | `cd AS_01 && bash run.sh` | `cd AS_01 && bash run.sh` | `cd AS_01 && bash run.sh` | `cd AS_01 && bash run.sh` |
 | **AS_02** | `cd AS_02 && bash run.sh` | `cd AS_02 && bash run.sh` | `cd AS_02 && bash run.sh` | `cd AS_02 && bash run.sh` |
 | **AS_03** | `cd AS_03 && bash run.sh` | `cd AS_03 && bash run.sh` | `cd AS_03 && bash run.sh` | `cd AS_03 && bash run.sh` |
+| **AS_04** | `cd AS_04 && bash run.sh` | `cd AS_04 && bash run.sh` | `cd AS_04 && bash run.sh` | `cd AS_04 && bash run.sh` |
 | **AS_14** | `cd AS_14 && bash run.sh` | `cd AS_14 && bash run.sh` | `cd AS_14 && bash run.sh` | `cd AS_14 && bash run.sh` |
 | **AS_15** | `cd AS_15 && bash run.sh` | `cd AS_15 && bash run.sh` | `cd AS_15 && bash run.sh` | `cd AS_15 && bash run.sh` |
 | **AS_16** | `cd AS_16 && bash run.sh` | `cd AS_16 && bash run.sh` | `cd AS_16 && bash run.sh` | `cd AS_16 && bash run.sh` |
@@ -296,6 +307,36 @@ Create a department group and configure a shared directory so that only members 
 - 📖 **Sprint Documentation:** [`AS_03/README.md`](./AS_03/README.md)
 - 📜 **Audit Log File:** [`AS_03/logs/department_access.log`](./AS_03/logs/department_access.log)
 - 📋 **Command Log:** [`AS_03/commands_used.md`](./AS_03/commands_used.md)
+
+</details>
+
+<details>
+<summary><strong>AS_04 — Permission Audit (Security)</strong></summary>
+
+### Problem Statement
+A company security administrator wants to identify all world-writable files in a specified directory. Develop a script to generate an audit report.
+
+### Summary of Approach
+- **Least-Privilege Auditing Engine:** Probes target directory tree for regular files with the 'others' write bit enabled (`find -type f -perm -0002` / `-perm -o+w`), eliminating false positives from directories with sticky bits.
+- **Risk Severity Categorization:** Evaluates flagged files by classification — CRITICAL for world-writable executables/scripts (`.sh`, `.py`, binaries), HIGH for config files (`.conf`, `.key`, `.csv`, `.json`), and MEDIUM for general files.
+- **Target Flexibility & Live Auditing:** Defaults to sandboxed multi-tier test environment (`AS_04/sandbox_data/`), but seamlessly audits live system paths (e.g. `./permission_audit.sh /var/log` or `--system`).
+- **Remediation Suggestions:** Automatically generates precision hardening commands (`chmod o-w <file>`) for every identified threat.
+- **Compliance Scoring:** Calculates system compliance percentage (`(compliant / total) * 100`) and serializes JSON telemetry.
+- **Cross-Platform HTML Dashboard (`run.sh`):** Executes scan, regenerates dark-themed `report.html` with interactive findings tables and metrics, and dispatches the default browser across WSL, Linux, macOS, and Git Bash.
+
+### Key Commands Used
+- `bash run.sh` — Single command to audit permissions, regenerate dashboard, and open HTML report (Linux / macOS / Windows)
+- `./permission_audit.sh` — Default scan of sandboxed company directory tree
+- `./permission_audit.sh /var/log` — Real-world audit of live host log directory
+- `./permission_audit.sh --system` — Audits host temporary directories (`/var/tmp`)
+- `./permission_audit.sh --json` — Emits structured JSON telemetry
+- `./permission_audit.sh --help` — Displays CLI manual and option syntax
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_04/report.html`](./AS_04/report.html)
+- 📖 **Sprint Documentation:** [`AS_04/README.md`](./AS_04/README.md)
+- 📜 **Audit Log File:** [`AS_04/logs/permission_audit.log`](./AS_04/logs/permission_audit.log)
+- 📋 **Command Log:** [`AS_04/commands_used.md`](./AS_04/commands_used.md)
 
 </details>
 
