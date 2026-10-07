@@ -1,0 +1,12 @@
+[2026-10-07 11:56:03 IST] [INFO] Starting backup verification on repository '/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_11/sandbox_data/backups'
+[2026-10-07 11:56:03 IST] [CHECK] Test 1 (Existence): PASS - Found /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_11/sandbox_data/backups/backup_prod_20261007_020000.tar.gz
+[2026-10-07 11:56:03 IST] [CHECK] Test 2 (Non-Empty): PASS - Size is 379 bytes (379 B)
+[2026-10-07 11:56:03 IST] [CHECK] Test 3 (Tar Integrity): PASS - Verified 6 archived entities.
+[2026-10-07 11:56:03 IST] [CHECK] Test 4 (Checksum): PASS - Cryptographic match confirmed (31f865402923b24f0b657dee90b199e928e3ba5301bf61771c6f42c0c5e2d5c1)
+[2026-10-07 11:56:03 IST] [CHECK] Test 5 (Freshness): PASS - Archive age is 0.0h (within 24h SLA)
+[2026-10-07 11:56:52 IST] [INFO] Starting backup verification on repository '/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_11/sandbox_data/backups'
+[2026-10-07 11:56:52 IST] [CHECK] Test 1 (Existence): PASS - Found /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_11/sandbox_data/backups/backup_prod_20261007_020000.tar.gz
+[2026-10-07 11:56:52 IST] [CHECK] Test 2 (Non-Empty): PASS - Size is 379 bytes (379 B)
+[2026-10-07 11:56:53 IST] [CHECK] Test 3 (Tar Integrity): PASS - Verified 6 archived entities.
+[2026-10-07 11:56:53 IST] [CHECK] Test 4 (Checksum): PASS - Cryptographic match confirmed (31f865402923b24f0b657dee90b199e928e3ba5301bf61771c6f42c0c5e2d5c1)
+[2026-10-07 11:56:53 IST] [CHECK] Test 5 (Freshness): PASS - Archive age is 0.0h (within 24h SLA)
