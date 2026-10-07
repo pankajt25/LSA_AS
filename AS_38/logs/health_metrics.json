@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-10-07 16:16:36 IST",
+  "execution_seconds": 1,
+  "report_file": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_38/reports/health_report_20261007_161636.txt",
+  "system": {
+    "hostname": "SP",
+    "kernel": "6.18.40.1-microsoft-standard-WSL2",
+    "uptime": "up 1 hour, 8 minutes",
+    "cpu_cores": 4,
+    "load_1m": "0.03",
+    "load_5m": "0.13",
+    "load_15m": "0.19"
+  },
+  "memory": {
+    "total_mb": 3869,
+    "used_mb": 677,
+    "free_mb": 1786,
+    "buff_cache_mb": 1543,
+    "avail_mb": 3191,
+    "used_pct": "17.5",
+    "swap_total_mb": 1024,
+    "swap_used_mb": 0
+  },
+  "storage": {
+    "mount": "/",
+    "total": "1007G",
+    "used": "6.5G",
+    "avail": "950G",
+    "used_pct": "1%"
+  }
+}

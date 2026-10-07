@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AS_38: Scheduled Linux System Health Report via Cron</title>
+    <style>
+        :root {
+            --bg-primary: #0a0f1d;
+            --bg-secondary: #111827;
+            --bg-card: #182234;
+            --bg-card-hover: #1f2c42;
+            --border-color: #27374f;
+            --text-primary: #f0f4fc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-cyan: #06b6d4;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-purple: #8b5cf6;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 30px 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            background: linear-gradient(135deg, #111e33 0%, #1e293b 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .header-title h1 {
+            font-size: 26px;
+            font-weight: 700;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .badge-sprint {
+            background: rgba(6, 182, 212, 0.15);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            font-size: 13px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+        .header-subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-top: 6px;
+        }
+        .status-pill {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-green);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .status-pill::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 8px var(--accent-green);
+        }
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            margin-bottom: 28px;
+        }
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(6, 182, 212, 0.4);
+        }
+        .card-label {
+            font-size: 13px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+        .card-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+        .card-sub {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .section-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .cron-box {
+            background: #0f1623;
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            padding: 16px;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            font-size: 14px;
+            color: #38bdf8;
+            overflow-x: auto;
+            margin-bottom: 16px;
+        }
+        .tasks-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        .tasks-table th {
+            background: #111827;
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-align: left;
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .tasks-table td {
+            padding: 14px;
+            border-bottom: 1px solid rgba(39, 53, 79, 0.5);
+            vertical-align: middle;
+        }
+        .tasks-table tr:last-child td {
+            border-bottom: none;
+        }
+        .task-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .badge-success {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-green);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        .log-terminal {
+            background: #05080f;
+            border: 1px solid #1a2233;
+            border-radius: 8px;
+            padding: 16px;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            font-size: 13px;
+            color: #e2e8f0;
+            max-height: 380px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            line-height: 1.5;
+        }
+        .footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-top: 36px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-title">
+                <h1>
+                    <span>📊 Scheduled Linux System Health Report</span>
+                    <span class="badge-sprint">AS_38</span>
+                </h1>
+                <div class="header-subtitle">Linux System Administration (E1ITA307) • Periodic Health Monitoring via Cron</div>
+            </div>
+            <div class="header-meta">
+                <div class="status-pill">MONITORING ACTIVE</div>
+            </div>
+        </header>
+
+        <!-- Metric Cards -->
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-label">System Load (1m / 5m / 15m)</div>
+                <div class="card-value" style="color: var(--accent-cyan); font-size: 20px;">0.03 • 0.13 • 0.19</div>
+                <div class="card-sub">4 Logical CPU Cores</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Physical Memory (RAM)</div>
+                <div class="card-value" style="color: var(--accent-green);">17.5%</div>
+                <div class="card-sub">677MB used / 3869MB total</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Root Storage Utilization</div>
+                <div class="card-value" style="color: #ffffff;">1%</div>
+                <div class="card-sub">950G free of 1007G</div>
+            </div>
+            <div class="card">
+                <div class="card-label">System Uptime</div>
+                <div class="card-value" style="font-size: 19px; color: var(--accent-purple);">up 1 hour, 8 minutes</div>
+                <div class="card-sub">Cadence: */30 * * * * (Every 30 min)</div>
+            </div>
+        </div>
+
+        <!-- Section 1: Cron Automation Registration -->
+        <div class="section-box">
+            <div class="section-header">
+                <div class="section-title">
+                    <span>⏰</span> Cron Schedule Registration & Automation Policy
+                </div>
+            </div>
+            <p style="color: var(--text-secondary); margin-bottom: 12px; font-size: 14px;">
+                The Linux system health report is automatically generated periodically using the following active crontab job:
+            </p>
+            <div class="cron-box">*/30 * * * * /bin/bash &quot;/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_38/scheduled_health_report.sh&quot; --generate &gt;&gt; &quot;/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_38/logs/cron_health.log&quot; 2&gt;&amp;1 # LSA_SPRINT_TEST</div>
+            <div style="font-size: 13px; color: var(--text-muted); display: flex; gap: 20px; flex-wrap: wrap;">
+                <div>🏷️ <strong>Safety Tag:</strong> <code style="color: var(--accent-cyan);"># LSA_SPRINT_TEST</code></div>
+                <div>🔄 <strong>Frequency:</strong> Every 30 minutes</div>
+                <div>📁 <strong>Reports Archive:</strong> <code>AS_38/reports/</code></div>
+            </div>
+        </div>
+
+        <!-- Section 2: Health Report Detailed Preview -->
+        <div class="section-box">
+            <div class="section-header">
+                <div class="section-title">
+                    <span>📋</span> Latest System Health Report (Generated via Automation)
+                </div>
+            </div>
+            <div class="log-terminal">================================================================================
+LINUX SYSTEM HEALTH AUDIT REPORT
+Generated At: 2026-10-07 16:16:36 IST
+Host: SP | Kernel: 6.18.40.1-microsoft-standard-WSL2 | Uptime: up 1 hour, 8 minutes
+================================================================================
+
+1. SYSTEM IDENTITY &amp; LOAD
+--------------------------------------------------------------------------------
+Hostname         : SP
+Kernel Version   : 6.18.40.1-microsoft-standard-WSL2
+CPU Logical Cores: 4
+Uptime           : up 1 hour, 8 minutes
+Load Average     : 1 min: 0.03 | 5 min: 0.13 | 15 min: 0.19
+
+2. MEMORY &amp; SWAP UTILIZATION
+--------------------------------------------------------------------------------
+Physical RAM     : Total: 3869MB | Used: 677MB (17.5%) | Free: 1786MB
+Buffers/Cached   : 1543MB | Available: 3191MB
+Swap Space       : Total: 1024MB | Used: 0MB | Free: 1024MB
+
+3. FILESYSTEM STORAGE FOOTPRINT (Root /)
+--------------------------------------------------------------------------------
+Total Capacity   : 1007G
+Used Space       : 6.5G (1%)
+Available Space  : 950G
+
+4. NETWORK INTERFACES
+--------------------------------------------------------------------------------
+lo               UNKNOWN        127.0.0.1/8 10.255.255.254/32 ::1/128 
+eth0             UP             192.168.42.183/20 fe80::215:5dff:fe64:16d1/64 
+
+5. TOP 5 CPU INTENSIVE PROCESSES
+--------------------------------------------------------------------------------
+    PID USER     %CPU %MEM COMMAND
+    897 pankaj   12.2  7.9 agy
+   2268 pankaj    4.5  0.0 bash
+   2264 pankaj    3.3  0.0 bash
+    203 root      0.2  1.3 containerd
+      1 root      0.1  0.3 systemd
+
+6. TOP 5 MEMORY INTENSIVE PROCESSES
+--------------------------------------------------------------------------------
+    PID USER     %MEM   RSS COMMAND
+    897 pankaj    7.9 313904 agy
+    203 root      1.3 51524 containerd
+    224 root      0.8 32648 unattended-upgr
+    159 root      0.7 29856 networkd-dispat
+     54 root      0.4 17492 systemd-journal
+
+================================================================================
+END OF REPORT — LSA SPRINT AUTOMATION (AS_38)
+================================================================================</div>
+        </div>
+
+        <!-- Section 3: Live Terminal Trace -->
+        <div class="section-box">
+            <div class="section-header">
+                <div class="section-title">
+                    <span>💻</span> Live Execution Terminal Trace
+                </div>
+            </div>
+            <div class="log-terminal">[1;34m[1m
+================================================================================
+     LSA AUTOMATION SPRINT (AS_38) — SYSTEM HEALTH REPORT ENGINE                
+================================================================================
+[0m
+[1;36m[2026-10-07 16:16:36] [INFO] Gathering live system health telemetry...[0m
+[1;32m[2026-10-07 16:16:37] [SUCCESS] Timestamped health report generated: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_38/reports/health_report_20261007_161636.txt[0m
+[1;32m[2026-10-07 16:16:37] [SUCCESS] Updated latest report pointer: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_38/reports/latest_health_report.txt[0m
+[1;32m[2026-10-07 16:16:37] [SUCCESS] Telemetry written to /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_38/logs/health_metrics.json[0m
+
+[1;32m✔ System Health Summary:[0m
+  Load Averages: [1;36m0.03, 0.13, 0.19[0m (4 Cores)
+  Memory Usage : [1;36m677MB / 3869MB (17.5%)[0m
+  Root Storage : [1;36m6.5G / 1007G (1%)[0m
+  Report Saved : [1;32m/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_38/reports/health_report_20261007_161636.txt[0m
+
+[INFO] Registering periodic health report job in Cron table...
+[1;36m[2026-10-07 16:16:37] [INFO] Installing scheduled health report cron task...[0m
+[1;36m[2026-10-07 16:16:37] [INFO] Cadence Schedule : &#x27;*/30 * * * *&#x27; (Tag: # LSA_SPRINT_TEST)[0m
+[1;32m[2026-10-07 16:16:37] [SUCCESS] Health report cron schedule installed successfully in user crontab.[0m
+[1;36m[2026-10-07 16:16:37] [INFO] Verifying active crontab entry:[0m
+   [1;32m↳ */30 * * * * /bin/bash &quot;/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_38/scheduled_health_report.sh&quot; --generate &gt;&gt; &quot;/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_38/logs/cron_health.log&quot; 2&gt;&amp;1 # LSA_SPRINT_TEST[0m
+
+[1;36m[2026-10-07 16:16:37] [INFO] Inspecting user crontab for scheduled LSA health report jobs...[0m
+[1;32m[2026-10-07 16:16:37] [SUCCESS] Active scheduled health report job(s) found:[0m
+   [1;32m✔ */30 * * * * /bin/bash &quot;/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_38/scheduled_health_report.sh&quot; --generate &gt;&gt; &quot;/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_38/logs/cron_health.log&quot; 2&gt;&amp;1 # LSA_SPRINT_TEST[0m</div>
+        </div>
+
+        <!-- Section 4: System Host Context -->
+        <div class="section-box">
+            <div class="section-header">
+                <div class="section-title">
+                    <span>🖥️</span> System Host Context
+                </div>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; font-size: 14px;">
+                <div><span style="color: var(--text-muted);">Hostname:</span> <strong>SP</strong></div>
+                <div><span style="color: var(--text-muted);">OS Display:</span> <strong>Ubuntu 26.04.1 LTS</strong></div>
+                <div><span style="color: var(--text-muted);">Kernel:</span> <strong>6.18.40.1-microsoft-standard-WSL2</strong></div>
+                <div><span style="color: var(--text-muted);">Operator:</span> <strong>pankaj</strong></div>
+                <div><span style="color: var(--text-muted);">Timestamp:</span> <strong>2026-10-07 16:16:37 IST</strong></div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            Linux System Administration (E1ITA307) • Automation Sprint • Problem #38 Scheduled Health Report Dashboard
+        </div>
+    </div>
+</body>
+</html>
