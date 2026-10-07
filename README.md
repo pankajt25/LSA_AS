@@ -351,6 +351,13 @@ LSA_AS/
 │   ├── report.html                 # Standalone dark-themed dashboard report
 │   ├── logs/                       # Audit trail & JSON telemetry directory
 │   └── README.md                   # Problem documentation & usage
+├── AS_45/                          # Automation Sprint Problem #45
+│   ├── server_uptime_report.sh     # Core kernel uptime, boot epoch & continuous SLA monitor
+│   ├── run.sh                      # Unified execution & HTML dashboard generator
+│   ├── commands_used.md            # Command log & uptime auditing reference
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── logs/                       # Audit trail & JSON telemetry directory
+│   └── README.md                   # Problem documentation & usage
 └── (Upcoming Projects)/            # Future Automation Sprint additions
 ```
 
@@ -404,6 +411,7 @@ LSA_AS/
 | **AS_42** | **Department Folder Creation** | Automated department folder provisioning (`mkdir -p`), dedicated group creation (`groupadd`), SGID inheritance enforcement (`chmod 2770`), isolated permissions verification, safe teardown (`cleanup.sh`), and dark-themed HTML report. | ✅ Completed | [`AS_42/`](./AS_42) |
 | **AS_43** | **Employee Offboarding** | Complete account de-provisioning (`pkill -u`, `usermod -L`, `usermod -s /usr/sbin/nologin`), home directory archiving (`tar -czf`), SHA-256 integrity verification, safe teardown (`cleanup.sh`), and dark-themed HTML report. | ✅ Completed | [`AS_43/`](./AS_43) |
 | **AS_44** | **Resource Threshold Monitor** | Real-time live CPU sampling (`/proc/stat` delta), memory and swap allocation accounting (`/proc/meminfo`), multi-tier threshold evaluation (Warn/Crit), top process profiling, and dark-themed HTML report. | ✅ Completed | [`AS_44/`](./AS_44) |
+| **AS_45** | **Server Uptime Report** | Monotonic kernel uptime auditing (`/proc/uptime`), boot epoch extraction (`/proc/stat` `btime`), multi-core CPU idle calculation, continuous operation SLA tracking, and dark-themed HTML report. | ✅ Completed | [`AS_45/`](./AS_45) |
 | *Upcoming* | *Future Sprints* | Additional automation tasks and administration solutions. | ⏳ Planned | — |
 
 ---
@@ -1830,6 +1838,36 @@ Check CPU and memory utilization and display warnings/alerts exceeding threshold
 - 📖 **Sprint Documentation:** [`AS_44/README.md`](./AS_44/README.md)
 - 📜 **Audit Log File:** [`AS_44/logs/`](./AS_44/logs/)
 - 📋 **Command Log:** [`AS_44/commands_used.md`](./AS_44/commands_used.md)
+
+</details>
+
+<details>
+<summary><strong>AS_45 — Server Uptime Report (Availability & SLA Monitoring)</strong></summary>
+
+### Problem Statement
+Report server uptime and evaluate against continuous operation thresholds.
+
+### Summary of Approach
+- **Monotonic Clock Discovery:** Interrogates `/proc/uptime` to retrieve raw monotonic elapsed seconds since initialization, immune to wall-clock skew, timezone changes, or NTP step adjustments.
+- **Boot Timestamp & Epoch Extraction:** Reads the kernel initialization timestamp via `/proc/stat` (`btime`) and humanized boot date via `uptime -s`.
+- **Multi-Core Idle Ratio Accounting:** Normalizes aggregate idle jiffies across all detected CPU cores (`nproc`), calculating exact cumulative processor idle ratio.
+- **Continuous Operation SLA Evaluation:** Compares live uptime against configurable operational thresholds (default target: 30 days, advisory: 90 days, overdue: 180 days), producing proactive maintenance recommendations for scheduled kernel updates.
+- **Machine-Readable JSON Telemetry:** Exports complete uptime and environment metadata to `logs/last_run.json` and chronological logs in `logs/uptime_report_<timestamp>.log`.
+- **Cross-Platform HTML Dashboard (`run.sh`):** Drives live uptime analysis, renders a dark dashboard `report.html` featuring SLA progress meters, operational status badges, and kernel parameters, automatically opening across WSL, Linux, macOS, and Git Bash.
+
+### Key Commands Used
+- `cd AS_45 && bash run.sh` — Single command to audit server uptime and launch HTML dashboard
+- `./server_uptime_report.sh --threshold-days 60` — Evaluates uptime against custom SLA threshold
+- `read -r UPTIME_RAW IDLE_RAW < /proc/uptime` — Monotonic kernel uptime counter inspection
+- `uptime -p` — Human-friendly uptime string extraction
+- `grep "^btime" /proc/stat` — System boot epoch extraction
+- `uname -r && uname -m` — Kernel release and CPU architecture auditing
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_45/report.html`](./AS_45/report.html)
+- 📖 **Sprint Documentation:** [`AS_45/README.md`](./AS_45/README.md)
+- 📜 **Audit Log File:** [`AS_45/logs/`](./AS_45/logs/)
+- 📋 **Command Log:** [`AS_45/commands_used.md`](./AS_45/commands_used.md)
 
 </details>
 
