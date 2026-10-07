@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AS_40: Mounted File System Space Report</title>
+    <style>
+        :root {
+            --bg-primary: #0a0e19;
+            --bg-secondary: #111827;
+            --bg-card: #182233;
+            --bg-card-hover: #1e2c40;
+            --border-color: #27374d;
+            --text-primary: #f0f4fc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-cyan: #06b6d4;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-red: #ef4444;
+            --accent-purple: #8b5cf6;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 30px 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+        .header {
+            background: linear-gradient(135deg, #111c30 0%, #1e293b 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .header-title h1 {
+            font-size: 26px;
+            font-weight: 700;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .badge-sprint {
+            background: rgba(6, 182, 212, 0.15);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            font-size: 13px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+        .header-subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-top: 6px;
+        }
+        .status-pill {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-green);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .status-pill::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 8px var(--accent-green);
+        }
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            margin-bottom: 28px;
+        }
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(6, 182, 212, 0.4);
+        }
+        .card-label {
+            font-size: 13px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+        .card-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+        .card-sub {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .cat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .cat-card {
+            background: #0f1623;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 16px;
+            text-align: center;
+        }
+        .cat-card-num {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-cyan);
+        }
+        .cat-card-name {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+        .section-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .tasks-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        .tasks-table th {
+            background: #111827;
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-align: left;
+            padding: 12px 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .tasks-table td {
+            padding: 12px 10px;
+            border-bottom: 1px solid rgba(39, 53, 79, 0.5);
+            vertical-align: middle;
+        }
+        .tasks-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .progress-bar-bg {
+            background: #0f172a;
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+            width: 100%;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+        }
+        .fstype-pill {
+            font-family: monospace;
+            background: #0d1522;
+            color: var(--accent-cyan);
+            border: 1px solid #1e2c40;
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        .mode-badge {
+            display: inline-block;
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .badge-rw {
+            background: rgba(6, 182, 212, 0.15);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+        }
+        .badge-ro {
+            background: rgba(139, 92, 246, 0.15);
+            color: var(--accent-purple);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+        .category-pill {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .cat-physical {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-green);
+        }
+        .cat-shared {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--accent-blue);
+        }
+        .cat-virtual {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--accent-amber);
+        }
+        .cat-overlay {
+            background: rgba(139, 92, 246, 0.15);
+            color: var(--accent-purple);
+        }
+        .log-terminal {
+            background: #05080f;
+            border: 1px solid #1a2233;
+            border-radius: 8px;
+            padding: 16px;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            font-size: 13px;
+            color: #e2e8f0;
+            max-height: 380px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            line-height: 1.5;
+        }
+        .footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-top: 36px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-title">
+                <h1>
+                    <span>🗄️ Mounted File System Space Report</span>
+                    <span class="badge-sprint">AS_40</span>
+                </h1>
+                <div class="header-subtitle">Linux System Administration (E1ITA307) • VFS Mounted Storage & Capacity Telemetry</div>
+            </div>
+            <div class="header-meta">
+                <div class="status-pill">VFS AUDIT NOMINAL</div>
+            </div>
+        </header>
+
+        <!-- Metric Cards -->
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-label">Mounted Filesystems</div>
+                <div class="card-value" style="color: var(--accent-cyan);">16 Mount Points</div>
+                <div class="card-sub">14 Read-Write • 2 Read-Only</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Average Utilization</div>
+                <div class="card-value" style="color: var(--accent-green);">10.2%</div>
+                <div class="card-sub">Mean capacity across active mounts</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Root VFS Filesystem</div>
+                <div class="card-value" style="color: #ffffff;">ext4</div>
+                <div class="card-sub">Device: /dev/sdd (1007G Total, 1% Used)</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Shared Mounts</div>
+                <div class="card-value" style="color: var(--accent-purple);">3 Volumes</div>
+                <div class="card-sub">9p / Host storage bridge</div>
+            </div>
+        </div>
+
+        <!-- Section 1: Architectural Categories Breakdown -->
+        <div class="section-box">
+            <div class="section-header">
+                <div class="section-title">
+                    <span>🏗️</span> Filesystem Architectural Classification
+                </div>
+            </div>
+            <div class="cat-grid">
+                
+    <div class="cat-card">
+        <div class="cat-card-num">3</div>
+        <div class="cat-card-name">Host / Network Shared</div>
+    </div>
+    
+    <div class="cat-card">
+        <div class="cat-card-num">7</div>
+        <div class="cat-card-name">In-Memory Virtual</div>
+    </div>
+    
+    <div class="cat-card">
+        <div class="cat-card-num">1</div>
+        <div class="cat-card-name">Physical Storage</div>
+    </div>
+    
+    <div class="cat-card">
+        <div class="cat-card-num">1</div>
+        <div class="cat-card-name">Specialized VFS</div>
+    </div>
+    
+    <div class="cat-card">
+        <div class="cat-card-num">4</div>
+        <div class="cat-card-name">Overlay / Container</div>
+    </div>
+    
+            </div>
+        </div>
+
+        <!-- Section 2: Detailed Mounted File Systems Table -->
+        <div class="section-box">
+            <div class="section-header">
+                <div class="section-title">
+                    <span>📋</span> Mounted Filesystems: Space Allocation & Access Modes
+                </div>
+            </div>
+            <div style="overflow-x: auto;">
+                <table class="tasks-table">
+                    <thead>
+                        <tr>
+                            <th>Mount Point</th>
+                            <th>FSType</th>
+                            <th>Total Size</th>
+                            <th>Used Space</th>
+                            <th>Available</th>
+                            <th>Utilization</th>
+                            <th>Mode</th>
+                            <th>Category</th>
+                            <th>Device Source</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+    <tr>
+        <td style="font-weight: 600;"><code>/usr/lib/wsl/drivers</code></td>
+        <td><span class="fstype-pill">9p</span></td>
+        <td style="font-weight: 600;">118G</td>
+        <td>83G</td>
+        <td>35G</td>
+        <td style="min-width: 140px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                <span>71%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: 71%; background: var(--accent-amber);"></div>
+            </div>
+        </td>
+        <td><span class="mode-badge badge-ro">RO</span></td>
+        <td><span class="category-pill cat-shared">Host / Network Shared</span></td>
+        <td style="color: var(--text-secondary); font-size: 12px;"><code>drivers</code></td>
+    </tr>
+    
+    <tr>
+        <td style="font-weight: 600;"><code>/mnt/c</code></td>
+        <td><span class="fstype-pill">9p</span></td>
+        <td style="font-weight: 600;">118G</td>
+        <td>83G</td>
+        <td>35G</td>
+        <td style="min-width: 140px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                <span>71%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: 71%; background: var(--accent-amber);"></div>
+            </div>
+        </td>
+        <td><span class="mode-badge badge-rw">RW</span></td>
+        <td><span class="category-pill cat-shared">Host / Network Shared</span></td>
+        <td style="color: var(--text-secondary); font-size: 12px;"><code>C:\</code></td>
+    </tr>
+    
+    <tr>
+        <td style="font-weight: 600;"><code>/mnt/d</code></td>
+        <td><span class="fstype-pill">9p</span></td>
+        <td style="font-weight: 600;">918G</td>
+        <td>109G</td>
+        <td>809G</td>
+        <td style="min-width: 140px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                <span>12%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: 12%; background: var(--accent-green);"></div>
+            </div>
+        </td>
+        <td><span class="mode-badge badge-rw">RW</span></td>
+        <td><span class="category-pill cat-shared">Host / Network Shared</span></td>
+        <td style="color: var(--text-secondary); font-size: 12px;"><code>D:\</code></td>
+    </tr>
+    
+    <tr>
+        <td style="font-weight: 600;"><code>/mnt/wsl</code></td>
+        <td><span class="fstype-pill">tmpfs</span></td>
+        <td style="font-weight: 600;">1.9G</td>
+        <td>4.0K</td>
+        <td>1.9G</td>
+        <td style="min-width: 140px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                <span>1%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: 1%; background: var(--accent-green);"></div>
+            </div>
+        </td>
+        <td><span class="mode-badge badge-rw">RW</span></td>
+        <td><span class="category-pill cat-virtual">In-Memory Virtual</span></td>
+        <td style="color: var(--text-secondary); font-size: 12px;"><code>none</code></td>
+    </tr>
+    
+    <tr>
+        <td style="font-weight: 600;"><code>/</code></td>
+        <td><span class="fstype-pill">ext4</span></td>
+        <td style="font-weight: 600;">1007G</td>
+        <td>6.5G</td>
+        <td>950G</td>
+        <td style="min-width: 140px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                <span>1%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: 1%; background: var(--accent-green);"></div>
+            </div>
+        </td>
+        <td><span class="mode-badge badge-rw">RW</span></td>
+        <td><span class="category-pill cat-physical">Physical Storage</span></td>
+        <td style="color: var(--text-secondary); font-size: 12px;"><code>/dev/sdd</code></td>
+    </tr>
+    
+    <tr>
+        <td style="font-weight: 600;"><code>/mnt/wslg</code></td>
+        <td><span class="fstype-pill">tmpfs</span></td>
+        <td style="font-weight: 600;">1.9G</td>
+        <td>36K</td>
+        <td>1.9G</td>
+        <td style="min-width: 140px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                <span>1%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: 1%; background: var(--accent-green);"></div>
+            </div>
+        </td>
+        <td><span class="mode-badge badge-rw">RW</span></td>
+        <td><span class="category-pill cat-virtual">In-Memory Virtual</span></td>
+        <td style="color: var(--text-secondary); font-size: 12px;"><code>none</code></td>
+    </tr>
+    
+    <tr>
+        <td style="font-weight: 600;"><code>/init</code></td>
+        <td><span class="fstype-pill">rootfs</span></td>
+        <td style="font-weight: 600;">1.9G</td>
+        <td>3.3M</td>
+        <td>1.9G</td>
+        <td style="min-width: 140px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                <span>1%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: 1%; background: var(--accent-green);"></div>
+            </div>
+        </td>
+        <td><span class="mode-badge badge-ro">RO</span></td>
+        <td><span class="category-pill cat-overlay">Specialized VFS</span></td>
+        <td style="color: var(--text-secondary); font-size: 12px;"><code>rootfs</code></td>
+    </tr>
+    
+    <tr>
+        <td style="font-weight: 600;"><code>/run</code></td>
+        <td><span class="fstype-pill">tmpfs</span></td>
+        <td style="font-weight: 600;">1.9G</td>
+        <td>776K</td>
+        <td>1.9G</td>
+        <td style="min-width: 140px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                <span>1%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: 1%; background: var(--accent-green);"></div>
+            </div>
+        </td>
+        <td><span class="mode-badge badge-rw">RW</span></td>
+        <td><span class="category-pill cat-virtual">In-Memory Virtual</span></td>
+        <td style="color: var(--text-secondary); font-size: 12px;"><code>none</code></td>
+    </tr>
+    
+    <tr>
+        <td style="font-weight: 600;"><code>/mnt/wslg/versions.txt</code></td>
+        <td><span class="fstype-pill">overlay</span></td>
+        <td style="font-weight: 600;">1.9G</td>
+        <td>80K</td>
+        <td>1.9G</td>
+        <td style="min-width: 140px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                <span>1%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: 1%; background: var(--accent-green);"></div>
+            </div>
+        </td>
+        <td><span class="mode-badge badge-rw">RW</span></td>
+        <td><span class="category-pill cat-overlay">Overlay / Container</span></td>
+        <td style="color: var(--text-secondary); font-size: 12px;"><code>none</code></td>
+    </tr>
+    
+    <tr>
+        <td style="font-weight: 600;"><code>/mnt/wslg/doc</code></td>
+        <td><span class="fstype-pill">overlay</span></td>
+        <td style="font-weight: 600;">1.9G</td>
+        <td>80K</td>
+        <td>1.9G</td>
+        <td style="min-width: 140px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                <span>1%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: 1%; background: var(--accent-green);"></div>
+            </div>
+        </td>
+        <td><span class="mode-badge badge-rw">RW</span></td>
+        <td><span class="category-pill cat-overlay">Overlay / Container</span></td>
+        <td style="color: var(--text-secondary); font-size: 12px;"><code>none</code></td>
+    </tr>
+    
+    <tr>
+        <td style="font-weight: 600;"><code>/tmp</code></td>
+        <td><span class="fstype-pill">tmpfs</span></td>
+        <td style="font-weight: 600;">1.9G</td>
+        <td>460K</td>
+        <td>1.9G</td>
+        <td style="min-width: 140px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                <span>1%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: 1%; background: var(--accent-green);"></div>
+            </div>
+        </td>
+        <td><span class="mode-badge badge-rw">RW</span></td>
+        <td><span class="category-pill cat-virtual">In-Memory Virtual</span></td>
+        <td style="color: var(--text-secondary); font-size: 12px;"><code>tmpfs</code></td>
+    </tr>
+    
+    <tr>
+        <td style="font-weight: 600;"><code>/run/user/1000</code></td>
+        <td><span class="fstype-pill">tmpfs</span></td>
+        <td style="font-weight: 600;">387M</td>
+        <td>12K</td>
+        <td>387M</td>
+        <td style="min-width: 140px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                <span>1%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: 1%; background: var(--accent-green);"></div>
+            </div>
+        </td>
+        <td><span class="mode-badge badge-rw">RW</span></td>
+        <td><span class="category-pill cat-virtual">In-Memory Virtual</span></td>
+        <td style="color: var(--text-secondary); font-size: 12px;"><code>tmpfs</code></td>
+    </tr>
+    
+    <tr>
+        <td style="font-weight: 600;"><code>/usr/lib/modules/6.18.40.1-microsoft-standard-WSL2</code></td>
+        <td><span class="fstype-pill">overlay</span></td>
+        <td style="font-weight: 600;">1.9G</td>
+        <td>0</td>
+        <td>1.9G</td>
+        <td style="min-width: 140px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                <span>0%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: 0%; background: var(--accent-green);"></div>
+            </div>
+        </td>
+        <td><span class="mode-badge badge-rw">RW</span></td>
+        <td><span class="category-pill cat-overlay">Overlay / Container</span></td>
+        <td style="color: var(--text-secondary); font-size: 12px;"><code>none</code></td>
+    </tr>
+    
+    <tr>
+        <td style="font-weight: 600;"><code>/usr/lib/wsl/lib</code></td>
+        <td><span class="fstype-pill">overlay</span></td>
+        <td style="font-weight: 600;">1.9G</td>
+        <td>0</td>
+        <td>1.9G</td>
+        <td style="min-width: 140px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                <span>0%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: 0%; background: var(--accent-green);"></div>
+            </div>
+        </td>
+        <td><span class="mode-badge badge-rw">RW</span></td>
+        <td><span class="category-pill cat-overlay">Overlay / Container</span></td>
+        <td style="color: var(--text-secondary); font-size: 12px;"><code>none</code></td>
+    </tr>
+    
+    <tr>
+        <td style="font-weight: 600;"><code>/run/lock</code></td>
+        <td><span class="fstype-pill">tmpfs</span></td>
+        <td style="font-weight: 600;">1.9G</td>
+        <td>0</td>
+        <td>1.9G</td>
+        <td style="min-width: 140px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                <span>0%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: 0%; background: var(--accent-green);"></div>
+            </div>
+        </td>
+        <td><span class="mode-badge badge-rw">RW</span></td>
+        <td><span class="category-pill cat-virtual">In-Memory Virtual</span></td>
+        <td style="color: var(--text-secondary); font-size: 12px;"><code>none</code></td>
+    </tr>
+    
+    <tr>
+        <td style="font-weight: 600;"><code>/run/shm</code></td>
+        <td><span class="fstype-pill">tmpfs</span></td>
+        <td style="font-weight: 600;">1.9G</td>
+        <td>0</td>
+        <td>1.9G</td>
+        <td style="min-width: 140px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                <span>0%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: 0%; background: var(--accent-green);"></div>
+            </div>
+        </td>
+        <td><span class="mode-badge badge-rw">RW</span></td>
+        <td><span class="category-pill cat-virtual">In-Memory Virtual</span></td>
+        <td style="color: var(--text-secondary); font-size: 12px;"><code>none</code></td>
+    </tr>
+    
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Section 3: Live Terminal Trace -->
+        <div class="section-box">
+            <div class="section-header">
+                <div class="section-title">
+                    <span>💻</span> Live Execution Terminal Trace
+                </div>
+            </div>
+            <div class="log-terminal">[1;34m[1m
+================================================================================
+      LSA AUTOMATION SPRINT (AS_40) — MOUNTED FILE SYSTEM REPORT                
+================================================================================
+[0m
+[1;36m[2026-10-07 16:28:45] [INFO] Scanning mounted file system tables across Linux VFS...[0m
+[1;36m[2026-10-07 16:28:45] [INFO] Configuration: Sort By=&#x27;pct&#x27;, Filter=&#x27;All&#x27;, IncludeAll=false[0m
+
+[1mMOUNT POINT            TYPE      TOTAL    USED     AVAIL    USE %   MODE   CATEGORY               DEVICE          [0m
+------------------------------------------------------------------------------------------------------------
+/usr/lib/wsl/drivers   9p        118G     83G      35G      [1;33m71%    [0m [1;35mRO    [0m Host / Network Shared  drivers         
+/mnt/c                 9p        118G     83G      35G      [1;33m71%    [0m [1;36mRW    [0m Host / Network Shared  C:\             
+/mnt/d                 9p        918G     109G     809G     [1;32m12%    [0m [1;36mRW    [0m Host / Network Shared  D:\             
+/mnt/wsl               tmpfs     1.9G     4.0K     1.9G     [1;32m1%     [0m [1;36mRW    [0m In-Memory Virtual      none            
+/                      ext4      1007G    6.5G     950G     [1;32m1%     [0m [1;36mRW    [0m Physical Storage       /dev/sdd        
+/mnt/wslg              tmpfs     1.9G     36K      1.9G     [1;32m1%     [0m [1;36mRW    [0m In-Memory Virtual      none            
+/init                  rootfs    1.9G     3.3M     1.9G     [1;32m1%     [0m [1;35mRO    [0m Specialized VFS        rootfs          
+/run                   tmpfs     1.9G     776K     1.9G     [1;32m1%     [0m [1;36mRW    [0m In-Memory Virtual      none            
+/mnt/wslg/versions.tx  overlay   1.9G     80K      1.9G     [1;32m1%     [0m [1;36mRW    [0m Overlay / Container    none            
+/mnt/wslg/doc          overlay   1.9G     80K      1.9G     [1;32m1%     [0m [1;36mRW    [0m Overlay / Container    none            
+/tmp                   tmpfs     1.9G     460K     1.9G     [1;32m1%     [0m [1;36mRW    [0m In-Memory Virtual      tmpfs           
+/run/user/1000         tmpfs     387M     12K      387M     [1;32m1%     [0m [1;36mRW    [0m In-Memory Virtual      tmpfs           
+/usr/lib/modules/6.18  overlay   1.9G     0        1.9G     [1;32m0%     [0m [1;36mRW    [0m Overlay / Container    none            
+/usr/lib/wsl/lib       overlay   1.9G     0        1.9G     [1;32m0%     [0m [1;36mRW    [0m Overlay / Container    none            
+/run/lock              tmpfs     1.9G     0        1.9G     [1;32m0%     [0m [1;36mRW    [0m In-Memory Virtual      none            
+/run/shm               tmpfs     1.9G     0        1.9G     [1;32m0%     [0m [1;36mRW    [0m In-Memory Virtual      none            
+------------------------------------------------------------------------------------------------------------
+Total Mounted File Systems: [1m16[0m (14 Read-Write, 2 Read-Only) | Average Capacity Use: [1;36m10.2%[0m
+[1;32m[2026-10-07 16:28:46] [SUCCESS] Mounted filesystem report generated in 1s.[0m</div>
+        </div>
+
+        <!-- Section 4: System Host Context -->
+        <div class="section-box">
+            <div class="section-header">
+                <div class="section-title">
+                    <span>🖥️</span> System Host Context
+                </div>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; font-size: 14px;">
+                <div><span style="color: var(--text-muted);">Hostname:</span> <strong>SP</strong></div>
+                <div><span style="color: var(--text-muted);">OS Display:</span> <strong>Ubuntu 26.04.1 LTS</strong></div>
+                <div><span style="color: var(--text-muted);">Kernel:</span> <strong>6.18.40.1-microsoft-standard-WSL2</strong></div>
+                <div><span style="color: var(--text-muted);">Operator:</span> <strong>pankaj</strong></div>
+                <div><span style="color: var(--text-muted);">Timestamp:</span> <strong>2026-10-07 16:28:46 IST</strong></div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            Linux System Administration (E1ITA307) • Automation Sprint • Problem #40 Mounted File System Report Dashboard
+        </div>
+    </div>
+</body>
+</html>
