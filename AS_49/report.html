@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AS_49 - Automated File Synchronization</title>
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --border-color: #30363d;
+            --text-primary: #c9d1d9;
+            --text-muted: #8b949e;
+            --accent-green: #238636;
+            --accent-blue: #1f6feb;
+            --accent-orange: #d29922;
+            --accent-purple: #8957e5;
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: var(--font-family);
+            margin: 0;
+            padding: 24px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px 24px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .header h1 {
+            margin: 0 0 6px 0;
+            font-size: 24px;
+            color: #58a6ff;
+        }
+        .header .meta {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .badge-success { background-color: rgba(46, 160, 67, 0.2); color: #3fb950; border: 1px solid rgba(46, 160, 67, 0.4); }
+        .badge-info { background-color: rgba(56, 139, 253, 0.2); color: #58a6ff; border: 1px solid rgba(56, 139, 253, 0.4); }
+        .badge-danger { background-color: rgba(248, 81, 73, 0.2); color: #f85149; border: 1px solid rgba(248, 81, 73, 0.4); }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 18px;
+        }
+        .card-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        .card-val {
+            font-size: 28px;
+            font-weight: bold;
+            color: #f0f6fc;
+        }
+        .card-sub {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        .section {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: #f0f6fc;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        th, td {
+            text-align: left;
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        th {
+            background-color: #1c2128;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+        tr:hover td {
+            background-color: rgba(110, 118, 129, 0.05);
+        }
+        pre.log-box {
+            background-color: #0b0e14;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 14px;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 12px;
+            color: #7ee787;
+            overflow-x: auto;
+            max-height: 280px;
+            margin: 0;
+        }
+        .footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 12px;
+            margin-top: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>🔄 Automated File Synchronization Dashboard (AS_49)</h1>
+                <div class="meta">
+                    <strong>Host:</strong> SP &bull; 
+                    <strong>OS:</strong> Linux-6.18.40.1-microsoft-standard-WSL2-x86_64-with-glibc2.43 &bull; 
+                    <strong>Executed:</strong> 2026-10-07 17:20:15
+                </div>
+            </div>
+            <div>
+                <span class="badge badge-success">✓ Mirror Synchronized</span>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <div class="card-label">Files Evaluated</div>
+                <div class="card-val" style="color: #58a6ff;">10</div>
+                <div class="card-sub">Files in synchronization catalog</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Delta Transferred</div>
+                <div class="card-val" style="color: #3fb950;">2</div>
+                <div class="card-sub">141 bytes updated</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Rsync Speedup</div>
+                <div class="card-val" style="color: #bc8cff;">0.43x</div>
+                <div class="card-sub">Delta transfer acceleration ratio</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Cryptographic Match</div>
+                <div class="card-val" style="color: #3fb950;">100%</div>
+                <div class="card-sub">SHA-256 byte-for-byte verified</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">📂 Synchronized Files & SHA-256 Mirror Matrix</h2>
+            <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">
+                <strong>Source:</strong> <code>/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_49/sandbox_data/source</code> &rarr; 
+                <strong>Destination:</strong> <code>/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_49/sandbox_data/dest</code>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Project Relative Path</th>
+                        <th>Size</th>
+                        <th>Source Digest (SHA-256)</th>
+                        <th>Dest Digest (SHA-256)</th>
+                        <th>Integrity Audit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr>
+        <td style="font-family: monospace; color: #79c0ff;">assets/branding.svg</td>
+        <td>28 B</td>
+        <td><code>f5292d20e02e8fcb...</code></td>
+        <td><code>f5292d20e02e8fcb...</code></td>
+        <td><span class="badge badge-success">✓ HASH MATCH</span></td>
+    </tr>
+    
+    <tr>
+        <td style="font-family: monospace; color: #79c0ff;">config/settings.json</td>
+        <td>56 B</td>
+        <td><code>ed77ca711c7daa93...</code></td>
+        <td><code>ed77ca711c7daa93...</code></td>
+        <td><span class="badge badge-success">✓ HASH MATCH</span></td>
+    </tr>
+    
+    <tr>
+        <td style="font-family: monospace; color: #79c0ff;">docs/architecture.md</td>
+        <td>76 B</td>
+        <td><code>b46441eab7a0eb63...</code></td>
+        <td><code>b46441eab7a0eb63...</code></td>
+        <td><span class="badge badge-success">✓ HASH MATCH</span></td>
+    </tr>
+    
+    <tr>
+        <td style="font-family: monospace; color: #79c0ff;">src/main.py</td>
+        <td>31 B</td>
+        <td><code>32fd3a59fb866668...</code></td>
+        <td><code>32fd3a59fb866668...</code></td>
+        <td><span class="badge badge-success">✓ HASH MATCH</span></td>
+    </tr>
+    
+    <tr>
+        <td style="font-family: monospace; color: #79c0ff;">src/utils.py</td>
+        <td>65 B</td>
+        <td><code>c7c0cd77a0a51d39...</code></td>
+        <td><code>c7c0cd77a0a51d39...</code></td>
+        <td><span class="badge badge-success">✓ HASH MATCH</span></td>
+    </tr>
+    
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">📜 Rsync Execution Audit Trace</h2>
+            <pre class="log-box">[2026-10-07 17:20:14] [INFO] Destination Backup:   /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_49/sandbox_data/dest
+[2026-10-07 17:20:14] [INFO] Dry Run Mode:         false
+[2026-10-07 17:20:14] [INFO] Delete Extraneous:    true
+[2026-10-07 17:20:14] [INFO] Log File:             /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_49/logs/sync_20261007_172014.log
+[2026-10-07 17:20:14] [INFO] ============================================================
+[2026-10-07 17:20:14] [INFO] Added incremental updates to source files to demonstrate delta sync.
+[2026-10-07 17:20:14] [INFO] Executing rsync: rsync -avh --stats --delete /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_49/sandbox_data/source/ /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_49/sandbox_data/dest/
+sending incremental file list
+docs/architecture.md
+src/utils.py
+
+Number of files: 10 (reg: 5, dir: 5)
+Number of created files: 0
+Number of deleted files: 0
+Number of regular files transferred: 2
+Total file size: 256 bytes
+Total transferred file size: 141 bytes
+Literal data: 141 bytes
+Matched data: 0 bytes
+File list size: 0
+File list generation time: 0.013 seconds
+File list transfer time: 0.000 seconds
+Total bytes sent: 537
+Total bytes received: 65
+
+sent 537 bytes  received 65 bytes  1.20K bytes/sec
+total size is 256  speedup is 0.43
+[2026-10-07 17:20:15] [SUCCESS] Rsync transfer completed successfully.
+[2026-10-07 17:20:15] [INFO] Statistics: Files Considered=10, Transferred=2, Transferred Size=141 bytes, Speedup=0.43
+[2026-10-07 17:20:15] [INFO] Integrity Verification: Sync Verified = true
+</pre>
+        </div>
+
+        <div class="footer">
+            Linux System Administration (E1ITA307) &bull; Automation Sprint &bull; AS_49
+        </div>
+    </div>
+</body>
+</html>
