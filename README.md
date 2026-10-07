@@ -390,7 +390,13 @@ LSA_AS/
 │   ├── logs/                       # Audit trail & JSON telemetry directory
 │   ├── sandbox_data/               # Isolated source and destination project mirrors
 │   └── README.md                   # Problem documentation & usage
-└── (Upcoming Projects)/            # Future Automation Sprint additions
+└── AS_50/                          # Automation Sprint Problem #50 (Sprint Finale)
+    ├── mini_dashboard.sh           # Core integrated multi-subsystem administration dashboard
+    ├── run.sh                      # Unified execution & HTML dashboard generator
+    ├── commands_used.md            # Command log & telemetry reference
+    ├── report.html                 # Standalone dark-themed dashboard report
+    ├── logs/                       # Audit trail & JSON telemetry directory
+    └── README.md                   # Problem documentation & usage
 ```
 
 ---
@@ -448,7 +454,7 @@ LSA_AS/
 | **AS_47** | **Security Audit Report** | Multi-vector vulnerability auditing: password-less accounts (`/etc/shadow`), world-writable files (`find -perm -0002`), failed logins (`/var/log/auth.log`), active sessions (`who`), safe teardown (`cleanup.sh`), and dark-themed HTML report. | ✅ Completed | [`AS_47/`](./AS_47) |
 | **AS_48** | **Administrator Daily Report** | Consolidated administrative briefing: uptime (`/proc/uptime`), CPU utilization (`/proc/stat` delta), memory & swap allocation (`/proc/meminfo`), root storage (`df -hP`), active users (`who`), core daemons, plaintext summary generation, and dark-themed HTML report. | ✅ Completed | [`AS_48/`](./AS_48) |
 | **AS_49** | **Automated File Synchronization** | Automated folder synchronization engine using `rsync` (`-avh --delete --stats`), delta transfer optimization, cryptographic SHA-256 integrity verification, sandboxed isolation, and dark-themed HTML report. | ✅ Completed | [`AS_49/`](./AS_49) |
-| *Upcoming* | *Future Sprints* | Additional automation tasks and administration solutions. | ⏳ Planned | — |
+| **AS_50** | **Mini Linux Administration Dashboard** | Integrated multi-subsystem administrative dashboard: real CPU delta sampling, memory/swap allocation, filesystem mount capacity, active user sessions, core systemd daemons, system uptime, and dark-themed HTML report. | ✅ Completed | [`AS_50/`](./AS_50) |
 
 ---
 
@@ -509,6 +515,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_47** | Security Audit Report | `cd AS_47 && bash run.sh` *(Run `bash cleanup.sh` afterward to restore system)* |
 | **AS_48** | Administrator Daily Report | `cd AS_48 && bash run.sh` |
 | **AS_49** | Automated File Synchronization | `cd AS_49 && bash run.sh` |
+| **AS_50** | Mini Linux Administration Dashboard | `cd AS_50 && bash run.sh` |
 
 ### 💻 Quick Command Reference by Operating System
 
@@ -563,6 +570,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_47** | `cd AS_47 && bash run.sh` | `cd AS_47 && bash run.sh` | `cd AS_47 && bash run.sh` | `cd AS_47 && bash run.sh` |
 | **AS_48** | `cd AS_48 && bash run.sh` | `cd AS_48 && bash run.sh` | `cd AS_48 && bash run.sh` | `cd AS_48 && bash run.sh` |
 | **AS_49** | `cd AS_49 && bash run.sh` | `cd AS_49 && bash run.sh` | `cd AS_49 && bash run.sh` | `cd AS_49 && bash run.sh` |
+| **AS_50** | `cd AS_50 && bash run.sh` | `cd AS_50 && bash run.sh` | `cd AS_50 && bash run.sh` | `cd AS_50 && bash run.sh` |
 
 ---
 
@@ -2042,6 +2050,40 @@ Write a script to synchronize a project directory with a backup directory automa
 - 📖 **Sprint Documentation:** [`AS_49/README.md`](./AS_49/README.md)
 - 📜 **Audit Log File:** [`AS_49/logs/`](./AS_49/logs/)
 - 📋 **Command Log:** [`AS_49/commands_used.md`](./AS_49/commands_used.md)
+
+</details>
+
+<details>
+<summary><strong>AS_50 — Mini Linux Administration Dashboard (Integrated System Introspection Engine)</strong></summary>
+
+### Problem Statement
+Build a mini Bash dashboard that displays CPU usage, memory usage, disk usage, logged-in users, running services, and system uptime.
+
+### Summary of Approach
+- **Unified Multi-Subsystem Telemetry Engine:** Synthesizes the core operational pillars of Linux systems administration—CPU, memory, storage, sessions, services, and uptime—into a cohesive, real-time diagnostic dashboard.
+- **Precision Dual-Sample CPU Accounting:** Computes exact instantaneous CPU utilization from `/proc/stat` deltas over an interval, capturing 1m/5m/15m load averages (`/proc/loadavg`), core count (`nproc`), and ranking top CPU-consuming processes.
+- **Accurate Physical Memory & Swap Metrics:** Queries kernel memory management directly via `/proc/meminfo` (`MemTotal`, `MemAvailable`, `Buffers`, `Cached`, `SwapTotal`), calculating true active consumption percentages and top memory-consuming processes.
+- **Storage & Inode Allocation Auditing:** Evaluates root filesystem capacity (`df -hP /`) and inode saturation (`df -iP /`) alongside dynamic mount discovery with DrvFs path sanitization.
+- **Interactive Session & Service Matrix Introspection:** Enumerates live terminal logins (`who`) and introspects core systemd daemons (`systemctl is-active`, `is-enabled`, `MainPID`, `MemoryCurrent`), auditing total active versus failed units.
+- **Dual-Artifact Generation & Responsive Dashboard (`run.sh`):** Outputs a colorized ANSI terminal dashboard with ASCII progress meters, exports structured JSON telemetry (`logs/last_run.json`), and renders an interactive dark-themed HTML report (`report.html`) auto-opening across WSL, Linux, macOS, and Git Bash.
+
+### Key Commands Used
+- `cd AS_50 && bash run.sh` — Single command to execute full system introspection and launch HTML dashboard
+- `./mini_dashboard.sh` — Default execution generating ANSI terminal dashboard and JSON telemetry
+- `./mini_dashboard.sh --sample-interval 1.0` — Customizes CPU sampling duration
+- `./mini_dashboard.sh --json-only` — Suppresses terminal output for background telemetry collection
+- `read -r _ u n s i w q sq st _ < /proc/stat` — Dual-sample kernel CPU tick accounting
+- `cat /proc/uptime` — Monotonic kernel uptime and idle counters
+- `grep "MemAvailable" /proc/meminfo` — Accurate memory allocation extraction
+- `df -hP /` & `df -iP /` — POSIX filesystem space and inode capacity checks
+- `who` — Active login session discovery
+- `systemctl list-units --type=service --state=running` — Active daemon enumeration
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_50/report.html`](./AS_50/report.html)
+- 📖 **Sprint Documentation:** [`AS_50/README.md`](./AS_50/README.md)
+- 📜 **Audit Log File:** [`AS_50/logs/`](./AS_50/logs/)
+- 📋 **Command Log:** [`AS_50/commands_used.md`](./AS_50/commands_used.md)
 
 </details>
 
