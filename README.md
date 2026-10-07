@@ -304,6 +304,13 @@ LSA_AS/
 │   ├── reports/                    # Generated periodic health reports & latest pointer
 │   ├── logs/                       # Audit trail & JSON telemetry directory
 │   └── README.md                   # Problem documentation & usage
+├── AS_39/                          # Automation Sprint Problem #39
+│   ├── disk_inode_check.sh         # Core disk space & inode utilization audit script
+│   ├── run.sh                      # Unified execution & HTML dashboard generator
+│   ├── commands_used.md            # Command log & storage audit reference
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── logs/                       # Audit trail & JSON telemetry directory
+│   └── README.md                   # Problem documentation & usage
 └── (Upcoming Projects)/            # Future Automation Sprint additions
 ```
 
@@ -351,6 +358,7 @@ LSA_AS/
 | **AS_36** | **Routine Server Maintenance** | Routine system maintenance (`sync`, `/tmp` cache cleanup, package database & apt check, journald/log audit, zombie detection), Cron automation with `# LSA_SPRINT_TEST` safety tag, safe teardown (`cleanup.sh`), and dark-themed HTML report. | ✅ Completed | [`AS_36/`](./AS_36) |
 | **AS_37** | **Scheduled Backup** | Automated project directory backup (`tar -czf`), non-destructive decompression verification (`tar -tzf`), SHA-256 integrity manifest, retention policy enforcement, Cron automation with `# LSA_SPRINT_TEST` tag, safe teardown (`cleanup.sh`), and dark-themed HTML report. | ✅ Completed | [`AS_37/`](./AS_37) |
 | **AS_38** | **Scheduled Health Report** | Live Linux subsystem telemetry (CPU load averages, RAM & swap metrics, root storage %, network interfaces, top processes), periodic report archiving, Cron automation with `# LSA_SPRINT_TEST` tag, safe teardown (`cleanup.sh`), and dark-themed HTML report. | ✅ Completed | [`AS_38/`](./AS_38) |
+| **AS_39** | **Disk and Inode Check** | Storage space and inode utilization auditing (`df -hP`, `df -iP`), dynamic critical/warning threshold evaluation, threshold breach alerting, and dark-themed HTML report. | ✅ Completed | [`AS_39/`](./AS_39) |
 | *Upcoming* | *Future Sprints* | Additional automation tasks and administration solutions. | ⏳ Planned | — |
 
 ---
@@ -401,6 +409,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_36** | Routine Server Maintenance | `cd AS_36 && bash run.sh` *(Run `bash cleanup.sh` afterward to restore system)* |
 | **AS_37** | Scheduled Backup | `cd AS_37 && bash run.sh` *(Run `bash cleanup.sh` afterward to restore system)* |
 | **AS_38** | Scheduled Health Report | `cd AS_38 && bash run.sh` *(Run `bash cleanup.sh` afterward to restore system)* |
+| **AS_39** | Disk and Inode Check | `cd AS_39 && bash run.sh` |
 
 ### 💻 Quick Command Reference by Operating System
 
@@ -444,6 +453,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_36** | `cd AS_36 && bash run.sh` | `cd AS_36 && bash run.sh` | `cd AS_36 && bash run.sh` | `cd AS_36 && bash run.sh` |
 | **AS_37** | `cd AS_37 && bash run.sh` | `cd AS_37 && bash run.sh` | `cd AS_37 && bash run.sh` | `cd AS_37 && bash run.sh` |
 | **AS_38** | `cd AS_38 && bash run.sh` | `cd AS_38 && bash run.sh` | `cd AS_38 && bash run.sh` | `cd AS_38 && bash run.sh` |
+| **AS_39** | `cd AS_39 && bash run.sh` | `cd AS_39 && bash run.sh` | `cd AS_39 && bash run.sh` | `cd AS_39 && bash run.sh` |
 
 ---
 
@@ -1593,6 +1603,35 @@ Configure a Cron job to periodically generate a Linux system health report.
 - 📖 **Sprint Documentation:** [`AS_38/README.md`](./AS_38/README.md)
 - 📜 **Audit Log File:** [`AS_38/logs/health_report.log`](./AS_38/logs/health_report.log)
 - 📋 **Command Log:** [`AS_38/commands_used.md`](./AS_38/commands_used.md)
+
+</details>
+
+<details>
+<summary><strong>AS_39 — Disk and Inode Check (Storage Monitoring & Inode Auditing)</strong></summary>
+
+### Problem Statement
+Develop a script that checks both disk-space and inode utilization and reports file systems exceeding a specified threshold.
+
+### Summary of Approach
+- **Dual-Metric Storage Auditing:** Concurrently audits physical block storage capacity (`df -hP`) and virtual filesystem inode exhaustion (`df -iP`), providing complete visibility into disk saturation risks.
+- **Configurable Multi-Tier Threshold Engine:** Features parameterized thresholds for disk space (`--disk-threshold`, default 80%), inode utilization (`--inode-threshold`, default 80%), and pre-emptive warning boundaries (`--warn-threshold`, default 70%).
+- **Multi-OS Filesystem Normalization:** Gracefully normalizes differences between native Linux ext4/xfs filesystems, tmpfs allocations, and virtualized Windows/WSL DrvFs/NTFS mounts where standard Linux inode counts return non-applicable (`-`).
+- **Structured JSON Telemetry & Event Logging:** Emits machine-readable audit manifests (`logs/disk_inode_audit.json`) containing full metrics, per-mount status classifications, and breach rationale, while recording operational logs to `logs/disk_inode.log`.
+- **Cross-Platform HTML Dashboard (`run.sh`):** Executes live filesystem audits, renders a self-contained dark dashboard `report.html` with responsive progress bars and alert banners, and auto-launches in the default browser across WSL, Linux, macOS, and Git Bash.
+
+### Key Commands Used
+- `cd AS_39 && bash run.sh` — Single command to audit disk & inode usage and launch HTML dashboard
+- `./disk_inode_check.sh` — Audits mounted storage using standard 80% thresholds
+- `./disk_inode_check.sh --disk-threshold 70 --inode-threshold 75` — Evaluates storage against custom thresholds
+- `./disk_inode_check.sh --all` — Includes all virtual and system credential mounts
+- `df -hP` — POSIX-compliant human-readable filesystem block consumption
+- `df -iP` — POSIX-compliant filesystem inode consumption
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_39/report.html`](./AS_39/report.html)
+- 📖 **Sprint Documentation:** [`AS_39/README.md`](./AS_39/README.md)
+- 📜 **Audit Log File:** [`AS_39/logs/disk_inode.log`](./AS_39/logs/disk_inode.log)
+- 📋 **Command Log:** [`AS_39/commands_used.md`](./AS_39/commands_used.md)
 
 </details>
 
