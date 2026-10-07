@@ -1,0 +1,24 @@
+{
+  "timestamp": "2026-10-07T10:40:25Z",
+  "execution_seconds": 0,
+  "project": {
+    "name": "my_project",
+    "source_path": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_37/sandbox_data/my_project",
+    "files_count": 3,
+    "source_bytes": 438
+  },
+  "archive": {
+    "filename": "backup_my_project_20261007_161025.tar.gz",
+    "path": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_37/backups/backup_my_project_20261007_161025.tar.gz",
+    "size_bytes": 585,
+    "format": "gz",
+    "sha256": "0c4642251a09e1a14ae6ef2fc9cdbae490b308ad6b6f96d0eeeb49a9eb8971fa",
+    "integrity": "VERIFIED",
+    "space_saved_bytes": -147,
+    "compression_ratio_pct": -33.56
+  },
+  "retention": {
+    "retention_days": 14,
+    "purged_archives": 0
+  }
+}

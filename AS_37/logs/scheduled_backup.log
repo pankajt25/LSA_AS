@@ -1,0 +1,74 @@
+[2026-10-07 16:07:07] [INFO] Target Project   : /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_37/sandbox_data/my_project
+[2026-10-07 16:07:07] [INFO] Destination Dir  : /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_37/backups
+[2026-10-07 16:07:07] [INFO] Archive Filename : backup_my_project_20261007_160707.tar.gz
+[2026-10-07 16:07:07] [INFO] Compression Mode : GZ
+[2026-10-07 16:07:07] [INFO] Source Footprint : 438 bytes (3 files)
+[2026-10-07 16:07:07] [INFO] Creating compressed archive...
+[2026-10-07 16:07:07] [SUCCESS] Archive generated successfully: 585 bytes
+[2026-10-07 16:07:07] [INFO] Performing non-destructive archive integrity test (tar -tzf)...
+[2026-10-07 16:07:07] [SUCCESS] Archive integrity test PASSED (zero corruption detected).
+[2026-10-07 16:07:07] [INFO] Generating SHA-256 cryptographic checksum manifest...
+[2026-10-07 16:07:08] [SUCCESS] SHA-256: 0c4642251a09e1a14ae6ef2fc9cdbae490b308ad6b6f96d0eeeb49a9eb8971fa
+[2026-10-07 16:07:08] [INFO] Space Saved      : -147 bytes (-33.56% reduction)
+[2026-10-07 16:07:08] [INFO] Applying retention policy (pruning archives older than 14 days)...
+[2026-10-07 16:07:08] [SUCCESS] Retention audit complete: 0 expired archive(s) purged.
+[2026-10-07 16:07:08] [SUCCESS] Automated project backup completed in 1s.
+[2026-10-07 16:07:08] [SUCCESS] Backup telemetry serialized to /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_37/logs/backup_metadata.json
+[2026-10-07 16:07:46] [INFO] Installing scheduled backup cron task...
+[2026-10-07 16:07:46] [INFO] Target Directory : /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_37/sandbox_data/my_project
+[2026-10-07 16:07:46] [INFO] Backup Target    : /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_37/backups
+[2026-10-07 16:07:46] [INFO] Schedule Cron    : '0 1 * * *' (Tag: # LSA_SPRINT_TEST)
+[2026-10-07 16:07:46] [SUCCESS] Backup cron schedule installed successfully in user crontab.
+[2026-10-07 16:07:46] [INFO] Verifying active crontab entry:
+[2026-10-07 16:07:47] [INFO] Inspecting user crontab for scheduled LSA backup jobs...
+[2026-10-07 16:07:47] [SUCCESS] Active scheduled backup job(s) found:
+[2026-10-07 16:07:47] [INFO] Attempting to remove crontab entries matching '# LSA_SPRINT_TEST'...
+[2026-10-07 16:07:47] [SUCCESS] Successfully removed LSA test backup cron job(s).
+[2026-10-07 16:09:53] [INFO] Target Project   : /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_37/sandbox_data/my_project
+[2026-10-07 16:09:53] [INFO] Destination Dir  : /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_37/backups
+[2026-10-07 16:09:53] [INFO] Archive Filename : backup_my_project_20261007_160953.tar.gz
+[2026-10-07 16:09:53] [INFO] Compression Mode : GZ
+[2026-10-07 16:09:53] [INFO] Source Footprint : 438 bytes (3 files)
+[2026-10-07 16:09:53] [INFO] Creating compressed archive...
+[2026-10-07 16:09:53] [SUCCESS] Archive generated successfully: 585 bytes
+[2026-10-07 16:09:53] [INFO] Performing non-destructive archive integrity test (tar -tzf)...
+[2026-10-07 16:09:53] [SUCCESS] Archive integrity test PASSED (zero corruption detected).
+[2026-10-07 16:09:53] [INFO] Generating SHA-256 cryptographic checksum manifest...
+[2026-10-07 16:09:53] [SUCCESS] SHA-256: 0c4642251a09e1a14ae6ef2fc9cdbae490b308ad6b6f96d0eeeb49a9eb8971fa
+[2026-10-07 16:09:53] [INFO] Space Saved      : -147 bytes (-33.56% reduction)
+[2026-10-07 16:09:53] [INFO] Applying retention policy (pruning archives older than 14 days)...
+[2026-10-07 16:09:53] [SUCCESS] Retention audit complete: 0 expired archive(s) purged.
+[2026-10-07 16:09:53] [SUCCESS] Automated project backup completed in 0s.
+[2026-10-07 16:09:53] [SUCCESS] Backup telemetry serialized to /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_37/logs/backup_metadata.json
+[2026-10-07 16:09:54] [INFO] Installing scheduled backup cron task...
+[2026-10-07 16:09:54] [INFO] Target Directory : /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_37/sandbox_data/my_project
+[2026-10-07 16:09:54] [INFO] Backup Target    : /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_37/backups
+[2026-10-07 16:09:54] [INFO] Schedule Cron    : '0 1 * * *' (Tag: # LSA_SPRINT_TEST)
+[2026-10-07 16:09:54] [SUCCESS] Backup cron schedule installed successfully in user crontab.
+[2026-10-07 16:09:54] [INFO] Verifying active crontab entry:
+[2026-10-07 16:09:54] [INFO] Inspecting user crontab for scheduled LSA backup jobs...
+[2026-10-07 16:09:54] [SUCCESS] Active scheduled backup job(s) found:
+[2026-10-07 16:10:25] [INFO] Target Project   : /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_37/sandbox_data/my_project
+[2026-10-07 16:10:25] [INFO] Destination Dir  : /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_37/backups
+[2026-10-07 16:10:25] [INFO] Archive Filename : backup_my_project_20261007_161025.tar.gz
+[2026-10-07 16:10:25] [INFO] Compression Mode : GZ
+[2026-10-07 16:10:25] [INFO] Source Footprint : 438 bytes (3 files)
+[2026-10-07 16:10:25] [INFO] Creating compressed archive...
+[2026-10-07 16:10:25] [SUCCESS] Archive generated successfully: 585 bytes
+[2026-10-07 16:10:25] [INFO] Performing non-destructive archive integrity test (tar -tzf)...
+[2026-10-07 16:10:25] [SUCCESS] Archive integrity test PASSED (zero corruption detected).
+[2026-10-07 16:10:25] [INFO] Generating SHA-256 cryptographic checksum manifest...
+[2026-10-07 16:10:25] [SUCCESS] SHA-256: 0c4642251a09e1a14ae6ef2fc9cdbae490b308ad6b6f96d0eeeb49a9eb8971fa
+[2026-10-07 16:10:25] [INFO] Space Saved      : -147 bytes (-33.56% reduction)
+[2026-10-07 16:10:25] [INFO] Applying retention policy (pruning archives older than 14 days)...
+[2026-10-07 16:10:25] [SUCCESS] Retention audit complete: 0 expired archive(s) purged.
+[2026-10-07 16:10:25] [SUCCESS] Automated project backup completed in 0s.
+[2026-10-07 16:10:25] [SUCCESS] Backup telemetry serialized to /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_37/logs/backup_metadata.json
+[2026-10-07 16:10:26] [INFO] Installing scheduled backup cron task...
+[2026-10-07 16:10:26] [INFO] Target Directory : /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_37/sandbox_data/my_project
+[2026-10-07 16:10:26] [INFO] Backup Target    : /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_37/backups
+[2026-10-07 16:10:26] [INFO] Schedule Cron    : '0 1 * * *' (Tag: # LSA_SPRINT_TEST)
+[2026-10-07 16:10:26] [SUCCESS] Backup cron schedule installed successfully in user crontab.
+[2026-10-07 16:10:26] [INFO] Verifying active crontab entry:
+[2026-10-07 16:10:26] [INFO] Inspecting user crontab for scheduled LSA backup jobs...
+[2026-10-07 16:10:26] [SUCCESS] Active scheduled backup job(s) found:
