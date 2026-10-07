@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Low Disk Space Alert Dashboard — AS_07 (E1ITA307)</title>
+    <style>
+        :root {
+            --bg-primary: #0b0f19;
+            --bg-card: #151e32;
+            --bg-card-hover: #1b2742;
+            --border-color: #243452;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --cyan: #38bdf8;
+            --green: #22c55e;
+            --amber: #f59e0b;
+            --red: #ef4444;
+            --purple: #a855f7;
+            --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            font-family: var(--font-stack);
+            line-height: 1.6;
+            padding: 24px;
+        }
+        .container { max-width: 1380px; margin: 0 auto; }
+        .header {
+            background: linear-gradient(135deg, #151e32 0%, #1e293b 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 28px 32px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        }
+        .header-title h1 {
+            font-size: 1.85rem;
+            font-weight: 700;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .header-title p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-top: 6px;
+        }
+        .meta-pill {
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid var(--border-color);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .meta-pill strong { color: #ffffff; }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .card-metric-title {
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        .card-metric-value {
+            font-size: 1.85rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 6px;
+            font-family: var(--font-mono);
+        }
+        .card-metric-desc {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        .section-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .section-header h2 {
+            font-size: 1.25rem;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.92rem;
+        }
+        th {
+            background: #0f172a;
+            color: var(--text-muted);
+            text-align: left;
+            padding: 12px 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.78rem;
+            letter-spacing: 0.04em;
+            border-bottom: 2px solid var(--border-color);
+        }
+        td {
+            padding: 14px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-main);
+        }
+        tr:hover td {
+            background-color: var(--bg-card-hover);
+        }
+        code {
+            background: #0f172a;
+            color: var(--cyan);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 0.88rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        .badge-success { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
+        .badge-warning { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+        .badge-danger { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+        .badge-info { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+
+        .terminal-box {
+            background: #090d16;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: #e2e8f0;
+            max-height: 380px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .remed-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 14px;
+        }
+        .remed-card {
+            background: #0d1526;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+        }
+        .remed-card h4 {
+            font-size: 0.92rem;
+            color: var(--cyan);
+            margin-bottom: 6px;
+        }
+        .remed-card p {
+            font-size: 0.84rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        .remed-card code {
+            display: block;
+            background: #090d16;
+            padding: 6px 10px;
+            font-size: 0.82rem;
+        }
+
+        .footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-title">
+                <h1>💽 Low Disk Space Alert Dashboard — AS_07</h1>
+                <p>Linux System Administration (E1ITA307) &bull; Storage Capacity Threshold Auditing &amp; Anomaly Detection</p>
+            </div>
+            <div class="header-meta">
+                <span class="meta-pill">Host: <strong>SP</strong></span>
+                <span class="meta-pill">OS: <strong>Ubuntu 26.04.1 LTS</strong></span>
+                <span class="meta-pill">Kernel: <strong>6.18.40.1-microsoft-standard-WSL2</strong></span>
+                <span class="meta-pill">Operator: <strong>pankaj</strong></span>
+                <span class="meta-pill">Timestamp: <strong>2026-10-07 11:25:40 IST</strong></span>
+            </div>
+        </div>
+
+        <!-- Metric KPI Cards -->
+        <div class="cards-grid">
+            <div class="card" style="border-top: 4px solid var(--cyan);">
+                <div class="card-metric-title">Alert Threshold</div>
+                <div class="card-metric-value" style="color: var(--cyan);">80%</div>
+                <div class="card-metric-desc">Warning triggered if utilization &ge; 80%</div>
+            </div>
+
+            <div class="card" style="border-top: 4px solid var(--purple);">
+                <div class="card-metric-title">Filesystems Scanned</div>
+                <div class="card-metric-value" style="color: var(--purple);">9</div>
+                <div class="card-metric-desc">POSIX portable volume inspection via <code>df -P</code></div>
+            </div>
+
+            <div class="card" style="border-top: 4px solid var(--green);">
+                <div class="card-metric-title">Threshold Violations</div>
+                <div class="card-metric-value" style="color: var(--green);">
+                    0
+                </div>
+                <div class="card-metric-desc">All partitions healthy</div>
+            </div>
+
+            <div class="card" style="border-top: 4px solid var(--green);">
+                <div class="card-metric-title">Capacity Status</div>
+                <div class="card-metric-value" style="font-size: 1.45rem; color: var(--green);">
+                    NORMAL
+                </div>
+                <div class="card-metric-desc">Safe operational headroom</div>
+            </div>
+        </div>
+
+        <!-- Section 1: Alert Warnings -->
+        <div class="section-panel">
+            <div class="section-header">
+                <h2>⚠️ High-Capacity Utilization Alerts (&ge; 80%)</h2>
+                <span class="badge" style="background: rgba(34,197,94,0.15); color: #22c55e; border: 1px solid #22c55e;">ALL FILESYSTEMS HEALTHY</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Filesystem Device</th>
+                        <th>Mount Point</th>
+                        <th>Total Size</th>
+                        <th>Used Space</th>
+                        <th>Available</th>
+                        <th>Capacity Utilization</th>
+                        <th>Severity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr>
+        <td colspan="7" style="text-align:center; padding: 22px; color: #4ade80;">
+            ✅ Optimal disk health. Zero mounted partitions have exceeded the <strong>80%</strong> utilization threshold.
+        </td>
+    </tr>
+    
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Section 2: Complete Mounted Storage Inventory -->
+        <div class="section-panel">
+            <div class="section-header">
+                <h2>🗄️ Complete Storage Volume Inventory</h2>
+                <span class="badge badge-info">9 Mounted Partition(s)</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Device</th>
+                        <th>Mount Point</th>
+                        <th>Total Size</th>
+                        <th>Used Space</th>
+                        <th>Available</th>
+                        <th>Utilization Progress</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+        <tr>
+            <td><code>none</code></td>
+            <td><strong>/usr/lib/modules/6.18.40.1-microsoft-standard-WSL2</strong></td>
+            <td>1.9G</td>
+            <td>0M</td>
+            <td>1.9G</td>
+            <td>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <span style="width:36px; font-family:var(--font-mono);">0%</span>
+                    <div style="flex-grow:1; background:#0f172a; height:6px; border-radius:3px; overflow:hidden;">
+                        <div style="width:0%; height:100%; background:#22c55e;"></div>
+                    </div>
+                </div>
+            </td>
+            <td><span class="badge badge-success">OK</span></td>
+        </tr>
+        
+        <tr>
+            <td><code>drivers</code></td>
+            <td><strong>/usr/lib/wsl/drivers</strong></td>
+            <td>117.2G</td>
+            <td>82.3G</td>
+            <td>34.9G</td>
+            <td>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <span style="width:36px; font-family:var(--font-mono);">71%</span>
+                    <div style="flex-grow:1; background:#0f172a; height:6px; border-radius:3px; overflow:hidden;">
+                        <div style="width:71%; height:100%; background:#f59e0b;"></div>
+                    </div>
+                </div>
+            </td>
+            <td><span class="badge badge-success">OK</span></td>
+        </tr>
+        
+        <tr>
+            <td><code>/dev/sdd</code></td>
+            <td><strong>/</strong></td>
+            <td>1006.9G</td>
+            <td>6.4G</td>
+            <td>949.2G</td>
+            <td>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <span style="width:36px; font-family:var(--font-mono);">1%</span>
+                    <div style="flex-grow:1; background:#0f172a; height:6px; border-radius:3px; overflow:hidden;">
+                        <div style="width:1%; height:100%; background:#22c55e;"></div>
+                    </div>
+                </div>
+            </td>
+            <td><span class="badge badge-success">OK</span></td>
+        </tr>
+        
+        <tr>
+            <td><code>none</code></td>
+            <td><strong>/usr/lib/wsl/lib</strong></td>
+            <td>1.9G</td>
+            <td>0M</td>
+            <td>1.9G</td>
+            <td>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <span style="width:36px; font-family:var(--font-mono);">0%</span>
+                    <div style="flex-grow:1; background:#0f172a; height:6px; border-radius:3px; overflow:hidden;">
+                        <div style="width:0%; height:100%; background:#22c55e;"></div>
+                    </div>
+                </div>
+            </td>
+            <td><span class="badge badge-success">OK</span></td>
+        </tr>
+        
+        <tr>
+            <td><code>rootfs</code></td>
+            <td><strong>/init</strong></td>
+            <td>1.9G</td>
+            <td>3M</td>
+            <td>1.9G</td>
+            <td>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <span style="width:36px; font-family:var(--font-mono);">1%</span>
+                    <div style="flex-grow:1; background:#0f172a; height:6px; border-radius:3px; overflow:hidden;">
+                        <div style="width:1%; height:100%; background:#22c55e;"></div>
+                    </div>
+                </div>
+            </td>
+            <td><span class="badge badge-success">OK</span></td>
+        </tr>
+        
+        <tr>
+            <td><code>none</code></td>
+            <td><strong>/mnt/wslg/versions.txt</strong></td>
+            <td>1.9G</td>
+            <td>0M</td>
+            <td>1.9G</td>
+            <td>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <span style="width:36px; font-family:var(--font-mono);">1%</span>
+                    <div style="flex-grow:1; background:#0f172a; height:6px; border-radius:3px; overflow:hidden;">
+                        <div style="width:1%; height:100%; background:#22c55e;"></div>
+                    </div>
+                </div>
+            </td>
+            <td><span class="badge badge-success">OK</span></td>
+        </tr>
+        
+        <tr>
+            <td><code>none</code></td>
+            <td><strong>/mnt/wslg/doc</strong></td>
+            <td>1.9G</td>
+            <td>0M</td>
+            <td>1.9G</td>
+            <td>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <span style="width:36px; font-family:var(--font-mono);">1%</span>
+                    <div style="flex-grow:1; background:#0f172a; height:6px; border-radius:3px; overflow:hidden;">
+                        <div style="width:1%; height:100%; background:#22c55e;"></div>
+                    </div>
+                </div>
+            </td>
+            <td><span class="badge badge-success">OK</span></td>
+        </tr>
+        
+        <tr>
+            <td><code>C:\</code></td>
+            <td><strong>/mnt/c</strong></td>
+            <td>117.2G</td>
+            <td>82.3G</td>
+            <td>34.9G</td>
+            <td>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <span style="width:36px; font-family:var(--font-mono);">71%</span>
+                    <div style="flex-grow:1; background:#0f172a; height:6px; border-radius:3px; overflow:hidden;">
+                        <div style="width:71%; height:100%; background:#f59e0b;"></div>
+                    </div>
+                </div>
+            </td>
+            <td><span class="badge badge-success">OK</span></td>
+        </tr>
+        
+        <tr>
+            <td><code>D:\</code></td>
+            <td><strong>/mnt/d</strong></td>
+            <td>917.4G</td>
+            <td>108.7G</td>
+            <td>808.7G</td>
+            <td>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <span style="width:36px; font-family:var(--font-mono);">12%</span>
+                    <div style="flex-grow:1; background:#0f172a; height:6px; border-radius:3px; overflow:hidden;">
+                        <div style="width:12%; height:100%; background:#22c55e;"></div>
+                    </div>
+                </div>
+            </td>
+            <td><span class="badge badge-success">OK</span></td>
+        </tr>
+        
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Section 3: Mitigation Playbook -->
+        <div class="section-panel">
+            <div class="section-header">
+                <h2>🛠️ Storage Remediation &amp; Mitigation Playbook</h2>
+            </div>
+            <div class="remed-grid">
+                <div class="remed-card">
+                    <h4>1. Isolate Storage Consumers</h4>
+                    <p>Identify the top 10 space-consuming directories on the affected volume:</p>
+                    <code>du -sh &lt;mount&gt;/* 2&gt;/dev/null | sort -hr | head -n 10</code>
+                </div>
+                <div class="remed-card">
+                    <h4>2. Clean Systemd Journals</h4>
+                    <p>Vacuum systemd journal archives older than 3 days:</p>
+                    <code>sudo journalctl --vacuum-time=3d</code>
+                </div>
+                <div class="remed-card">
+                    <h4>3. Purge Package Cache</h4>
+                    <p>Remove cached deb/rpm archives from package managers:</p>
+                    <code>sudo apt clean &amp;&amp; sudo apt autoremove --purge</code>
+                </div>
+                <div class="remed-card">
+                    <h4>4. Prune Container Footprints</h4>
+                    <p>Remove dangling images, build caches, and stopped containers:</p>
+                    <code>docker system prune -af --volumes</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: Live Terminal Console -->
+        <div class="section-panel">
+            <div class="section-header">
+                <h2>🖥️ Live Monitor Terminal Transcript</h2>
+                <span class="badge badge-info">CLI Console</span>
+            </div>
+            <div class="terminal-box">[36m[1m================================================================================[0m
+[36m[1m        LOW DISK SPACE MONITOR &amp; CAPACITY ALERT ENGINE (AS_07)                   [0m
+[36m[1m================================================================================[0m
+ Alert Threshold  : [1m80% utilization[0m
+ Hostname         : SP
+ Kernel           : 6.18.40.1-microsoft-standard-WSL2
+ Timestamp        : 2026-10-07 11:25:39 IST
+[36m--------------------------------------------------------------------------------[0m
+[32m[1m✅ HEALTHY: All 9 mounted file system(s) are within safe capacity limits (&lt; 80%).[0m
+
+[36m--------------------------------------------------------------------------------[0m
+[1mALL MOUNTED FILE SYSTEMS AUDIT SNAPSHOT:[0m
+FILESYSTEM               MOUNT POINT              TOTAL    USED     AVAIL    USE%
+--------------------------------------------------------------------------------
+none                     /usr/lib/modules/6.18.40.1-microsoft-standard-WSL2 1.9G     0        1.9G     0%
+drivers                  /usr/lib/wsl/drivers     118G     83G      35G      71%
+/dev/sdd                 /                        1007G    6.4G     950G     1%
+none                     /usr/lib/wsl/lib         1.9G     0        1.9G     0%
+rootfs                   /init                    1.9G     3.3M     1.9G     1%
+none                     /mnt/wslg/versions.txt   1.9G     80K      1.9G     1%
+none                     /mnt/wslg/doc            1.9G     80K      1.9G     1%
+C:\                      /mnt/c                   118G     83G      35G      71%
+D:\                      /mnt/d                   918G     109G     809G     12%
+[36m--------------------------------------------------------------------------------[0m
+[1mSUMMARY RESULTS:[0m
+  Overall Status       : [32mHEALTHY (0 Filesystems &amp;ge; 80%)[0m
+  Total Filesystems    : 9
+  Alert Threshold      : 80%
+  Audit Telemetry JSON : [36m/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_07/logs/disk_alert.json[0m
+  Persistent Log File  : [36m/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_07/logs/disk_alert.log[0m
+[36m================================================================================[0m</div>
+        </div>
+
+        <!-- Section 5: Persistent Audit Log -->
+        <div class="section-panel">
+            <div class="section-header">
+                <h2>📜 Persistent Capacity Audit Log (<code>logs/disk_alert.log</code>)</h2>
+                <span class="badge badge-info">Audit Trail</span>
+            </div>
+            <div class="terminal-box">[2026-10-07 11:23:18 IST] [INFO] Starting disk utilization scan with threshold 80%
+[2026-10-07 11:23:18 IST] [INFO] All 0 filesystems below 80% utilization threshold.
+[2026-10-07 11:23:33 IST] [INFO] Starting disk utilization scan with threshold 80%
+[2026-10-07 11:23:34 IST] [INFO] All 9 filesystems below 80% utilization threshold.
+[2026-10-07 11:23:39 IST] [INFO] Starting disk utilization scan with threshold 70%
+[2026-10-07 11:23:40 IST] [ALERT] Filesystem drivers mounted on /usr/lib/wsl/drivers crossed threshold: 71% (severity: WARNING)
+[2026-10-07 11:23:40 IST] [ALERT] Filesystem C:\ mounted on /mnt/c crossed threshold: 71% (severity: WARNING)
+[2026-10-07 11:24:35 IST] [INFO] Starting disk utilization scan with threshold 80%
+[2026-10-07 11:24:35 IST] [INFO] All 9 filesystems below 80% utilization threshold.
+[2026-10-07 11:25:09 IST] [INFO] Starting disk utilization scan with threshold 80%
+[2026-10-07 11:25:10 IST] [INFO] All 9 filesystems below 80% utilization threshold.
+[2026-10-07 11:25:39 IST] [INFO] Starting disk utilization scan with threshold 80%
+[2026-10-07 11:25:39 IST] [INFO] All 9 filesystems below 80% utilization threshold.</div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            Linux System Administration (E1ITA307) &bull; Automation Sprint AS_07 &bull; Generated dynamically via <code>run.sh</code>
+        </div>
+    </div>
+</body>
+</html>
