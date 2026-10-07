@@ -1,0 +1,15 @@
+{
+  "timestamp": "2026-10-07 16:43:57",
+  "target_user": "lsatest_offboard_demo",
+  "pre_shell": "/bin/bash",
+  "post_shell": "/usr/sbin/nologin",
+  "pre_shadow_status": "P",
+  "post_shadow_status": "L",
+  "account_expiry": "Jan 02, 1970",
+  "home_directory": "/home/lsatest_offboard_demo",
+  "archive_file": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_43/archives/lsatest_offboard_demo_archive_20261007_164355.tar.gz",
+  "archive_size_bytes": 2585,
+  "sha256": "708ff990d90271a38e7ff10ecf7ef90f4c77542d988d8cb0137d11ee19508fb6",
+  "archived_entries_count": 10,
+  "log_file": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_43/logs/offboarding_20261007_164355.log"
+}

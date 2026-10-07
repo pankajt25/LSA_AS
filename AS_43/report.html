@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AS_43 - Employee Offboarding Dashboard</title>
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --border-color: #30363d;
+            --text-primary: #c9d1d9;
+            --text-muted: #8b949e;
+            --accent-green: #238636;
+            --accent-red: #da3633;
+            --accent-blue: #1f6feb;
+            --accent-orange: #d29922;
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: var(--font-family);
+            margin: 0;
+            padding: 24px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px 24px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .header h1 {
+            margin: 0 0 6px 0;
+            font-size: 24px;
+            color: #58a6ff;
+        }
+        .header .meta {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .badge-success { background-color: rgba(46, 160, 67, 0.2); color: #3fb950; border: 1px solid rgba(46, 160, 67, 0.4); }
+        .badge-danger { background-color: rgba(248, 81, 73, 0.2); color: #f85149; border: 1px solid rgba(248, 81, 73, 0.4); }
+        .badge-warning { background-color: rgba(210, 153, 34, 0.2); color: #d29922; border: 1px solid rgba(210, 153, 34, 0.4); }
+        .badge-info { background-color: rgba(56, 139, 253, 0.2); color: #58a6ff; border: 1px solid rgba(56, 139, 253, 0.4); }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 18px;
+        }
+        .card-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        .card-val {
+            font-size: 24px;
+            font-weight: bold;
+            color: #f0f6fc;
+        }
+        .card-sub {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        .section {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: #f0f6fc;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        th, td {
+            text-align: left;
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        th {
+            background-color: #1c2128;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+        tr:hover td {
+            background-color: rgba(110, 118, 129, 0.05);
+        }
+        pre.log-box {
+            background-color: #0b0e14;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 14px;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 12px;
+            color: #7ee787;
+            overflow-x: auto;
+            max-height: 280px;
+            margin: 0;
+        }
+        .footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 12px;
+            margin-top: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>🔒 Employee Offboarding Dashboard (AS_43)</h1>
+                <div class="meta">
+                    <strong>Host:</strong> SP &bull; 
+                    <strong>OS:</strong> Linux-6.18.40.1-microsoft-standard-WSL2-x86_64-with-glibc2.43 &bull; 
+                    <strong>Executed:</strong> 2026-10-07 16:43:57
+                </div>
+            </div>
+            <div>
+                <span class="badge badge-danger">Account Offboarded</span>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <div class="card-label">Target Employee</div>
+                <div class="card-val" style="color: #58a6ff;">lsatest_offboard_demo</div>
+                <div class="card-sub">/home/lsatest_offboard_demo</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Account Lock Status</div>
+                <div class="card-val" style="color: #f85149;">LOCKED</div>
+                <div class="card-sub">Shadow flag: L (usermod -L)</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Login Shell</div>
+                <div class="card-val" style="font-size: 18px; color: #d29922;">nologin</div>
+                <div class="card-sub">/usr/sbin/nologin</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Home Directory Archive</div>
+                <div class="card-val" style="color: #3fb950;">2.52 KB</div>
+                <div class="card-sub">10 entries packaged</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">⚖️ Account State Transition (Before vs After)</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Security Control</th>
+                        <th>Pre-Offboarding State</th>
+                        <th>Post-Offboarding State</th>
+                        <th>Enforcement Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Interactive Shell</strong></td>
+                        <td><code>/bin/bash</code></td>
+                        <td><code>/usr/sbin/nologin</code></td>
+                        <td><span class="badge badge-success">✓ Shell Disabled</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Password Authentication</strong></td>
+                        <td><code>Active (P)</code></td>
+                        <td><code>Locked (L)</code></td>
+                        <td><span class="badge badge-success">✓ Shadow Locked</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Account Validity</strong></td>
+                        <td><code>Active</code></td>
+                        <td><code>Jan 02, 1970</code></td>
+                        <td><span class="badge badge-success">✓ Validity Revoked</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Active Processes</strong></td>
+                        <td><code>Running (if any)</code></td>
+                        <td><code>0 Processes</code></td>
+                        <td><span class="badge badge-success">✓ Terminated</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Data Preservation</strong></td>
+                        <td><code>Uncompressed Home</code></td>
+                        <td><code>lsatest_offboard_demo_archive_20261007_164355.tar.gz</code></td>
+                        <td><span class="badge badge-success">✓ SHA-256 Verified</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">📦 Archived User Files Manifest</h2>
+            <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px; font-family: monospace;">
+                SHA-256: 708ff990d90271a38e7ff10ecf7ef90f4c77542d988d8cb0137d11ee19508fb6
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Path in Archive</th>
+                        <th>Type</th>
+                        <th>Size</th>
+                        <th>File Mode</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                <tr>
+                    <td style="font-family: monospace; color: #79c0ff;">lsatest_offboard_demo</td>
+                    <td><span class="badge badge-info">Directory</span></td>
+                    <td>-</td>
+                    <td><code>o750</code></td>
+                </tr>
+                
+                <tr>
+                    <td style="font-family: monospace; color: #79c0ff;">lsatest_offboard_demo/documents</td>
+                    <td><span class="badge badge-info">Directory</span></td>
+                    <td>-</td>
+                    <td><code>o755</code></td>
+                </tr>
+                
+                <tr>
+                    <td style="font-family: monospace; color: #79c0ff;">lsatest_offboard_demo/documents/handover_notes.txt</td>
+                    <td><span class="badge badge-success">File</span></td>
+                    <td>27 B</td>
+                    <td><code>o644</code></td>
+                </tr>
+                
+                <tr>
+                    <td style="font-family: monospace; color: #79c0ff;">lsatest_offboard_demo/.bash_logout</td>
+                    <td><span class="badge badge-success">File</span></td>
+                    <td>220 B</td>
+                    <td><code>o644</code></td>
+                </tr>
+                
+                <tr>
+                    <td style="font-family: monospace; color: #79c0ff;">lsatest_offboard_demo/.bashrc</td>
+                    <td><span class="badge badge-success">File</span></td>
+                    <td>3,771 B</td>
+                    <td><code>o644</code></td>
+                </tr>
+                
+                <tr>
+                    <td style="font-family: monospace; color: #79c0ff;">lsatest_offboard_demo/projects</td>
+                    <td><span class="badge badge-info">Directory</span></td>
+                    <td>-</td>
+                    <td><code>o755</code></td>
+                </tr>
+                
+                <tr>
+                    <td style="font-family: monospace; color: #79c0ff;">lsatest_offboard_demo/projects/service.py</td>
+                    <td><span class="badge badge-success">File</span></td>
+                    <td>34 B</td>
+                    <td><code>o644</code></td>
+                </tr>
+                
+                <tr>
+                    <td style="font-family: monospace; color: #79c0ff;">lsatest_offboard_demo/mail</td>
+                    <td><span class="badge badge-info">Directory</span></td>
+                    <td>-</td>
+                    <td><code>o755</code></td>
+                </tr>
+                
+                <tr>
+                    <td style="font-family: monospace; color: #79c0ff;">lsatest_offboard_demo/mail/contacts.csv</td>
+                    <td><span class="badge badge-success">File</span></td>
+                    <td>21 B</td>
+                    <td><code>o644</code></td>
+                </tr>
+                
+                <tr>
+                    <td style="font-family: monospace; color: #79c0ff;">lsatest_offboard_demo/.profile</td>
+                    <td><span class="badge badge-success">File</span></td>
+                    <td>807 B</td>
+                    <td><code>o644</code></td>
+                </tr>
+                
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">📜 Offboarding Execution Audit Trail</h2>
+            <pre class="log-box">[2026-10-07 16:43:55] [INFO] ============================================================
+[2026-10-07 16:43:55] [INFO] LSA Sprint AS_43 - Employee Offboarding Engine
+[2026-10-07 16:43:55] [INFO] Target Employee:      lsatest_offboard_demo
+[2026-10-07 16:43:55] [INFO] Archive Directory:    /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_43/archives
+[2026-10-07 16:43:55] [INFO] Log File:             /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_43/logs/offboarding_20261007_164355.log
+[2026-10-07 16:43:55] [INFO] ============================================================
+[2026-10-07 16:43:55] [INFO] Demo user 'lsatest_offboard_demo' does not exist. Creating with sample files...
+[2026-10-07 16:43:55] [SUCCESS] Provisioned demo user 'lsatest_offboard_demo' with home directory '/home/lsatest_offboard_demo'.
+[2026-10-07 16:43:55] [INFO] Pre-Offboarding State:
+[2026-10-07 16:43:55] [INFO]   Home Directory:    /home/lsatest_offboard_demo
+[2026-10-07 16:43:56] [INFO]   Active Shell:      /bin/bash
+[2026-10-07 16:43:56] [INFO]   Password Status:   P (P=Password active, L=Locked, NP=No password)
+[2026-10-07 16:43:56] [INFO] Step 1: Terminating any active processes for 'lsatest_offboard_demo'...
+[2026-10-07 16:43:56] [SUCCESS] Active processes terminated. Remaining processes: 0.
+[2026-10-07 16:43:56] [INFO] Step 2: Locking user password...
+[2026-10-07 16:43:56] [SUCCESS] Password locked. Status: L.
+[2026-10-07 16:43:56] [INFO] Step 3: Disabling interactive login shell...
+[2026-10-07 16:43:56] [SUCCESS] Shell updated to: /usr/sbin/nologin.
+[2026-10-07 16:43:56] [INFO] Step 4: Expiring account validity date...
+[2026-10-07 16:43:56] [SUCCESS] Account expiry status: Jan 02, 1970.
+[2026-10-07 16:43:56] [INFO] Step 5: Archiving home directory '/home/lsatest_offboard_demo'...
+[2026-10-07 16:43:56] [SUCCESS] Home directory successfully archived: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_43/archives/lsatest_offboard_demo_archive_20261007_164355.tar.gz (2585 bytes).
+[2026-10-07 16:43:56] [SUCCESS] SHA-256 Digest: 708ff990d90271a38e7ff10ecf7ef90f4c77542d988d8cb0137d11ee19508fb6.
+[2026-10-07 16:43:56] [INFO] Verifying archive bundle integrity...
+[2026-10-07 16:43:56] [SUCCESS] Archive integrity confirmed. Contained entries: 10.
+[2026-10-07 16:43:57] [INFO] Employee offboarding completed successfully.
+</pre>
+        </div>
+
+        <div class="footer">
+            Linux System Administration (E1ITA307) &bull; Automation Sprint &bull; AS_43
+        </div>
+    </div>
+</body>
+</html>
