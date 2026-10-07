@@ -220,6 +220,13 @@ LSA_AS/
 │   ├── report.html                 # Standalone dark-themed dashboard report
 │   ├── logs/                       # Audit trail & JSON telemetry directory
 │   └── README.md                   # Problem documentation & usage
+├── AS_29/                          # Automation Sprint Problem #29
+│   ├── system_inventory.sh         # Core hardware, OS, storage & network inventory script
+│   ├── run.sh                      # Unified execution & HTML dashboard generator
+│   ├── commands_used.md            # Command log & system inventory reference
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── logs/                       # Audit trail & JSON telemetry directory
+│   └── README.md                   # Problem documentation & usage
 └── (Upcoming Projects)/            # Future Automation Sprint additions
 ```
 
@@ -257,6 +264,7 @@ LSA_AS/
 | **AS_26** | **Package Update Check** | Dynamic package manager detection (`apt`, `dnf`, `brew`, `pacman`, `zypper`), safe read-only index refresh, package version extraction, security vs standard classification, and dark-themed HTML report. | ✅ Completed | [`AS_26/`](./AS_26) |
 | **AS_27** | **Application Installation** | Menu-driven application catalog installer (`apt`, `dnf`, `pacman`), interactive & batch installation, safe demonstration testing (`cowsay`, `figlet`), clean uninstallation (`cleanup.sh`), and dark-themed HTML report. | ✅ Completed | [`AS_27/`](./AS_27) |
 | **AS_28** | **Package Verification** | Package manifest verification (`dpkg -s`, `rpm -q`, `pacman -Q`), version extraction, install command recommendation, compliance scoring, and dark-themed HTML report. | ✅ Completed | [`AS_28/`](./AS_28) |
+| **AS_29** | **System Inventory** | Complete hardware & OS specification audit (`/etc/os-release`, `uname -r`, `/proc/cpuinfo`, `free -m`, `df -hP`, `ip -br addr`), volume utilization, and dark-themed HTML report. | ✅ Completed | [`AS_29/`](./AS_29) |
 | *Upcoming* | *Future Sprints* | Additional automation tasks and administration solutions. | ⏳ Planned | — |
 
 ---
@@ -297,6 +305,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_26** | Package Update Check | `cd AS_26 && bash run.sh` |
 | **AS_27** | Application Installation | `cd AS_27 && bash run.sh` *(Run `bash cleanup.sh` afterward to restore system)* |
 | **AS_28** | Package Verification | `cd AS_28 && bash run.sh` |
+| **AS_29** | System Inventory | `cd AS_29 && bash run.sh` |
 
 ### 💻 Quick Command Reference by Operating System
 
@@ -330,6 +339,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_26** | `cd AS_26 && bash run.sh` | `cd AS_26 && bash run.sh` | `cd AS_26 && bash run.sh` | `cd AS_26 && bash run.sh` |
 | **AS_27** | `cd AS_27 && bash run.sh` | `cd AS_27 && bash run.sh` | `cd AS_27 && bash run.sh` | `cd AS_27 && bash run.sh` |
 | **AS_28** | `cd AS_28 && bash run.sh` | `cd AS_28 && bash run.sh` | `cd AS_28 && bash run.sh` | `cd AS_28 && bash run.sh` |
+| **AS_29** | `cd AS_29 && bash run.sh` | `cd AS_29 && bash run.sh` | `cd AS_29 && bash run.sh` | `cd AS_29 && bash run.sh` |
 
 ---
 
@@ -1171,8 +1181,36 @@ Verify if a given list of packages is installed on the system. For each package:
 - 📊 **Interactive Dashboard:** [`AS_28/report.html`](./AS_28/report.html)
 - 📖 **Sprint Documentation:** [`AS_28/README.md`](./AS_28/README.md)
 - 📜 **Audit Log File:** [`AS_28/logs/package_verifier.log`](./AS_28/logs/package_verifier.log)
-- 📄 **Package Manifest:** [`AS_28/packages.txt`](./AS_28/packages.txt)
-- 📋 **Command Log:** [`AS_28/commands_used.md`](./AS_28/commands_used.md)
+</details>
+
+<details>
+<summary><strong>AS_29 — System Inventory (Hardware, OS & Infrastructure Audit)</strong></summary>
+
+### Problem Statement
+Before configuring new software, you need full hardware and OS specifications. Write a script that collects and displays: OS name and version, kernel version, CPU model and core count, total and available RAM, disk partitions and sizes, network interfaces and IP addresses.
+
+### Summary of Approach
+- **Multi-Subsystem Telemetry Ingestion:** Seamlessly aggregates live system metrics spanning OS vendor release data (`/etc/os-release`), kernel release (`uname -r`), instruction architecture (`uname -m`), and uptime.
+- **Hardware Architecture Introspection:** Analyzes CPU hardware strings directly from `/proc/cpuinfo` and `nproc`, identifying processor model, core counts, and operating frequencies.
+- **Memory & Swap Utilization Breakdown:** Computes physical memory footprint (`free -m` / `/proc/meminfo`), separating total, used, free, and available memory alongside swap allocation and percentage utilization.
+- **Storage Volume & Mount Inventory:** Traverses non-virtual filesystem partitions (`df -hP -x tmpfs -x devtmpfs -x squashfs`), tabulating total volumes, allocated blocks, free capacity, and mount hierarchy.
+- **Network Interface & Address Enumeration:** Queries host network subsystem (`ip -br addr`), mapping interface operational status (`UP`/`DOWN`), hardware MAC addresses (`/sys/class/net`), and IPv4/IPv6 address allocations.
+- **Dual Telemetry Architecture:** Outputs clean ANSI terminal diagnostics, appends chronological traces to `logs/system_inventory.log`, and serializes structured JSON telemetry (`logs/system_inventory.json`).
+- **Cross-Platform HTML Dashboard (`run.sh`):** Executes hardware and OS inventory audit against host, generates a responsive dark dashboard `report.html` featuring hardware KPI cards, utilization progress bars, and inventory tables, and auto-opens in the default browser across WSL, Linux, macOS, and Git Bash.
+
+### Key Commands Used
+- `bash run.sh` — Single command to audit system inventory, regenerate dashboard, and open HTML report (Linux / macOS / Windows)
+- `./system_inventory.sh` — Collects and displays full hardware, OS, storage, and network specification
+- `./system_inventory.sh --json` — Emits structured machine-readable JSON telemetry
+- `./system_inventory.sh --summary` — Compact high-level executive summary
+- `df -hP -x tmpfs -x devtmpfs -x squashfs` — Audits physical storage partitions and mount points
+- `ip -br addr show` — Audits network interface states and IP configurations
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_29/report.html`](./AS_29/report.html)
+- 📖 **Sprint Documentation:** [`AS_29/README.md`](./AS_29/README.md)
+- 📜 **Audit Log File:** [`AS_29/logs/system_inventory.log`](./AS_29/logs/system_inventory.log)
+- 📋 **Command Log:** [`AS_29/commands_used.md`](./AS_29/commands_used.md)
 
 </details>
 
