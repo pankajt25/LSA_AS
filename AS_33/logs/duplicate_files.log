@@ -1,0 +1,35 @@
+[2026-10-07 15:32:17] DUPLICATE FILE DETECTOR RUN
+Directory: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_33/sandbox_data
+Algorithm: sha256
+Duplicate groups: 3
+Redundant files: 5
+Wasted space: 1.8 KB
+------------------------------------------------------------
+[2026-10-07 15:32:21] DUPLICATE FILE DETECTOR RUN
+Directory: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint
+Algorithm: sha256
+Duplicate groups: 6
+Redundant files: 9
+Wasted space: 6.3 KB
+------------------------------------------------------------
+[2026-10-07 15:33:27] DUPLICATE FILE DETECTOR RUN
+Directory: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint
+Algorithm: sha256
+Duplicate groups: 6
+Redundant files: 9
+Wasted space: 6.3 KB
+------------------------------------------------------------
+[2026-10-07 15:33:27] DUPLICATE FILE DETECTOR RUN
+Directory: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_33/sandbox_data
+Algorithm: sha256
+Duplicate groups: 3
+Redundant files: 5
+Wasted space: 1.8 KB
+------------------------------------------------------------
+[2026-10-07 15:33:32] DUPLICATE FILE DETECTOR RUN
+Directory: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint
+Algorithm: sha256
+Duplicate groups: 7
+Redundant files: 10
+Wasted space: 8.8 KB
+------------------------------------------------------------

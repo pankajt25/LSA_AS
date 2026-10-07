@@ -1,0 +1,83 @@
+{
+  "scan_metadata": {
+    "target_directory": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_33/sandbox_data",
+    "algorithm": "SHA256",
+    "min_size_filter": 1,
+    "scan_timestamp": "2026-10-07 15:33:27 "
+  },
+  "summary": {
+    "total_files_scanned": 11,
+    "total_directory_size_bytes": 3834,
+    "total_directory_size_human": "3.7 KB",
+    "candidate_collision_sizes": 3,
+    "files_hashed_count": 8,
+    "duplicate_groups_count": 3,
+    "redundant_files_count": 5,
+    "wasted_space_bytes": 1861,
+    "wasted_space_human": "1.8 KB",
+    "wasted_storage_percentage": 48.54
+  },
+  "duplicate_groups": [
+    {
+      "group_id": "DUP-001",
+      "checksum": "682670156671209c9a3c00c8cbfb183b72b969e17db2cb91505f9e162f53aaf2",
+      "algorithm": "SHA256",
+      "file_size_bytes": 656,
+      "file_size_human": "656 B",
+      "copies_count": 3,
+      "redundant_count": 2,
+      "wasted_bytes": 1312,
+      "wasted_human": "1.3 KB",
+      "original_file": "archive/brand_asset_2026.bin",
+      "duplicate_files": [
+        "media/favicon_hires.bin",
+        "media/logo_256.bin"
+      ],
+      "all_files": [
+        "archive/brand_asset_2026.bin",
+        "media/favicon_hires.bin",
+        "media/logo_256.bin"
+      ]
+    },
+    {
+      "group_id": "DUP-002",
+      "checksum": "7121fac28f91cc7261b241cd2507151474acbd850480203cd4b1d2b5ea2f0493",
+      "algorithm": "SHA256",
+      "file_size_bytes": 160,
+      "file_size_human": "160 B",
+      "copies_count": 3,
+      "redundant_count": 2,
+      "wasted_bytes": 320,
+      "wasted_human": "320 B",
+      "original_file": "archive/old_msa_copy.txt",
+      "duplicate_files": [
+        "contracts/master_services_agreement_2026.txt",
+        "contracts/msa_signed_backup.txt"
+      ],
+      "all_files": [
+        "archive/old_msa_copy.txt",
+        "contracts/master_services_agreement_2026.txt",
+        "contracts/msa_signed_backup.txt"
+      ]
+    },
+    {
+      "group_id": "DUP-003",
+      "checksum": "0ef56b3a3c06d93f8b8214cdce02f85d11133726a83586ccd66f03b0a9905a64",
+      "algorithm": "SHA256",
+      "file_size_bytes": 229,
+      "file_size_human": "229 B",
+      "copies_count": 2,
+      "redundant_count": 1,
+      "wasted_bytes": 229,
+      "wasted_human": "229 B",
+      "original_file": "backups/db_schema_seed.sql",
+      "duplicate_files": [
+        "configs/db_schema_v2.sql"
+      ],
+      "all_files": [
+        "backups/db_schema_seed.sql",
+        "configs/db_schema_v2.sql"
+      ]
+    }
+  ]
+}
