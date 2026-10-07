@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Health Check Dashboard — AS_06 (E1ITA307)</title>
+    <style>
+        :root {
+            --bg-primary: #0b0f19;
+            --bg-card: #151e32;
+            --bg-card-hover: #1b2742;
+            --border-color: #243452;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --cyan: #38bdf8;
+            --green: #22c55e;
+            --amber: #f59e0b;
+            --red: #ef4444;
+            --purple: #a855f7;
+            --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            font-family: var(--font-stack);
+            line-height: 1.6;
+            padding: 24px;
+        }
+        .container { max-width: 1380px; margin: 0 auto; }
+        .header {
+            background: linear-gradient(135deg, #151e32 0%, #1e293b 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 28px 32px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        }
+        .header-title h1 {
+            font-size: 1.85rem;
+            font-weight: 700;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .header-title p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-top: 6px;
+        }
+        .meta-pill {
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid var(--border-color);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .meta-pill strong { color: #ffffff; }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .card-metric-title {
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        .card-metric-value {
+            font-size: 1.85rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 6px;
+            font-family: var(--font-mono);
+        }
+        .card-metric-desc {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        .progress-bar-bg {
+            background: #0f172a;
+            border-radius: 6px;
+            height: 8px;
+            width: 100%;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.3s ease;
+        }
+
+        .section-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .section-header h2 {
+            font-size: 1.25rem;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 18px;
+        }
+
+        .stat-box {
+            background: #0d1526;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+        }
+        .stat-box-title {
+            font-size: 0.85rem;
+            color: var(--cyan);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 10px;
+        }
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.9rem;
+        }
+        .stat-item:last-child { border-bottom: none; }
+        .stat-label { color: var(--text-muted); }
+        .stat-val { color: #ffffff; font-family: var(--font-mono); font-weight: 600; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.92rem;
+        }
+        th {
+            background: #0f172a;
+            color: var(--text-muted);
+            text-align: left;
+            padding: 12px 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.78rem;
+            letter-spacing: 0.04em;
+            border-bottom: 2px solid var(--border-color);
+        }
+        td {
+            padding: 14px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-main);
+        }
+        tr:hover td {
+            background-color: var(--bg-card-hover);
+        }
+        code {
+            background: #0f172a;
+            color: var(--cyan);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 0.88rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        .badge-success { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
+        .badge-warning { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+        .badge-danger { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+        .badge-info { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+
+        .terminal-box {
+            background: #090d16;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: #e2e8f0;
+            max-height: 380px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-title">
+                <h1>🩺 Pre-Workday Server Health Check — AS_06</h1>
+                <p>Linux System Administration (E1ITA307) &bull; Core Subsystem Operational Telemetry &amp; Availability</p>
+            </div>
+            <div class="header-meta">
+                <span class="meta-pill">Host: <strong>SP</strong></span>
+                <span class="meta-pill">OS: <strong>Ubuntu 26.04.1 LTS</strong></span>
+                <span class="meta-pill">Kernel: <strong>6.18.40.1-microsoft-standard-WSL2</strong></span>
+                <span class="meta-pill">Operator: <strong>pankaj</strong></span>
+                <span class="meta-pill">Timestamp: <strong>2026-10-07 11:20:05 IST</strong></span>
+            </div>
+        </div>
+
+        <!-- Metric KPI Cards -->
+        <div class="cards-grid">
+            <div class="card" style="border-top: 4px solid var(--green);">
+                <div class="card-metric-title">System Uptime</div>
+                <div class="card-metric-value" style="font-size: 1.45rem; color: var(--green);">up 30 minutes</div>
+                <div class="card-metric-desc">Status: <strong style="color: #22c55e;">OPTIMAL</strong></div>
+            </div>
+
+            <div class="card" style="border-top: 4px solid var(--cyan);">
+                <div class="card-metric-title">CPU Utilization</div>
+                <div class="card-metric-value" style="color: var(--cyan);">1.6%</div>
+                <div class="card-metric-desc">Load (1m): <strong>0.15</strong> &bull; 4 Cores (0.04/core)</div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" style="width: 1.6%; background: var(--cyan);"></div>
+                </div>
+            </div>
+
+            <div class="card" style="border-top: 4px solid var(--purple);">
+                <div class="card-metric-title">Memory (RAM)</div>
+                <div class="card-metric-value" style="color: var(--purple);">18.9%</div>
+                <div class="card-metric-desc">732Mi used of 3.8Gi (3.1Gi free)</div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" style="width: 18.9%; background: var(--purple);"></div>
+                </div>
+            </div>
+
+            <div class="card" style="border-top: 4px solid var(--amber);">
+                <div class="card-metric-title">Disk Storage (Root /)</div>
+                <div class="card-metric-value" style="color: var(--amber);">1%</div>
+                <div class="card-metric-desc">6.4G used of 1007G (950G free)</div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" style="width: 1.0%; background: var(--amber);"></div>
+                </div>
+            </div>
+
+            <div class="card" style="border-top: 4px solid var(--cyan);">
+                <div class="card-metric-title">Logged-in Users</div>
+                <div class="card-metric-value" style="color: #ffffff;">1</div>
+                <div class="card-metric-desc">Active interactive login session(s)</div>
+            </div>
+        </div>
+
+        <!-- Subsystems Deep Dive Grid -->
+        <div class="section-panel">
+            <div class="section-header">
+                <h2>📊 Subsystem Telemetry Breakdown</h2>
+                <span class="badge" style="background: rgba(34,197,94,0.15); color: #22c55e; border: 1px solid #22c55e;">
+                    OPERATIONAL: OPTIMAL
+                </span>
+            </div>
+            <div class="grid-2">
+                <!-- Box 1: CPU & Load -->
+                <div class="stat-box">
+                    <div class="stat-box-title">⚡ Processor &amp; Load Architecture</div>
+                    <div class="stat-item"><span class="stat-label">Physical / Virtual Cores</span><span class="stat-val">4</span></div>
+                    <div class="stat-item"><span class="stat-label">Active CPU Utilization</span><span class="stat-val">1.6%</span></div>
+                    <div class="stat-item"><span class="stat-label">1-Minute Load Average</span><span class="stat-val">0.15</span></div>
+                    <div class="stat-item"><span class="stat-label">5-Minute Load Average</span><span class="stat-val">0.22</span></div>
+                    <div class="stat-item"><span class="stat-label">15-Minute Load Average</span><span class="stat-val">0.22</span></div>
+                    <div class="stat-item"><span class="stat-label">Normalized Load Per Core</span><span class="stat-val">0.04</span></div>
+                </div>
+
+                <!-- Box 2: Memory & Storage -->
+                <div class="stat-box">
+                    <div class="stat-box-title">💾 Memory &amp; Storage Footprint</div>
+                    <div class="stat-item"><span class="stat-label">Total Physical RAM</span><span class="stat-val">3.8Gi</span></div>
+                    <div class="stat-item"><span class="stat-label">RAM Allocated (Used)</span><span class="stat-val">732Mi (18.9%)</span></div>
+                    <div class="stat-item"><span class="stat-label">Available System Memory</span><span class="stat-val">3.1Gi</span></div>
+                    <div class="stat-item"><span class="stat-label">Root Partition Size (/)</span><span class="stat-val">1007G</span></div>
+                    <div class="stat-item"><span class="stat-label">Root Disk Used Space</span><span class="stat-val">6.4G (1%)</span></div>
+                    <div class="stat-item"><span class="stat-label">Root Disk Free Space</span><span class="stat-val">950G</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active User Sessions Table -->
+        <div class="section-panel">
+            <div class="section-header">
+                <h2>👥 Active Logged-In User Sessions</h2>
+                <span class="badge badge-info">1 Session(s) Active</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Terminal (TTY)</th>
+                        <th>Login Timestamp</th>
+                        <th>Remote Host / Origin</th>
+                        <th>Session Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+        <tr>
+            <td><strong>pankaj</strong></td>
+            <td><code>pts/1</code></td>
+            <td>2026-10-07 10:41</td>
+            <td><code>local</code></td>
+            <td><span class="badge badge-success">Active Session</span></td>
+        </tr>
+        
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Terminal Execution Transcript -->
+        <div class="section-panel">
+            <div class="section-header">
+                <h2>🖥️ Live Health Check Terminal Transcript</h2>
+                <span class="badge badge-info">CLI Console</span>
+            </div>
+            <div class="terminal-box">[36m[1m================================================================================[0m
+[36m[1m          PRE-WORKDAY SERVER HEALTH CHECK &amp; OPERATIONAL AUDIT (AS_06)            [0m
+[36m[1m================================================================================[0m
+ Hostname       : [1mSP[0m (Ubuntu 26.04.1 LTS)
+ Kernel / Arch  : 6.18.40.1-microsoft-standard-WSL2 (x86_64)
+ System Uptime  : [32mup 30 minutes[0m (Boot: )
+ Timestamp      : 2026-10-07 11:20:04 IST
+[36m--------------------------------------------------------------------------------[0m
+[1m[1] CPU &amp; SYSTEM LOAD AUDIT[0m
+  - Logical Cores  : 4 core(s)
+  - CPU Utilization: [1m1.6%[0m
+  - Load Averages  : 1m: [1m0.15[0m | 5m: [1m0.22[0m | 15m: [1m0.22[0m
+  - Load per Core  : [1m0.04[0m (Threshold: &lt; 1.5)
+
+[1m[2] MEMORY (RAM) &amp; SWAP ACCOUNTING[0m
+  - Total RAM      : 3.8Gi (3869 MB)
+  - Used RAM       : 732Mi (732 MB) -&gt; [1m18.9%[0m
+  - Available RAM  : [32m3.1Gi (3136 MB)[0m
+  - Swap Space     : 0 MB used / 1024 MB total (0.0%)
+
+[1m[3] STORAGE &amp; DISK UTILIZATION (ROOT /)[0m
+  - Total Space    : 1007G
+  - Used Space     : 6.4G ([1m1%[0m)
+  - Available      : [32m950G[0m
+  - Filesystem Table:
+      Filesystem      Size  Used Avail Use% Mounted on
+      none            1.9G     0  1.9G   0% /usr/lib/modules/6.18.40.1-microsoft-standard-WSL2
+      drivers         118G   83G   35G  71% /usr/lib/wsl/drivers
+      /dev/sdd       1007G  6.4G  950G   1% /
+      none            1.9G     0  1.9G   0% /usr/lib/wsl/lib
+      rootfs          1.9G  3.3M  1.9G   1% /init
+
+[1m[4] ACTIVE LOGGED-IN USERS &amp; TERMINAL SESSIONS[0m
+  - Total Active Sessions: [1m1[0m
+      USER         TTY        LOGIN TIME         FROM
+      --------------------------------------------------------
+      pankaj       pts/1      2026-10-07 10:41   
+
+[1m[5] PROCESS DIAGNOSTICS[0m
+  - Active Tasks   : 36 total processes
+  - Zombie Tasks   : [31m1 ZOMBIES DETECTED[0m
+[36m--------------------------------------------------------------------------------[0m
+[1mSYSTEM OPERATIONAL STATUS: [32mOPTIMAL[0m
+  [33m⚠️  WARNING: Detected 1 zombie process(es)[0m
+ Telemetry File : [36m/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_06/logs/server_health_check.json[0m
+ Audit Log File : [36m/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_06/logs/server_health_check.log[0m
+[36m================================================================================[0m</div>
+        </div>
+
+        <!-- Persistent Audit Log Viewer -->
+        <div class="section-panel">
+            <div class="section-header">
+                <h2>📜 Persistent Health Log (<code>logs/server_health_check.log</code>)</h2>
+                <span class="badge badge-info">Audit Trail</span>
+            </div>
+            <div class="terminal-box">[2026-10-07 11:19:02 IST] [HEALTH] Health scan completed. Status: OPTIMAL, CPU: 2.4%, Mem: 18.8%, Disk: 1%
+[2026-10-07 11:19:08 IST] [HEALTH] Health scan completed. Status: OPTIMAL, CPU: 3.2%, Mem: 19.0%, Disk: 1%
+[2026-10-07 11:20:05 IST] [HEALTH] Health scan completed. Status: OPTIMAL, CPU: 1.6%, Mem: 18.9%, Disk: 1%</div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            Linux System Administration (E1ITA307) &bull; Automation Sprint AS_06 &bull; Generated dynamically via <code>run.sh</code>
+        </div>
+    </div>
+</body>
+</html>
