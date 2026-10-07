@@ -227,6 +227,14 @@ LSA_AS/
 │   ├── report.html                 # Standalone dark-themed dashboard report
 │   ├── logs/                       # Audit trail & JSON telemetry directory
 │   └── README.md                   # Problem documentation & usage
+├── AS_30/                          # Automation Sprint Problem #30
+│   ├── logged_in_users.sh          # Core logged-in user, tty, remote IP & idle monitoring script
+│   ├── run.sh                      # Unified execution & HTML dashboard generator
+│   ├── commands_used.md            # Command log & user monitoring reference
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── logs/                       # Audit trail & JSON telemetry directory
+│   ├── sandbox_data/               # Simulated enterprise multi-user session dataset
+│   └── README.md                   # Problem documentation & usage
 └── (Upcoming Projects)/            # Future Automation Sprint additions
 ```
 
@@ -265,6 +273,7 @@ LSA_AS/
 | **AS_27** | **Application Installation** | Menu-driven application catalog installer (`apt`, `dnf`, `pacman`), interactive & batch installation, safe demonstration testing (`cowsay`, `figlet`), clean uninstallation (`cleanup.sh`), and dark-themed HTML report. | ✅ Completed | [`AS_27/`](./AS_27) |
 | **AS_28** | **Package Verification** | Package manifest verification (`dpkg -s`, `rpm -q`, `pacman -Q`), version extraction, install command recommendation, compliance scoring, and dark-themed HTML report. | ✅ Completed | [`AS_28/`](./AS_28) |
 | **AS_29** | **System Inventory** | Complete hardware & OS specification audit (`/etc/os-release`, `uname -r`, `/proc/cpuinfo`, `free -m`, `df -hP`, `ip -br addr`), volume utilization, and dark-themed HTML report. | ✅ Completed | [`AS_29/`](./AS_29) |
+| **AS_30** | **Logged-in User Report** | Real-time session monitoring (`w`, `who -u`, `loginctl`), terminal inspection (`tty`/`pts`), remote IP attribution, idle metrics, and dark-themed HTML report. | ✅ Completed | [`AS_30/`](./AS_30) |
 | *Upcoming* | *Future Sprints* | Additional automation tasks and administration solutions. | ⏳ Planned | — |
 
 ---
@@ -306,6 +315,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_27** | Application Installation | `cd AS_27 && bash run.sh` *(Run `bash cleanup.sh` afterward to restore system)* |
 | **AS_28** | Package Verification | `cd AS_28 && bash run.sh` |
 | **AS_29** | System Inventory | `cd AS_29 && bash run.sh` |
+| **AS_30** | Logged-in User Report | `cd AS_30 && bash run.sh` |
 
 ### 💻 Quick Command Reference by Operating System
 
@@ -340,6 +350,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_27** | `cd AS_27 && bash run.sh` | `cd AS_27 && bash run.sh` | `cd AS_27 && bash run.sh` | `cd AS_27 && bash run.sh` |
 | **AS_28** | `cd AS_28 && bash run.sh` | `cd AS_28 && bash run.sh` | `cd AS_28 && bash run.sh` | `cd AS_28 && bash run.sh` |
 | **AS_29** | `cd AS_29 && bash run.sh` | `cd AS_29 && bash run.sh` | `cd AS_29 && bash run.sh` | `cd AS_29 && bash run.sh` |
+| **AS_30** | `cd AS_30 && bash run.sh` | `cd AS_30 && bash run.sh` | `cd AS_30 && bash run.sh` | `cd AS_30 && bash run.sh` |
 
 ---
 
@@ -1209,8 +1220,34 @@ Before configuring new software, you need full hardware and OS specifications. W
 ### Dashboard Report & Documentation
 - 📊 **Interactive Dashboard:** [`AS_29/report.html`](./AS_29/report.html)
 - 📖 **Sprint Documentation:** [`AS_29/README.md`](./AS_29/README.md)
-- 📜 **Audit Log File:** [`AS_29/logs/system_inventory.log`](./AS_29/logs/system_inventory.log)
-- 📋 **Command Log:** [`AS_29/commands_used.md`](./AS_29/commands_used.md)
+</details>
+
+<details>
+<summary><strong>AS_30 — Logged-in User Report (User Monitoring & Session Auditing)</strong></summary>
+
+### Problem Statement
+Sysadmins need to know who is currently using the system. Write a script that checks and displays: all currently logged-in users, terminal (`tty`/`pts`) they are using, login time, remote host/IP (if logged in remotely), and idle time.
+
+### Summary of Approach
+- **Multi-Source Session Discovery:** Ingests active utmp/wtmp session tables (`w -h`, `who -u`, `loginctl list-sessions`), handling single-console WSL instances and multi-user environments with equal reliability.
+- **Granular Session Metadata Parsing:** Formats username, terminal line (`pts/X` / `ttyX`), source host/IP (remote network address or local console), session login time, idle duration, and foreground active command.
+- **Connection Type & Activity Classification:** Differentiates remote SSH/network logins from physical local/console logins, classifying session responsiveness (active execution vs idle vs stale).
+- **Dual Telemetry Architecture:** Outputs clean ANSI terminal tables, appends chronological traces to `logs/user_sessions.log`, and serializes structured JSON telemetry (`logs/user_sessions.json`).
+- **Cross-Platform HTML Dashboard (`run.sh`):** Executes live user session audit, embeds comparative multi-user enterprise scenario drill results (`sandbox_data/simulated_w.txt`), builds a responsive dark dashboard `report.html`, and auto-opens in the default browser across WSL, Linux, macOS, and Git Bash.
+
+### Key Commands Used
+- `bash run.sh` — Single command to audit user sessions, regenerate dashboard, and open HTML report (Linux / macOS / Windows)
+- `./logged_in_users.sh` — Inspects live host active sessions
+- `./logged_in_users.sh --sandbox` — Audits simulated enterprise multi-user scenario
+- `./logged_in_users.sh --json` — Emits structured machine-readable JSON telemetry
+- `w -h` — Queries active session records without headers
+- `who -u` — Queries terminal devices, login timestamps, and idle durations
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_30/report.html`](./AS_30/report.html)
+- 📖 **Sprint Documentation:** [`AS_30/README.md`](./AS_30/README.md)
+- 📜 **Audit Log File:** [`AS_30/logs/user_sessions.log`](./AS_30/logs/user_sessions.log)
+- 📋 **Command Log:** [`AS_30/commands_used.md`](./AS_30/commands_used.md)
 
 </details>
 
