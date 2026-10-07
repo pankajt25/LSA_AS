@@ -276,6 +276,15 @@ LSA_AS/
 │   ├── logs/                       # Audit trail & JSON telemetry directory
 │   ├── sandbox_data/               # Simulated corporate active log repository
 │   └── README.md                   # Problem documentation & usage
+├── AS_36/                          # Automation Sprint Problem #36
+│   ├── routine_maintenance.sh      # Core routine maintenance & cron scheduling automation
+│   ├── cleanup.sh                  # Safe cron teardown & system restoration script
+│   ├── run.sh                      # Unified execution & HTML dashboard generator
+│   ├── commands_used.md            # Command log & routine maintenance reference
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── logs/                       # Audit trail & JSON telemetry directory
+│   ├── sandbox_data/               # Simulated cache & temporary file test datasets
+│   └── README.md                   # Problem documentation & usage
 └── (Upcoming Projects)/            # Future Automation Sprint additions
 ```
 
@@ -320,6 +329,7 @@ LSA_AS/
 | **AS_33** | **Duplicate File Detection** | Cryptographic content hashing (`sha256sum`, `md5sum`), two-tier size collision optimization, redundant copy tracking, storage recovery calculations, and dark-themed HTML report. | ✅ Completed | [`AS_33/`](./AS_33) |
 | **AS_34** | **File Integrity Check** | Cryptographic baseline auditing (`sha256sum -c`), 4-state lifecycle tracking (intact, tampered, missing, untracked), compliance scoring, and dark-themed HTML report. | ✅ Completed | [`AS_34/`](./AS_34) |
 | **AS_35** | **Log Archival** | Automated log packaging (`tar -czf`), timestamped archiving, non-destructive decompression testing (`tar -tzf`), cryptographic SHA-256 validation, and dark-themed HTML report. | ✅ Completed | [`AS_35/`](./AS_35) |
+| **AS_36** | **Routine Server Maintenance** | Routine system maintenance (`sync`, `/tmp` cache cleanup, package database & apt check, journald/log audit, zombie detection), Cron automation with `# LSA_SPRINT_TEST` safety tag, safe teardown (`cleanup.sh`), and dark-themed HTML report. | ✅ Completed | [`AS_36/`](./AS_36) |
 | *Upcoming* | *Future Sprints* | Additional automation tasks and administration solutions. | ⏳ Planned | — |
 
 ---
@@ -367,6 +377,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_33** | Duplicate File Detection | `cd AS_33 && bash run.sh` |
 | **AS_34** | File Integrity Check | `cd AS_34 && bash run.sh` |
 | **AS_35** | Log Archival | `cd AS_35 && bash run.sh` |
+| **AS_36** | Routine Server Maintenance | `cd AS_36 && bash run.sh` *(Run `bash cleanup.sh` afterward to restore system)* |
 
 ### 💻 Quick Command Reference by Operating System
 
@@ -407,6 +418,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_33** | `cd AS_33 && bash run.sh` | `cd AS_33 && bash run.sh` | `cd AS_33 && bash run.sh` | `cd AS_33 && bash run.sh` |
 | **AS_34** | `cd AS_34 && bash run.sh` | `cd AS_34 && bash run.sh` | `cd AS_34 && bash run.sh` | `cd AS_34 && bash run.sh` |
 | **AS_35** | `cd AS_35 && bash run.sh` | `cd AS_35 && bash run.sh` | `cd AS_35 && bash run.sh` | `cd AS_35 && bash run.sh` |
+| **AS_36** | `cd AS_36 && bash run.sh` | `cd AS_36 && bash run.sh` | `cd AS_36 && bash run.sh` | `cd AS_36 && bash run.sh` |
 
 ---
 
@@ -1461,6 +1473,37 @@ An organization needs to archive old log files. Develop a script to compress sel
 - 📖 **Sprint Documentation:** [`AS_35/README.md`](./AS_35/README.md)
 - 📜 **Audit Log File:** [`AS_35/logs/log_archival.log`](./AS_35/logs/log_archival.log)
 - 📋 **Command Log:** [`AS_35/commands_used.md`](./AS_35/commands_used.md)
+
+</details>
+
+<details>
+<summary><strong>AS_36 — Routine Server Maintenance (Cron Automation & System Hygiene)</strong></summary>
+
+### Problem Statement
+Create a shell script for routine server maintenance and schedule it using Cron.
+
+### Summary of Approach
+- **Multi-Vector Maintenance Routines:** Implements automated tasks spanning transient file inspection (`/tmp`, user cache), package repository and dependency checking (`dpkg --audit`, `apt-get check`), log and journal footprint tracking (`journalctl --disk-usage`, `/var/log`), buffer cache synchronization (`sync`), zombie process auditing (`ps -eo stat`), and root storage capacity verification (`df -hP /`).
+- **Cron Automation Engine:** Includes integrated cron installation (`--schedule`), status verification (`--verify-cron`), and safe removal (`--unschedule`) targeting user crontabs.
+- **Strict Test Sandboxing & Naming Convention:** Appends the mandatory `# LSA_SPRINT_TEST` tag to all scheduled cron entries and provides a dedicated teardown script (`cleanup.sh`) to restore the system without affecting human or production jobs.
+- **Structured JSON Telemetry & Audit Logs:** Logs operations chronologically to `logs/maintenance.log` and serializes structured JSON telemetry to `logs/maintenance_telemetry.json`.
+- **Cross-Platform HTML Dashboard (`run.sh`):** Executes maintenance routines on live system datasets, registers and audits the cron schedule, regenerates `report.html`, and launches the report via native OS openers (WSL, Linux, macOS, Git Bash).
+
+### Key Commands Used
+- `cd AS_36 && bash run.sh` — Single command to execute maintenance, configure cron, and launch HTML dashboard
+- `bash cleanup.sh` — Safely tears down test cron entries and restores host crontab state
+- `./routine_maintenance.sh --run` — Executes all routine maintenance tasks against real host data
+- `./routine_maintenance.sh --schedule "0 2 * * *"` — Installs routine maintenance cron schedule
+- `./routine_maintenance.sh --verify-cron` — Audits active cron schedule for test job
+- `./routine_maintenance.sh --unschedule` — Removes scheduled maintenance cron job
+- `sync` — Flushes dirty filesystem buffers from RAM cache to disk
+- `journalctl --disk-usage` — Inspects systemd journal storage consumption
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_36/report.html`](./AS_36/report.html)
+- 📖 **Sprint Documentation:** [`AS_36/README.md`](./AS_36/README.md)
+- 📜 **Audit Log File:** [`AS_36/logs/maintenance.log`](./AS_36/logs/maintenance.log)
+- 📋 **Command Log:** [`AS_36/commands_used.md`](./AS_36/commands_used.md)
 
 </details>
 
