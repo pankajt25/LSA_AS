@@ -235,6 +235,14 @@ LSA_AS/
 │   ├── logs/                       # Audit trail & JSON telemetry directory
 │   ├── sandbox_data/               # Simulated enterprise multi-user session dataset
 │   └── README.md                   # Problem documentation & usage
+├── AS_31/                          # Automation Sprint Problem #31
+│   ├── user_login_audit.sh         # Core user login audit & PAM session extraction script
+│   ├── run.sh                      # Unified execution & HTML dashboard generator
+│   ├── commands_used.md            # Command log & security audit reference
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── logs/                       # Audit trail & JSON telemetry directory
+│   ├── sandbox_data/               # Simulated enterprise multi-user auth log dataset
+│   └── README.md                   # Problem documentation & usage
 └── (Upcoming Projects)/            # Future Automation Sprint additions
 ```
 
@@ -274,6 +282,7 @@ LSA_AS/
 | **AS_28** | **Package Verification** | Package manifest verification (`dpkg -s`, `rpm -q`, `pacman -Q`), version extraction, install command recommendation, compliance scoring, and dark-themed HTML report. | ✅ Completed | [`AS_28/`](./AS_28) |
 | **AS_29** | **System Inventory** | Complete hardware & OS specification audit (`/etc/os-release`, `uname -r`, `/proc/cpuinfo`, `free -m`, `df -hP`, `ip -br addr`), volume utilization, and dark-themed HTML report. | ✅ Completed | [`AS_29/`](./AS_29) |
 | **AS_30** | **Logged-in User Report** | Real-time session monitoring (`w`, `who -u`, `loginctl`), terminal inspection (`tty`/`pts`), remote IP attribution, idle metrics, and dark-themed HTML report. | ✅ Completed | [`AS_30/`](./AS_30) |
+| **AS_31** | **User Login Audit** | Automated session history auditing (`/var/log/auth.log`, `last`, `who -a`), PAM event parsing, SSH vs local attribution, distinct account profiling, and dark-themed HTML report. | ✅ Completed | [`AS_31/`](./AS_31) |
 | *Upcoming* | *Future Sprints* | Additional automation tasks and administration solutions. | ⏳ Planned | — |
 
 ---
@@ -316,6 +325,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_28** | Package Verification | `cd AS_28 && bash run.sh` |
 | **AS_29** | System Inventory | `cd AS_29 && bash run.sh` |
 | **AS_30** | Logged-in User Report | `cd AS_30 && bash run.sh` |
+| **AS_31** | User Login Audit | `cd AS_31 && bash run.sh` |
 
 ### 💻 Quick Command Reference by Operating System
 
@@ -351,6 +361,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_28** | `cd AS_28 && bash run.sh` | `cd AS_28 && bash run.sh` | `cd AS_28 && bash run.sh` | `cd AS_28 && bash run.sh` |
 | **AS_29** | `cd AS_29 && bash run.sh` | `cd AS_29 && bash run.sh` | `cd AS_29 && bash run.sh` | `cd AS_29 && bash run.sh` |
 | **AS_30** | `cd AS_30 && bash run.sh` | `cd AS_30 && bash run.sh` | `cd AS_30 && bash run.sh` | `cd AS_30 && bash run.sh` |
+| **AS_31** | `cd AS_31 && bash run.sh` | `cd AS_31 && bash run.sh` | `cd AS_31 && bash run.sh` | `cd AS_31 && bash run.sh` |
 
 ---
 
@@ -1248,6 +1259,37 @@ Sysadmins need to know who is currently using the system. Write a script that ch
 - 📖 **Sprint Documentation:** [`AS_30/README.md`](./AS_30/README.md)
 - 📜 **Audit Log File:** [`AS_30/logs/user_sessions.log`](./AS_30/logs/user_sessions.log)
 - 📋 **Command Log:** [`AS_30/commands_used.md`](./AS_30/commands_used.md)
+
+</details>
+
+<details>
+<summary><strong>AS_31 — User Login Audit (Security Audit & Session Tracking)</strong></summary>
+
+### Problem Statement
+Develop a script that generates a report of recent user login activities from the system.
+
+### Summary of Approach
+- **Multi-Tier Login History Ingestion:** Resiliently extracts user login events across PAM authentication logs (`/var/log/auth.log`, `/var/log/secure`), systemd journal logs (`journalctl`), `wtmp` binary records, and `last` utility queries.
+- **Active Session Cross-Referencing:** Merges historical audit records with live terminal and desktop sessions via `who -u` and `loginctl list-sessions`, distinguishing active sessions from closed/terminated connections.
+- **Connection Type & Network Attribution:** Identifies whether logins originated via remote SSH (`sshd`), local console/TTY (`login`), GUI display managers, or sudo privilege escalations (`sudo`), capturing originating remote IPs and terminal devices.
+- **Dual Telemetry Architecture:** Outputs clean ANSI terminal diagnostics, appends chronological traces to `logs/login_audit.log`, and serializes structured JSON telemetry (`logs/login_audit.json`).
+- **Cross-Platform HTML Dashboard (`run.sh`):** Executes live login audit against host, generates a responsive dark dashboard `report.html` featuring telemetry KPI cards, live vs drill table comparisons, and terminal logs, and auto-opens in the default browser across WSL, Linux, macOS, and Git Bash.
+
+### Key Commands Used
+- `bash run.sh` — Single command to audit user logins, regenerate dashboard, and open HTML report (Linux / macOS / Windows)
+- `./user_login_audit.sh` — Inspects live host login activities and active sessions
+- `./user_login_audit.sh --user <name>` — Filters login audit by target username
+- `./user_login_audit.sh --remote` — Filters to show only remote network logins
+- `./user_login_audit.sh --sandbox` — Audits simulated enterprise multi-user scenario
+- `./user_login_audit.sh --json` — Emits structured machine-readable JSON telemetry
+- `who -u` / `who -a` — Queries terminal devices and active user lines
+- `grep "session opened" /var/log/auth.log` — Extracts PAM login sessions
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_31/report.html`](./AS_31/report.html)
+- 📖 **Sprint Documentation:** [`AS_31/README.md`](./AS_31/README.md)
+- 📜 **Audit Log File:** [`AS_31/logs/login_audit.log`](./AS_31/logs/login_audit.log)
+- 📋 **Command Log:** [`AS_31/commands_used.md`](./AS_31/commands_used.md)
 
 </details>
 
