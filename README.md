@@ -382,6 +382,14 @@ LSA_AS/
 │   ├── reports/                    # Plaintext daily report archive & latest link
 │   ├── logs/                       # Audit trail & JSON telemetry directory
 │   └── README.md                   # Problem documentation & usage
+├── AS_49/                          # Automation Sprint Problem #49
+│   ├── sync_project.sh             # Core automated file synchronization & rsync delta engine
+│   ├── run.sh                      # Unified execution & HTML dashboard generator
+│   ├── commands_used.md            # Command log & rsync reference
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── logs/                       # Audit trail & JSON telemetry directory
+│   ├── sandbox_data/               # Isolated source and destination project mirrors
+│   └── README.md                   # Problem documentation & usage
 └── (Upcoming Projects)/            # Future Automation Sprint additions
 ```
 
@@ -439,6 +447,7 @@ LSA_AS/
 | **AS_46** | **Service Status Dashboard** | Live systemd service matrix auditing (`systemctl is-active`, `is-enabled`), cgroup memory measurement (`MemoryCurrent`), PID extraction, uninstalled unit handling, and dark-themed HTML report. | ✅ Completed | [`AS_46/`](./AS_46) |
 | **AS_47** | **Security Audit Report** | Multi-vector vulnerability auditing: password-less accounts (`/etc/shadow`), world-writable files (`find -perm -0002`), failed logins (`/var/log/auth.log`), active sessions (`who`), safe teardown (`cleanup.sh`), and dark-themed HTML report. | ✅ Completed | [`AS_47/`](./AS_47) |
 | **AS_48** | **Administrator Daily Report** | Consolidated administrative briefing: uptime (`/proc/uptime`), CPU utilization (`/proc/stat` delta), memory & swap allocation (`/proc/meminfo`), root storage (`df -hP`), active users (`who`), core daemons, plaintext summary generation, and dark-themed HTML report. | ✅ Completed | [`AS_48/`](./AS_48) |
+| **AS_49** | **Automated File Synchronization** | Automated folder synchronization engine using `rsync` (`-avh --delete --stats`), delta transfer optimization, cryptographic SHA-256 integrity verification, sandboxed isolation, and dark-themed HTML report. | ✅ Completed | [`AS_49/`](./AS_49) |
 | *Upcoming* | *Future Sprints* | Additional automation tasks and administration solutions. | ⏳ Planned | — |
 
 ---
@@ -491,6 +500,15 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_38** | Scheduled Health Report | `cd AS_38 && bash run.sh` *(Run `bash cleanup.sh` afterward to restore system)* |
 | **AS_39** | Disk and Inode Check | `cd AS_39 && bash run.sh` |
 | **AS_40** | Mounted File System Report | `cd AS_40 && bash run.sh` |
+| **AS_41** | Archive Old Files | `cd AS_41 && bash run.sh` |
+| **AS_42** | Department Directory Setup | `cd AS_42 && bash run.sh` *(Run `bash cleanup.sh` afterward to restore system)* |
+| **AS_43** | Employee Offboarding | `cd AS_43 && bash run.sh` *(Run `bash cleanup.sh` afterward to restore system)* |
+| **AS_44** | Resource Threshold Monitor | `cd AS_44 && bash run.sh` |
+| **AS_45** | Server Uptime Report | `cd AS_45 && bash run.sh` |
+| **AS_46** | Service Status Dashboard | `cd AS_46 && bash run.sh` |
+| **AS_47** | Security Audit Report | `cd AS_47 && bash run.sh` *(Run `bash cleanup.sh` afterward to restore system)* |
+| **AS_48** | Administrator Daily Report | `cd AS_48 && bash run.sh` |
+| **AS_49** | Automated File Synchronization | `cd AS_49 && bash run.sh` |
 
 ### 💻 Quick Command Reference by Operating System
 
@@ -536,6 +554,15 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_38** | `cd AS_38 && bash run.sh` | `cd AS_38 && bash run.sh` | `cd AS_38 && bash run.sh` | `cd AS_38 && bash run.sh` |
 | **AS_39** | `cd AS_39 && bash run.sh` | `cd AS_39 && bash run.sh` | `cd AS_39 && bash run.sh` | `cd AS_39 && bash run.sh` |
 | **AS_40** | `cd AS_40 && bash run.sh` | `cd AS_40 && bash run.sh` | `cd AS_40 && bash run.sh` | `cd AS_40 && bash run.sh` |
+| **AS_41** | `cd AS_41 && bash run.sh` | `cd AS_41 && bash run.sh` | `cd AS_41 && bash run.sh` | `cd AS_41 && bash run.sh` |
+| **AS_42** | `cd AS_42 && bash run.sh` | `cd AS_42 && bash run.sh` | `cd AS_42 && bash run.sh` | `cd AS_42 && bash run.sh` |
+| **AS_43** | `cd AS_43 && bash run.sh` | `cd AS_43 && bash run.sh` | `cd AS_43 && bash run.sh` | `cd AS_43 && bash run.sh` |
+| **AS_44** | `cd AS_44 && bash run.sh` | `cd AS_44 && bash run.sh` | `cd AS_44 && bash run.sh` | `cd AS_44 && bash run.sh` |
+| **AS_45** | `cd AS_45 && bash run.sh` | `cd AS_45 && bash run.sh` | `cd AS_45 && bash run.sh` | `cd AS_45 && bash run.sh` |
+| **AS_46** | `cd AS_46 && bash run.sh` | `cd AS_46 && bash run.sh` | `cd AS_46 && bash run.sh` | `cd AS_46 && bash run.sh` |
+| **AS_47** | `cd AS_47 && bash run.sh` | `cd AS_47 && bash run.sh` | `cd AS_47 && bash run.sh` | `cd AS_47 && bash run.sh` |
+| **AS_48** | `cd AS_48 && bash run.sh` | `cd AS_48 && bash run.sh` | `cd AS_48 && bash run.sh` | `cd AS_48 && bash run.sh` |
+| **AS_49** | `cd AS_49 && bash run.sh` | `cd AS_49 && bash run.sh` | `cd AS_49 && bash run.sh` | `cd AS_49 && bash run.sh` |
 
 ---
 
@@ -1986,6 +2013,35 @@ Create a Bash script that generates a daily report containing system uptime, CPU
 - 📖 **Sprint Documentation:** [`AS_48/README.md`](./AS_48/README.md)
 - 📜 **Audit Log File:** [`AS_48/logs/`](./AS_48/logs/)
 - 📋 **Command Log:** [`AS_48/commands_used.md`](./AS_48/commands_used.md)
+
+</details>
+
+<details>
+<summary><strong>AS_49 — Automated File Synchronization (rsync Delta Mirroring & Cryptographic Verification)</strong></summary>
+
+### Problem Statement
+Write a script to synchronize a project directory with a backup directory automatically using `rsync`.
+
+### Summary of Approach
+- **Strict Sandbox Enforcement:** Restricts synchronization explicitly between sandboxed source (`AS_49/sandbox_data/source/`) and backup target (`AS_49/sandbox_data/dest/`), safeguarding against unintended synchronization of host/user filesystems.
+- **Enterprise Rsync Delta Mirroring:** Uses `rsync -avh --delete --stats` to mirror multi-directory project trees, preserving permissions, timestamps, and recursively pruning destination files removed from source.
+- **Post-Sync Cryptographic Verification:** Calculates and cross-compares 256-bit SHA-256 digests (`sha256sum`) and byte sizes (`stat -c%s`) across all transferred files to ensure 100% bit-level fidelity.
+- **Incremental & Dry-Run Support:** Supports `--dry-run` (`-n`) simulation mode, `--no-delete` flag, and automatically handles incremental modification detection on subsequent executions.
+- **Structured JSON Telemetry & Dashboard:** Records transfer metrics (files examined, files transferred, literal bytes sent, speedup ratio) to `logs/last_run.json` and renders an interactive dark-themed HTML dashboard (`report.html`).
+
+### Key Commands Used
+- `cd AS_49 && bash run.sh` — Single command to execute synchronization, verify SHA-256 digests, and launch HTML dashboard
+- `./sync_project.sh` — Executes rsync synchronization against sandbox project directories
+- `./sync_project.sh --dry-run` — Simulates file sync without modifying destination files
+- `rsync -avh --delete --stats <src>/ <dest>/` — Archive mode synchronization with orphan deletion and metrics
+- `sha256sum <file>` — Cryptographic bit-level audit across source and destination replicas
+- `stat -c%s <file>` — File size extraction in bytes
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_49/report.html`](./AS_49/report.html)
+- 📖 **Sprint Documentation:** [`AS_49/README.md`](./AS_49/README.md)
+- 📜 **Audit Log File:** [`AS_49/logs/`](./AS_49/logs/)
+- 📋 **Command Log:** [`AS_49/commands_used.md`](./AS_49/commands_used.md)
 
 </details>
 
