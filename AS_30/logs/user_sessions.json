@@ -1,0 +1,15 @@
+{
+  "problem_id": "AS_30",
+  "title": "Logged-in User Report",
+  "timestamp": "2026-10-07 12:56:03 IST",
+  "timestamp_epoch": 1791357963,
+  "hostname": "SP",
+  "source_mode": "REAL_LIVE_HOST",
+  "total_sessions": 1,
+  "unique_users_count": 1,
+  "remote_sessions": 0,
+  "local_sessions": 1,
+  "sessions": [
+    {"user":"pankaj","tty":"pts/1","remote_host":"-","is_remote":false,"session_type":"Local/Console","login_time":"10:41","idle":"2:14m","idle_description":"Idle (2:14m)","what":"-bash"}
+  ]
+}

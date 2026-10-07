@@ -1,0 +1,15 @@
+{
+  "problem_id": "AS_30",
+  "title": "Logged-in User Report",
+  "timestamp": "2026-10-07 12:56:03 IST",
+  "timestamp_epoch": 1791357963,
+  "hostname": "SP",
+  "source_mode": "SIMULATED_SANDBOX",
+  "total_sessions": 5,
+  "unique_users_count": 5,
+  "remote_sessions": 4,
+  "local_sessions": 1,
+  "sessions": [
+    {"user":"root","tty":"pts/0","remote_host":"192.168.1.50","is_remote":true,"session_type":"Remote","login_time":"08:15","idle":"1:12m","idle_description":"Idle (1:12m)","what":"htop"},{"user":"pankaj","tty":"pts/1","remote_host":"10.0.0.12","is_remote":true,"session_type":"Remote","login_time":"09:30","idle":"0.00s","idle_description":"Active (0.00s)","what":"vim /etc/nginx/nginx.conf"},{"user":"alice","tty":"pts/2","remote_host":"172.16.5.88","is_remote":true,"session_type":"Remote","login_time":"11:02","idle":"45:10","idle_description":"Idle (45:10)","what":"-bash"},{"user":"bob","tty":"tty1","remote_host":":0","is_remote":false,"session_type":"Local/Console","login_time":"07:45","idle":"5:14m","idle_description":"Idle (5:14m)","what":"/usr/bin/gnome-shell"},{"user":"devops","tty":"pts/3","remote_host":"203.0.113.19","is_remote":true,"session_type":"Remote","login_time":"12:20","idle":"12s","idle_description":"Active (12s)","what":"git pull origin main"}
+  ]
+}
