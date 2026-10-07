@@ -90,6 +90,14 @@ LSA_AS/
 │   ├── backups/                    # Timestamped tar.gz archives & sha256 checksums
 │   ├── sandbox_data/               # Simulated corporate payment service project tree
 │   └── README.md                   # Problem documentation & usage
+├── AS_11/                          # Automation Sprint Problem #11
+│   ├── backup_verifier.sh          # Core 5-point backup integrity & checksum validation script
+│   ├── run.sh                      # Unified execution & HTML dashboard generator
+│   ├── commands_used.md            # Command log & validation reference
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── logs/                       # Audit trail & JSON telemetry directory
+│   ├── sandbox_data/               # Multi-archive repository & test project tree
+│   └── README.md                   # Problem documentation & usage
 ├── AS_14/                          # Automation Sprint Problem #14
 │   ├── suspicious_ip_detector.sh   # Core bash script for IP detection
 │   ├── commands_used.md            # Command log & viva preparation
@@ -199,6 +207,7 @@ LSA_AS/
 | **AS_08** | **Large File Detection** | Recursive filesystem tree inspection (`find -size +<threshold>`), numerical sorting (`sort -nr`), file ownership & timestamp extraction (`stat`), cumulative consumption tallying, and dark-themed HTML report. | ✅ Completed | [`AS_08/`](./AS_08) |
 | **AS_09** | **Temporary File Cleanup** | Stale file aging evaluation (`stat` epoch / `find -mtime`), safe simulation dry-run (`--dry-run`), active unlinking (`rm -f`), empty tree pruning, and dark-themed HTML report. | ✅ Completed | [`AS_09/`](./AS_09) |
 | **AS_10** | **Daily Backup** | Automated directory archiving (`tar -czf`), non-destructive integrity testing (`tar -tzf`), cryptographic SHA-256 validation, compression ratio metrics, and dark-themed HTML report. | ✅ Completed | [`AS_10/`](./AS_10) |
+| **AS_11** | **Backup Verification** | Latest archive discovery, existence & non-empty validation, `tar -tzf` decompression integrity testing, SHA-256 cryptographic cross-checking, 24h freshness SLA audit, and dark-themed HTML report. | ✅ Completed | [`AS_11/`](./AS_11) |
 | **AS_14** | **Suspicious IP Detection** | Automated SSH brute-force monitor, real log auto-detection (`/var/log/auth.log`), regex parsing, descending ranking, and audit reporting. | ✅ Completed | [`AS_14/`](./AS_14)
 | **AS_15** | **Error Log Report** | Automated error extraction, real log auto-detection (`/var/log/syslog`), severity breakdown, frequency ranking, and tail-style review. | ✅ Completed | [`AS_15/`](./AS_15)
 | **AS_16** | **Service Availability Check** | Real-time service monitoring, boot persistence verification, systemd/SysV fallback, audit logging, and dark-themed HTML report dashboard. | ✅ Completed | [`AS_16/`](./AS_16)
@@ -234,6 +243,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_08** | Large File Detection | `cd AS_08 && bash run.sh` |
 | **AS_09** | Temporary File Cleanup | `cd AS_09 && bash run.sh` |
 | **AS_10** | Daily Backup | `cd AS_10 && bash run.sh` |
+| **AS_11** | Backup Verification | `cd AS_11 && bash run.sh` |
 | **AS_14** | Suspicious IP Detection | `cd AS_14 && bash run.sh` |
 | **AS_15** | Error Log Report | `cd AS_15 && bash run.sh` |
 | **AS_16** | Service Availability Check | `cd AS_16 && bash run.sh` |
@@ -262,6 +272,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_08** | `cd AS_08 && bash run.sh` | `cd AS_08 && bash run.sh` | `cd AS_08 && bash run.sh` | `cd AS_08 && bash run.sh` |
 | **AS_09** | `cd AS_09 && bash run.sh` | `cd AS_09 && bash run.sh` | `cd AS_09 && bash run.sh` | `cd AS_09 && bash run.sh` |
 | **AS_10** | `cd AS_10 && bash run.sh` | `cd AS_10 && bash run.sh` | `cd AS_10 && bash run.sh` | `cd AS_10 && bash run.sh` |
+| **AS_11** | `cd AS_11 && bash run.sh` | `cd AS_11 && bash run.sh` | `cd AS_11 && bash run.sh` | `cd AS_11 && bash run.sh` |
 | **AS_14** | `cd AS_14 && bash run.sh` | `cd AS_14 && bash run.sh` | `cd AS_14 && bash run.sh` | `cd AS_14 && bash run.sh` |
 | **AS_15** | `cd AS_15 && bash run.sh` | `cd AS_15 && bash run.sh` | `cd AS_15 && bash run.sh` | `cd AS_15 && bash run.sh` |
 | **AS_16** | `cd AS_16 && bash run.sh` | `cd AS_16 && bash run.sh` | `cd AS_16 && bash run.sh` | `cd AS_16 && bash run.sh` |
@@ -575,6 +586,39 @@ Regular backups are essential for disaster recovery. Write a script that creates
 - 📖 **Sprint Documentation:** [`AS_10/README.md`](./AS_10/README.md)
 - 📜 **Audit Log File:** [`AS_10/logs/daily_backup.log`](./AS_10/logs/daily_backup.log)
 - 📋 **Command Log:** [`AS_10/commands_used.md`](./AS_10/commands_used.md)
+
+</details>
+
+<details>
+<summary><strong>AS_11 — Backup Verification (Backup Validation)</strong></summary>
+
+### Problem Statement
+A backup is only useful if it is valid. Write a script that verifies whether the latest backup file exists, is non-empty, checks archive integrity (e.g., using `tar -tzf`), reports status, size, and calculates its SHA-256 checksum.
+
+### Summary of Approach
+- **Dynamic Latest Archive Discovery:** Traverses the target backup repository and locates the most recently generated archive using numerical modification timestamps (`find -printf "%T@ %p\n" | sort -nr`).
+- **Rigorous 5-Point Verification Pipeline:**
+  1. *Archive Existence Check:* Confirms valid file descriptor in designated path.
+  2. *Non-Empty Integrity Check:* Enforces byte size > 0 via `test -s`.
+  3. *Archive Container Integrity:* Tests decompression and reads the complete internal table of contents using `tar -tzf`, catching corrupted compression blocks or incomplete transfers.
+  4. *Cryptographic Hash Validation:* Computes raw SHA-256 digest and cross-verifies against companion `.sha256` checksum files.
+  5. *Recency & SLA Freshness Audit:* Validates that the backup was generated within the 24-hour disaster recovery window.
+- **Deep Manifest Inspection:** Extracts verbose contents listing (`tar -tvf`), tabulating archived file permissions, byte sizes, and paths.
+- **Cross-Platform HTML Dashboard (`run.sh`):** Executes verification suite, outputs structured JSON telemetry, builds an executive dark dashboard `report.html` featuring a 5-point verification matrix table, and auto-opens in the default browser across WSL, Linux, macOS, and Git Bash.
+
+### Key Commands Used
+- `bash run.sh` — Single command to verify latest backup, regenerate dashboard, and open HTML report (Linux / macOS / Windows)
+- `./backup_verifier.sh` — Verifies latest backup archive in `sandbox_data/backups/`
+- `./backup_verifier.sh -f ./sandbox_data/backups/backup_prod_20261007_020000.tar.gz` — Direct file validation
+- `tar -tzf archive.tar.gz` — Non-destructive decompression and integrity test
+- `sha256sum archive.tar.gz` — Computes 256-bit cryptographic digest
+- `./backup_verifier.sh --json` — Emits structured JSON telemetry
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_11/report.html`](./AS_11/report.html)
+- 📖 **Sprint Documentation:** [`AS_11/README.md`](./AS_11/README.md)
+- 📜 **Audit Log File:** [`AS_11/logs/backup_verify.log`](./AS_11/logs/backup_verify.log)
+- 📋 **Command Log:** [`AS_11/commands_used.md`](./AS_11/commands_used.md)
 
 </details>
 
