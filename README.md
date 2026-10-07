@@ -311,6 +311,13 @@ LSA_AS/
 │   ├── report.html                 # Standalone dark-themed dashboard report
 │   ├── logs/                       # Audit trail & JSON telemetry directory
 │   └── README.md                   # Problem documentation & usage
+├── AS_40/                          # Automation Sprint Problem #40
+│   ├── mounted_fs_report.sh        # Core mounted filesystem capacity & classification script
+│   ├── run.sh                      # Unified execution & HTML dashboard generator
+│   ├── commands_used.md            # Command log & filesystem audit reference
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── logs/                       # Audit trail & JSON telemetry directory
+│   └── README.md                   # Problem documentation & usage
 └── (Upcoming Projects)/            # Future Automation Sprint additions
 ```
 
@@ -359,6 +366,7 @@ LSA_AS/
 | **AS_37** | **Scheduled Backup** | Automated project directory backup (`tar -czf`), non-destructive decompression verification (`tar -tzf`), SHA-256 integrity manifest, retention policy enforcement, Cron automation with `# LSA_SPRINT_TEST` tag, safe teardown (`cleanup.sh`), and dark-themed HTML report. | ✅ Completed | [`AS_37/`](./AS_37) |
 | **AS_38** | **Scheduled Health Report** | Live Linux subsystem telemetry (CPU load averages, RAM & swap metrics, root storage %, network interfaces, top processes), periodic report archiving, Cron automation with `# LSA_SPRINT_TEST` tag, safe teardown (`cleanup.sh`), and dark-themed HTML report. | ✅ Completed | [`AS_38/`](./AS_38) |
 | **AS_39** | **Disk and Inode Check** | Storage space and inode utilization auditing (`df -hP`, `df -iP`), dynamic critical/warning threshold evaluation, threshold breach alerting, and dark-themed HTML report. | ✅ Completed | [`AS_39/`](./AS_39) |
+| **AS_40** | **Mounted File System Report** | Virtual filesystem discovery (`df -hT`, `/proc/mounts`), total/used/available storage reporting, architectural categorization (physical, virtual, shared, overlay), mount permission inspection, and dark-themed HTML report. | ✅ Completed | [`AS_40/`](./AS_40) |
 | *Upcoming* | *Future Sprints* | Additional automation tasks and administration solutions. | ⏳ Planned | — |
 
 ---
@@ -410,6 +418,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_37** | Scheduled Backup | `cd AS_37 && bash run.sh` *(Run `bash cleanup.sh` afterward to restore system)* |
 | **AS_38** | Scheduled Health Report | `cd AS_38 && bash run.sh` *(Run `bash cleanup.sh` afterward to restore system)* |
 | **AS_39** | Disk and Inode Check | `cd AS_39 && bash run.sh` |
+| **AS_40** | Mounted File System Report | `cd AS_40 && bash run.sh` |
 
 ### 💻 Quick Command Reference by Operating System
 
@@ -454,6 +463,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_37** | `cd AS_37 && bash run.sh` | `cd AS_37 && bash run.sh` | `cd AS_37 && bash run.sh` | `cd AS_37 && bash run.sh` |
 | **AS_38** | `cd AS_38 && bash run.sh` | `cd AS_38 && bash run.sh` | `cd AS_38 && bash run.sh` | `cd AS_38 && bash run.sh` |
 | **AS_39** | `cd AS_39 && bash run.sh` | `cd AS_39 && bash run.sh` | `cd AS_39 && bash run.sh` | `cd AS_39 && bash run.sh` |
+| **AS_40** | `cd AS_40 && bash run.sh` | `cd AS_40 && bash run.sh` | `cd AS_40 && bash run.sh` | `cd AS_40 && bash run.sh` |
 
 ---
 
@@ -1632,6 +1642,36 @@ Develop a script that checks both disk-space and inode utilization and reports f
 - 📖 **Sprint Documentation:** [`AS_39/README.md`](./AS_39/README.md)
 - 📜 **Audit Log File:** [`AS_39/logs/disk_inode.log`](./AS_39/logs/disk_inode.log)
 - 📋 **Command Log:** [`AS_39/commands_used.md`](./AS_39/commands_used.md)
+
+</details>
+
+<details>
+<summary><strong>AS_40 — Mounted File System Report (Virtual File System & Storage Metrics)</strong></summary>
+
+### Problem Statement
+Create a script to display all mounted file systems along with their total, used, and available space.
+
+### Summary of Approach
+- **Comprehensive VFS Hierarchy Discovery:** Interrogates the active Linux Virtual File System table (`df -hT`, `/proc/mounts`, `findmnt`), retrieving device sources, filesystem drivers, mount paths, total capacities, consumed bytes, and available space.
+- **Architectural Classification Engine:** Automatically categorizes mounted volumes into functional subsystems: Physical Storage (ext4, xfs), Host / Network Shared (9p, CIFS, NFS), In-Memory Virtual (tmpfs, devtmpfs), and Overlay / Container Layers (overlay, squashfs).
+- **Mount Security & Permission Auditing:** Analyzes mount flags (`/proc/mounts`) to differentiate Read-Write (`RW`) from hardened Read-Only (`RO`) volumes.
+- **Structured JSON Telemetry & Event Logging:** Exports structured machine-readable manifests (`logs/mounted_fs_audit.json`) capturing full volume tables and aggregate capacity distributions, alongside chronological audit traces in `logs/mounted_fs.log`.
+- **Cross-Platform HTML Dashboard (`run.sh`):** Executes live VFS discovery, compiles an interactive dark dashboard `report.html` featuring visual utilization meters and architectural category cards, and launches in default browsers across WSL, Linux, macOS, and Git Bash.
+
+### Key Commands Used
+- `cd AS_40 && bash run.sh` — Single command to audit mounted filesystems and launch HTML dashboard
+- `./mounted_fs_report.sh` — Generates mounted filesystem capacity report sorted by utilization %
+- `./mounted_fs_report.sh --sort size` — Sorts mounted filesystems by total storage volume capacity
+- `./mounted_fs_report.sh --filter ext4` — Filters mounted filesystems by filesystem type
+- `./mounted_fs_report.sh --all` — Includes micro-mounts like systemd service credential directories
+- `df -hT` — Displays mounted filesystems with filesystem types and human-readable capacity
+- `cat /proc/mounts` — Real-time kernel mount table inspection
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_40/report.html`](./AS_40/report.html)
+- 📖 **Sprint Documentation:** [`AS_40/README.md`](./AS_40/README.md)
+- 📜 **Audit Log File:** [`AS_40/logs/mounted_fs.log`](./AS_40/logs/mounted_fs.log)
+- 📋 **Command Log:** [`AS_40/commands_used.md`](./AS_40/commands_used.md)
 
 </details>
 
