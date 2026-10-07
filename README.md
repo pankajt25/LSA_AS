@@ -318,6 +318,14 @@ LSA_AS/
 │   ├── report.html                 # Standalone dark-themed dashboard report
 │   ├── logs/                       # Audit trail & JSON telemetry directory
 │   └── README.md                   # Problem documentation & usage
+├── AS_41/                          # Automation Sprint Problem #41
+│   ├── archive_old_files.sh        # Core aged project file discovery & archival engine
+│   ├── run.sh                      # Unified execution & HTML dashboard generator
+│   ├── commands_used.md            # Command log & archival reference
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── logs/                       # Audit trail & JSON telemetry directory
+│   ├── sandbox_data/               # Sandboxed project repositories & archive bundles
+│   └── README.md                   # Problem documentation & usage
 └── (Upcoming Projects)/            # Future Automation Sprint additions
 ```
 
@@ -367,6 +375,7 @@ LSA_AS/
 | **AS_38** | **Scheduled Health Report** | Live Linux subsystem telemetry (CPU load averages, RAM & swap metrics, root storage %, network interfaces, top processes), periodic report archiving, Cron automation with `# LSA_SPRINT_TEST` tag, safe teardown (`cleanup.sh`), and dark-themed HTML report. | ✅ Completed | [`AS_38/`](./AS_38) |
 | **AS_39** | **Disk and Inode Check** | Storage space and inode utilization auditing (`df -hP`, `df -iP`), dynamic critical/warning threshold evaluation, threshold breach alerting, and dark-themed HTML report. | ✅ Completed | [`AS_39/`](./AS_39) |
 | **AS_40** | **Mounted File System Report** | Virtual filesystem discovery (`df -hT`, `/proc/mounts`), total/used/available storage reporting, architectural categorization (physical, virtual, shared, overlay), mount permission inspection, and dark-themed HTML report. | ✅ Completed | [`AS_40/`](./AS_40) |
+| **AS_41** | **Archive Old Project Files** | Automated project file age auditing (`find -type f -mtime +N`), cryptographic SHA-256 integrity verification, safe relocation preserving tree structure, `.tar.gz` bundle compression, and dark-themed HTML report. | ✅ Completed | [`AS_41/`](./AS_41) |
 | *Upcoming* | *Future Sprints* | Additional automation tasks and administration solutions. | ⏳ Planned | — |
 
 ---
@@ -1672,6 +1681,35 @@ Create a script to display all mounted file systems along with their total, used
 - 📖 **Sprint Documentation:** [`AS_40/README.md`](./AS_40/README.md)
 - 📜 **Audit Log File:** [`AS_40/logs/mounted_fs.log`](./AS_40/logs/mounted_fs.log)
 - 📋 **Command Log:** [`AS_40/commands_used.md`](./AS_40/commands_used.md)
+
+</details>
+
+<details>
+<summary><strong>AS_41 — Archive Old Project Files (Lifecycle Archival Engine)</strong></summary>
+
+### Problem Statement
+Identify project files older than $N$ days and move them to an archive directory.
+
+### Summary of Approach
+- **Dynamic File Aging Discovery:** Scans specified project workspaces recursively using `find -type f -mtime +<days>` to pinpoint dormant files exceeding the retention SLA (default: 30 days).
+- **Cryptographic Pre-Move Hashing:** Generates SHA-256 checksums (`sha256sum`) and records file metadata (size, exact modification timestamp, relative path) into an archival manifest before file relocation.
+- **Hierarchical Relocation & Gzip Compression:** Relocates eligible stale project files into a timestamped archival directory structure and packages the entire batch into a compressed `.tar.gz` bundle, cleanly pruning empty source directories.
+- **Automated Live Simulation Sandbox:** Implements reproducible synthetic file seeding in `sandbox_data/projects` utilizing `touch -d` with backdated timestamps, ensuring zero interference with real host files.
+- **Cross-Platform HTML Dashboard (`run.sh`):** Drives the complete lifecycle audit, extracts archive member details with Python's standard `tarfile` module, renders a self-contained dark dashboard `report.html`, and launches the report in default browsers across WSL, Linux, macOS, and Git Bash.
+
+### Key Commands Used
+- `cd AS_41 && bash run.sh` — Single command to audit aged project files, perform archival, and open HTML dashboard
+- `./archive_old_files.sh --days 30 --compress` — Archives files older than 30 days into a compressed `.tar.gz` bundle
+- `./archive_old_files.sh --days 60 --dry-run` — Performs a dry-run scan without relocating files
+- `find "${SOURCE_DIR}" -type f -mtime +"${DAYS_THRESHOLD}"` — Finds regular files strictly exceeding retention days
+- `tar -czf "${ARCHIVE_BUNDLE}" -C "${ARCHIVE_DIR}" ...` — Creates compressed tarball bundle
+- `sha256sum <filepath>` — Verifies cryptographic integrity of archived candidates
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_41/report.html`](./AS_41/report.html)
+- 📖 **Sprint Documentation:** [`AS_41/README.md`](./AS_41/README.md)
+- 📜 **Audit Log File:** [`AS_41/logs/`](./AS_41/logs/)
+- 📋 **Command Log:** [`AS_41/commands_used.md`](./AS_41/commands_used.md)
 
 </details>
 
