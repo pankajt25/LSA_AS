@@ -295,6 +295,15 @@ LSA_AS/
 │   ├── logs/                       # Audit trail & JSON telemetry directory
 │   ├── sandbox_data/               # Simulated enterprise project repository
 │   └── README.md                   # Problem documentation & usage
+├── AS_38/                          # Automation Sprint Problem #38
+│   ├── scheduled_health_report.sh  # Core system telemetry harvester & periodic report generator
+│   ├── cleanup.sh                  # Safe cron teardown & system restoration script
+│   ├── run.sh                      # Unified execution & HTML dashboard generator
+│   ├── commands_used.md            # Command log & health telemetry reference
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── reports/                    # Generated periodic health reports & latest pointer
+│   ├── logs/                       # Audit trail & JSON telemetry directory
+│   └── README.md                   # Problem documentation & usage
 └── (Upcoming Projects)/            # Future Automation Sprint additions
 ```
 
@@ -341,6 +350,7 @@ LSA_AS/
 | **AS_35** | **Log Archival** | Automated log packaging (`tar -czf`), timestamped archiving, non-destructive decompression testing (`tar -tzf`), cryptographic SHA-256 validation, and dark-themed HTML report. | ✅ Completed | [`AS_35/`](./AS_35) |
 | **AS_36** | **Routine Server Maintenance** | Routine system maintenance (`sync`, `/tmp` cache cleanup, package database & apt check, journald/log audit, zombie detection), Cron automation with `# LSA_SPRINT_TEST` safety tag, safe teardown (`cleanup.sh`), and dark-themed HTML report. | ✅ Completed | [`AS_36/`](./AS_36) |
 | **AS_37** | **Scheduled Backup** | Automated project directory backup (`tar -czf`), non-destructive decompression verification (`tar -tzf`), SHA-256 integrity manifest, retention policy enforcement, Cron automation with `# LSA_SPRINT_TEST` tag, safe teardown (`cleanup.sh`), and dark-themed HTML report. | ✅ Completed | [`AS_37/`](./AS_37) |
+| **AS_38** | **Scheduled Health Report** | Live Linux subsystem telemetry (CPU load averages, RAM & swap metrics, root storage %, network interfaces, top processes), periodic report archiving, Cron automation with `# LSA_SPRINT_TEST` tag, safe teardown (`cleanup.sh`), and dark-themed HTML report. | ✅ Completed | [`AS_38/`](./AS_38) |
 | *Upcoming* | *Future Sprints* | Additional automation tasks and administration solutions. | ⏳ Planned | — |
 
 ---
@@ -390,6 +400,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_35** | Log Archival | `cd AS_35 && bash run.sh` |
 | **AS_36** | Routine Server Maintenance | `cd AS_36 && bash run.sh` *(Run `bash cleanup.sh` afterward to restore system)* |
 | **AS_37** | Scheduled Backup | `cd AS_37 && bash run.sh` *(Run `bash cleanup.sh` afterward to restore system)* |
+| **AS_38** | Scheduled Health Report | `cd AS_38 && bash run.sh` *(Run `bash cleanup.sh` afterward to restore system)* |
 
 ### 💻 Quick Command Reference by Operating System
 
@@ -432,6 +443,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_35** | `cd AS_35 && bash run.sh` | `cd AS_35 && bash run.sh` | `cd AS_35 && bash run.sh` | `cd AS_35 && bash run.sh` |
 | **AS_36** | `cd AS_36 && bash run.sh` | `cd AS_36 && bash run.sh` | `cd AS_36 && bash run.sh` | `cd AS_36 && bash run.sh` |
 | **AS_37** | `cd AS_37 && bash run.sh` | `cd AS_37 && bash run.sh` | `cd AS_37 && bash run.sh` | `cd AS_37 && bash run.sh` |
+| **AS_38** | `cd AS_38 && bash run.sh` | `cd AS_38 && bash run.sh` | `cd AS_38 && bash run.sh` | `cd AS_38 && bash run.sh` |
 
 ---
 
@@ -1550,6 +1562,37 @@ Create a Cron-based automated backup for a specified project directory.
 - 📖 **Sprint Documentation:** [`AS_37/README.md`](./AS_37/README.md)
 - 📜 **Audit Log File:** [`AS_37/logs/scheduled_backup.log`](./AS_37/logs/scheduled_backup.log)
 - 📋 **Command Log:** [`AS_37/commands_used.md`](./AS_37/commands_used.md)
+
+</details>
+
+<details>
+<summary><strong>AS_38 — Scheduled Health Report (Cron & System Telemetry Monitoring)</strong></summary>
+
+### Problem Statement
+Configure a Cron job to periodically generate a Linux system health report.
+
+### Summary of Approach
+- **Comprehensive Subsystem Telemetry:** Harvests real-time metrics across CPU load averages (`/proc/loadavg`, 1m/5m/15m), CPU core architecture, physical RAM and swap space utilization (`free -m`), root filesystem capacity and mount status (`df -hP`), network interface addressing (`ip -br addr`), and top CPU/memory consuming processes (`ps`).
+- **Periodic Report Archiving:** Serializes human-readable system health summaries to timestamped text logs (`reports/health_report_YYYYMMDD_HHMMSS.txt`), continuously maintains a `latest_health_report.txt` pointer, and records machine-readable JSON metrics in `logs/health_metrics.json`.
+- **Cron Automation & Sandboxing:** Automates recurring crontab installation (`--schedule "*/30 * * * *"`), verifies active status (`--verify-cron`), and facilitates full teardown (`cleanup.sh`) using the `# LSA_SPRINT_TEST` tag.
+- **Cross-Platform HTML Dashboard (`run.sh`):** Executes live health audits, registers cron automation, compiles self-contained dark dashboard `report.html`, and launches into default browser across WSL, Linux, macOS, and Git Bash.
+
+### Key Commands Used
+- `cd AS_38 && bash run.sh` — Single command to audit system health, configure cron, and launch HTML dashboard
+- `bash cleanup.sh` — Safely tears down test cron entries and restores host crontab state
+- `./scheduled_health_report.sh --generate` — Collects live system health telemetry and outputs report
+- `./scheduled_health_report.sh --schedule "*/30 * * * *"` — Installs 30-minute recurring cron schedule
+- `./scheduled_health_report.sh --verify-cron` — Inspects active crontab for scheduled test health report job
+- `./scheduled_health_report.sh --unschedule` — Removes scheduled health report cron job
+- `free -m` — Inspects physical memory and swap utilization
+- `uptime -p` / `/proc/loadavg` — Extracts system uptime and multi-window processor load
+- `df -hP /` — Audits root filesystem storage usage and free space
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_38/report.html`](./AS_38/report.html)
+- 📖 **Sprint Documentation:** [`AS_38/README.md`](./AS_38/README.md)
+- 📜 **Audit Log File:** [`AS_38/logs/health_report.log`](./AS_38/logs/health_report.log)
+- 📋 **Command Log:** [`AS_38/commands_used.md`](./AS_38/commands_used.md)
 
 </details>
 
