@@ -1,0 +1,109 @@
+[2026-10-07 15:54:33] [INFO] Starting automated routine server maintenance cycle...
+[2026-10-07 15:54:33] [INFO] --- TASK 1: Temporary & Cache File Maintenance ---
+[2026-10-07 15:54:34] [INFO] Live /tmp directory footprint: 456K
+N/A (1
+0 entries checked)
+[2026-10-07 15:54:34] [SUCCESS] Cleaned 0 stale cache/temp files from sandbox quarantine.
+[2026-10-07 15:54:34] [INFO] --- TASK 2: Package Cache & Repository Hygiene ---
+[2026-10-07 15:54:34] [INFO] Package Manager: APT (Debian/Ubuntu). APT cache footprint: 17M
+0 MB
+[2026-10-07 15:54:34] [SUCCESS] Debian package database integrity verified (no broken packages).
+[2026-10-07 15:54:34] [INFO] --- TASK 3: System Log Hygiene & Journald Audit ---
+[2026-10-07 15:54:34] [INFO] Systemd journal usage: Archived and active journals take up 808.5M in the file system.
+[2026-10-07 15:54:34] [INFO] /var/log total footprint: 818M
+Restricted
+[2026-10-07 15:54:34] [INFO] --- TASK 4: Memory Cache & Buffer Sync ---
+[2026-10-07 15:54:34] [INFO] Pre-sync memory profile: Used: 635MB, Free: 1923MB, Buff/Cache: 1448MB
+[2026-10-07 15:54:34] [INFO] Flushing dirty cached filesystem buffers via 'sync'...
+[2026-10-07 15:54:34] [SUCCESS] Buffers flushed. Post-sync memory profile: Used: 636MB, Free: 1922MB, Buff/Cache: 1448MB
+[2026-10-07 15:54:34] [INFO] --- TASK 5: Process Health & Zombie Detection ---
+[2026-10-07 15:54:34] [WARN] Detected 0
+0 defunct/zombie process(es) awaiting reaper.
+[2026-10-07 15:54:34] [INFO] --- TASK 6: Filesystem Storage Capacity Health ---
+[2026-10-07 15:54:34] [INFO] Root File System (/): Capacity: 1007G, Free: 950G, Utilized: 1%
+[2026-10-07 15:54:34] [SUCCESS] Routine maintenance cycle completed successfully in 1s.
+[2026-10-07 15:54:34] [SUCCESS] Structured JSON telemetry written to /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_36/logs/maintenance_telemetry.json
+[2026-10-07 15:55:11] [INFO] Starting automated routine server maintenance cycle...
+[2026-10-07 15:55:11] [INFO] --- TASK 1: Temporary & Cache File Maintenance ---
+[2026-10-07 15:55:16] [INFO] Starting automated routine server maintenance cycle...
+[2026-10-07 15:55:16] [INFO] --- TASK 1: Temporary & Cache File Maintenance ---
+[2026-10-07 15:55:55] [INFO] Starting automated routine server maintenance cycle...
+[2026-10-07 15:55:55] [INFO] --- TASK 1: Temporary & Cache File Maintenance ---
+[2026-10-07 15:55:55] [INFO] Live /tmp directory footprint: 456K (1 entries checked)
+[2026-10-07 15:55:55] [SUCCESS] Cleaned 0 stale cache/temp files from sandbox quarantine.
+[2026-10-07 15:55:55] [INFO] --- TASK 2: Package Cache & Repository Hygiene ---
+[2026-10-07 15:55:55] [INFO] Package Manager: APT (Debian/Ubuntu). APT cache footprint: 17M
+[2026-10-07 15:55:55] [SUCCESS] Debian package database integrity verified (no broken packages).
+[2026-10-07 15:55:55] [INFO] --- TASK 3: System Log Hygiene & Journald Audit ---
+[2026-10-07 15:55:55] [INFO] Systemd journal usage: Archived and active journals take up 808.5M in the file system.
+[2026-10-07 15:55:55] [INFO] /var/log total footprint: 818M
+[2026-10-07 15:55:55] [INFO] --- TASK 4: Memory Cache & Buffer Sync ---
+[2026-10-07 15:55:55] [INFO] Pre-sync memory profile: Used: 650MB, Free: 1821MB, Buff/Cache: 1536MB
+[2026-10-07 15:55:55] [INFO] Flushing dirty cached filesystem buffers via 'sync'...
+[2026-10-07 15:55:55] [SUCCESS] Buffers flushed. Post-sync memory profile: Used: 650MB, Free: 1821MB, Buff/Cache: 1536MB
+[2026-10-07 15:55:55] [INFO] --- TASK 5: Process Health & Zombie Detection ---
+[2026-10-07 15:55:55] [SUCCESS] Process table clean: 0 zombie/defunct processes detected.
+[2026-10-07 15:55:55] [INFO] --- TASK 6: Filesystem Storage Capacity Health ---
+[2026-10-07 15:55:55] [INFO] Root File System (/): Capacity: 1007G, Free: 950G, Utilized: 1%
+[2026-10-07 15:55:56] [SUCCESS] Routine maintenance cycle completed successfully in 1s.
+[2026-10-07 15:55:56] [SUCCESS] Structured JSON telemetry written to /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_36/logs/maintenance_telemetry.json
+[2026-10-07 15:59:17] [INFO] Installing routine maintenance cron schedule...
+[2026-10-07 15:59:17] [INFO] Schedule expression: '0 2 * * *' (Tag: # LSA_SPRINT_TEST)
+[2026-10-07 15:59:17] [SUCCESS] Cron job installed successfully in user crontab.
+[2026-10-07 15:59:17] [INFO] Verifying active crontab entry:
+[2026-10-07 15:59:17] [INFO] Inspecting user crontab for scheduled LSA maintenance jobs...
+[2026-10-07 15:59:17] [SUCCESS] Active scheduled maintenance job(s) found:
+[2026-10-07 15:59:17] [INFO] Attempting to remove crontab entries matching '# LSA_SPRINT_TEST'...
+[2026-10-07 15:59:17] [SUCCESS] Successfully removed LSA test maintenance cron job(s).
+[2026-10-07 16:00:47] [INFO] Starting automated routine server maintenance cycle...
+[2026-10-07 16:00:48] [INFO] --- TASK 1: Temporary & Cache File Maintenance ---
+[2026-10-07 16:00:48] [INFO] Live /tmp directory footprint: 460K (2 entries checked)
+[2026-10-07 16:00:48] [SUCCESS] Cleaned 0 stale cache/temp files from sandbox quarantine.
+[2026-10-07 16:00:48] [INFO] --- TASK 2: Package Cache & Repository Hygiene ---
+[2026-10-07 16:00:48] [INFO] Package Manager: APT (Debian/Ubuntu). APT cache footprint: 17M
+[2026-10-07 16:00:48] [SUCCESS] Debian package database integrity verified (no broken packages).
+[2026-10-07 16:00:48] [INFO] --- TASK 3: System Log Hygiene & Journald Audit ---
+[2026-10-07 16:00:48] [INFO] Systemd journal usage: Archived and active journals take up 808.5M in the file system.
+[2026-10-07 16:00:48] [INFO] /var/log total footprint: 818M
+[2026-10-07 16:00:48] [INFO] --- TASK 4: Memory Cache & Buffer Sync ---
+[2026-10-07 16:00:48] [INFO] Pre-sync memory profile: Used: 648MB, Free: 1842MB, Buff/Cache: 1516MB
+[2026-10-07 16:00:48] [INFO] Flushing dirty cached filesystem buffers via 'sync'...
+[2026-10-07 16:00:48] [SUCCESS] Buffers flushed. Post-sync memory profile: Used: 648MB, Free: 1842MB, Buff/Cache: 1517MB
+[2026-10-07 16:00:48] [INFO] --- TASK 5: Process Health & Zombie Detection ---
+[2026-10-07 16:00:48] [SUCCESS] Process table clean: 0 zombie/defunct processes detected.
+[2026-10-07 16:00:48] [INFO] --- TASK 6: Filesystem Storage Capacity Health ---
+[2026-10-07 16:00:48] [INFO] Root File System (/): Capacity: 1007G, Free: 950G, Utilized: 1%
+[2026-10-07 16:00:48] [SUCCESS] Routine maintenance cycle completed successfully in 1s.
+[2026-10-07 16:00:48] [SUCCESS] Structured JSON telemetry written to /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_36/logs/maintenance_telemetry.json
+[2026-10-07 16:00:49] [INFO] Installing routine maintenance cron schedule...
+[2026-10-07 16:00:49] [INFO] Schedule expression: '0 2 * * *' (Tag: # LSA_SPRINT_TEST)
+[2026-10-07 16:00:49] [SUCCESS] Cron job installed successfully in user crontab.
+[2026-10-07 16:00:49] [INFO] Verifying active crontab entry:
+[2026-10-07 16:00:49] [INFO] Inspecting user crontab for scheduled LSA maintenance jobs...
+[2026-10-07 16:00:49] [SUCCESS] Active scheduled maintenance job(s) found:
+[2026-10-07 16:01:38] [INFO] Starting automated routine server maintenance cycle...
+[2026-10-07 16:01:38] [INFO] --- TASK 1: Temporary & Cache File Maintenance ---
+[2026-10-07 16:01:38] [INFO] Live /tmp directory footprint: 460K (2 entries checked)
+[2026-10-07 16:01:38] [SUCCESS] Cleaned 0 stale cache/temp files from sandbox quarantine.
+[2026-10-07 16:01:38] [INFO] --- TASK 2: Package Cache & Repository Hygiene ---
+[2026-10-07 16:01:38] [INFO] Package Manager: APT (Debian/Ubuntu). APT cache footprint: 17M
+[2026-10-07 16:01:38] [SUCCESS] Debian package database integrity verified (no broken packages).
+[2026-10-07 16:01:38] [INFO] --- TASK 3: System Log Hygiene & Journald Audit ---
+[2026-10-07 16:01:38] [INFO] Systemd journal usage: Archived and active journals take up 808.5M in the file system.
+[2026-10-07 16:01:38] [INFO] /var/log total footprint: 818M
+[2026-10-07 16:01:38] [INFO] --- TASK 4: Memory Cache & Buffer Sync ---
+[2026-10-07 16:01:38] [INFO] Pre-sync memory profile: Used: 650MB, Free: 1823MB, Buff/Cache: 1533MB
+[2026-10-07 16:01:38] [INFO] Flushing dirty cached filesystem buffers via 'sync'...
+[2026-10-07 16:01:39] [SUCCESS] Buffers flushed. Post-sync memory profile: Used: 650MB, Free: 1823MB, Buff/Cache: 1534MB
+[2026-10-07 16:01:39] [INFO] --- TASK 5: Process Health & Zombie Detection ---
+[2026-10-07 16:01:39] [SUCCESS] Process table clean: 0 zombie/defunct processes detected.
+[2026-10-07 16:01:39] [INFO] --- TASK 6: Filesystem Storage Capacity Health ---
+[2026-10-07 16:01:39] [INFO] Root File System (/): Capacity: 1007G, Free: 950G, Utilized: 1%
+[2026-10-07 16:01:39] [SUCCESS] Routine maintenance cycle completed successfully in 1s.
+[2026-10-07 16:01:39] [SUCCESS] Structured JSON telemetry written to /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_36/logs/maintenance_telemetry.json
+[2026-10-07 16:01:39] [INFO] Installing routine maintenance cron schedule...
+[2026-10-07 16:01:39] [INFO] Schedule expression: '0 2 * * *' (Tag: # LSA_SPRINT_TEST)
+[2026-10-07 16:01:39] [SUCCESS] Cron job installed successfully in user crontab.
+[2026-10-07 16:01:39] [INFO] Verifying active crontab entry:
+[2026-10-07 16:01:39] [INFO] Inspecting user crontab for scheduled LSA maintenance jobs...
+[2026-10-07 16:01:39] [SUCCESS] Active scheduled maintenance job(s) found:

@@ -1,0 +1,43 @@
+{
+  "timestamp": "2026-10-07T10:31:39Z",
+  "execution_seconds": 1,
+  "host": {
+    "hostname": "SP",
+    "kernel": "6.18.40.1-microsoft-standard-WSL2",
+    "user": "pankaj"
+  },
+  "tasks": {
+    "temp_cleanup": {
+      "live_tmp_entries": 2,
+      "live_tmp_size": "460K",
+      "pruned_sandbox_files": 0,
+      "status": "COMPLETED"
+    },
+    "package_cache": {
+      "manager": "APT (Debian/Ubuntu)",
+      "cache_size": "17M",
+      "integrity": "Integrity OK",
+      "status": "COMPLETED"
+    },
+    "logs_journal": {
+      "var_log_size": "818M",
+      "journal_size": "Archived and active journals take up 808.5M in the file system.",
+      "status": "COMPLETED"
+    },
+    "memory_sync": {
+      "before": "Used: 650MB, Free: 1823MB, Buff/Cache: 1533MB",
+      "after": "Used: 650MB, Free: 1823MB, Buff/Cache: 1534MB",
+      "status": "SYNCED"
+    },
+    "process_health": {
+      "zombies": 0,
+      "status": "HEALTHY"
+    },
+    "storage_health": {
+      "root_total": "1007G",
+      "root_free": "950G",
+      "root_usage": "1%",
+      "status": "OPTIMAL"
+    }
+  }
+}
