@@ -1,0 +1,24 @@
+{
+  "problem_id": "AS_12",
+  "title": "Old Backup Cleanup",
+  "timestamp": "2026-10-07 12:17:20 IST",
+  "timestamp_epoch": 1791355639,
+  "hostname": "SP",
+  "backup_directory": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_12/sandbox_data/backups",
+  "retention_days": 7,
+  "keep_minimum_guarantee": 1,
+  "dry_run": false,
+  "total_archives_evaluated": 8,
+  "expired_archives_count": 4,
+  "retained_archives_count": 4,
+  "reclaimed_bytes": 983267,
+  "reclaimed_human": "960.22 KB",
+  "companions_removed_count": 4,
+  "status": "EXPIRED_BACKUPS_CLEANED",
+  "pruned_archives": [
+    {"index":5,"filename":"backup_db_prod_20260927_020000.tar.gz","path":"/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_12/sandbox_data/backups/backup_db_prod_20260927_020000.tar.gz","size_bytes":184368,"size_human":"180.05 KB","age_days":10,"modified":"2026-09-27 12:17:18","action":"DELETED","companion_cleaned":true},{"index":6,"filename":"backup_db_prod_20260923_020000.tar.gz","path":"/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_12/sandbox_data/backups/backup_db_prod_20260923_020000.tar.gz","size_bytes":317508,"size_human":"310.07 KB","age_days":14,"modified":"2026-09-23 12:17:17","action":"DELETED","companion_cleaned":true},{"index":7,"filename":"backup_db_prod_20260917_020000.tar.gz","path":"/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_12/sandbox_data/backups/backup_db_prod_20260917_020000.tar.gz","size_bytes":225333,"size_human":"220.05 KB","age_days":20,"modified":"2026-09-17 12:17:17","action":"DELETED","companion_cleaned":true},{"index":8,"filename":"backup_db_prod_20260907_020000.tar.gz","path":"/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_12/sandbox_data/backups/backup_db_prod_20260907_020000.tar.gz","size_bytes":256058,"size_human":"250.06 KB","age_days":30,"modified":"2026-09-07 12:17:17","action":"DELETED","companion_cleaned":true}
+  ],
+  "retained_archives": [
+    {"index":1,"filename":"backup_db_prod_20261007_020000.tar.gz","path":"/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_12/sandbox_data/backups/backup_db_prod_20261007_020000.tar.gz","size_bytes":327748,"size_human":"320.07 KB","age_days":0,"modified":"2026-10-07 12:17:18","action":"RETAINED_MIN_SAFEGUARD"},{"index":2,"filename":"backup_db_prod_20261006_020000.tar.gz","path":"/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_12/sandbox_data/backups/backup_db_prod_20261006_020000.tar.gz","size_bytes":307268,"size_human":"300.07 KB","age_days":1,"modified":"2026-10-06 12:17:18","action":"RETAINED_WITHIN_WINDOW"},{"index":3,"filename":"backup_db_prod_20261004_020000.tar.gz","path":"/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_12/sandbox_data/backups/backup_db_prod_20261004_020000.tar.gz","size_bytes":245818,"size_human":"240.06 KB","age_days":3,"modified":"2026-10-04 12:17:18","action":"RETAINED_WITHIN_WINDOW"},{"index":4,"filename":"backup_db_prod_20261002_020000.tar.gz","path":"/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_12/sandbox_data/backups/backup_db_prod_20261002_020000.tar.gz","size_bytes":297028,"size_human":"290.07 KB","age_days":5,"modified":"2026-10-02 12:17:18","action":"RETAINED_WITHIN_WINDOW"}
+  ]
+}
