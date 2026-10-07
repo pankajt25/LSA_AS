@@ -1,0 +1,14 @@
+[2026-10-07 16:48:31] [INFO] ============================================================
+[2026-10-07 16:48:31] [INFO] LSA Sprint AS_44 - Real-Time Resource Threshold Monitor
+[2026-10-07 16:48:31] [INFO] CPU Thresholds:       Warn >= 70%, Crit >= 85%
+[2026-10-07 16:48:31] [INFO] Memory Thresholds:    Warn >= 75%, Crit >= 90%
+[2026-10-07 16:48:31] [INFO] Swap Thresholds:      Warn >= 50%, Crit >= 75%
+[2026-10-07 16:48:31] [INFO] Sample Interval:      1.0s
+[2026-10-07 16:48:31] [INFO] Log File:             /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_44/logs/resource_monitor_20261007_164831.log
+[2026-10-07 16:48:31] [INFO] ============================================================
+[2026-10-07 16:48:33] [INFO] CPU Usage:            8.56% [OK] (Cores: 4, Load: 0.45, 0.29, 0.23)
+[2026-10-07 16:48:33] [INFO] Memory Usage:         18.43% [OK] (712.9MB / 3869.3MB)
+[2026-10-07 16:48:33] [INFO] Swap Usage:           0.00% [OK] (0.0MB / 1024.0MB)
+[2026-10-07 16:48:33] [INFO] Overall System State: [OK]
+[2026-10-07 16:48:33] [INFO] Harvesting top running processes...
+[2026-10-07 16:48:33] [INFO] Resource threshold monitoring cycle completed.
