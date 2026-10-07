@@ -73,6 +73,14 @@ LSA_AS/
 │   ├── logs/                       # Audit trail & JSON telemetry directory
 │   ├── sandbox_data/               # Simulated large-file data environment
 │   └── README.md                   # Problem documentation & usage
+├── AS_09/                          # Automation Sprint Problem #9
+│   ├── temp_cleaner.sh             # Core temporary file cleanup & storage hygiene script
+│   ├── run.sh                      # Unified execution & HTML dashboard generator
+│   ├── commands_used.md            # Command log & storage hygiene reference
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── logs/                       # Audit trail & JSON telemetry directory
+│   ├── sandbox_data/               # Aging test temporary directory tree
+│   └── README.md                   # Problem documentation & usage
 ├── AS_14/                          # Automation Sprint Problem #14
 │   ├── suspicious_ip_detector.sh   # Core bash script for IP detection
 │   ├── commands_used.md            # Command log & viva preparation
@@ -180,6 +188,7 @@ LSA_AS/
 | **AS_06** | **Server Health Check** | Comprehensive pre-workday system health monitoring covering CPU utilization, memory & swap allocation, storage use, system uptime, active logged-in sessions, and dark-themed HTML report. | ✅ Completed | [`AS_06/`](./AS_06) |
 | **AS_07** | **Low Disk Space Alert** | Filesystem storage capacity auditing (`df -P`), dynamic threshold evaluation (&ge; 80%), critical severity classification, mitigation recommendations, and dark-themed HTML report. | ✅ Completed | [`AS_07/`](./AS_07) |
 | **AS_08** | **Large File Detection** | Recursive filesystem tree inspection (`find -size +<threshold>`), numerical sorting (`sort -nr`), file ownership & timestamp extraction (`stat`), cumulative consumption tallying, and dark-themed HTML report. | ✅ Completed | [`AS_08/`](./AS_08) |
+| **AS_09** | **Temporary File Cleanup** | Stale file aging evaluation (`stat` epoch / `find -mtime`), safe simulation dry-run (`--dry-run`), active unlinking (`rm -f`), empty tree pruning, and dark-themed HTML report. | ✅ Completed | [`AS_09/`](./AS_09) |
 | **AS_14** | **Suspicious IP Detection** | Automated SSH brute-force monitor, real log auto-detection (`/var/log/auth.log`), regex parsing, descending ranking, and audit reporting. | ✅ Completed | [`AS_14/`](./AS_14)
 | **AS_15** | **Error Log Report** | Automated error extraction, real log auto-detection (`/var/log/syslog`), severity breakdown, frequency ranking, and tail-style review. | ✅ Completed | [`AS_15/`](./AS_15)
 | **AS_16** | **Service Availability Check** | Real-time service monitoring, boot persistence verification, systemd/SysV fallback, audit logging, and dark-themed HTML report dashboard. | ✅ Completed | [`AS_16/`](./AS_16)
@@ -213,6 +222,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_06** | Server Health Check | `cd AS_06 && bash run.sh` |
 | **AS_07** | Low Disk Space Alert | `cd AS_07 && bash run.sh` |
 | **AS_08** | Large File Detection | `cd AS_08 && bash run.sh` |
+| **AS_09** | Temporary File Cleanup | `cd AS_09 && bash run.sh` |
 | **AS_14** | Suspicious IP Detection | `cd AS_14 && bash run.sh` |
 | **AS_15** | Error Log Report | `cd AS_15 && bash run.sh` |
 | **AS_16** | Service Availability Check | `cd AS_16 && bash run.sh` |
@@ -239,6 +249,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_06** | `cd AS_06 && bash run.sh` | `cd AS_06 && bash run.sh` | `cd AS_06 && bash run.sh` | `cd AS_06 && bash run.sh` |
 | **AS_07** | `cd AS_07 && bash run.sh` | `cd AS_07 && bash run.sh` | `cd AS_07 && bash run.sh` | `cd AS_07 && bash run.sh` |
 | **AS_08** | `cd AS_08 && bash run.sh` | `cd AS_08 && bash run.sh` | `cd AS_08 && bash run.sh` | `cd AS_08 && bash run.sh` |
+| **AS_09** | `cd AS_09 && bash run.sh` | `cd AS_09 && bash run.sh` | `cd AS_09 && bash run.sh` | `cd AS_09 && bash run.sh` |
 | **AS_14** | `cd AS_14 && bash run.sh` | `cd AS_14 && bash run.sh` | `cd AS_14 && bash run.sh` | `cd AS_14 && bash run.sh` |
 | **AS_15** | `cd AS_15 && bash run.sh` | `cd AS_15 && bash run.sh` | `cd AS_15 && bash run.sh` | `cd AS_15 && bash run.sh` |
 | **AS_16** | `cd AS_16 && bash run.sh` | `cd AS_16 && bash run.sh` | `cd AS_16 && bash run.sh` | `cd AS_16 && bash run.sh` |
@@ -493,6 +504,35 @@ An administrator wants to locate all files in a directory that exceed a certain 
 - 📖 **Sprint Documentation:** [`AS_08/README.md`](./AS_08/README.md)
 - 📜 **Audit Log File:** [`AS_08/logs/large_files.log`](./AS_08/logs/large_files.log)
 - 📋 **Command Log:** [`AS_08/commands_used.md`](./AS_08/commands_used.md)
+
+</details>
+
+<details>
+<summary><strong>AS_09 — Temporary File Cleanup (System Maintenance)</strong></summary>
+
+### Problem Statement
+Temporary files can consume a large amount of disk space over time. Write a script that identifies and deletes temporary files in a specified directory that have not been modified for more than N days.
+
+### Summary of Approach
+- **Deterministic File Aging & Epoch Comparison:** Evaluates file modification epoch stamps (`stat -c %Y`) against current wall-clock epoch (`date +%s`), calculating exact age in days rather than coarse heuristic estimates.
+- **Fail-Safe Dry-Run by Default:** Ships with simulation safety enabled by default; only deletes files when `--delete` or `--force` is explicitly provided.
+- **Root Directory Guard:** Contains safety blocks protecting system paths (`/`, `/etc`, `/usr`, `/home`, etc.) from destructive traversal.
+- **Storage Hygiene Metrics:** Automatically aggregates reclaimed bytes, human-readable totals (`KB`, `MB`), and differentiates unlinked stale files from active files preserved within the retention window.
+- **Optional Empty Tree Pruning:** Supports `--empty-dirs` to remove orphaned nested directory trees after stale payload eviction.
+- **Cross-Platform HTML Dashboard (`run.sh`):** Seeds reproducible test files with `touch -d` backdated timestamps, executes cleanup, serializes JSON telemetry, regenerates a responsive dark dashboard `report.html`, and auto-opens in the host's default web browser across WSL, Linux, macOS, and Git Bash.
+
+### Key Commands Used
+- `bash run.sh` — Single command to seed test environment, execute cleanup, regenerate dashboard, and open HTML report (Linux / macOS / Windows)
+- `./temp_cleaner.sh --delete` — Executes actual deletion of files older than 7 days in sandbox
+- `./temp_cleaner.sh --dry-run` — Safe simulation listing items that would be unlinked
+- `./temp_cleaner.sh -d 10 --delete` — Cleans files older than 10 days
+- `./temp_cleaner.sh --json` — Emits structured JSON telemetry
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_09/report.html`](./AS_09/report.html)
+- 📖 **Sprint Documentation:** [`AS_09/README.md`](./AS_09/README.md)
+- 📜 **Audit Log File:** [`AS_09/logs/temp_cleaner.log`](./AS_09/logs/temp_cleaner.log)
+- 📋 **Command Log:** [`AS_09/commands_used.md`](./AS_09/commands_used.md)
 
 </details>
 
