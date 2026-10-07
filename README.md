@@ -98,6 +98,14 @@ LSA_AS/
 │   ├── logs/                       # Audit trail & JSON telemetry directory
 │   ├── sandbox_data/               # Multi-archive repository & test project tree
 │   └── README.md                   # Problem documentation & usage
+├── AS_12/                          # Automation Sprint Problem #12
+│   ├── old_backup_cleaner.sh       # Core backup retention & lifecycle pruning script
+│   ├── run.sh                      # Unified execution & HTML dashboard generator
+│   ├── commands_used.md            # Command log & retention policy reference
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── logs/                       # Audit trail & JSON telemetry directory
+│   ├── sandbox_data/               # Multi-generation archive repository with companion checksums
+│   └── README.md                   # Problem documentation & usage
 ├── AS_14/                          # Automation Sprint Problem #14
 │   ├── suspicious_ip_detector.sh   # Core bash script for IP detection
 │   ├── commands_used.md            # Command log & viva preparation
@@ -208,6 +216,7 @@ LSA_AS/
 | **AS_09** | **Temporary File Cleanup** | Stale file aging evaluation (`stat` epoch / `find -mtime`), safe simulation dry-run (`--dry-run`), active unlinking (`rm -f`), empty tree pruning, and dark-themed HTML report. | ✅ Completed | [`AS_09/`](./AS_09) |
 | **AS_10** | **Daily Backup** | Automated directory archiving (`tar -czf`), non-destructive integrity testing (`tar -tzf`), cryptographic SHA-256 validation, compression ratio metrics, and dark-themed HTML report. | ✅ Completed | [`AS_10/`](./AS_10) |
 | **AS_11** | **Backup Verification** | Latest archive discovery, existence & non-empty validation, `tar -tzf` decompression integrity testing, SHA-256 cryptographic cross-checking, 24h freshness SLA audit, and dark-themed HTML report. | ✅ Completed | [`AS_11/`](./AS_11) |
+| **AS_12** | **Old Backup Cleanup** | Automated retention policy evaluation (`stat` epoch / `find -printf`), expired snapshot unlinking, companion checksum purging (`.sha256`), minimum retention safeguards, and dark-themed HTML report. | ✅ Completed | [`AS_12/`](./AS_12) |
 | **AS_14** | **Suspicious IP Detection** | Automated SSH brute-force monitor, real log auto-detection (`/var/log/auth.log`), regex parsing, descending ranking, and audit reporting. | ✅ Completed | [`AS_14/`](./AS_14)
 | **AS_15** | **Error Log Report** | Automated error extraction, real log auto-detection (`/var/log/syslog`), severity breakdown, frequency ranking, and tail-style review. | ✅ Completed | [`AS_15/`](./AS_15)
 | **AS_16** | **Service Availability Check** | Real-time service monitoring, boot persistence verification, systemd/SysV fallback, audit logging, and dark-themed HTML report dashboard. | ✅ Completed | [`AS_16/`](./AS_16)
@@ -244,6 +253,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_09** | Temporary File Cleanup | `cd AS_09 && bash run.sh` |
 | **AS_10** | Daily Backup | `cd AS_10 && bash run.sh` |
 | **AS_11** | Backup Verification | `cd AS_11 && bash run.sh` |
+| **AS_12** | Old Backup Cleanup | `cd AS_12 && bash run.sh` |
 | **AS_14** | Suspicious IP Detection | `cd AS_14 && bash run.sh` |
 | **AS_15** | Error Log Report | `cd AS_15 && bash run.sh` |
 | **AS_16** | Service Availability Check | `cd AS_16 && bash run.sh` |
@@ -273,6 +283,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_09** | `cd AS_09 && bash run.sh` | `cd AS_09 && bash run.sh` | `cd AS_09 && bash run.sh` | `cd AS_09 && bash run.sh` |
 | **AS_10** | `cd AS_10 && bash run.sh` | `cd AS_10 && bash run.sh` | `cd AS_10 && bash run.sh` | `cd AS_10 && bash run.sh` |
 | **AS_11** | `cd AS_11 && bash run.sh` | `cd AS_11 && bash run.sh` | `cd AS_11 && bash run.sh` | `cd AS_11 && bash run.sh` |
+| **AS_12** | `cd AS_12 && bash run.sh` | `cd AS_12 && bash run.sh` | `cd AS_12 && bash run.sh` | `cd AS_12 && bash run.sh` |
 | **AS_14** | `cd AS_14 && bash run.sh` | `cd AS_14 && bash run.sh` | `cd AS_14 && bash run.sh` | `cd AS_14 && bash run.sh` |
 | **AS_15** | `cd AS_15 && bash run.sh` | `cd AS_15 && bash run.sh` | `cd AS_15 && bash run.sh` | `cd AS_15 && bash run.sh` |
 | **AS_16** | `cd AS_16 && bash run.sh` | `cd AS_16 && bash run.sh` | `cd AS_16 && bash run.sh` | `cd AS_16 && bash run.sh` |
@@ -619,6 +630,36 @@ A backup is only useful if it is valid. Write a script that verifies whether the
 - 📖 **Sprint Documentation:** [`AS_11/README.md`](./AS_11/README.md)
 - 📜 **Audit Log File:** [`AS_11/logs/backup_verify.log`](./AS_11/logs/backup_verify.log)
 - 📋 **Command Log:** [`AS_11/commands_used.md`](./AS_11/commands_used.md)
+
+</details>
+
+<details>
+<summary><strong>AS_12 — Old Backup Cleanup (Backup Management)</strong></summary>
+
+### Problem Statement
+Backups accumulate over time and consume disk space. Write a script that retains recent backups and deletes backups older than N days to prevent disk space exhaustion.
+
+### Summary of Approach
+- **Deterministic File Aging & Chronological Sorting:** Scans repository archives using float epoch timestamps (`find -printf "%T@\t%s\t%p\n" | sort -nr`) to rank backup snapshots from newest to oldest.
+- **Fail-Safe Minimum Retention Guarantee:** Enforces `--keep-min <M>` (default: 1) safeguard, preventing the destruction of all backups even if every snapshot in the repository exceeds the retention window.
+- **Atomic Companion Artifact Cleanup:** Concurrently purges associated companion metadata (`.sha256`, `.md5`) when an archive is pruned, maintaining clean storage hygiene without orphaned checksums.
+- **Dry-Run Simulation Guard:** Operates in non-destructive dry-run mode by default, requiring `--delete` or `--force` to perform permanent unlinking.
+- **Storage Reclamation Metrics:** Calculates exact byte savings and human-readable totals (`KB`, `MB`, `GB`) reclaimed by lifecycle pruning.
+- **Cross-Platform HTML Dashboard (`run.sh`):** Seeds a multi-generation test environment, executes lifecycle pruning, serializes JSON telemetry, regenerates an executive dark dashboard `report.html`, and auto-opens in the default browser across WSL, Linux, macOS, and Git Bash.
+
+### Key Commands Used
+- `bash run.sh` — Single command to seed repository, prune expired backups, regenerate dashboard, and open HTML report (Linux / macOS / Windows)
+- `./old_backup_cleaner.sh --delete` — Prunes backups older than 7 days in sandbox
+- `./old_backup_cleaner.sh --dry-run` — Safe simulation listing archives eligible for deletion
+- `./old_backup_cleaner.sh -d 14 --delete` — Prunes backups older than 14 days
+- `./old_backup_cleaner.sh --keep-min 2 --delete` — Ensures at least 2 newest snapshots are retained
+- `./old_backup_cleaner.sh --json` — Emits structured JSON telemetry
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_12/report.html`](./AS_12/report.html)
+- 📖 **Sprint Documentation:** [`AS_12/README.md`](./AS_12/README.md)
+- 📜 **Audit Log File:** [`AS_12/logs/old_backup_cleaner.log`](./AS_12/logs/old_backup_cleaner.log)
+- 📋 **Command Log:** [`AS_12/commands_used.md`](./AS_12/commands_used.md)
 
 </details>
 
