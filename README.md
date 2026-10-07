@@ -243,6 +243,14 @@ LSA_AS/
 │   ├── logs/                       # Audit trail & JSON telemetry directory
 │   ├── sandbox_data/               # Simulated enterprise multi-user auth log dataset
 │   └── README.md                   # Problem documentation & usage
+├── AS_32/                          # Automation Sprint Problem #32
+│   ├── file_modification_monitor.sh # Core 24h file modification detection & metadata script
+│   ├── run.sh                      # Unified execution & HTML dashboard generator
+│   ├── commands_used.md            # Command log & filesystem monitoring reference
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── logs/                       # Audit trail & JSON telemetry directory
+│   ├── sandbox_data/               # Simulated project repo with fresh & aged files
+│   └── README.md                   # Problem documentation & usage
 └── (Upcoming Projects)/            # Future Automation Sprint additions
 ```
 
@@ -283,6 +291,7 @@ LSA_AS/
 | **AS_29** | **System Inventory** | Complete hardware & OS specification audit (`/etc/os-release`, `uname -r`, `/proc/cpuinfo`, `free -m`, `df -hP`, `ip -br addr`), volume utilization, and dark-themed HTML report. | ✅ Completed | [`AS_29/`](./AS_29) |
 | **AS_30** | **Logged-in User Report** | Real-time session monitoring (`w`, `who -u`, `loginctl`), terminal inspection (`tty`/`pts`), remote IP attribution, idle metrics, and dark-themed HTML report. | ✅ Completed | [`AS_30/`](./AS_30) |
 | **AS_31** | **User Login Audit** | Automated session history auditing (`/var/log/auth.log`, `last`, `who -a`), PAM event parsing, SSH vs local attribution, distinct account profiling, and dark-themed HTML report. | ✅ Completed | [`AS_31/`](./AS_31) |
+| **AS_32** | **File Modification Monitor** | Filesystem timestamp auditing (`find -mmin -1440`, `stat`), 24-hour change window detection, file size & ownership tracking, age bracketing, and dark-themed HTML report. | ✅ Completed | [`AS_32/`](./AS_32) |
 | *Upcoming* | *Future Sprints* | Additional automation tasks and administration solutions. | ⏳ Planned | — |
 
 ---
@@ -326,6 +335,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_29** | System Inventory | `cd AS_29 && bash run.sh` |
 | **AS_30** | Logged-in User Report | `cd AS_30 && bash run.sh` |
 | **AS_31** | User Login Audit | `cd AS_31 && bash run.sh` |
+| **AS_32** | File Modification Monitor | `cd AS_32 && bash run.sh` |
 
 ### 💻 Quick Command Reference by Operating System
 
@@ -362,6 +372,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_29** | `cd AS_29 && bash run.sh` | `cd AS_29 && bash run.sh` | `cd AS_29 && bash run.sh` | `cd AS_29 && bash run.sh` |
 | **AS_30** | `cd AS_30 && bash run.sh` | `cd AS_30 && bash run.sh` | `cd AS_30 && bash run.sh` | `cd AS_30 && bash run.sh` |
 | **AS_31** | `cd AS_31 && bash run.sh` | `cd AS_31 && bash run.sh` | `cd AS_31 && bash run.sh` | `cd AS_31 && bash run.sh` |
+| **AS_32** | `cd AS_32 && bash run.sh` | `cd AS_32 && bash run.sh` | `cd AS_32 && bash run.sh` | `cd AS_32 && bash run.sh` |
 
 ---
 
@@ -1290,6 +1301,37 @@ Develop a script that generates a report of recent user login activities from th
 - 📖 **Sprint Documentation:** [`AS_31/README.md`](./AS_31/README.md)
 - 📜 **Audit Log File:** [`AS_31/logs/login_audit.log`](./AS_31/logs/login_audit.log)
 - 📋 **Command Log:** [`AS_31/commands_used.md`](./AS_31/commands_used.md)
+
+</details>
+
+<details>
+<summary><strong>AS_32 — File Modification Monitor (File Monitoring & Timestamp Auditing)</strong></summary>
+
+### Problem Statement
+A project directory contains important files. Write a script to identify files modified within the last 24 hours.
+
+### Summary of Approach
+- **Precise Temporal Cutoff Evaluation:** Leverages high-resolution inode modification tracking (`find -mmin -1440` and Python `os.stat().st_mtime`), evaluating an exact rolling 24-hour cutoff window.
+- **Deep Filesystem Metadata Extraction:** Inspects file sizes (formatted in bytes/KB/MB), relative and absolute directory paths, last modified timestamps, file ownership/permissions, and elapsed relative age (`X` hours/minutes ago).
+- **Temporal Age Bracketing:** Clusters detected modifications into discrete operational time brackets (<1h, 1h-6h, 6h-12h, 12h-24h, >24h) and generates file type/extension breakdowns.
+- **Dual Telemetry Architecture:** Outputs clean ANSI terminal diagnostics, appends chronological traces to `logs/modified_files.log`, and serializes structured JSON telemetry (`logs/modified_files.json`).
+- **Cross-Platform HTML Dashboard (`run.sh`):** Executes live project monitoring across host files, renders comparative test drill outputs (`sandbox_data/project_repo`), builds a responsive dark dashboard `report.html`, and auto-opens in the default browser across WSL, Linux, macOS, and Git Bash.
+
+### Key Commands Used
+- `bash run.sh` — Single command to monitor file modifications, regenerate dashboard, and open HTML report (Linux / macOS / Windows)
+- `./file_modification_monitor.sh` — Inspects files in current directory modified within 24 hours
+- `./file_modification_monitor.sh --dir <path>` — Inspects target directory path
+- `./file_modification_monitor.sh --hours <N>` — Configurable temporal threshold (e.g., 12h, 48h)
+- `./file_modification_monitor.sh --ext .py` — Filters modifications by file extension
+- `./file_modification_monitor.sh --sandbox` — Audits simulated project repository dataset
+- `./file_modification_monitor.sh --json` — Emits structured machine-readable JSON telemetry
+- `find <dir> -type f -mmin -1440` — POSIX/GNU find 24-hour minute-level filter
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_32/report.html`](./AS_32/report.html)
+- 📖 **Sprint Documentation:** [`AS_32/README.md`](./AS_32/README.md)
+- 📜 **Audit Log File:** [`AS_32/logs/modified_files.log`](./AS_32/logs/modified_files.log)
+- 📋 **Command Log:** [`AS_32/commands_used.md`](./AS_32/commands_used.md)
 
 </details>
 
