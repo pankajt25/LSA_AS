@@ -1,0 +1,22 @@
+{
+  "problem_id": "AS_09",
+  "title": "Temporary File Cleanup",
+  "timestamp": "2026-10-07 11:42:34 IST",
+  "timestamp_epoch": 1791353554,
+  "hostname": "SP",
+  "target_directory": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp",
+  "retention_days": 7,
+  "dry_run": false,
+  "all_files_count": 9,
+  "stale_files_count": 5,
+  "retained_files_count": 4,
+  "reclaimed_bytes": 120,
+  "reclaimed_human": "120 B",
+  "status": "STALE_FILES_DETECTED",
+  "stale_files": [
+    {"path":"/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp/build_artifact_expired.bin","size_bytes":25,"size_human":"25 B","age_days":30,"modified":"2026-09-07 11:42:33","action":"DELETED"},{"path":"/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp/crash_dump_old.dmp","size_bytes":21,"size_human":"21 B","age_days":20,"modified":"2026-09-17 11:42:33","action":"DELETED"},{"path":"/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp/session_cache_old.tmp","size_bytes":24,"size_human":"24 B","age_days":14,"modified":"2026-09-23 11:42:32","action":"DELETED"},{"path":"/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp/subcache/nested_stale.tmp","size_bytes":22,"size_human":"22 B","age_days":12,"modified":"2026-09-25 11:42:33","action":"DELETED"},{"path":"/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp/worker_thread_stale.log","size_bytes":28,"size_human":"28 B","age_days":10,"modified":"2026-09-27 11:42:33","action":"DELETED"}
+  ],
+  "retained_files": [
+    {"path":"/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp/active_user_token.tmp","size_bytes":21,"size_human":"21 B","age_days":1,"modified":"2026-10-06 11:42:33","action":"RETAINED"},{"path":"/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp/current_session.lock","size_bytes":24,"size_human":"24 B","age_days":2,"modified":"2026-10-05 11:42:33","action":"RETAINED"},{"path":"/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp/recent_metrics.log","size_bytes":21,"size_human":"21 B","age_days":0,"modified":"2026-10-07 11:42:33","action":"RETAINED"},{"path":"/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp/subcache/nested_fresh.tmp","size_bytes":21,"size_human":"21 B","age_days":3,"modified":"2026-10-04 11:42:33","action":"RETAINED"}
+  ]
+}

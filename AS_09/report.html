@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AS_09: Temporary File Cleanup Dashboard</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --surface-hover: #334155;
+            --border: #334155;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --accent-glow: rgba(56, 189, 248, 0.15);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --code-bg: #090d16;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            padding: 2rem;
+            line-height: 1.5;
+        }
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .header-title h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .header-title p {
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+            font-size: 0.95rem;
+        }
+        .sys-badge {
+            display: inline-flex;
+            gap: 0.5rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            align-self: flex-start;
+        }
+        .sys-badge span {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+        .card {
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.25rem;
+            position: relative;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+        }
+        .card-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+        .card-value {
+            font-size: 1.65rem;
+            font-weight: 700;
+            color: var(--text-main);
+            word-break: break-all;
+        }
+        .card-subtext {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.4rem;
+        }
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.65rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .badge-success { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #059669; }
+        .badge-warning { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid #d97706; }
+        .badge-danger { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #dc2626; }
+        
+        .section-box {
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+        }
+        .section-header {
+            background: rgba(0,0,0,0.15);
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .section-header h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+        .table-responsive {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+        th {
+            background: rgba(15, 23, 42, 0.6);
+            padding: 0.75rem 1rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--border);
+        }
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(51, 65, 85, 0.4);
+            color: var(--text-main);
+        }
+        tr:hover td {
+            background-color: var(--surface-hover);
+        }
+        .rank-cell {
+            font-weight: 700;
+            color: var(--accent);
+            width: 50px;
+        }
+        .size-cell {
+            color: #fbbf24;
+            font-weight: 600;
+            width: 110px;
+        }
+        .path-cell {
+            font-family: monospace;
+            font-size: 0.85rem;
+            word-break: break-all;
+        }
+        .time-cell {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 2rem !important;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+        pre.terminal-log {
+            background-color: var(--code-bg);
+            color: #e2e8f0;
+            padding: 1.25rem;
+            font-family: "JetBrains Mono", Consolas, "Courier New", monospace;
+            font-size: 0.82rem;
+            line-height: 1.45;
+            overflow-x: auto;
+            max-height: 380px;
+            white-space: pre-wrap;
+            border-radius: 0 0 8px 8px;
+        }
+        .remediation-box {
+            padding: 1.25rem;
+            background: rgba(56, 189, 248, 0.05);
+            border-left: 4px solid var(--accent);
+            font-size: 0.88rem;
+            line-height: 1.6;
+        }
+        .remediation-box code {
+            background: #090d16;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            color: var(--accent);
+            font-family: monospace;
+        }
+        footer {
+            text-align: center;
+            padding-top: 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>🧹 Temporary File Cleanup Dashboard</h1>
+                <p>E1ITA307 Linux System Administration — Automation Sprint (AS_09)</p>
+            </div>
+            <div class="sys-badge">
+                <span>HOST:</span> SP &nbsp;|&nbsp; 
+                <span>OS:</span> Ubuntu 26.04.1 LTS &nbsp;|&nbsp; 
+                <span>KERNEL:</span> 6.18.40.1-microsoft-standard-WSL2
+            </div>
+        </header>
+
+        <!-- KPI CARDS -->
+        <div class="grid">
+            <div class="card">
+                <div class="card-label">Target Directory</div>
+                <div class="card-value" style="font-size: 1.15rem; font-family: monospace;">/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp</div>
+                <div class="card-subtext">Cleaned directory tree</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Retention Threshold</div>
+                <div class="card-value" style="color: var(--accent);">&gt; 7 Days</div>
+                <div class="card-subtext">Unmodified cutoff limit</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Stale Files Cleaned</div>
+                <div class="card-value" style="color: #f87171;">5</div>
+                <div class="card-subtext">Identified beyond age cutoff</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Active Files Preserved</div>
+                <div class="card-value" style="color: #34d399;">4</div>
+                <div class="card-subtext">Within retention window</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Execution Mode</div>
+                <div class="card-value" style="font-size: 0.95rem; margin-top: 0.4rem;"><span class="badge badge-danger">ACTIVE DELETION</span></div>
+                <div class="card-subtext">120 B storage reclaimed</div>
+            </div>
+        </div>
+
+        <!-- STALE FILES TABLE -->
+        <div class="section-box">
+            <div class="section-header">
+                <h2>🗑️ Cleaned / Stale Files Inventory (&gt; 7 Days)</h2>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">5 item(s)</span>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Size</th>
+                            <th>Age</th>
+                            <th>Last Modified</th>
+                            <th>Action</th>
+                            <th>File Location / Path</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+        <tr>
+            <td class="rank-cell">#1</td>
+            <td class="size-cell"><strong>25 B</strong></td>
+            <td><span class="badge badge-warning">30 days</span></td>
+            <td class="time-cell">2026-09-07 11:42:33</td>
+            <td><span class="badge badge-danger">DELETED</span></td>
+            <td class="path-cell" title="/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp/build_artifact_expired.bin">/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp/build_artifact_expired.bin</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#2</td>
+            <td class="size-cell"><strong>21 B</strong></td>
+            <td><span class="badge badge-warning">20 days</span></td>
+            <td class="time-cell">2026-09-17 11:42:33</td>
+            <td><span class="badge badge-danger">DELETED</span></td>
+            <td class="path-cell" title="/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp/crash_dump_old.dmp">/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp/crash_dump_old.dmp</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#3</td>
+            <td class="size-cell"><strong>24 B</strong></td>
+            <td><span class="badge badge-warning">14 days</span></td>
+            <td class="time-cell">2026-09-23 11:42:32</td>
+            <td><span class="badge badge-danger">DELETED</span></td>
+            <td class="path-cell" title="/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp/session_cache_old.tmp">/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp/session_cache_old.tmp</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#4</td>
+            <td class="size-cell"><strong>22 B</strong></td>
+            <td><span class="badge badge-warning">12 days</span></td>
+            <td class="time-cell">2026-09-25 11:42:33</td>
+            <td><span class="badge badge-danger">DELETED</span></td>
+            <td class="path-cell" title="/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp/subcache/nested_stale.tmp">/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp/subcache/nested_stale.tmp</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#5</td>
+            <td class="size-cell"><strong>28 B</strong></td>
+            <td><span class="badge badge-warning">10 days</span></td>
+            <td class="time-cell">2026-09-27 11:42:33</td>
+            <td><span class="badge badge-danger">DELETED</span></td>
+            <td class="path-cell" title="/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp/worker_thread_stale.log">/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp/worker_thread_stale.log</td>
+        </tr>
+        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- PRESERVED ACTIVE FILES TABLE -->
+        <div class="section-box">
+            <div class="section-header">
+                <h2>✅ Retained Active Files Inventory (&le; 7 Days)</h2>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">4 item(s)</span>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Size</th>
+                            <th>Age</th>
+                            <th>Last Modified</th>
+                            <th>File Location / Path</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+        <tr>
+            <td class="rank-cell">#1</td>
+            <td class="size-cell">21 B</td>
+            <td><span class="badge badge-success">1 days</span></td>
+            <td class="time-cell">2026-10-06 11:42:33</td>
+            <td class="path-cell" title="/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp/active_user_token.tmp">/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp/active_user_token.tmp</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#2</td>
+            <td class="size-cell">24 B</td>
+            <td><span class="badge badge-success">2 days</span></td>
+            <td class="time-cell">2026-10-05 11:42:33</td>
+            <td class="path-cell" title="/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp/current_session.lock">/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp/current_session.lock</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#3</td>
+            <td class="size-cell">21 B</td>
+            <td><span class="badge badge-success">0 days</span></td>
+            <td class="time-cell">2026-10-07 11:42:33</td>
+            <td class="path-cell" title="/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp/recent_metrics.log">/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp/recent_metrics.log</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#4</td>
+            <td class="size-cell">21 B</td>
+            <td><span class="badge badge-success">3 days</span></td>
+            <td class="time-cell">2026-10-04 11:42:33</td>
+            <td class="path-cell" title="/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp/subcache/nested_fresh.tmp">/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp/subcache/nested_fresh.tmp</td>
+        </tr>
+        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- BEST PRACTICES & PRODUCTION GUIDELINES -->
+        <div class="section-box">
+            <div class="section-header">
+                <h2>🛡️ System Maintenance & Production Hygiene Standards</h2>
+            </div>
+            <div class="remediation-box">
+                <p><strong>Temporary Storage Management Practices:</strong></p>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                    <li><strong>systemd-tmpfiles Integration:</strong> Modern Linux systems manage <code>/tmp</code> and <code>/var/tmp</code> via <code>systemd-tmpfiles</code> configuration (e.g. <code>d /tmp 1777 root root 10d</code> in <code>/etc/tmpfiles.d/custom-tmp.conf</code>).</li>
+                    <li><strong>Sticky Bit Security:</strong> Temporary directories must enforce the sticky bit (<code>chmod +t /tmp</code> or mode <code>1777</code>) to prevent users from unlinking or renaming other users' files.</li>
+                    <li><strong>Scheduled Execution:</strong> Schedule routine maintenance via cron: <code>0 2 * * * /path/to/temp_cleaner.sh -d 7 --delete</code>.</li>
+                    <li><strong>Dry-Run Verification:</strong> Always run with <code>--dry-run</code> first before introducing new cleanup policies to production directories.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- LIVE EXECUTION AUDIT LOG -->
+        <div class="section-box">
+            <div class="section-header">
+                <h2>💻 Console Execution Output</h2>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">2026-10-07 11:42:34 IST</span>
+            </div>
+            <pre class="terminal-log">[36m[1m================================================================================[0m
+[36m[1m         TEMPORARY FILE CLEANUP &amp; STORAGE HYGIENE ENGINE (AS_09)                [0m
+[36m[1m================================================================================[0m
+ Target Directory   : [1m/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp[0m
+ Retention Cutoff   : [1m&gt; 7 day(s) unmodified[0m
+ Execution Mode     : [31m[1mACTIVE (Actual Deletion)[0m
+ Hostname           : SP
+ Timestamp          : 2026-10-07 11:42:33 IST
+[36m--------------------------------------------------------------------------------[0m
+[1m#    SIZE         AGE(DAYS)  MODIFIED             ACTION         FILE PATH[0m
+--------------------------------------------------------------------------------
+#1   21 B         1d         2026-10-06 11:42:33  [32mRETAINED[0m    /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp/active_user_token.tmp
+#2   25 B         30d        2026-09-07 11:42:33  [31mDELETED[0m     /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp/build_artifact_expired.bin
+#3   21 B         20d        2026-09-17 11:42:33  [31mDELETED[0m     /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp/crash_dump_old.dmp
+#4   24 B         2d         2026-10-05 11:42:33  [32mRETAINED[0m    /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp/current_session.lock
+#5   21 B         0d         2026-10-07 11:42:33  [32mRETAINED[0m    /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp/recent_metrics.log
+#6   24 B         14d        2026-09-23 11:42:32  [31mDELETED[0m     /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp/session_cache_old.tmp
+#7   21 B         3d         2026-10-04 11:42:33  [32mRETAINED[0m    /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp/subcache/nested_fresh.tmp
+#8   22 B         12d        2026-09-25 11:42:33  [31mDELETED[0m     /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp/subcache/nested_stale.tmp
+#9   28 B         10d        2026-09-27 11:42:33  [31mDELETED[0m     /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/sandbox_data/tmp/worker_thread_stale.log
+[36m--------------------------------------------------------------------------------[0m
+[1mCLEANUP SUMMARY:[0m
+  Total Files Evaluated : [1m9[0m
+  Stale Files Identified: [33m[1m5[0m (&gt; 7 days)
+  Active Files Retained : [32m[1m4[0m (&amp;le; 7 days)
+  Storage Space Reclaimed: [1m120 B[0m (120 bytes)
+  Notice                : [32mStale files unlinked from filesystem.[0m
+  Telemetry JSON File   : [36m/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/logs/temp_cleanup.json[0m
+  Audit Log File        : [36m/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_09/logs/temp_cleaner.log[0m
+[36m================================================================================[0m</pre>
+        </div>
+
+        <footer>
+            Automated Linux System Administration Sprint &bull; Problem AS_09 &bull; Generated on 2026-10-07 11:42:34 IST
+        </footer>
+    </div>
+</body>
+</html>
