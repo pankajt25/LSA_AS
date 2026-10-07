@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AS_39: Disk Space & Inode Utilization Audit</title>
+    <style>
+        :root {
+            --bg-primary: #0a0e1a;
+            --bg-secondary: #121826;
+            --bg-card: #182234;
+            --bg-card-hover: #1e2c42;
+            --border-color: #27364f;
+            --text-primary: #f0f4fc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-cyan: #06b6d4;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-red: #ef4444;
+            --accent-purple: #8b5cf6;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 30px 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1240px;
+            margin: 0 auto;
+        }
+        .header {
+            background: linear-gradient(135deg, #111d33 0%, #1e293b 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .header-title h1 {
+            font-size: 26px;
+            font-weight: 700;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .badge-sprint {
+            background: rgba(6, 182, 212, 0.15);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            font-size: 13px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+        .header-subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-top: 6px;
+        }
+        .status-pill-green {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-green);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .status-pill-yellow {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--accent-amber);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .status-pill-red {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--accent-red);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            margin-bottom: 28px;
+        }
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(6, 182, 212, 0.4);
+        }
+        .card-label {
+            font-size: 13px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+        .card-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+        .card-sub {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .section-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .alert-box {
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+        .alert-critical {
+            background: rgba(239, 68, 68, 0.12);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            color: #fca5a5;
+        }
+        .alert-warning {
+            background: rgba(245, 158, 11, 0.12);
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            color: #fde68a;
+        }
+        .tasks-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        .tasks-table th {
+            background: #111827;
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-align: left;
+            padding: 12px 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .tasks-table td {
+            padding: 12px 10px;
+            border-bottom: 1px solid rgba(39, 53, 79, 0.5);
+            vertical-align: middle;
+        }
+        .tasks-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .progress-bar-bg {
+            background: #0f172a;
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+            width: 100%;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+        }
+        .task-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            text-align: center;
+        }
+        .badge-ok {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-green);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--accent-amber);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+        .badge-critical {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--accent-red);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        .log-terminal {
+            background: #05080f;
+            border: 1px solid #1a2233;
+            border-radius: 8px;
+            padding: 16px;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            font-size: 13px;
+            color: #e2e8f0;
+            max-height: 380px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            line-height: 1.5;
+        }
+        .footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-top: 36px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-title">
+                <h1>
+                    <span>💾 Disk Space & Inode Utilization Audit</span>
+                    <span class="badge-sprint">AS_39</span>
+                </h1>
+                <div class="header-subtitle">Linux System Administration (E1ITA307) • Storage Capacity & Inode Monitoring</div>
+            </div>
+            <div class="header-meta">
+                <div class="status-pill-yellow">WARNINGS DETECTED</div>
+            </div>
+        </header>
+
+        <!-- Metric Cards -->
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-label">Audited Mounts</div>
+                <div class="card-value" style="color: var(--accent-cyan);">16 Filesystems</div>
+                <div class="card-sub">14 OK • 2 Warning • 0 Critical</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Peak Disk Space</div>
+                <div class="card-value" style="color: var(--accent-amber);">71%</div>
+                <div class="card-sub">Highest disk capacity utilized</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Peak Inodes</div>
+                <div class="card-value" style="color: var(--accent-purple);">1%</div>
+                <div class="card-sub">Highest inode table utilized</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Active Thresholds</div>
+                <div class="card-value" style="font-size: 18px; color: #ffffff;">Disk: 80% • Inode: 80%</div>
+                <div class="card-sub">Warning threshold: 70%</div>
+            </div>
+        </div>
+
+        <!-- Section 1: Alert Panel -->
+        <div class="section-box">
+            <div class="section-header">
+                <div class="section-title">
+                    <span>🚨</span> Threshold Policy Evaluation & Alerts
+                </div>
+            </div>
+            
+        <div class="alert-box alert-warning">
+            <div style="font-weight: 700; font-size: 15px; margin-bottom: 4px;">
+                ⚠️ WARNING THRESHOLD REACHED: <code>/usr/lib/wsl/drivers</code> (drivers)
+            </div>
+            <div style="font-size: 14px; margin-bottom: 6px;">
+                <strong>Trigger:</strong> Disk 71% &gt;= 70% | <strong>Storage:</strong> 83G used of 118G (35G free)
+            </div>
+            <div style="font-size: 13px; color: var(--text-secondary);">
+                <strong>Recommendation:</strong> Inspect large files with <code>find /usr/lib/wsl/drivers -size +100M</code>, prune stale cache/log trees, or expand volume capacity.
+            </div>
+        </div>
+        
+        <div class="alert-box alert-warning">
+            <div style="font-weight: 700; font-size: 15px; margin-bottom: 4px;">
+                ⚠️ WARNING THRESHOLD REACHED: <code>/mnt/c</code> (C:\)
+            </div>
+            <div style="font-size: 14px; margin-bottom: 6px;">
+                <strong>Trigger:</strong> Disk 71% &gt;= 70% | <strong>Storage:</strong> 83G used of 118G (35G free)
+            </div>
+            <div style="font-size: 13px; color: var(--text-secondary);">
+                <strong>Recommendation:</strong> Inspect large files with <code>find /mnt/c -size +100M</code>, prune stale cache/log trees, or expand volume capacity.
+            </div>
+        </div>
+        
+        </div>
+
+        <!-- Section 2: Filesystem Storage & Inode Audit Matrix -->
+        <div class="section-box">
+            <div class="section-header">
+                <div class="section-title">
+                    <span>📋</span> Mounted Filesystems: Disk Space & Inode Utilization Matrix
+                </div>
+            </div>
+            <div style="overflow-x: auto;">
+                <table class="tasks-table">
+                    <thead>
+                        <tr>
+                            <th>Mount Point</th>
+                            <th>Filesystem</th>
+                            <th>Size</th>
+                            <th>Used</th>
+                            <th>Avail</th>
+                            <th>Disk Use %</th>
+                            <th>Inodes</th>
+                            <th>I-Used</th>
+                            <th>Inode %</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+    <tr>
+        <td style="font-weight: 600;"><code>/usr/lib/wsl/drivers</code></td>
+        <td style="color: var(--text-secondary);">drivers</td>
+        <td>118G</td>
+        <td>83G</td>
+        <td>35G</td>
+        <td style="min-width: 140px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                <span>71%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: 71%; background: var(--accent-amber);"></div>
+            </div>
+        </td>
+        <td>999</td>
+        <td>-999001</td>
+        <td style="min-width: 110px;">
+            <div style="font-size: 12px; margin-bottom: 3px;">N/A</div>
+            <span style='color: var(--text-muted); font-size: 11px;'>Not Applicable</span>
+        </td>
+        <td><span class="task-badge badge-warning">WARNING</span></td>
+    </tr>
+    
+    <tr>
+        <td style="font-weight: 600;"><code>/mnt/c</code></td>
+        <td style="color: var(--text-secondary);">C:\</td>
+        <td>118G</td>
+        <td>83G</td>
+        <td>35G</td>
+        <td style="min-width: 140px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                <span>71%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: 71%; background: var(--accent-amber);"></div>
+            </div>
+        </td>
+        <td>999</td>
+        <td>-999001</td>
+        <td style="min-width: 110px;">
+            <div style="font-size: 12px; margin-bottom: 3px;">N/A</div>
+            <span style='color: var(--text-muted); font-size: 11px;'>Not Applicable</span>
+        </td>
+        <td><span class="task-badge badge-warning">WARNING</span></td>
+    </tr>
+    
+    <tr>
+        <td style="font-weight: 600;"><code>/mnt/d</code></td>
+        <td style="color: var(--text-secondary);">D:\</td>
+        <td>918G</td>
+        <td>109G</td>
+        <td>809G</td>
+        <td style="min-width: 140px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                <span>12%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: 12%; background: var(--accent-green);"></div>
+            </div>
+        </td>
+        <td>999</td>
+        <td>-999001</td>
+        <td style="min-width: 110px;">
+            <div style="font-size: 12px; margin-bottom: 3px;">N/A</div>
+            <span style='color: var(--text-muted); font-size: 11px;'>Not Applicable</span>
+        </td>
+        <td><span class="task-badge badge-ok">OK</span></td>
+    </tr>
+    
+    <tr>
+        <td style="font-weight: 600;"><code>/mnt/wsl</code></td>
+        <td style="color: var(--text-secondary);">none</td>
+        <td>1.9G</td>
+        <td>4.0K</td>
+        <td>1.9G</td>
+        <td style="min-width: 140px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                <span>1%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: 1%; background: var(--accent-green);"></div>
+            </div>
+        </td>
+        <td>495265</td>
+        <td>2</td>
+        <td style="min-width: 110px;">
+            <div style="font-size: 12px; margin-bottom: 3px;">1%</div>
+            <div class='progress-bar-bg'><div class='progress-bar-fill' style='width: 1%; background: var(--accent-cyan);'></div></div>
+        </td>
+        <td><span class="task-badge badge-ok">OK</span></td>
+    </tr>
+    
+    <tr>
+        <td style="font-weight: 600;"><code>/</code></td>
+        <td style="color: var(--text-secondary);">/dev/sdd</td>
+        <td>1007G</td>
+        <td>6.5G</td>
+        <td>950G</td>
+        <td style="min-width: 140px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                <span>1%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: 1%; background: var(--accent-green);"></div>
+            </div>
+        </td>
+        <td>67108864</td>
+        <td>144086</td>
+        <td style="min-width: 110px;">
+            <div style="font-size: 12px; margin-bottom: 3px;">1%</div>
+            <div class='progress-bar-bg'><div class='progress-bar-fill' style='width: 1%; background: var(--accent-cyan);'></div></div>
+        </td>
+        <td><span class="task-badge badge-ok">OK</span></td>
+    </tr>
+    
+    <tr>
+        <td style="font-weight: 600;"><code>/mnt/wslg</code></td>
+        <td style="color: var(--text-secondary);">none</td>
+        <td>1.9G</td>
+        <td>36K</td>
+        <td>1.9G</td>
+        <td style="min-width: 140px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                <span>1%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: 1%; background: var(--accent-green);"></div>
+            </div>
+        </td>
+        <td>495265</td>
+        <td>23</td>
+        <td style="min-width: 110px;">
+            <div style="font-size: 12px; margin-bottom: 3px;">1%</div>
+            <div class='progress-bar-bg'><div class='progress-bar-fill' style='width: 1%; background: var(--accent-cyan);'></div></div>
+        </td>
+        <td><span class="task-badge badge-ok">OK</span></td>
+    </tr>
+    
+    <tr>
+        <td style="font-weight: 600;"><code>/init</code></td>
+        <td style="color: var(--text-secondary);">rootfs</td>
+        <td>1.9G</td>
+        <td>3.3M</td>
+        <td>1.9G</td>
+        <td style="min-width: 140px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                <span>1%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: 1%; background: var(--accent-green);"></div>
+            </div>
+        </td>
+        <td>494157</td>
+        <td>12</td>
+        <td style="min-width: 110px;">
+            <div style="font-size: 12px; margin-bottom: 3px;">1%</div>
+            <div class='progress-bar-bg'><div class='progress-bar-fill' style='width: 1%; background: var(--accent-cyan);'></div></div>
+        </td>
+        <td><span class="task-badge badge-ok">OK</span></td>
+    </tr>
+    
+    <tr>
+        <td style="font-weight: 600;"><code>/run</code></td>
+        <td style="color: var(--text-secondary);">none</td>
+        <td>1.9G</td>
+        <td>776K</td>
+        <td>1.9G</td>
+        <td style="min-width: 140px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                <span>1%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: 1%; background: var(--accent-green);"></div>
+            </div>
+        </td>
+        <td>495265</td>
+        <td>554</td>
+        <td style="min-width: 110px;">
+            <div style="font-size: 12px; margin-bottom: 3px;">1%</div>
+            <div class='progress-bar-bg'><div class='progress-bar-fill' style='width: 1%; background: var(--accent-cyan);'></div></div>
+        </td>
+        <td><span class="task-badge badge-ok">OK</span></td>
+    </tr>
+    
+    <tr>
+        <td style="font-weight: 600;"><code>/mnt/wslg/versions.txt</code></td>
+        <td style="color: var(--text-secondary);">none</td>
+        <td>1.9G</td>
+        <td>80K</td>
+        <td>1.9G</td>
+        <td style="min-width: 140px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                <span>1%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: 1%; background: var(--accent-green);"></div>
+            </div>
+        </td>
+        <td>495265</td>
+        <td>53</td>
+        <td style="min-width: 110px;">
+            <div style="font-size: 12px; margin-bottom: 3px;">1%</div>
+            <div class='progress-bar-bg'><div class='progress-bar-fill' style='width: 1%; background: var(--accent-cyan);'></div></div>
+        </td>
+        <td><span class="task-badge badge-ok">OK</span></td>
+    </tr>
+    
+    <tr>
+        <td style="font-weight: 600;"><code>/mnt/wslg/doc</code></td>
+        <td style="color: var(--text-secondary);">none</td>
+        <td>1.9G</td>
+        <td>80K</td>
+        <td>1.9G</td>
+        <td style="min-width: 140px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                <span>1%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: 1%; background: var(--accent-green);"></div>
+            </div>
+        </td>
+        <td>495265</td>
+        <td>53</td>
+        <td style="min-width: 110px;">
+            <div style="font-size: 12px; margin-bottom: 3px;">1%</div>
+            <div class='progress-bar-bg'><div class='progress-bar-fill' style='width: 1%; background: var(--accent-cyan);'></div></div>
+        </td>
+        <td><span class="task-badge badge-ok">OK</span></td>
+    </tr>
+    
+    <tr>
+        <td style="font-weight: 600;"><code>/tmp</code></td>
+        <td style="color: var(--text-secondary);">tmpfs</td>
+        <td>1.9G</td>
+        <td>460K</td>
+        <td>1.9G</td>
+        <td style="min-width: 140px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                <span>1%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: 1%; background: var(--accent-green);"></div>
+            </div>
+        </td>
+        <td>1048576</td>
+        <td>11</td>
+        <td style="min-width: 110px;">
+            <div style="font-size: 12px; margin-bottom: 3px;">1%</div>
+            <div class='progress-bar-bg'><div class='progress-bar-fill' style='width: 1%; background: var(--accent-cyan);'></div></div>
+        </td>
+        <td><span class="task-badge badge-ok">OK</span></td>
+    </tr>
+    
+    <tr>
+        <td style="font-weight: 600;"><code>/run/user/1000</code></td>
+        <td style="color: var(--text-secondary);">tmpfs</td>
+        <td>387M</td>
+        <td>12K</td>
+        <td>387M</td>
+        <td style="min-width: 140px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                <span>1%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: 1%; background: var(--accent-green);"></div>
+            </div>
+        </td>
+        <td>99053</td>
+        <td>44</td>
+        <td style="min-width: 110px;">
+            <div style="font-size: 12px; margin-bottom: 3px;">1%</div>
+            <div class='progress-bar-bg'><div class='progress-bar-fill' style='width: 1%; background: var(--accent-cyan);'></div></div>
+        </td>
+        <td><span class="task-badge badge-ok">OK</span></td>
+    </tr>
+    
+    <tr>
+        <td style="font-weight: 600;"><code>/usr/lib/modules/6.18.40.1-microsoft-standard-WSL2</code></td>
+        <td style="color: var(--text-secondary);">none</td>
+        <td>1.9G</td>
+        <td>0</td>
+        <td>1.9G</td>
+        <td style="min-width: 140px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                <span>0%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: 0%; background: var(--accent-green);"></div>
+            </div>
+        </td>
+        <td>495265</td>
+        <td>5</td>
+        <td style="min-width: 110px;">
+            <div style="font-size: 12px; margin-bottom: 3px;">1%</div>
+            <div class='progress-bar-bg'><div class='progress-bar-fill' style='width: 1%; background: var(--accent-cyan);'></div></div>
+        </td>
+        <td><span class="task-badge badge-ok">OK</span></td>
+    </tr>
+    
+    <tr>
+        <td style="font-weight: 600;"><code>/usr/lib/wsl/lib</code></td>
+        <td style="color: var(--text-secondary);">none</td>
+        <td>1.9G</td>
+        <td>0</td>
+        <td>1.9G</td>
+        <td style="min-width: 140px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                <span>0%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: 0%; background: var(--accent-green);"></div>
+            </div>
+        </td>
+        <td>495265</td>
+        <td>5</td>
+        <td style="min-width: 110px;">
+            <div style="font-size: 12px; margin-bottom: 3px;">1%</div>
+            <div class='progress-bar-bg'><div class='progress-bar-fill' style='width: 1%; background: var(--accent-cyan);'></div></div>
+        </td>
+        <td><span class="task-badge badge-ok">OK</span></td>
+    </tr>
+    
+    <tr>
+        <td style="font-weight: 600;"><code>/run/lock</code></td>
+        <td style="color: var(--text-secondary);">none</td>
+        <td>1.9G</td>
+        <td>0</td>
+        <td>1.9G</td>
+        <td style="min-width: 140px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                <span>0%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: 0%; background: var(--accent-green);"></div>
+            </div>
+        </td>
+        <td>495265</td>
+        <td>3</td>
+        <td style="min-width: 110px;">
+            <div style="font-size: 12px; margin-bottom: 3px;">1%</div>
+            <div class='progress-bar-bg'><div class='progress-bar-fill' style='width: 1%; background: var(--accent-cyan);'></div></div>
+        </td>
+        <td><span class="task-badge badge-ok">OK</span></td>
+    </tr>
+    
+    <tr>
+        <td style="font-weight: 600;"><code>/run/shm</code></td>
+        <td style="color: var(--text-secondary);">none</td>
+        <td>1.9G</td>
+        <td>0</td>
+        <td>1.9G</td>
+        <td style="min-width: 140px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                <span>0%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: 0%; background: var(--accent-green);"></div>
+            </div>
+        </td>
+        <td>495265</td>
+        <td>1</td>
+        <td style="min-width: 110px;">
+            <div style="font-size: 12px; margin-bottom: 3px;">1%</div>
+            <div class='progress-bar-bg'><div class='progress-bar-fill' style='width: 1%; background: var(--accent-cyan);'></div></div>
+        </td>
+        <td><span class="task-badge badge-ok">OK</span></td>
+    </tr>
+    
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Section 3: Live Terminal Trace -->
+        <div class="section-box">
+            <div class="section-header">
+                <div class="section-title">
+                    <span>💻</span> Live Execution Terminal Trace
+                </div>
+            </div>
+            <div class="log-terminal">[1;34m[1m
+================================================================================
+       LSA AUTOMATION SPRINT (AS_39) — DISK &amp; INODE UTILIZATION AUDIT           
+================================================================================
+[0m
+[1;36m[2026-10-07 16:22:54] [INFO] Initiating storage audit across mounted filesystems...[0m
+[1;36m[2026-10-07 16:22:54] [INFO] Thresholds: Disk Critical &gt;= 80%, Inode Critical &gt;= 80%, Warning &gt;= 70%[0m
+
+[1mMOUNT POINT            FILESYSTEM         DISK SIZE  DISK USED  DISK %   INODES     INODE %  STATUS    [0m
+------------------------------------------------------------------------------------------------------
+/usr/lib/wsl/drivers   drivers            118G       83G        71%      999        N/A      [1;33mWARNING   [0m
+/mnt/c                 C:\                118G       83G        71%      999        N/A      [1;33mWARNING   [0m
+/mnt/d                 D:\                918G       109G       12%      999        N/A      [1;32mOK        [0m
+/mnt/wsl               none               1.9G       4.0K       1%       495265     1%       [1;32mOK        [0m
+/                      /dev/sdd           1007G      6.5G       1%       67108864   1%       [1;32mOK        [0m
+/mnt/wslg              none               1.9G       36K        1%       495265     1%       [1;32mOK        [0m
+/init                  rootfs             1.9G       3.3M       1%       494157     1%       [1;32mOK        [0m
+/run                   none               1.9G       776K       1%       495265     1%       [1;32mOK        [0m
+/mnt/wslg/versions.tx  none               1.9G       80K        1%       495265     1%       [1;32mOK        [0m
+/mnt/wslg/doc          none               1.9G       80K        1%       495265     1%       [1;32mOK        [0m
+/tmp                   tmpfs              1.9G       460K       1%       1048576    1%       [1;32mOK        [0m
+/run/user/1000         tmpfs              387M       12K        1%       99053      1%       [1;32mOK        [0m
+/usr/lib/modules/6.18  none               1.9G       0          0%       495265     1%       [1;32mOK        [0m
+/usr/lib/wsl/lib       none               1.9G       0          0%       495265     1%       [1;32mOK        [0m
+/run/lock              none               1.9G       0          0%       495265     1%       [1;32mOK        [0m
+/run/shm               none               1.9G       0          0%       495265     1%       [1;32mOK        [0m
+------------------------------------------------------------------------------------------------------
+Audited: 16 filesystems | [1;32mOK: 14[0m | [1;33mWarning: 2[0m | [1;31mCritical Exceeded: 0[0m
+
+[1;33m[1m⚠ FILE SYSTEMS REQUIRING ATTENTION:[0m
+  [1;33m[WARNING][0m /usr/lib/wsl/drivers (drivers) -&gt; Disk 71% &gt;= 70%
+  [1;33m[WARNING][0m /mnt/c (C:\) -&gt; Disk 71% &gt;= 70%
+[1;32m[2026-10-07 16:22:55] [SUCCESS] Storage &amp; Inode audit finished in 1s.[0m</div>
+        </div>
+
+        <!-- Section 4: System Host Context -->
+        <div class="section-box">
+            <div class="section-header">
+                <div class="section-title">
+                    <span>🖥️</span> System Host Context
+                </div>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; font-size: 14px;">
+                <div><span style="color: var(--text-muted);">Hostname:</span> <strong>SP</strong></div>
+                <div><span style="color: var(--text-muted);">OS Display:</span> <strong>Ubuntu 26.04.1 LTS</strong></div>
+                <div><span style="color: var(--text-muted);">Kernel:</span> <strong>6.18.40.1-microsoft-standard-WSL2</strong></div>
+                <div><span style="color: var(--text-muted);">Operator:</span> <strong>pankaj</strong></div>
+                <div><span style="color: var(--text-muted);">Timestamp:</span> <strong>2026-10-07 16:22:55 IST</strong></div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            Linux System Administration (E1ITA307) • Automation Sprint • Problem #39 Disk & Inode Check Dashboard
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,24 @@
+[2026-10-07 16:21:08] [INFO] Initiating storage audit across mounted filesystems...
+[2026-10-07 16:21:08] [INFO] Thresholds: Disk Critical >= 80%, Inode Critical >= 80%, Warning >= 70%
+[2026-10-07 16:21:08 IST] AUDIT: Audited=16, Critical=0, Warning=2, OK=14
+[2026-10-07 16:21:08 IST] ALERT: WARNING on /usr/lib/wsl/drivers -> Disk 71% >= 70%
+[2026-10-07 16:21:08 IST] ALERT: WARNING on /mnt/c -> Disk 71% >= 70%
+[2026-10-07 16:21:08] [SUCCESS] Storage & Inode audit finished in 0s.
+[2026-10-07 16:21:16] [INFO] Initiating storage audit across mounted filesystems...
+[2026-10-07 16:21:16] [INFO] Thresholds: Disk Critical >= 70%, Inode Critical >= 80%, Warning >= 70%
+[2026-10-07 16:21:16 IST] AUDIT: Audited=16, Critical=2, Warning=0, OK=14
+[2026-10-07 16:21:16 IST] ALERT: CRITICAL on /usr/lib/wsl/drivers -> Disk 71% >= 70%
+[2026-10-07 16:21:16 IST] ALERT: CRITICAL on /mnt/c -> Disk 71% >= 70%
+[2026-10-07 16:21:16] [SUCCESS] Storage & Inode audit finished in 0s.
+[2026-10-07 16:22:10] [INFO] Initiating storage audit across mounted filesystems...
+[2026-10-07 16:22:10] [INFO] Thresholds: Disk Critical >= 80%, Inode Critical >= 80%, Warning >= 70%
+[2026-10-07 16:22:10 IST] AUDIT: Audited=16, Critical=0, Warning=2, OK=14
+[2026-10-07 16:22:10 IST] ALERT: WARNING on /usr/lib/wsl/drivers -> Disk 71% >= 70%
+[2026-10-07 16:22:10 IST] ALERT: WARNING on /mnt/c -> Disk 71% >= 70%
+[2026-10-07 16:22:10] [SUCCESS] Storage & Inode audit finished in 0s.
+[2026-10-07 16:22:54] [INFO] Initiating storage audit across mounted filesystems...
+[2026-10-07 16:22:54] [INFO] Thresholds: Disk Critical >= 80%, Inode Critical >= 80%, Warning >= 70%
+[2026-10-07 16:22:54 IST] AUDIT: Audited=16, Critical=0, Warning=2, OK=14
+[2026-10-07 16:22:54 IST] ALERT: WARNING on /usr/lib/wsl/drivers -> Disk 71% >= 70%
+[2026-10-07 16:22:54 IST] ALERT: WARNING on /mnt/c -> Disk 71% >= 70%
+[2026-10-07 16:22:55] [SUCCESS] Storage & Inode audit finished in 1s.
