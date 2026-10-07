@@ -1,0 +1,10 @@
+[2026-10-07 10:55:10 IST] [INFO] Starting permission audit on directory: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_04/sandbox_data
+[2026-10-07 10:55:10 IST] [VULN] World-writable found: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_04/sandbox_data/conf/database.conf (mode: 666, -rw-rw-rw-, severity: HIGH)
+[2026-10-07 10:55:11 IST] [VULN] World-writable found: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_04/sandbox_data/data/customer_records.csv (mode: 666, -rw-rw-rw-, severity: HIGH)
+[2026-10-07 10:55:11 IST] [VULN] World-writable found: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_04/sandbox_data/scripts/deploy.sh (mode: 777, -rwxrwxrwx, severity: CRITICAL)
+[2026-10-07 10:55:17 IST] [INFO] Starting permission audit on directory: /var/log
+[2026-10-07 10:55:17 IST] [INFO] No world-writable files detected in /var/log
+[2026-10-07 10:56:07 IST] [INFO] Starting permission audit on directory: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_04/sandbox_data
+[2026-10-07 10:56:08 IST] [VULN] World-writable found: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_04/sandbox_data/conf/database.conf (mode: 666, -rw-rw-rw-, severity: HIGH)
+[2026-10-07 10:56:08 IST] [VULN] World-writable found: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_04/sandbox_data/data/customer_records.csv (mode: 666, -rw-rw-rw-, severity: HIGH)
+[2026-10-07 10:56:08 IST] [VULN] World-writable found: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_04/sandbox_data/scripts/deploy.sh (mode: 777, -rwxrwxrwx, severity: CRITICAL)

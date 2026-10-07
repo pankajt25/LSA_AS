@@ -1,0 +1,20 @@
+{
+  "problem_id": "AS_04",
+  "title": "Permission Audit",
+  "timestamp": "2026-10-07 10:56:08 IST",
+  "timestamp_epoch": 1791350768,
+  "hostname": "SP",
+  "target_directory": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_04/sandbox_data",
+  "total_files_scanned": 8,
+  "compliant_files": 5,
+  "world_writable_count": 3,
+  "severity_breakdown": {
+    "critical": 1,
+    "high": 2,
+    "medium": 0
+  },
+  "status": "VULNERABILITIES_FOUND",
+  "vulnerabilities": [
+    {"path":"/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_04/sandbox_data/conf/database.conf","octal":"666","symbolic":"-rw-rw-rw-","owner":"pankaj","group":"pankaj","size":131,"modified":"2026-10-07 10:54:31","severity":"HIGH","remediation":"chmod o-w /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_04/sandbox_data/conf/database.conf"},{"path":"/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_04/sandbox_data/data/customer_records.csv","octal":"666","symbolic":"-rw-rw-rw-","owner":"pankaj","group":"pankaj","size":105,"modified":"2026-10-07 10:54:31","severity":"HIGH","remediation":"chmod o-w /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_04/sandbox_data/data/customer_records.csv"},{"path":"/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_04/sandbox_data/scripts/deploy.sh","octal":"777","symbolic":"-rwxrwxrwx","owner":"pankaj","group":"pankaj","size":137,"modified":"2026-10-07 10:54:31","severity":"CRITICAL","remediation":"chmod o-w /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_04/sandbox_data/scripts/deploy.sh"}
+  ]
+}
