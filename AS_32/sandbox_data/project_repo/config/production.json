@@ -1,0 +1,5 @@
+{
+  "api_port": 8443,
+  "tls_enabled": true,
+  "db_host": "10.0.1.25"
+}

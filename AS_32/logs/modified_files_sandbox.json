@@ -1,0 +1,102 @@
+{
+  "scan_metadata": {
+    "target_directory": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_32/sandbox_data/project_repo",
+    "scan_timestamp": "2026-10-07 15:27:39 ",
+    "threshold_hours": 24.0,
+    "extension_filter": "All Extensions"
+  },
+  "summary": {
+    "total_files_scanned": 9,
+    "modified_files_count": 5,
+    "older_files_count": 4,
+    "modification_percentage": 55.6,
+    "total_modified_bytes": 446,
+    "total_modified_human": "446 B",
+    "most_recent_file": "build/pipeline_output.log",
+    "time_brackets": {
+      "under_1h": 1,
+      "1h_to_6h": 2,
+      "6h_to_12h": 1,
+      "12h_to_24h": 1,
+      "over_24h": 4
+    },
+    "top_extensions": {
+      ".log": 1,
+      ".json": 1,
+      ".md": 1,
+      ".py": 2
+    }
+  },
+  "modified_files": [
+    {
+      "relative_path": "build/pipeline_output.log",
+      "absolute_path": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_32/sandbox_data/project_repo/build/pipeline_output.log",
+      "filename": "pipeline_output.log",
+      "extension": ".log",
+      "size_bytes": 87,
+      "size_human": "87 B",
+      "mtime_epoch": 1791365134.0,
+      "mtime_formatted": "2026-10-07 14:55:34",
+      "age_hours": 0.53,
+      "age_string": "32m ago",
+      "owner": "pankaj",
+      "permissions": "644"
+    },
+    {
+      "relative_path": "src/auth_service.py",
+      "absolute_path": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_32/sandbox_data/project_repo/src/auth_service.py",
+      "filename": "auth_service.py",
+      "extension": ".py",
+      "size_bytes": 101,
+      "size_human": "101 B",
+      "mtime_epoch": 1791359734.0,
+      "mtime_formatted": "2026-10-07 13:25:34",
+      "age_hours": 2.03,
+      "age_string": "2.0h ago",
+      "owner": "pankaj",
+      "permissions": "644"
+    },
+    {
+      "relative_path": "src/db_connector.py",
+      "absolute_path": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_32/sandbox_data/project_repo/src/db_connector.py",
+      "filename": "db_connector.py",
+      "extension": ".py",
+      "size_bytes": 109,
+      "size_human": "109 B",
+      "mtime_epoch": 1791348934.0,
+      "mtime_formatted": "2026-10-07 10:25:34",
+      "age_hours": 5.03,
+      "age_string": "5.0h ago",
+      "owner": "pankaj",
+      "permissions": "644"
+    },
+    {
+      "relative_path": "config/production.json",
+      "absolute_path": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_32/sandbox_data/project_repo/config/production.json",
+      "filename": "production.json",
+      "extension": ".json",
+      "size_bytes": 72,
+      "size_human": "72 B",
+      "mtime_epoch": 1791338134.0,
+      "mtime_formatted": "2026-10-07 07:25:34",
+      "age_hours": 8.03,
+      "age_string": "8.0h ago",
+      "owner": "pankaj",
+      "permissions": "644"
+    },
+    {
+      "relative_path": "docs/deployment_notes.md",
+      "absolute_path": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_32/sandbox_data/project_repo/docs/deployment_notes.md",
+      "filename": "deployment_notes.md",
+      "extension": ".md",
+      "size_bytes": 77,
+      "size_human": "77 B",
+      "mtime_epoch": 1791302134.0,
+      "mtime_formatted": "2026-10-06 21:25:34",
+      "age_hours": 18.03,
+      "age_string": "18.0h ago",
+      "owner": "pankaj",
+      "permissions": "644"
+    }
+  ]
+}
