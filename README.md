@@ -26,6 +26,15 @@ LSA_AS/
 │   ├── report.html                 # Standalone dark-themed dashboard report
 │   ├── logs/                       # Audit trail directory
 │   └── README.md                   # Problem documentation & usage
+├── AS_03/                          # Automation Sprint Problem #3
+│   ├── department_access.sh        # Core department group & shared folder permission script
+│   ├── cleanup.sh                  # Safe environment teardown & group removal script
+│   ├── run.sh                      # Unified execution & HTML dashboard generator
+│   ├── commands_used.md            # Command log & development history
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── logs/                       # Audit trail & JSON telemetry directory
+│   ├── sandbox_data/               # Sandboxed shared folder data directory
+│   └── README.md                   # Problem documentation & usage
 ├── AS_14/                          # Automation Sprint Problem #14
 │   ├── suspicious_ip_detector.sh   # Core bash script for IP detection
 │   ├── commands_used.md            # Command log & viva preparation
@@ -127,6 +136,7 @@ LSA_AS/
 |---|---|---|---|---|
 | **AS_01** | **Employee Account Setup** | Automated employee account provisioning (`useradd -m -c -g`), department group creation (`groupadd`), non-interactive forced first-login password expiration (`passwd -e`), sandboxed test isolation (`lsatest_`), and safe teardown (`cleanup.sh`). | ✅ Completed | [`AS_01/`](./AS_01) |
 | **AS_02** | **Inactive Employee Detection** | Real local account discovery (`/etc/passwd`), human user filtering (`UID >= 1000`), multi-tier login history resolution (`lastlog` / `last` / `loginctl` fallback), configurable thresholding, and dark-themed HTML report. | ✅ Completed | [`AS_02/`](./AS_02) |
+| **AS_03** | **Department Access** | Department group creation (`groupadd`), sandboxed shared directory provisioning (`chmod 2770`), SGID bit inheritance enforcement, zero non-member access (`---`), and safe teardown (`cleanup.sh`). | ✅ Completed | [`AS_03/`](./AS_03) |
 | **AS_14** | **Suspicious IP Detection** | Automated SSH brute-force monitor, real log auto-detection (`/var/log/auth.log`), regex parsing, descending ranking, and audit reporting. | ✅ Completed | [`AS_14/`](./AS_14) |
 | **AS_15** | **Error Log Report** | Automated error extraction, real log auto-detection (`/var/log/syslog`), severity breakdown, frequency ranking, and tail-style review. | ✅ Completed | [`AS_15/`](./AS_15) |
 | **AS_16** | **Service Availability Check** | Real-time service monitoring, boot persistence verification, systemd/SysV fallback, audit logging, and dark-themed HTML report dashboard. | ✅ Completed | [`AS_16/`](./AS_16) |
@@ -154,6 +164,7 @@ Each project can be executed with a **single command** that automatically runs t
 |---|---|---|
 | **AS_01** | Employee Account Setup | `cd AS_01 && bash run.sh` *(Run `bash cleanup.sh` afterward to restore system)* |
 | **AS_02** | Inactive Employee Detection | `cd AS_02 && bash run.sh` |
+| **AS_03** | Department Access | `cd AS_03 && bash run.sh` *(Run `bash cleanup.sh` afterward to restore system)* |
 | **AS_14** | Suspicious IP Detection | `cd AS_14 && bash run.sh` |
 | **AS_15** | Error Log Report | `cd AS_15 && bash run.sh` |
 | **AS_16** | Service Availability Check | `cd AS_16 && bash run.sh` |
@@ -174,6 +185,7 @@ Each project can be executed with a **single command** that automatically runs t
 |---|---|---|---|---|
 | **AS_01** | `cd AS_01 && bash run.sh` | `cd AS_01 && bash run.sh` | `cd AS_01 && bash run.sh` | `cd AS_01 && bash run.sh` |
 | **AS_02** | `cd AS_02 && bash run.sh` | `cd AS_02 && bash run.sh` | `cd AS_02 && bash run.sh` | `cd AS_02 && bash run.sh` |
+| **AS_03** | `cd AS_03 && bash run.sh` | `cd AS_03 && bash run.sh` | `cd AS_03 && bash run.sh` | `cd AS_03 && bash run.sh` |
 | **AS_14** | `cd AS_14 && bash run.sh` | `cd AS_14 && bash run.sh` | `cd AS_14 && bash run.sh` | `cd AS_14 && bash run.sh` |
 | **AS_15** | `cd AS_15 && bash run.sh` | `cd AS_15 && bash run.sh` | `cd AS_15 && bash run.sh` | `cd AS_15 && bash run.sh` |
 | **AS_16** | `cd AS_16 && bash run.sh` | `cd AS_16 && bash run.sh` | `cd AS_16 && bash run.sh` | `cd AS_16 && bash run.sh` |
@@ -253,6 +265,37 @@ The system administrator wants to identify users who have not logged in recently
 - 📖 **Sprint Documentation:** [`AS_02/README.md`](./AS_02/README.md)
 - 📜 **Audit Log File:** [`AS_02/logs/inactive_check.log`](./AS_02/logs/inactive_check.log)
 - 📋 **Command Log:** [`AS_02/commands_used.md`](./AS_02/commands_used.md)
+
+</details>
+
+<details>
+<summary><strong>AS_03 — Department Access (Groups & Permissions)</strong></summary>
+
+### Problem Statement
+Create a department group and configure a shared directory so that only members of that group can access it.
+
+### Summary of Approach
+- **Department Group Provisioning:** Automatically inspects and provisions test group `lsatest_dept_shared` using `sudo groupadd` if not already present.
+- **Sandboxed Directory Setup:** Establishes `AS_03/sandbox_data/shared/` without altering system-level root directories.
+- **Restrictive Ownership & SGID Bit Enforcement:** Configures directory ownership to `${USER}:lsatest_dept_shared` and applies octal mode `2770` (`drwxrws---`).
+- **Group Inheritance Validation:** The SetGID bit (`2xxx`) ensures that all newly created files and subdirectories automatically inherit the department group (`lsatest_dept_shared`).
+- **Kernel-Enforced Non-Member Lockdown:** Zero permissions (`---` / `0`) for Others ensures that non-members (probed via `sudo -u nobody`) are strictly denied read, write, and execute permissions (`EACCES`).
+- **Safe Teardown Script (`cleanup.sh`):** Restores pristine system state by removing the group (`sudo groupdel lsatest_dept_shared`) and resetting folder permissions.
+- **Cross-Platform HTML Dashboard (`run.sh`):** Automatically executes the configuration, verifies permissions, regenerates `report.html` from scratch, and dispatches the dashboard across WSL, Linux, macOS, and Git Bash.
+
+### Key Commands Used
+- `bash run.sh` — Single command to configure access, audit permissions, regenerate dashboard, and open HTML report (Linux / macOS / Windows)
+- `bash cleanup.sh` — Safely deletes test group `lsatest_dept_shared` and restores pristine host state
+- `./department_access.sh` — Default configuration and audit run
+- `./department_access.sh --check` — Audits current group and directory permissions without making modifications
+- `./department_access.sh --dry-run` — Simulates execution steps
+- `./department_access.sh --json` — Emits structured JSON telemetry
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_03/report.html`](./AS_03/report.html)
+- 📖 **Sprint Documentation:** [`AS_03/README.md`](./AS_03/README.md)
+- 📜 **Audit Log File:** [`AS_03/logs/department_access.log`](./AS_03/logs/department_access.log)
+- 📋 **Command Log:** [`AS_03/commands_used.md`](./AS_03/commands_used.md)
 
 </details>
 
