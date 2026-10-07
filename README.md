@@ -374,6 +374,14 @@ LSA_AS/
 │   ├── logs/                       # Audit trail & JSON telemetry directory
 │   ├── sandbox_data/               # Sandboxed insecure test artifacts
 │   └── README.md                   # Problem documentation & usage
+├── AS_48/                          # Automation Sprint Problem #48
+│   ├── admin_daily_report.sh       # Core multi-subsystem administrator daily reporting script
+│   ├── run.sh                      # Unified execution & HTML dashboard generator
+│   ├── commands_used.md            # Command log & reporting reference
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── reports/                    # Plaintext daily report archive & latest link
+│   ├── logs/                       # Audit trail & JSON telemetry directory
+│   └── README.md                   # Problem documentation & usage
 └── (Upcoming Projects)/            # Future Automation Sprint additions
 ```
 
@@ -430,6 +438,7 @@ LSA_AS/
 | **AS_45** | **Server Uptime Report** | Monotonic kernel uptime auditing (`/proc/uptime`), boot epoch extraction (`/proc/stat` `btime`), multi-core CPU idle calculation, continuous operation SLA tracking, and dark-themed HTML report. | ✅ Completed | [`AS_45/`](./AS_45) |
 | **AS_46** | **Service Status Dashboard** | Live systemd service matrix auditing (`systemctl is-active`, `is-enabled`), cgroup memory measurement (`MemoryCurrent`), PID extraction, uninstalled unit handling, and dark-themed HTML report. | ✅ Completed | [`AS_46/`](./AS_46) |
 | **AS_47** | **Security Audit Report** | Multi-vector vulnerability auditing: password-less accounts (`/etc/shadow`), world-writable files (`find -perm -0002`), failed logins (`/var/log/auth.log`), active sessions (`who`), safe teardown (`cleanup.sh`), and dark-themed HTML report. | ✅ Completed | [`AS_47/`](./AS_47) |
+| **AS_48** | **Administrator Daily Report** | Consolidated administrative briefing: uptime (`/proc/uptime`), CPU utilization (`/proc/stat` delta), memory & swap allocation (`/proc/meminfo`), root storage (`df -hP`), active users (`who`), core daemons, plaintext summary generation, and dark-themed HTML report. | ✅ Completed | [`AS_48/`](./AS_48) |
 | *Upcoming* | *Future Sprints* | Additional automation tasks and administration solutions. | ⏳ Planned | — |
 
 ---
@@ -1946,6 +1955,37 @@ Develop a script that reports password-less accounts, world-writable files, fail
 - 📖 **Sprint Documentation:** [`AS_47/README.md`](./AS_47/README.md)
 - 📜 **Audit Log File:** [`AS_47/logs/`](./AS_47/logs/)
 - 📋 **Command Log:** [`AS_47/commands_used.md`](./AS_47/commands_used.md)
+
+</details>
+
+<details>
+<summary><strong>AS_48 — Administrator Daily Report (Holistic System Telemetry)</strong></summary>
+
+### Problem Statement
+Create a Bash script that generates a daily report containing system uptime, CPU, memory, disk usage, users, and services.
+
+### Summary of Approach
+- **Holistic Six-Subsystem Audit Engine:** Consolidates daily vital telemetry across kernel uptime, CPU utilization, physical/swap memory, storage capacity, interactive users, and core systemd daemons.
+- **Dual-Sample Real CPU Accounting:** Calculates instantaneous CPU busy ratio from `/proc/stat` delta over a precision interval, reporting alongside 1m/5m/15m load averages (`/proc/loadavg`) and core counts (`nproc`).
+- **Memory & Storage Accounting:** Derives true used/available memory from `/proc/meminfo` and evaluates root filesystem capacity (`df -hP /`) and secondary physical mount points.
+- **Dual-Artifact Generation:** Automatically writes a human-readable daily briefing report in `reports/daily_report_<date>.txt` (with a permanent symlink pointer `latest_daily_report.txt`) while exporting structured JSON telemetry to `logs/last_run.json`.
+- **Cross-Platform HTML Dashboard (`run.sh`):** Executes the daily briefing cycle, renders an interactive dark dashboard `report.html` embedding the full plaintext briefing alongside responsive telemetry cards, automatically opening across WSL, Linux, macOS, and Git Bash.
+
+### Key Commands Used
+- `cd AS_48 && bash run.sh` — Single command to generate administrator daily briefing and launch HTML dashboard
+- `./admin_daily_report.sh --output-dir reports/` — Generates timestamped daily report file
+- `read -r UPTIME_RAW _ < /proc/uptime` — Monotonic system uptime counter inspection
+- `read -r _ u1 n1 s1 i1 ... < /proc/stat` — Dual-sample CPU delta utilization calculation
+- `grep "MemAvailable" /proc/meminfo` — Accurate memory allocation extraction
+- `df -hP /` — POSIX-compliant root filesystem capacity audit
+- `who` — Active login session discovery
+- `systemctl is-active <unit>.service` — Core systemd service verification
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_48/report.html`](./AS_48/report.html)
+- 📖 **Sprint Documentation:** [`AS_48/README.md`](./AS_48/README.md)
+- 📜 **Audit Log File:** [`AS_48/logs/`](./AS_48/logs/)
+- 📋 **Command Log:** [`AS_48/commands_used.md`](./AS_48/commands_used.md)
 
 </details>
 
