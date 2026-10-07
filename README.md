@@ -365,6 +365,15 @@ LSA_AS/
 │   ├── report.html                 # Standalone dark-themed dashboard report
 │   ├── logs/                       # Audit trail & JSON telemetry directory
 │   └── README.md                   # Problem documentation & usage
+├── AS_47/                          # Automation Sprint Problem #47
+│   ├── security_audit.sh           # Core multi-vector security audit engine
+│   ├── cleanup.sh                  # Safe test user teardown & restoration script
+│   ├── run.sh                      # Unified execution & HTML dashboard generator
+│   ├── commands_used.md            # Command log & security reference
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── logs/                       # Audit trail & JSON telemetry directory
+│   ├── sandbox_data/               # Sandboxed insecure test artifacts
+│   └── README.md                   # Problem documentation & usage
 └── (Upcoming Projects)/            # Future Automation Sprint additions
 ```
 
@@ -420,6 +429,7 @@ LSA_AS/
 | **AS_44** | **Resource Threshold Monitor** | Real-time live CPU sampling (`/proc/stat` delta), memory and swap allocation accounting (`/proc/meminfo`), multi-tier threshold evaluation (Warn/Crit), top process profiling, and dark-themed HTML report. | ✅ Completed | [`AS_44/`](./AS_44) |
 | **AS_45** | **Server Uptime Report** | Monotonic kernel uptime auditing (`/proc/uptime`), boot epoch extraction (`/proc/stat` `btime`), multi-core CPU idle calculation, continuous operation SLA tracking, and dark-themed HTML report. | ✅ Completed | [`AS_45/`](./AS_45) |
 | **AS_46** | **Service Status Dashboard** | Live systemd service matrix auditing (`systemctl is-active`, `is-enabled`), cgroup memory measurement (`MemoryCurrent`), PID extraction, uninstalled unit handling, and dark-themed HTML report. | ✅ Completed | [`AS_46/`](./AS_46) |
+| **AS_47** | **Security Audit Report** | Multi-vector vulnerability auditing: password-less accounts (`/etc/shadow`), world-writable files (`find -perm -0002`), failed logins (`/var/log/auth.log`), active sessions (`who`), safe teardown (`cleanup.sh`), and dark-themed HTML report. | ✅ Completed | [`AS_47/`](./AS_47) |
 | *Upcoming* | *Future Sprints* | Additional automation tasks and administration solutions. | ⏳ Planned | — |
 
 ---
@@ -1906,6 +1916,36 @@ Create a simple Bash dashboard displaying the status of SSH, web server, and oth
 - 📖 **Sprint Documentation:** [`AS_46/README.md`](./AS_46/README.md)
 - 📜 **Audit Log File:** [`AS_46/logs/`](./AS_46/logs/)
 - 📋 **Command Log:** [`AS_46/commands_used.md`](./AS_46/commands_used.md)
+
+</details>
+
+<details>
+<summary><strong>AS_47 — Security Audit Report (Vulnerability & Identity Audit)</strong></summary>
+
+### Problem Statement
+Develop a script that reports password-less accounts, world-writable files, failed logins, and active users.
+
+### Summary of Approach
+- **Shadow Database Credential Auditing:** Examines `/etc/shadow` to detect blank password hashes, flagging accounts that can authenticate without credentials and providing specific remediation instructions (`passwd -l`).
+- **Filesystem Permission Drift Scanning:** Recursively queries target directories for world-writable files (`find -perm -0002`), extracting ownership, symbolic masks, and octal codes.
+- **Authentication Failure Attribution:** Analyzes `/var/log/auth.log` or system journal logs for failed password attempts, extracting source IP addresses and targeted usernames.
+- **Interactive Session Profiling:** Inspects active terminal sessions (`who`), capturing logged-in accounts, pseudoterminals (`pts`), login times, and remote connection sources.
+- **Safe Demonstration & Teardown (`cleanup.sh`):** Seeds a controlled sandboxed world-writable file and temporary test account `lsatest_audit_nopass`, providing a dedicated `cleanup.sh` to remove all test data and restore system security.
+- **Cross-Platform HTML Dashboard (`run.sh`):** Evaluates all 4 security vectors, computes a consolidated Security Compliance Index (0–100%), renders a dark dashboard `report.html`, and automatically opens across WSL, Linux, macOS, and Git Bash.
+
+### Key Commands Used
+- `cd AS_47 && bash run.sh` — Single command to audit security vectors and launch HTML dashboard
+- `bash cleanup.sh` — Reverses test user provisioning and cleans up sandboxed artifacts
+- `sudo awk -F: '($2 == "") { print $1 }' /etc/shadow` — Audits passwordless accounts
+- `find "${AUDIT_TARGET_DIR}" -type f -perm -0002` — Identifies world-writable files
+- `sudo grep -iE "(Failed password|authentication failure)" /var/log/auth.log` — Parses failed authentication attempts
+- `who` — Profiles active terminal login sessions
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_47/report.html`](./AS_47/report.html)
+- 📖 **Sprint Documentation:** [`AS_47/README.md`](./AS_47/README.md)
+- 📜 **Audit Log File:** [`AS_47/logs/`](./AS_47/logs/)
+- 📋 **Command Log:** [`AS_47/commands_used.md`](./AS_47/commands_used.md)
 
 </details>
 
