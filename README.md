@@ -358,6 +358,13 @@ LSA_AS/
 │   ├── report.html                 # Standalone dark-themed dashboard report
 │   ├── logs/                       # Audit trail & JSON telemetry directory
 │   └── README.md                   # Problem documentation & usage
+├── AS_46/                          # Automation Sprint Problem #46
+│   ├── service_dashboard.sh        # Core systemd service matrix & status monitoring script
+│   ├── run.sh                      # Unified execution & HTML dashboard generator
+│   ├── commands_used.md            # Command log & systemd reference
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── logs/                       # Audit trail & JSON telemetry directory
+│   └── README.md                   # Problem documentation & usage
 └── (Upcoming Projects)/            # Future Automation Sprint additions
 ```
 
@@ -412,6 +419,7 @@ LSA_AS/
 | **AS_43** | **Employee Offboarding** | Complete account de-provisioning (`pkill -u`, `usermod -L`, `usermod -s /usr/sbin/nologin`), home directory archiving (`tar -czf`), SHA-256 integrity verification, safe teardown (`cleanup.sh`), and dark-themed HTML report. | ✅ Completed | [`AS_43/`](./AS_43) |
 | **AS_44** | **Resource Threshold Monitor** | Real-time live CPU sampling (`/proc/stat` delta), memory and swap allocation accounting (`/proc/meminfo`), multi-tier threshold evaluation (Warn/Crit), top process profiling, and dark-themed HTML report. | ✅ Completed | [`AS_44/`](./AS_44) |
 | **AS_45** | **Server Uptime Report** | Monotonic kernel uptime auditing (`/proc/uptime`), boot epoch extraction (`/proc/stat` `btime`), multi-core CPU idle calculation, continuous operation SLA tracking, and dark-themed HTML report. | ✅ Completed | [`AS_45/`](./AS_45) |
+| **AS_46** | **Service Status Dashboard** | Live systemd service matrix auditing (`systemctl is-active`, `is-enabled`), cgroup memory measurement (`MemoryCurrent`), PID extraction, uninstalled unit handling, and dark-themed HTML report. | ✅ Completed | [`AS_46/`](./AS_46) |
 | *Upcoming* | *Future Sprints* | Additional automation tasks and administration solutions. | ⏳ Planned | — |
 
 ---
@@ -1868,6 +1876,36 @@ Report server uptime and evaluate against continuous operation thresholds.
 - 📖 **Sprint Documentation:** [`AS_45/README.md`](./AS_45/README.md)
 - 📜 **Audit Log File:** [`AS_45/logs/`](./AS_45/logs/)
 - 📋 **Command Log:** [`AS_45/commands_used.md`](./AS_45/commands_used.md)
+
+</details>
+
+<details>
+<summary><strong>AS_46 — Service Status Dashboard (Systemd & Daemon Monitoring)</strong></summary>
+
+### Problem Statement
+Create a simple Bash dashboard displaying the status of SSH, web server, and other specified services.
+
+### Summary of Approach
+- **Multi-Service Catalog Inspection:** Probes critical infrastructural services (SSH, web servers, cron, rsyslog, systemd-resolved, chrony, containerd) with custom service list flexibility.
+- **Systemd State Machine Interrogation:** Audits unit definition presence (`systemctl show -p LoadState`), active runtime status (`systemctl is-active`), and boot enablement (`systemctl is-enabled`).
+- **Control Group (cgroup) Metrics:** Extracts primary daemon Process IDs (`MainPID`) and instantaneous cgroup resident memory consumption (`MemoryCurrent`) directly from kernel slices.
+- **Robust Uninstalled Unit Differentiation:** Differentiates between stopped units and uninstalled software to avoid false alarms.
+- **Machine-Readable JSON Telemetry:** Exports comprehensive audit metrics into `logs/last_run.json` and chronological logs in `logs/service_dashboard_<timestamp>.log`.
+- **Cross-Platform HTML Dashboard (`run.sh`):** Drives live service discovery, compiles a dark dashboard `report.html` featuring status indicators, memory allocations, and unit metadata, automatically opening across WSL, Linux, macOS, and Git Bash.
+
+### Key Commands Used
+- `cd AS_46 && bash run.sh` — Single command to inspect services and launch HTML dashboard
+- `./service_dashboard.sh --services "ssh nginx cron"` — Audits custom set of systemd daemons
+- `systemctl show -p LoadState --value <unit>.service` — Validates unit file registration
+- `systemctl is-active <unit>.service` — Inspects active/inactive/failed state
+- `systemctl is-enabled <unit>.service` — Audits boot persistence configuration
+- `systemctl show -p MemoryCurrent --value <unit>.service` — Inspects daemon cgroup memory use
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_46/report.html`](./AS_46/report.html)
+- 📖 **Sprint Documentation:** [`AS_46/README.md`](./AS_46/README.md)
+- 📜 **Audit Log File:** [`AS_46/logs/`](./AS_46/logs/)
+- 📋 **Command Log:** [`AS_46/commands_used.md`](./AS_46/commands_used.md)
 
 </details>
 
