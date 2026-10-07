@@ -1,0 +1,15 @@
+[2026-10-07 16:53:28] [INFO] ============================================================
+[2026-10-07 16:53:28] [INFO] LSA Sprint AS_45 - Server Uptime & Availability Engine
+[2026-10-07 16:53:28] [INFO] Target Threshold:     30 Days
+[2026-10-07 16:53:28] [INFO] Advisory Threshold:   90 Days
+[2026-10-07 16:53:28] [INFO] Overdue Threshold:    180 Days
+[2026-10-07 16:53:28] [INFO] Log File:             /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_45/logs/uptime_report_20261007_165328.log
+[2026-10-07 16:53:28] [INFO] ============================================================
+[2026-10-07 16:53:28] [INFO] Uptime (Raw):         6332.22s
+[2026-10-07 16:53:28] [INFO] Formatted Uptime:     0d 1h 45m 32s (up 1 hour, 45 minutes)
+[2026-10-07 16:53:28] [INFO] System Boot Time:     2026-10-07 15:07:56 (Epoch: 1791365876)
+[2026-10-07 16:53:28] [INFO] Target Threshold:     30 Days (Met: false)
+[2026-10-07 16:53:28] [INFO] CPU Idle Ratio:       94.07% across 4 core(s)
+[2026-10-07 16:53:29] [INFO] Operational Status:   [FRESH BOOT / STABLE] (INFO)
+[2026-10-07 16:53:29] [INFO] Advisory Note:        Server was booted within the past 24 hours. Services are actively warming up.
+[2026-10-07 16:53:29] [INFO] Server uptime evaluation completed successfully.
