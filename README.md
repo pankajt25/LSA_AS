@@ -285,6 +285,16 @@ LSA_AS/
 │   ├── logs/                       # Audit trail & JSON telemetry directory
 │   ├── sandbox_data/               # Simulated cache & temporary file test datasets
 │   └── README.md                   # Problem documentation & usage
+├── AS_37/                          # Automation Sprint Problem #37
+│   ├── scheduled_backup.sh         # Core automated project backup & cron scheduling script
+│   ├── cleanup.sh                  # Safe cron teardown & system restoration script
+│   ├── run.sh                      # Unified execution & HTML dashboard generator
+│   ├── commands_used.md            # Command log & scheduled backup reference
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── backups/                    # Generated compressed archives & SHA-256 manifests
+│   ├── logs/                       # Audit trail & JSON telemetry directory
+│   ├── sandbox_data/               # Simulated enterprise project repository
+│   └── README.md                   # Problem documentation & usage
 └── (Upcoming Projects)/            # Future Automation Sprint additions
 ```
 
@@ -330,6 +340,7 @@ LSA_AS/
 | **AS_34** | **File Integrity Check** | Cryptographic baseline auditing (`sha256sum -c`), 4-state lifecycle tracking (intact, tampered, missing, untracked), compliance scoring, and dark-themed HTML report. | ✅ Completed | [`AS_34/`](./AS_34) |
 | **AS_35** | **Log Archival** | Automated log packaging (`tar -czf`), timestamped archiving, non-destructive decompression testing (`tar -tzf`), cryptographic SHA-256 validation, and dark-themed HTML report. | ✅ Completed | [`AS_35/`](./AS_35) |
 | **AS_36** | **Routine Server Maintenance** | Routine system maintenance (`sync`, `/tmp` cache cleanup, package database & apt check, journald/log audit, zombie detection), Cron automation with `# LSA_SPRINT_TEST` safety tag, safe teardown (`cleanup.sh`), and dark-themed HTML report. | ✅ Completed | [`AS_36/`](./AS_36) |
+| **AS_37** | **Scheduled Backup** | Automated project directory backup (`tar -czf`), non-destructive decompression verification (`tar -tzf`), SHA-256 integrity manifest, retention policy enforcement, Cron automation with `# LSA_SPRINT_TEST` tag, safe teardown (`cleanup.sh`), and dark-themed HTML report. | ✅ Completed | [`AS_37/`](./AS_37) |
 | *Upcoming* | *Future Sprints* | Additional automation tasks and administration solutions. | ⏳ Planned | — |
 
 ---
@@ -378,6 +389,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_34** | File Integrity Check | `cd AS_34 && bash run.sh` |
 | **AS_35** | Log Archival | `cd AS_35 && bash run.sh` |
 | **AS_36** | Routine Server Maintenance | `cd AS_36 && bash run.sh` *(Run `bash cleanup.sh` afterward to restore system)* |
+| **AS_37** | Scheduled Backup | `cd AS_37 && bash run.sh` *(Run `bash cleanup.sh` afterward to restore system)* |
 
 ### 💻 Quick Command Reference by Operating System
 
@@ -419,6 +431,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_34** | `cd AS_34 && bash run.sh` | `cd AS_34 && bash run.sh` | `cd AS_34 && bash run.sh` | `cd AS_34 && bash run.sh` |
 | **AS_35** | `cd AS_35 && bash run.sh` | `cd AS_35 && bash run.sh` | `cd AS_35 && bash run.sh` | `cd AS_35 && bash run.sh` |
 | **AS_36** | `cd AS_36 && bash run.sh` | `cd AS_36 && bash run.sh` | `cd AS_36 && bash run.sh` | `cd AS_36 && bash run.sh` |
+| **AS_37** | `cd AS_37 && bash run.sh` | `cd AS_37 && bash run.sh` | `cd AS_37 && bash run.sh` | `cd AS_37 && bash run.sh` |
 
 ---
 
@@ -1504,6 +1517,39 @@ Create a shell script for routine server maintenance and schedule it using Cron.
 - 📖 **Sprint Documentation:** [`AS_36/README.md`](./AS_36/README.md)
 - 📜 **Audit Log File:** [`AS_36/logs/maintenance.log`](./AS_36/logs/maintenance.log)
 - 📋 **Command Log:** [`AS_36/commands_used.md`](./AS_36/commands_used.md)
+
+</details>
+
+<details>
+<summary><strong>AS_37 — Scheduled Backup (Cron & Automated Backup Management)</strong></summary>
+
+### Problem Statement
+Create a Cron-based automated backup for a specified project directory.
+
+### Summary of Approach
+- **Relative Tarball Architecture:** Packages the specified project directory via relative path execution (`tar -czf ... -C <parent> <folder>`), preventing leading slash stripping and enabling safe cross-environment restoration.
+- **Decompression Integrity Verification:** Executes automated non-destructive integrity testing (`tar -tzf`) to validate tarball readability and structure prior to companion SHA-256 digest calculation.
+- **Cryptographic Checksumming:** Emits companion `.sha256` digest files for all created archives to guarantee data integrity across storage and transmission.
+- **Automated Retention Management:** Implements automated backup aging policy (`find ... -mtime +N`) to prune expired snapshots while strictly preserving active backups.
+- **Cron Automation & Sandboxing:** Automates cron schedule installation (`--schedule`), status verification (`--verify-cron`), and safe teardown (`cleanup.sh`) using the `# LSA_SPRINT_TEST` tag.
+- **Cross-Platform HTML Dashboard (`run.sh`):** Executes backup pipeline, records execution telemetry in `logs/backup_metadata.json`, regenerates dark dashboard `report.html`, and auto-launches across WSL, Linux, macOS, and Git Bash.
+
+### Key Commands Used
+- `cd AS_37 && bash run.sh` — Single command to execute backup, install cron, and launch HTML dashboard
+- `bash cleanup.sh` — Safely tears down test cron entries and restores host crontab state
+- `./scheduled_backup.sh --source <dir> --destination <dir>` — Executes automated directory backup
+- `./scheduled_backup.sh --schedule "0 1 * * *"` — Installs automated backup schedule in user crontab
+- `./scheduled_backup.sh --verify-cron` — Inspects active crontab for scheduled test backup job
+- `./scheduled_backup.sh --unschedule` — Removes scheduled backup cron job
+- `tar -czf <archive>.tar.gz -C <parent> <dir>` — Creates compressed gzip tarball
+- `tar -tzf <archive>.tar.gz` — Non-destructive integrity verification test
+- `sha256sum <archive> > <archive>.sha256` — Emits cryptographic checksum digest
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_37/report.html`](./AS_37/report.html)
+- 📖 **Sprint Documentation:** [`AS_37/README.md`](./AS_37/README.md)
+- 📜 **Audit Log File:** [`AS_37/logs/scheduled_backup.log`](./AS_37/logs/scheduled_backup.log)
+- 📋 **Command Log:** [`AS_37/commands_used.md`](./AS_37/commands_used.md)
 
 </details>
 
