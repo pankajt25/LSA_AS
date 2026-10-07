@@ -1,0 +1,10 @@
+[2026-10-07 11:14:24 IST] [INFO] Scanning '/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_05/sandbox_data/project_alpha' for files not owned by 'pankaj'
+[2026-10-07 11:14:25 IST] [VIOLATION] Ownership mismatch: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_05/sandbox_data/project_alpha/assets/logo.svg (actual: nobody:65534, expected: pankaj, cat: FOREIGN_USER)
+[2026-10-07 11:14:25 IST] [VIOLATION] Ownership mismatch: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_05/sandbox_data/project_alpha/config/secrets.env (actual: root:0, expected: pankaj, cat: ROOT_PRIVILEGE)
+[2026-10-07 11:14:25 IST] [VIOLATION] Ownership mismatch: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_05/sandbox_data/project_alpha/tests/test_api.py (actual: root:0, expected: pankaj, cat: ROOT_PRIVILEGE)
+[2026-10-07 11:14:34 IST] [INFO] Scanning '/etc/cron.d' for files not owned by 'root'
+[2026-10-07 11:14:34 IST] [INFO] All files in /etc/cron.d owned by root
+[2026-10-07 11:15:26 IST] [INFO] Scanning '/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_05/sandbox_data/project_alpha' for files not owned by 'pankaj'
+[2026-10-07 11:15:26 IST] [VIOLATION] Ownership mismatch: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_05/sandbox_data/project_alpha/assets/logo.svg (actual: nobody:65534, expected: pankaj, cat: FOREIGN_USER)
+[2026-10-07 11:15:27 IST] [VIOLATION] Ownership mismatch: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_05/sandbox_data/project_alpha/config/secrets.env (actual: root:0, expected: pankaj, cat: ROOT_PRIVILEGE)
+[2026-10-07 11:15:27 IST] [VIOLATION] Ownership mismatch: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_05/sandbox_data/project_alpha/tests/test_api.py (actual: root:0, expected: pankaj, cat: ROOT_PRIVILEGE)
