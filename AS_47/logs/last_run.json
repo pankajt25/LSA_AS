@@ -1,0 +1,47 @@
+{
+  "timestamp": "2026-10-07 17:06:35",
+  "compliance_score": 65,
+  "severity_label": "CRITICAL VULNERABILITY DETECTED",
+  "severity_class": "CRITICAL",
+  "summary": {
+    "passwordless_accounts": 1,
+    "world_writable_files": 1,
+    "failed_logins": 1,
+    "active_users": 1
+  },
+  "passwordless_details": [
+    {
+      "user": "lsatest_audit_nopass",
+      "uid": "1011",
+      "shell": "/usr/sbin/nologin",
+      "severity": "CRITICAL"
+    }
+  ],
+  "world_writable_details": [
+    {
+      "path": "sandbox_data/insecure_shared_config.conf",
+      "permissions": "-rw-rw-rw-",
+      "octal": "666",
+      "owner": "pankaj",
+      "group": "pankaj",
+      "size": "42"
+    }
+  ],
+  "failed_login_details": [
+    {
+      "timestamp": "2026-10-07T17:06:34.530509+05:30 SP sudo:",
+      "user": "unknown",
+      "source_ip": "local/internal",
+      "raw": "2026-10-07T17:06:34.530509+05:30 SP sudo: pankaj : TTY=/dev/pts/2 ; PWD=/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_47 ; USER=root ; COMMAND=/usr/bin/grep -iE (Failed password|authentication failure|Failed publickey) /var/log/auth.log"
+    }
+  ],
+  "active_user_details": [
+    {
+      "user": "pankaj",
+      "tty": "pts/1",
+      "login_time": "2026-10-07 15:50",
+      "remote_host": "local"
+    }
+  ],
+  "log_file": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_47/logs/security_audit_20261007_170633.log"
+}
