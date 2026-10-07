@@ -1,0 +1,13 @@
+[2026-10-07 16:59:38] [INFO] ============================================================
+[2026-10-07 16:59:38] [INFO] LSA Sprint AS_46 - Service Status Dashboard Engine
+[2026-10-07 16:59:38] [INFO] Target Services:      ssh nginx apache2 cron rsyslog systemd-resolved chrony containerd
+[2026-10-07 16:59:38] [INFO] Log File:             /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_46/logs/service_dashboard_20261007_165938.log
+[2026-10-07 16:59:38] [INFO] ============================================================
+[2026-10-07 16:59:39] [INFO] Service: ssh | Status: NOT INSTALLED | Enabled: not-found | PID: - | Memory: -
+[2026-10-07 16:59:39] [INFO] Service: nginx | Status: NOT INSTALLED | Enabled: not-found | PID: - | Memory: -
+[2026-10-07 16:59:39] [INFO] Service: apache2 | Status: NOT INSTALLED | Enabled: not-found | PID: - | Memory: -
+[2026-10-07 16:59:39] [INFO] Service: cron | Status: ACTIVE | Enabled: enabled | PID: 153 | Memory: 0.5 MB
+[2026-10-07 16:59:40] [INFO] Service: rsyslog | Status: ACTIVE | Enabled: enabled | PID: 181 | Memory: 2.5 MB
+[2026-10-07 16:59:40] [INFO] Service: systemd-resolved | Status: ACTIVE | Enabled: enabled | PID: 98 | Memory: 7.4 MB
+[2026-10-07 16:59:40] [INFO] Service: chrony | Status: ACTIVE | Enabled: enabled | PID: 147 | Memory: 7.1 MB
+[2026-10-07 16:59:41] [INFO] Service: containerd | Status: ACTIVE | Enabled: enabled | PID: 203 | Memory: 80.8 MB
