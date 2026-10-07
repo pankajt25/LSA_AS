@@ -106,6 +106,14 @@ LSA_AS/
 │   ├── logs/                       # Audit trail & JSON telemetry directory
 │   ├── sandbox_data/               # Multi-generation archive repository with companion checksums
 │   └── README.md                   # Problem documentation & usage
+├── AS_13/                          # Automation Sprint Problem #13
+│   ├── failed_login_audit.sh       # Core failed SSH login analysis & threat detection script
+│   ├── run.sh                      # Unified execution & HTML dashboard generator
+│   ├── commands_used.md            # Command log & log analysis reference
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── logs/                       # Audit trail & JSON telemetry directory
+│   ├── sandbox_data/               # Simulated multi-vector brute force attack dataset
+│   └── README.md                   # Problem documentation & usage
 ├── AS_14/                          # Automation Sprint Problem #14
 │   ├── suspicious_ip_detector.sh   # Core bash script for IP detection
 │   ├── commands_used.md            # Command log & viva preparation
@@ -217,6 +225,7 @@ LSA_AS/
 | **AS_10** | **Daily Backup** | Automated directory archiving (`tar -czf`), non-destructive integrity testing (`tar -tzf`), cryptographic SHA-256 validation, compression ratio metrics, and dark-themed HTML report. | ✅ Completed | [`AS_10/`](./AS_10) |
 | **AS_11** | **Backup Verification** | Latest archive discovery, existence & non-empty validation, `tar -tzf` decompression integrity testing, SHA-256 cryptographic cross-checking, 24h freshness SLA audit, and dark-themed HTML report. | ✅ Completed | [`AS_11/`](./AS_11) |
 | **AS_12** | **Old Backup Cleanup** | Automated retention policy evaluation (`stat` epoch / `find -printf`), expired snapshot unlinking, companion checksum purging (`.sha256`), minimum retention safeguards, and dark-themed HTML report. | ✅ Completed | [`AS_12/`](./AS_12) |
+| **AS_13** | **Failed Login Audit** | Automated SSH failed login analysis (`/var/log/auth.log`), IP frequency aggregation (`grep` / `awk`), targeted account profiling, invalid vs valid user enumeration, and dark-themed HTML report. | ✅ Completed | [`AS_13/`](./AS_13) |
 | **AS_14** | **Suspicious IP Detection** | Automated SSH brute-force monitor, real log auto-detection (`/var/log/auth.log`), regex parsing, descending ranking, and audit reporting. | ✅ Completed | [`AS_14/`](./AS_14)
 | **AS_15** | **Error Log Report** | Automated error extraction, real log auto-detection (`/var/log/syslog`), severity breakdown, frequency ranking, and tail-style review. | ✅ Completed | [`AS_15/`](./AS_15)
 | **AS_16** | **Service Availability Check** | Real-time service monitoring, boot persistence verification, systemd/SysV fallback, audit logging, and dark-themed HTML report dashboard. | ✅ Completed | [`AS_16/`](./AS_16)
@@ -254,6 +263,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_10** | Daily Backup | `cd AS_10 && bash run.sh` |
 | **AS_11** | Backup Verification | `cd AS_11 && bash run.sh` |
 | **AS_12** | Old Backup Cleanup | `cd AS_12 && bash run.sh` |
+| **AS_13** | Failed Login Audit | `cd AS_13 && bash run.sh` |
 | **AS_14** | Suspicious IP Detection | `cd AS_14 && bash run.sh` |
 | **AS_15** | Error Log Report | `cd AS_15 && bash run.sh` |
 | **AS_16** | Service Availability Check | `cd AS_16 && bash run.sh` |
@@ -284,6 +294,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_10** | `cd AS_10 && bash run.sh` | `cd AS_10 && bash run.sh` | `cd AS_10 && bash run.sh` | `cd AS_10 && bash run.sh` |
 | **AS_11** | `cd AS_11 && bash run.sh` | `cd AS_11 && bash run.sh` | `cd AS_11 && bash run.sh` | `cd AS_11 && bash run.sh` |
 | **AS_12** | `cd AS_12 && bash run.sh` | `cd AS_12 && bash run.sh` | `cd AS_12 && bash run.sh` | `cd AS_12 && bash run.sh` |
+| **AS_13** | `cd AS_13 && bash run.sh` | `cd AS_13 && bash run.sh` | `cd AS_13 && bash run.sh` | `cd AS_13 && bash run.sh` |
 | **AS_14** | `cd AS_14 && bash run.sh` | `cd AS_14 && bash run.sh` | `cd AS_14 && bash run.sh` | `cd AS_14 && bash run.sh` |
 | **AS_15** | `cd AS_15 && bash run.sh` | `cd AS_15 && bash run.sh` | `cd AS_15 && bash run.sh` | `cd AS_15 && bash run.sh` |
 | **AS_16** | `cd AS_16 && bash run.sh` | `cd AS_16 && bash run.sh` | `cd AS_16 && bash run.sh` | `cd AS_16 && bash run.sh` |
@@ -660,6 +671,34 @@ Backups accumulate over time and consume disk space. Write a script that retains
 - 📖 **Sprint Documentation:** [`AS_12/README.md`](./AS_12/README.md)
 - 📜 **Audit Log File:** [`AS_12/logs/old_backup_cleaner.log`](./AS_12/logs/old_backup_cleaner.log)
 - 📋 **Command Log:** [`AS_12/commands_used.md`](./AS_12/commands_used.md)
+
+</details>
+
+<details>
+<summary><strong>AS_13 — Failed Login Audit (Log Analysis)</strong></summary>
+
+### Problem Statement
+Identify the number of failed SSH login attempts from system logs, aggregating failures by source IP, target user, and method to detect brute-force threats.
+
+### Summary of Approach
+- **Multi-Source Authentication Ingestion:** Dynamically locates and queries system authentication logs (`/var/log/auth.log`, `/var/log/secure`, systemd `journalctl _COMM=sshd`), falling back gracefully to simulated attack data (`sandbox_data/auth.log`) when running on clean environments.
+- **Granular Threat Telemetry Extraction:** Utilizes high-precision POSIX regex parsing (`grep -iE` / `grep -oP`) to capture authentication failures (`Failed password`, `Failed publickey`, `authentication failure`).
+- **Source IP & Account Aggregation:** Computes frequency ranking (`awk`, `sort`, `uniq -c`) to isolate aggressive offending IP addresses and differentiate target user profiles (including invalid account enumeration vs valid account password guessing).
+- **Dual Telemetry Architecture:** Exports human-readable console diagnostics and persistent structured JSON telemetry (`logs/failed_logins.json`) for SIEM and monitoring pipelines.
+- **Cross-Platform HTML Dashboard (`run.sh`):** Dispatches live system log analysis, renders KPI cards and attack distribution progress bars, regenerates a responsive dark dashboard `report.html`, and auto-opens in the default browser across WSL, Linux, macOS, and Git Bash.
+
+### Key Commands Used
+- `bash run.sh` — Single command to audit system logs, regenerate dashboard, and open HTML report (Linux / macOS / Windows)
+- `./failed_login_audit.sh` — Audits live system authentication logs (`/var/log/auth.log`)
+- `./failed_login_audit.sh --sandbox` — Audits synthetic brute-force attack drill dataset
+- `./failed_login_audit.sh --json` — Emits machine-readable telemetry JSON
+- `grep -oP 'from \K([0-9]{1,3}\.){3}[0-9]{1,3}' auth.log | sort | uniq -c | sort -nr` — Ranks offending IPs
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_13/report.html`](./AS_13/report.html)
+- 📖 **Sprint Documentation:** [`AS_13/README.md`](./AS_13/README.md)
+- 📜 **Audit Log File:** [`AS_13/logs/failed_login_audit.log`](./AS_13/logs/failed_login_audit.log)
+- 📋 **Command Log:** [`AS_13/commands_used.md`](./AS_13/commands_used.md)
 
 </details>
 
