@@ -326,6 +326,15 @@ LSA_AS/
 │   ├── logs/                       # Audit trail & JSON telemetry directory
 │   ├── sandbox_data/               # Sandboxed project repositories & archive bundles
 │   └── README.md                   # Problem documentation & usage
+├── AS_42/                          # Automation Sprint Problem #42
+│   ├── create_dept_folders.sh      # Core department directory provisioning & SGID security script
+│   ├── cleanup.sh                  # Safe group teardown & system restoration script
+│   ├── run.sh                      # Unified execution & HTML dashboard generator
+│   ├── commands_used.md            # Command log & permission reference
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── logs/                       # Audit trail & JSON telemetry directory
+│   ├── sandbox_data/               # Sandboxed departmental directory structures
+│   └── README.md                   # Problem documentation & usage
 └── (Upcoming Projects)/            # Future Automation Sprint additions
 ```
 
@@ -376,6 +385,7 @@ LSA_AS/
 | **AS_39** | **Disk and Inode Check** | Storage space and inode utilization auditing (`df -hP`, `df -iP`), dynamic critical/warning threshold evaluation, threshold breach alerting, and dark-themed HTML report. | ✅ Completed | [`AS_39/`](./AS_39) |
 | **AS_40** | **Mounted File System Report** | Virtual filesystem discovery (`df -hT`, `/proc/mounts`), total/used/available storage reporting, architectural categorization (physical, virtual, shared, overlay), mount permission inspection, and dark-themed HTML report. | ✅ Completed | [`AS_40/`](./AS_40) |
 | **AS_41** | **Archive Old Project Files** | Automated project file age auditing (`find -type f -mtime +N`), cryptographic SHA-256 integrity verification, safe relocation preserving tree structure, `.tar.gz` bundle compression, and dark-themed HTML report. | ✅ Completed | [`AS_41/`](./AS_41) |
+| **AS_42** | **Department Folder Creation** | Automated department folder provisioning (`mkdir -p`), dedicated group creation (`groupadd`), SGID inheritance enforcement (`chmod 2770`), isolated permissions verification, safe teardown (`cleanup.sh`), and dark-themed HTML report. | ✅ Completed | [`AS_42/`](./AS_42) |
 | *Upcoming* | *Future Sprints* | Additional automation tasks and administration solutions. | ⏳ Planned | — |
 
 ---
@@ -1710,6 +1720,36 @@ Identify project files older than $N$ days and move them to an archive directory
 - 📖 **Sprint Documentation:** [`AS_41/README.md`](./AS_41/README.md)
 - 📜 **Audit Log File:** [`AS_41/logs/`](./AS_41/logs/)
 - 📋 **Command Log:** [`AS_41/commands_used.md`](./AS_41/commands_used.md)
+
+</details>
+
+<details>
+<summary><strong>AS_42 — Department Folder Creation (SGID & Group RBAC)</strong></summary>
+
+### Problem Statement
+Create department folders and assign group ownership.
+
+### Summary of Approach
+- **Idempotent Group Provisioning:** Automatically identifies and creates organizational Linux security groups prefixed with `lsatest_` (`sudo groupadd`), inspecting the NSS database (`getent group`) to retrieve assigned GIDs.
+- **Hierarchical Sandboxed Folder Provisioning:** Provisions departmental folder trees inside `sandbox_data/departments/`, isolating test data from global system paths.
+- **SGID Permission & Discretionary Access Control:** Applies ownership (`sudo chown $USER:lsatest_<dept>`) and permissions `2770` (`drwxrws---`), enforcing Set Group ID (SGID) bit semantics so newly created files automatically inherit the departmental group rather than the user's primary group.
+- **Live Inheritance Verification:** Drops a test charter file in each directory to immediately audit and confirm active group inheritance.
+- **Complete Safe Teardown (`cleanup.sh`):** Provides a separate, verified cleanup script to remove all created `lsatest_*` groups (`sudo groupdel`) and remove sandbox directories.
+- **Cross-Platform HTML Dashboard (`run.sh`):** Executes departmental provisioning, builds a self-contained dark dashboard `report.html` detailing GIDs, permission masks, and inheritance status, and opens automatically across WSL, Linux, macOS, and Git Bash.
+
+### Key Commands Used
+- `cd AS_42 && bash run.sh` — Single command to provision departmental folders, audit inheritance, and launch HTML dashboard
+- `bash cleanup.sh` — Reverses all test group creations and cleans up sandbox directories
+- `sudo groupadd "lsatest_${dept}"` — Creates dedicated department security group
+- `sudo chmod 2770 "${dept_folder}"` — Enforces SGID bit and restricts others access
+- `stat -c "%A|%a|%U|%G" "${dept_folder}"` — Audits permission mode and group ownership
+- `getent group "lsatest_${dept}"` — Queries group database for verification
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_42/report.html`](./AS_42/report.html)
+- 📖 **Sprint Documentation:** [`AS_42/README.md`](./AS_42/README.md)
+- 📜 **Audit Log File:** [`AS_42/logs/`](./AS_42/logs/)
+- 📋 **Command Log:** [`AS_42/commands_used.md`](./AS_42/commands_used.md)
 
 </details>
 
