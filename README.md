@@ -344,6 +344,13 @@ LSA_AS/
 │   ├── archives/                   # Generated home directory archives & SHA-256 digests
 │   ├── logs/                       # Audit trail & JSON telemetry directory
 │   └── README.md                   # Problem documentation & usage
+├── AS_44/                          # Automation Sprint Problem #44
+│   ├── resource_monitor.sh         # Core live CPU, RAM & Swap utilization monitor
+│   ├── run.sh                      # Unified execution & HTML dashboard generator
+│   ├── commands_used.md            # Command log & performance accounting reference
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── logs/                       # Audit trail & JSON telemetry directory
+│   └── README.md                   # Problem documentation & usage
 └── (Upcoming Projects)/            # Future Automation Sprint additions
 ```
 
@@ -396,6 +403,7 @@ LSA_AS/
 | **AS_41** | **Archive Old Project Files** | Automated project file age auditing (`find -type f -mtime +N`), cryptographic SHA-256 integrity verification, safe relocation preserving tree structure, `.tar.gz` bundle compression, and dark-themed HTML report. | ✅ Completed | [`AS_41/`](./AS_41) |
 | **AS_42** | **Department Folder Creation** | Automated department folder provisioning (`mkdir -p`), dedicated group creation (`groupadd`), SGID inheritance enforcement (`chmod 2770`), isolated permissions verification, safe teardown (`cleanup.sh`), and dark-themed HTML report. | ✅ Completed | [`AS_42/`](./AS_42) |
 | **AS_43** | **Employee Offboarding** | Complete account de-provisioning (`pkill -u`, `usermod -L`, `usermod -s /usr/sbin/nologin`), home directory archiving (`tar -czf`), SHA-256 integrity verification, safe teardown (`cleanup.sh`), and dark-themed HTML report. | ✅ Completed | [`AS_43/`](./AS_43) |
+| **AS_44** | **Resource Threshold Monitor** | Real-time live CPU sampling (`/proc/stat` delta), memory and swap allocation accounting (`/proc/meminfo`), multi-tier threshold evaluation (Warn/Crit), top process profiling, and dark-themed HTML report. | ✅ Completed | [`AS_44/`](./AS_44) |
 | *Upcoming* | *Future Sprints* | Additional automation tasks and administration solutions. | ⏳ Planned | — |
 
 ---
@@ -1792,6 +1800,36 @@ Disable a user account and archive their home directory.
 - 📖 **Sprint Documentation:** [`AS_43/README.md`](./AS_43/README.md)
 - 📜 **Audit Log File:** [`AS_43/logs/`](./AS_43/logs/)
 - 📋 **Command Log:** [`AS_43/commands_used.md`](./AS_43/commands_used.md)
+
+</details>
+
+<details>
+<summary><strong>AS_44 — Resource Threshold Monitor (CPU & RAM Alarm Telemetry)</strong></summary>
+
+### Problem Statement
+Check CPU and memory utilization and display warnings/alerts exceeding threshold.
+
+### Summary of Approach
+- **Direct Kernel Time Sampling:** Interrogates `/proc/stat` across a precision sleep interval to derive true instantaneous CPU utilization delta, avoiding skewed single-sample historical averages.
+- **Accurate Linux Memory Accounting:** Parses `/proc/meminfo` to capture `MemTotal`, `MemAvailable`, and swap parameters, accurately determining consumed physical RAM versus free/buffered memory.
+- **Multi-Tier Threshold Engine:** Evaluates CPU, RAM, and Swap against configurable Warning and Critical thresholds (default: CPU 70/85%, RAM 75/90%, Swap 50/75%), establishing an aggregate system operational state (`OK`, `WARNING`, `CRITICAL`).
+- **Real-Time Heavy Process Profiling:** Automatically inspects the live Linux process table (`ps -eo`) to isolate the Top 5 CPU and Top 5 Memory consuming processes, logging PID, owner, RSS allocation, and execution command strings.
+- **Machine-Readable JSON Telemetry:** Records full cycle metrics into `logs/last_run.json` and chronological audit logs in `logs/resource_monitor_<timestamp>.log`.
+- **Cross-Platform HTML Dashboard (`run.sh`):** Executes live resource sampling, renders an interactive dark dashboard `report.html` equipped with visual utilization meters, load averages, and top process rankings, opening automatically across WSL, Linux, macOS, and Git Bash.
+
+### Key Commands Used
+- `cd AS_44 && bash run.sh` — Single command to monitor resource thresholds and launch HTML dashboard
+- `./resource_monitor.sh --cpu-warn 80 --mem-warn 80` — Evaluates live utilization against custom thresholds
+- `read -r _ user nice sys idle ... < /proc/stat` — Direct kernel CPU jiffies delta calculation
+- `grep "MemAvailable" /proc/meminfo` — Accurate available physical RAM extraction
+- `ps -eo pid,user,%cpu,%mem,comm,args --sort=-%cpu` — Live CPU process ranking
+- `ps -eo pid,user,%mem,%cpu,rss,comm,args --sort=-%mem` — Live memory process ranking
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_44/report.html`](./AS_44/report.html)
+- 📖 **Sprint Documentation:** [`AS_44/README.md`](./AS_44/README.md)
+- 📜 **Audit Log File:** [`AS_44/logs/`](./AS_44/logs/)
+- 📋 **Command Log:** [`AS_44/commands_used.md`](./AS_44/commands_used.md)
 
 </details>
 
