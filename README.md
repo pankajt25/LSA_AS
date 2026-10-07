@@ -251,6 +251,14 @@ LSA_AS/
 │   ├── logs/                       # Audit trail & JSON telemetry directory
 │   ├── sandbox_data/               # Simulated project repo with fresh & aged files
 │   └── README.md                   # Problem documentation & usage
+├── AS_33/                          # Automation Sprint Problem #33
+│   ├── duplicate_file_detector.sh  # Core cryptographic duplicate detection & size optimization script
+│   ├── run.sh                      # Unified execution & HTML dashboard generator
+│   ├── commands_used.md            # Command log & deduplication reference
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── logs/                       # Audit trail & JSON telemetry directory
+│   ├── sandbox_data/               # Simulated corporate repo with duplicate file clusters
+│   └── README.md                   # Problem documentation & usage
 └── (Upcoming Projects)/            # Future Automation Sprint additions
 ```
 
@@ -292,6 +300,7 @@ LSA_AS/
 | **AS_30** | **Logged-in User Report** | Real-time session monitoring (`w`, `who -u`, `loginctl`), terminal inspection (`tty`/`pts`), remote IP attribution, idle metrics, and dark-themed HTML report. | ✅ Completed | [`AS_30/`](./AS_30) |
 | **AS_31** | **User Login Audit** | Automated session history auditing (`/var/log/auth.log`, `last`, `who -a`), PAM event parsing, SSH vs local attribution, distinct account profiling, and dark-themed HTML report. | ✅ Completed | [`AS_31/`](./AS_31) |
 | **AS_32** | **File Modification Monitor** | Filesystem timestamp auditing (`find -mmin -1440`, `stat`), 24-hour change window detection, file size & ownership tracking, age bracketing, and dark-themed HTML report. | ✅ Completed | [`AS_32/`](./AS_32) |
+| **AS_33** | **Duplicate File Detection** | Cryptographic content hashing (`sha256sum`, `md5sum`), two-tier size collision optimization, redundant copy tracking, storage recovery calculations, and dark-themed HTML report. | ✅ Completed | [`AS_33/`](./AS_33) |
 | *Upcoming* | *Future Sprints* | Additional automation tasks and administration solutions. | ⏳ Planned | — |
 
 ---
@@ -336,6 +345,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_30** | Logged-in User Report | `cd AS_30 && bash run.sh` |
 | **AS_31** | User Login Audit | `cd AS_31 && bash run.sh` |
 | **AS_32** | File Modification Monitor | `cd AS_32 && bash run.sh` |
+| **AS_33** | Duplicate File Detection | `cd AS_33 && bash run.sh` |
 
 ### 💻 Quick Command Reference by Operating System
 
@@ -373,6 +383,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_30** | `cd AS_30 && bash run.sh` | `cd AS_30 && bash run.sh` | `cd AS_30 && bash run.sh` | `cd AS_30 && bash run.sh` |
 | **AS_31** | `cd AS_31 && bash run.sh` | `cd AS_31 && bash run.sh` | `cd AS_31 && bash run.sh` | `cd AS_31 && bash run.sh` |
 | **AS_32** | `cd AS_32 && bash run.sh` | `cd AS_32 && bash run.sh` | `cd AS_32 && bash run.sh` | `cd AS_32 && bash run.sh` |
+| **AS_33** | `cd AS_33 && bash run.sh` | `cd AS_33 && bash run.sh` | `cd AS_33 && bash run.sh` | `cd AS_33 && bash run.sh` |
 
 ---
 
@@ -1332,6 +1343,37 @@ A project directory contains important files. Write a script to identify files m
 - 📖 **Sprint Documentation:** [`AS_32/README.md`](./AS_32/README.md)
 - 📜 **Audit Log File:** [`AS_32/logs/modified_files.log`](./AS_32/logs/modified_files.log)
 - 📋 **Command Log:** [`AS_32/commands_used.md`](./AS_32/commands_used.md)
+
+</details>
+
+<details>
+<summary><strong>AS_33 — Duplicate File Detection (File Management & Deduplication)</strong></summary>
+
+### Problem Statement
+Develop a script to identify duplicate files in a specified directory using file checksums.
+
+### Summary of Approach
+- **Two-Stage Collision Resolution Pipeline:** Employs an optimized size-first indexing pass (`os.lstat().st_size`) that discards uniquely sized files before running computationally heavy cryptographic hash functions on potential collisions.
+- **Cryptographic Hash Verification:** Computes byte-level SHA-256 (or MD5) digests across matching file size clusters to guarantee bit-exact duplicate detection without false positives.
+- **Recoverable Storage Analytics:** Automatically tabulates total duplicate content groups, counts redundant instances (`N - 1`), and computes exact recoverable storage footprints (bytes, KB, MB) alongside percentage savings.
+- **Dual Telemetry Architecture:** Outputs clean ANSI terminal diagnostics, appends chronological traces to `logs/duplicate_files.log`, and serializes structured JSON telemetry (`logs/duplicate_files.json`).
+- **Cross-Platform HTML Dashboard (`run.sh`):** Executes live duplicate discovery across project assets, drills down into sandbox multi-folder cluster scenarios (`sandbox_data/`), builds a responsive dark dashboard `report.html`, and auto-opens in the default browser across WSL, Linux, macOS, and Git Bash.
+
+### Key Commands Used
+- `bash run.sh` — Single command to audit duplicate files, regenerate dashboard, and open HTML report (Linux / macOS / Windows)
+- `./duplicate_file_detector.sh` — Scans current directory for duplicate files using SHA-256
+- `./duplicate_file_detector.sh --dir <path>` — Scans target directory
+- `./duplicate_file_detector.sh --algo md5` — Selects MD5 hashing algorithm
+- `./duplicate_file_detector.sh --min-size 1024` — Filters out small files below byte threshold
+- `./duplicate_file_detector.sh --sandbox` — Audits simulated corporate repository dataset
+- `./duplicate_file_detector.sh --json` — Emits structured machine-readable JSON telemetry
+- `sha256sum <file>` / `md5sum <file>` — Core Linux cryptographic checksum utilities
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_33/report.html`](./AS_33/report.html)
+- 📖 **Sprint Documentation:** [`AS_33/README.md`](./AS_33/README.md)
+- 📜 **Audit Log File:** [`AS_33/logs/duplicate_files.log`](./AS_33/logs/duplicate_files.log)
+- 📋 **Command Log:** [`AS_33/commands_used.md`](./AS_33/commands_used.md)
 
 </details>
 
