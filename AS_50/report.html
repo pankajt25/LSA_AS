@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AS_50 - Mini Linux Administration Dashboard</title>
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --border-color: #30363d;
+            --text-primary: #c9d1d9;
+            --text-muted: #8b949e;
+            --accent-blue: #58a6ff;
+            --accent-green: #3fb950;
+            --accent-yellow: #d29922;
+            --accent-red: #f85149;
+            --accent-purple: #bc8cff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            padding: 24px;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #161b22 0%, #1f242c 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .header-title h1 {
+            font-size: 26px;
+            color: #ffffff;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-title p {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .meta-badges {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .meta-badge {
+            background-color: #21262d;
+            border: 1px solid var(--border-color);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .kpi-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 18px;
+            position: relative;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent-blue);
+        }
+
+        .kpi-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .kpi-value {
+            font-size: 26px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 6px;
+        }
+
+        .kpi-subtext {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .meter-bar {
+            width: 100%;
+            height: 8px;
+            background-color: #21262d;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 8px;
+            border: 1px solid #30363d;
+        }
+
+        .meter-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.4s ease;
+        }
+
+        .section {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .section-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .two-col {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        th {
+            background-color: #21262d;
+            color: var(--text-muted);
+            text-align: left;
+            padding: 10px 12px;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #21262d;
+            color: var(--text-primary);
+        }
+
+        tr:hover td {
+            background-color: #1c2128;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-success { background-color: rgba(63, 185, 80, 0.15); color: #3fb950; border: 1px solid #3fb950; }
+        .badge-warning { background-color: rgba(210, 153, 34, 0.15); color: #d29922; border: 1px solid #d29922; }
+        .badge-danger { background-color: rgba(248, 81, 73, 0.15); color: #f85149; border: 1px solid #f85149; }
+        .badge-info { background-color: rgba(88, 166, 255, 0.15); color: #58a6ff; border: 1px solid #58a6ff; }
+
+        code {
+            background-color: #21262d;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 12px;
+            color: #79c0ff;
+        }
+
+        .log-box {
+            background-color: #05080c;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #8b949e;
+            white-space: pre-wrap;
+            max-height: 350px;
+            overflow-y: auto;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 30px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-top">
+                <div class="header-title">
+                    <h1>📊 Mini Linux Administration Dashboard</h1>
+                    <p>Live Multi-Subsystem Health & Telemetry Introspection Engine</p>
+                </div>
+                <div class="meta-badges">
+                    <span class="meta-badge">🖥️ Host: <span style="color: #58a6ff;">SP</span></span>
+                    <span class="meta-badge">🐧 Ubuntu 26.04.1 LTS</span>
+                    <span class="meta-badge">⚙️ Kernel: 6.18.40.1-microsoft-standard-WSL2 (x86_64)</span>
+                    <span class="meta-badge">🕒 2026-10-07 17:28:50</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-label">System Uptime <span>⏱️</span></div>
+                <div class="kpi-value" style="color: #3fb950; font-size: 20px;">2h 20m 49s</div>
+                <div class="kpi-subtext">Boot: 2026-10-07 15:07:56</div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-label">CPU Utilization <span>⚡</span></div>
+                <div class="kpi-value" style="color: #3fb950;">3.9%</div>
+                <div class="meter-bar"><div class="meter-fill" style="width: 3.9%; background-color: #3fb950;"></div></div>
+                <div class="kpi-subtext" style="margin-top: 6px;">Load: 0.08, 0.18, 0.27 (4C)</div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-label">Memory Allocation <span>🧠</span></div>
+                <div class="kpi-value" style="color: #3fb950;">19.6%</div>
+                <div class="meter-bar"><div class="meter-fill" style="width: 19.6%; background-color: #3fb950;"></div></div>
+                <div class="kpi-subtext" style="margin-top: 6px;">Used: 760M / 3869M (Avail: 3109M)</div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-label">Root Storage <span>💾</span></div>
+                <div class="kpi-value" style="color: #3fb950;">1.0%</div>
+                <div class="meter-bar"><div class="meter-fill" style="width: 1.0%; background-color: #3fb950;"></div></div>
+                <div class="kpi-subtext" style="margin-top: 6px;">Used: 6.5G / 1007G (Inodes: 1.0%)</div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-label">Active Users <span>👥</span></div>
+                <div class="kpi-value" style="color: #58a6ff;">1</div>
+                <div class="kpi-subtext">1 unique user session(s)</div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-label">Systemd Daemons <span>⚙️</span></div>
+                <div class="kpi-value" style="color: #bc8cff;">14 Active</div>
+                <div class="kpi-subtext">1 failed unit(s)</div>
+            </div>
+        </div>
+
+        <div class="two-col">
+            <div class="section">
+                <h2 class="section-title">🛡️ Key Monitored Daemons</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Service Unit</th>
+                            <th>Status</th>
+                            <th>Boot Enable</th>
+                            <th>Main PID</th>
+                            <th>Memory</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+    <tr>
+        <td style="font-family: monospace; color: #58a6ff; font-weight: bold;">cron.service</td>
+        <td><span class="badge badge-success">● ACTIVE</span></td>
+        <td><span class="badge badge-info">enabled</span></td>
+        <td><code>153</code></td>
+        <td>0.5 MB</td>
+    </tr>
+    
+    <tr>
+        <td style="font-family: monospace; color: #58a6ff; font-weight: bold;">dbus.service</td>
+        <td><span class="badge badge-success">● ACTIVE</span></td>
+        <td><span class="badge badge-info">static</span></td>
+        <td><code>155</code></td>
+        <td>1.7 MB</td>
+    </tr>
+    
+    <tr>
+        <td style="font-family: monospace; color: #58a6ff; font-weight: bold;">rsyslog.service</td>
+        <td><span class="badge badge-success">● ACTIVE</span></td>
+        <td><span class="badge badge-info">enabled</span></td>
+        <td><code>181</code></td>
+        <td>2.5 MB</td>
+    </tr>
+    
+    <tr>
+        <td style="font-family: monospace; color: #58a6ff; font-weight: bold;">systemd-journald.service</td>
+        <td><span class="badge badge-success">● ACTIVE</span></td>
+        <td><span class="badge badge-info">static</span></td>
+        <td><code>54</code></td>
+        <td>12.7 MB</td>
+    </tr>
+    
+    <tr>
+        <td style="font-family: monospace; color: #58a6ff; font-weight: bold;">systemd-logind.service</td>
+        <td><span class="badge badge-success">● ACTIVE</span></td>
+        <td><span class="badge badge-info">static</span></td>
+        <td><code>161</code></td>
+        <td>2.7 MB</td>
+    </tr>
+    
+    <tr>
+        <td style="font-family: monospace; color: #58a6ff; font-weight: bold;">systemd-resolved.service</td>
+        <td><span class="badge badge-success">● ACTIVE</span></td>
+        <td><span class="badge badge-info">enabled</span></td>
+        <td><code>98</code></td>
+        <td>7.2 MB</td>
+    </tr>
+    
+    <tr>
+        <td style="font-family: monospace; color: #58a6ff; font-weight: bold;">containerd.service</td>
+        <td><span class="badge badge-success">● ACTIVE</span></td>
+        <td><span class="badge badge-info">enabled</span></td>
+        <td><code>203</code></td>
+        <td>81.0 MB</td>
+    </tr>
+    
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">👤 Active Terminal Logins</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>TTY</th>
+                            <th>Login Time</th>
+                            <th>Origin</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+    <tr>
+        <td style="font-weight: bold; color: #58a6ff;">pankaj</td>
+        <td><code>pts/1</code></td>
+        <td>2026-10-07 15:50</td>
+        <td><code>local</code></td>
+        <td><span class="badge badge-success">Active Session</span></td>
+    </tr>
+    
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">💽 Filesystem Mount Points & Storage Utilization</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Filesystem Device</th>
+                        <th>Mount Path</th>
+                        <th>Total Size</th>
+                        <th>Used</th>
+                        <th>Available</th>
+                        <th>Capacity Gauge</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    <tr>
+        <td style="font-family: monospace; color: #79c0ff;">none</td>
+        <td><strong>/mnt/wsl</strong></td>
+        <td>1.9G</td>
+        <td>4.0K</td>
+        <td>1.9G</td>
+        <td>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <div class="meter-bar" style="flex: 1;"><div class="meter-fill" style="width: 1%; background-color: #3fb950;"></div></div>
+                <span class="badge badge-success">1%</span>
+            </div>
+        </td>
+    </tr>
+    
+    <tr>
+        <td style="font-family: monospace; color: #79c0ff;">drivers</td>
+        <td><strong>/usr/lib/wsl/drivers</strong></td>
+        <td>118G</td>
+        <td>83G</td>
+        <td>35G</td>
+        <td>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <div class="meter-bar" style="flex: 1;"><div class="meter-fill" style="width: 71%; background-color: #d29922;"></div></div>
+                <span class="badge badge-warning">71%</span>
+            </div>
+        </td>
+    </tr>
+    
+    <tr>
+        <td style="font-family: monospace; color: #79c0ff;">/dev/sdd</td>
+        <td><strong>/</strong></td>
+        <td>1007G</td>
+        <td>6.5G</td>
+        <td>950G</td>
+        <td>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <div class="meter-bar" style="flex: 1;"><div class="meter-fill" style="width: 1%; background-color: #3fb950;"></div></div>
+                <span class="badge badge-success">1%</span>
+            </div>
+        </td>
+    </tr>
+    
+    <tr>
+        <td style="font-family: monospace; color: #79c0ff;">none</td>
+        <td><strong>/mnt/wslg</strong></td>
+        <td>1.9G</td>
+        <td>36K</td>
+        <td>1.9G</td>
+        <td>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <div class="meter-bar" style="flex: 1;"><div class="meter-fill" style="width: 1%; background-color: #3fb950;"></div></div>
+                <span class="badge badge-success">1%</span>
+            </div>
+        </td>
+    </tr>
+    
+    <tr>
+        <td style="font-family: monospace; color: #79c0ff;">none</td>
+        <td><strong>/usr/lib/wsl/lib</strong></td>
+        <td>1.9G</td>
+        <td>0</td>
+        <td>1.9G</td>
+        <td>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <div class="meter-bar" style="flex: 1;"><div class="meter-fill" style="width: 0%; background-color: #3fb950;"></div></div>
+                <span class="badge badge-success">0%</span>
+            </div>
+        </td>
+    </tr>
+    
+    <tr>
+        <td style="font-family: monospace; color: #79c0ff;">rootfs</td>
+        <td><strong>/init</strong></td>
+        <td>1.9G</td>
+        <td>3.3M</td>
+        <td>1.9G</td>
+        <td>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <div class="meter-bar" style="flex: 1;"><div class="meter-fill" style="width: 1%; background-color: #3fb950;"></div></div>
+                <span class="badge badge-success">1%</span>
+            </div>
+        </td>
+    </tr>
+    
+    <tr>
+        <td style="font-family: monospace; color: #79c0ff;">none</td>
+        <td><strong>/run</strong></td>
+        <td>1.9G</td>
+        <td>776K</td>
+        <td>1.9G</td>
+        <td>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <div class="meter-bar" style="flex: 1;"><div class="meter-fill" style="width: 1%; background-color: #3fb950;"></div></div>
+                <span class="badge badge-success">1%</span>
+            </div>
+        </td>
+    </tr>
+    
+    <tr>
+        <td style="font-family: monospace; color: #79c0ff;">none</td>
+        <td><strong>/run/lock</strong></td>
+        <td>1.9G</td>
+        <td>0</td>
+        <td>1.9G</td>
+        <td>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <div class="meter-bar" style="flex: 1;"><div class="meter-fill" style="width: 0%; background-color: #3fb950;"></div></div>
+                <span class="badge badge-success">0%</span>
+            </div>
+        </td>
+    </tr>
+    
+    <tr>
+        <td style="font-family: monospace; color: #79c0ff;">none</td>
+        <td><strong>/run/shm</strong></td>
+        <td>1.9G</td>
+        <td>0</td>
+        <td>1.9G</td>
+        <td>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <div class="meter-bar" style="flex: 1;"><div class="meter-fill" style="width: 0%; background-color: #3fb950;"></div></div>
+                <span class="badge badge-success">0%</span>
+            </div>
+        </td>
+    </tr>
+    
+    <tr>
+        <td style="font-family: monospace; color: #79c0ff;">C:\</td>
+        <td><strong>/mnt/c</strong></td>
+        <td>118G</td>
+        <td>83G</td>
+        <td>35G</td>
+        <td>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <div class="meter-bar" style="flex: 1;"><div class="meter-fill" style="width: 71%; background-color: #d29922;"></div></div>
+                <span class="badge badge-warning">71%</span>
+            </div>
+        </td>
+    </tr>
+    
+    <tr>
+        <td style="font-family: monospace; color: #79c0ff;">D:\</td>
+        <td><strong>/mnt/d</strong></td>
+        <td>918G</td>
+        <td>109G</td>
+        <td>809G</td>
+        <td>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <div class="meter-bar" style="flex: 1;"><div class="meter-fill" style="width: 12%; background-color: #3fb950;"></div></div>
+                <span class="badge badge-success">12%</span>
+            </div>
+        </td>
+    </tr>
+    
+    <tr>
+        <td style="font-family: monospace; color: #79c0ff;">tmpfs</td>
+        <td><strong>/tmp</strong></td>
+        <td>1.9G</td>
+        <td>456K</td>
+        <td>1.9G</td>
+        <td>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <div class="meter-bar" style="flex: 1;"><div class="meter-fill" style="width: 1%; background-color: #3fb950;"></div></div>
+                <span class="badge badge-success">1%</span>
+            </div>
+        </td>
+    </tr>
+    
+    <tr>
+        <td style="font-family: monospace; color: #79c0ff;">tmpfs</td>
+        <td><strong>/run/user/1000</strong></td>
+        <td>387M</td>
+        <td>12K</td>
+        <td>387M</td>
+        <td>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <div class="meter-bar" style="flex: 1;"><div class="meter-fill" style="width: 1%; background-color: #3fb950;"></div></div>
+                <span class="badge badge-success">1%</span>
+            </div>
+        </td>
+    </tr>
+    
+                </tbody>
+            </table>
+        </div>
+
+        <div class="two-col">
+            <div class="section">
+                <h2 class="section-title">⚡ Top CPU Consuming Processes</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>PID</th>
+                            <th>User</th>
+                            <th>%CPU</th>
+                            <th>%MEM</th>
+                            <th>Command</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+    <tr>
+        <td><code>897</code></td>
+        <td>pankaj</td>
+        <td><strong>17.3%</strong></td>
+        <td>10.3%</td>
+        <td style="font-family: monospace; color: #79c0ff;">agy</td>
+    </tr>
+    
+    <tr>
+        <td><code>6283</code></td>
+        <td>pankaj</td>
+        <td><strong>1.5%</strong></td>
+        <td>0.0%</td>
+        <td style="font-family: monospace; color: #79c0ff;">bash</td>
+    </tr>
+    
+    <tr>
+        <td><code>203</code></td>
+        <td>root</td>
+        <td><strong>0.2%</strong></td>
+        <td>1.3%</td>
+        <td style="font-family: monospace; color: #79c0ff;">containerd</td>
+    </tr>
+    
+    <tr>
+        <td><code>300</code></td>
+        <td>root</td>
+        <td><strong>0.1%</strong></td>
+        <td>0.0%</td>
+        <td style="font-family: monospace; color: #79c0ff;">Relay(301)</td>
+    </tr>
+    
+    <tr>
+        <td><code>1</code></td>
+        <td>root</td>
+        <td><strong>0.0%</strong></td>
+        <td>0.3%</td>
+        <td style="font-family: monospace; color: #79c0ff;">systemd</td>
+    </tr>
+    
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">🧠 Top Memory Consuming Processes</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>PID</th>
+                            <th>User</th>
+                            <th>%MEM</th>
+                            <th>%CPU</th>
+                            <th>Command</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+    <tr>
+        <td><code>897</code></td>
+        <td>pankaj</td>
+        <td><strong>10.3%</strong></td>
+        <td>17.3%</td>
+        <td style="font-family: monospace; color: #79c0ff;">agy</td>
+    </tr>
+    
+    <tr>
+        <td><code>203</code></td>
+        <td>root</td>
+        <td><strong>1.3%</strong></td>
+        <td>0.2%</td>
+        <td style="font-family: monospace; color: #79c0ff;">containerd</td>
+    </tr>
+    
+    <tr>
+        <td><code>224</code></td>
+        <td>root</td>
+        <td><strong>0.8%</strong></td>
+        <td>0.0%</td>
+        <td style="font-family: monospace; color: #79c0ff;">unattended-upgr</td>
+    </tr>
+    
+    <tr>
+        <td><code>159</code></td>
+        <td>root</td>
+        <td><strong>0.7%</strong></td>
+        <td>0.0%</td>
+        <td style="font-family: monospace; color: #79c0ff;">networkd-dispat</td>
+    </tr>
+    
+    <tr>
+        <td><code>54</code></td>
+        <td>root</td>
+        <td><strong>0.4%</strong></td>
+        <td>0.0%</td>
+        <td style="font-family: monospace; color: #79c0ff;">systemd-journal</td>
+    </tr>
+    
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">📜 Console Audit & Execution Trace</h2>
+            <pre class="log-box">[1;36m========================================================================================[0m
+[1m   LINUX SYSTEM ADMINISTRATION — MINI ADMINISTRATION DASHBOARD (AS_50)[0m
+[1;36m========================================================================================[0m
+ Hostname:    [1mSP[0m | OS: Ubuntu 26.04.1 LTS | Kernel: 6.18.40.1-microsoft-standard-WSL2
+ Uptime:      [1;32m2h 20m 49s[0m (Boot: 2026-10-07 15:07:56) | Cores: 4
+[1;36m----------------------------------------------------------------------------------------[0m
+[1mVITAL RESOURCE UTILIZATION:[0m
+  CPU Usage:    [--------------------] [1m3.9%[0m  (Load 1m/5m/15m: 0.08, 0.18, 0.27)
+  Memory Usage: [###-----------------] [1m19.6%[0m  (760 MB / 3869 MB, Avail: 3109 MB)
+  Swap Usage:   [--------------------] [1m0.0%[0m  (0 MB / 1024 MB)
+  Root Storage: [--------------------] [1m1%[0m  (6.5G / 1007G, Avail: 950G, Inodes: 1%)
+
+[1mSYSTEM SESSIONS & CORE DAEMONS:[0m
+  Active Users: [1m1[0m session(s) (1 unique)
+  Systemd Units: [1;32m14 running[0m | [1;31m1 failed[0m
+
+[1mKEY MONITORED SERVICES:[0m
+  SERVICE UNIT             STATUS     ENABLED    MAIN PID MEMORY      
+  ------------------------ ---------- ---------- -------- ------------
+  cron.service             [1;32mACTIVE[0m    enabled    153      0.5 MB      
+  dbus.service             [1;32mACTIVE[0m    static     155      1.7 MB      
+  rsyslog.service          [1;32mACTIVE[0m    enabled    181      2.5 MB      
+  systemd-journald.service [1;32mACTIVE[0m    static     54       12.7 MB     
+  systemd-logind.service   [1;32mACTIVE[0m    static     161      2.7 MB      
+  systemd-resolved.service [1;32mACTIVE[0m    enabled    98       7.2 MB      
+  containerd.service       [1;32mACTIVE[0m    enabled    203      81.0 MB     
+
+[1mLOGGED-IN SESSIONS:[0m
+  USER         TERMINAL     LOGIN TIME         HOST / ORIGIN       
+  ------------ ------------ ------------------ --------------------
+  pankaj       pts/1        2026-10-07 15:50   local               
+
+[1mTOP CPU PROCESSES:[0m
+  PID      USER         %CPU     %MEM     COMMAND             
+  897      pankaj       17.3     10.3     agy                 
+  6283     pankaj       1.5      0.0      bash                
+  203      root         0.2      1.3      containerd          
+  300      root         0.1      0.0      Relay(301)          
+  1        root         0.0      0.3      systemd             
+[1;36m========================================================================================[0m
+</pre>
+        </div>
+
+        <div class="footer">
+            Linux System Administration (E1ITA307) &bull; Automation Sprint &bull; AS_50
+        </div>
+    </div>
+</body>
+</html>

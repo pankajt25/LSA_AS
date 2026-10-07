@@ -1,0 +1,291 @@
+{
+  "timestamp": "2026-10-07 17:28:50",
+  "system": {
+    "hostname": "SP",
+    "os_name": "Ubuntu 26.04.1 LTS",
+    "kernel": "6.18.40.1-microsoft-standard-WSL2",
+    "architecture": "x86_64",
+    "uptime": {
+      "seconds": 8449,
+      "formatted": "2h 20m 49s",
+      "boot_epoch": 1791365876,
+      "boot_time": "2026-10-07 15:07:56"
+    }
+  },
+  "cpu": {
+    "usage_pct": 3.9,
+    "cores": 4,
+    "load_avg": {
+      "1m": 0.08,
+      "5m": 0.18,
+      "15m": 0.27
+    },
+    "top_processes": [
+      {
+        "pid": "897",
+        "user": "pankaj",
+        "cpu": "17.3",
+        "mem": "10.3",
+        "command": "agy"
+      },
+      {
+        "pid": "6283",
+        "user": "pankaj",
+        "cpu": "1.5",
+        "mem": "0.0",
+        "command": "bash"
+      },
+      {
+        "pid": "203",
+        "user": "root",
+        "cpu": "0.2",
+        "mem": "1.3",
+        "command": "containerd"
+      },
+      {
+        "pid": "300",
+        "user": "root",
+        "cpu": "0.1",
+        "mem": "0.0",
+        "command": "Relay(301)"
+      },
+      {
+        "pid": "1",
+        "user": "root",
+        "cpu": "0.0",
+        "mem": "0.3",
+        "command": "systemd"
+      }
+    ]
+  },
+  "memory": {
+    "total_mb": 3869,
+    "used_mb": 760,
+    "avail_mb": 3109,
+    "usage_pct": 19.6,
+    "swap_total_mb": 1024,
+    "swap_used_mb": 0,
+    "swap_usage_pct": 0.0,
+    "top_processes": [
+      {
+        "pid": "897",
+        "user": "pankaj",
+        "mem": "10.3",
+        "cpu": "17.3",
+        "command": "agy"
+      },
+      {
+        "pid": "203",
+        "user": "root",
+        "mem": "1.3",
+        "cpu": "0.2",
+        "command": "containerd"
+      },
+      {
+        "pid": "224",
+        "user": "root",
+        "mem": "0.8",
+        "cpu": "0.0",
+        "command": "unattended-upgr"
+      },
+      {
+        "pid": "159",
+        "user": "root",
+        "mem": "0.7",
+        "cpu": "0.0",
+        "command": "networkd-dispat"
+      },
+      {
+        "pid": "54",
+        "user": "root",
+        "mem": "0.4",
+        "cpu": "0.0",
+        "command": "systemd-journal"
+      }
+    ]
+  },
+  "disk": {
+    "root": {
+      "filesystem": "/dev/sdd",
+      "size": "1007G",
+      "used": "6.5G",
+      "avail": "950G",
+      "usage_pct": 1.0,
+      "inode_pct": 1.0
+    },
+    "mounts": [
+      {
+        "filesystem": "none",
+        "size": "1.9G",
+        "used": "4.0K",
+        "avail": "1.9G",
+        "pct": "1%",
+        "mount": "/mnt/wsl"
+      },
+      {
+        "filesystem": "drivers",
+        "size": "118G",
+        "used": "83G",
+        "avail": "35G",
+        "pct": "71%",
+        "mount": "/usr/lib/wsl/drivers"
+      },
+      {
+        "filesystem": "/dev/sdd",
+        "size": "1007G",
+        "used": "6.5G",
+        "avail": "950G",
+        "pct": "1%",
+        "mount": "/"
+      },
+      {
+        "filesystem": "none",
+        "size": "1.9G",
+        "used": "36K",
+        "avail": "1.9G",
+        "pct": "1%",
+        "mount": "/mnt/wslg"
+      },
+      {
+        "filesystem": "none",
+        "size": "1.9G",
+        "used": "0",
+        "avail": "1.9G",
+        "pct": "0%",
+        "mount": "/usr/lib/wsl/lib"
+      },
+      {
+        "filesystem": "rootfs",
+        "size": "1.9G",
+        "used": "3.3M",
+        "avail": "1.9G",
+        "pct": "1%",
+        "mount": "/init"
+      },
+      {
+        "filesystem": "none",
+        "size": "1.9G",
+        "used": "776K",
+        "avail": "1.9G",
+        "pct": "1%",
+        "mount": "/run"
+      },
+      {
+        "filesystem": "none",
+        "size": "1.9G",
+        "used": "0",
+        "avail": "1.9G",
+        "pct": "0%",
+        "mount": "/run/lock"
+      },
+      {
+        "filesystem": "none",
+        "size": "1.9G",
+        "used": "0",
+        "avail": "1.9G",
+        "pct": "0%",
+        "mount": "/run/shm"
+      },
+      {
+        "filesystem": "C:\\",
+        "size": "118G",
+        "used": "83G",
+        "avail": "35G",
+        "pct": "71%",
+        "mount": "/mnt/c"
+      },
+      {
+        "filesystem": "D:\\",
+        "size": "918G",
+        "used": "109G",
+        "avail": "809G",
+        "pct": "12%",
+        "mount": "/mnt/d"
+      },
+      {
+        "filesystem": "tmpfs",
+        "size": "1.9G",
+        "used": "456K",
+        "avail": "1.9G",
+        "pct": "1%",
+        "mount": "/tmp"
+      },
+      {
+        "filesystem": "tmpfs",
+        "size": "387M",
+        "used": "12K",
+        "avail": "387M",
+        "pct": "1%",
+        "mount": "/run/user/1000"
+      }
+    ]
+  },
+  "users": {
+    "session_count": 1,
+    "unique_count": 1,
+    "sessions": [
+      {
+        "user": "pankaj",
+        "terminal": "pts/1",
+        "time": "2026-10-07 15:50",
+        "host": "local"
+      }
+    ]
+  },
+  "services": {
+    "total_running": 14,
+    "total_failed": 1,
+    "monitored": [
+      {
+        "unit": "cron.service",
+        "status": "ACTIVE",
+        "enabled": "enabled",
+        "pid": "153",
+        "memory": "0.5 MB"
+      },
+      {
+        "unit": "dbus.service",
+        "status": "ACTIVE",
+        "enabled": "static",
+        "pid": "155",
+        "memory": "1.7 MB"
+      },
+      {
+        "unit": "rsyslog.service",
+        "status": "ACTIVE",
+        "enabled": "enabled",
+        "pid": "181",
+        "memory": "2.5 MB"
+      },
+      {
+        "unit": "systemd-journald.service",
+        "status": "ACTIVE",
+        "enabled": "static",
+        "pid": "54",
+        "memory": "12.7 MB"
+      },
+      {
+        "unit": "systemd-logind.service",
+        "status": "ACTIVE",
+        "enabled": "static",
+        "pid": "161",
+        "memory": "2.7 MB"
+      },
+      {
+        "unit": "systemd-resolved.service",
+        "status": "ACTIVE",
+        "enabled": "enabled",
+        "pid": "98",
+        "memory": "7.2 MB"
+      },
+      {
+        "unit": "containerd.service",
+        "status": "ACTIVE",
+        "enabled": "enabled",
+        "pid": "203",
+        "memory": "81.0 MB"
+      }
+    ]
+  },
+  "log_file": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_50/logs/dashboard_20261007_172845.log"
+}
