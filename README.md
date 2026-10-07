@@ -58,6 +58,13 @@ LSA_AS/
 │   ├── report.html                 # Standalone dark-themed dashboard report
 │   ├── logs/                       # Audit trail & JSON telemetry directory
 │   └── README.md                   # Problem documentation & usage
+├── AS_07/                          # Automation Sprint Problem #7
+│   ├── low_disk_space_alert.sh     # Core filesystem storage utilization & alert script
+│   ├── run.sh                      # Unified execution & HTML dashboard generator
+│   ├── commands_used.md            # Command log & development history
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── logs/                       # Audit trail & JSON telemetry directory
+│   └── README.md                   # Problem documentation & usage
 ├── AS_14/                          # Automation Sprint Problem #14
 │   ├── suspicious_ip_detector.sh   # Core bash script for IP detection
 │   ├── commands_used.md            # Command log & viva preparation
@@ -163,6 +170,7 @@ LSA_AS/
 | **AS_04** | **Permission Audit** | Automated world-writable file auditing (`find -type f -perm -0002`), risk severity classification, least-privilege compliance scoring, and dark-themed HTML report. | ✅ Completed | [`AS_04/`](./AS_04) |
 | **AS_05** | **Ownership Audit** | Project administrator ownership verification (`find ! -user <admin>`), privilege drift classification (root/foreign/orphan), compliance ratio reporting, and dark-themed HTML report. | ✅ Completed | [`AS_05/`](./AS_05) |
 | **AS_06** | **Server Health Check** | Comprehensive pre-workday system health monitoring covering CPU utilization, memory & swap allocation, storage use, system uptime, active logged-in sessions, and dark-themed HTML report. | ✅ Completed | [`AS_06/`](./AS_06) |
+| **AS_07** | **Low Disk Space Alert** | Filesystem storage capacity auditing (`df -P`), dynamic threshold evaluation (&ge; 80%), critical severity classification, mitigation recommendations, and dark-themed HTML report. | ✅ Completed | [`AS_07/`](./AS_07) |
 | **AS_14** | **Suspicious IP Detection** | Automated SSH brute-force monitor, real log auto-detection (`/var/log/auth.log`), regex parsing, descending ranking, and audit reporting. | ✅ Completed | [`AS_14/`](./AS_14) |
 | **AS_15** | **Error Log Report** | Automated error extraction, real log auto-detection (`/var/log/syslog`), severity breakdown, frequency ranking, and tail-style review. | ✅ Completed | [`AS_15/`](./AS_15) |
 | **AS_16** | **Service Availability Check** | Real-time service monitoring, boot persistence verification, systemd/SysV fallback, audit logging, and dark-themed HTML report dashboard. | ✅ Completed | [`AS_16/`](./AS_16) |
@@ -194,6 +202,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_04** | Permission Audit | `cd AS_04 && bash run.sh` |
 | **AS_05** | Ownership Audit | `cd AS_05 && bash run.sh` |
 | **AS_06** | Server Health Check | `cd AS_06 && bash run.sh` |
+| **AS_07** | Low Disk Space Alert | `cd AS_07 && bash run.sh` |
 | **AS_14** | Suspicious IP Detection | `cd AS_14 && bash run.sh` |
 | **AS_15** | Error Log Report | `cd AS_15 && bash run.sh` |
 | **AS_16** | Service Availability Check | `cd AS_16 && bash run.sh` |
@@ -218,6 +227,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_04** | `cd AS_04 && bash run.sh` | `cd AS_04 && bash run.sh` | `cd AS_04 && bash run.sh` | `cd AS_04 && bash run.sh` |
 | **AS_05** | `cd AS_05 && bash run.sh` | `cd AS_05 && bash run.sh` | `cd AS_05 && bash run.sh` | `cd AS_05 && bash run.sh` |
 | **AS_06** | `cd AS_06 && bash run.sh` | `cd AS_06 && bash run.sh` | `cd AS_06 && bash run.sh` | `cd AS_06 && bash run.sh` |
+| **AS_07** | `cd AS_07 && bash run.sh` | `cd AS_07 && bash run.sh` | `cd AS_07 && bash run.sh` | `cd AS_07 && bash run.sh` |
 | **AS_14** | `cd AS_14 && bash run.sh` | `cd AS_14 && bash run.sh` | `cd AS_14 && bash run.sh` | `cd AS_14 && bash run.sh` |
 | **AS_15** | `cd AS_15 && bash run.sh` | `cd AS_15 && bash run.sh` | `cd AS_15 && bash run.sh` | `cd AS_15 && bash run.sh` |
 | **AS_16** | `cd AS_16 && bash run.sh` | `cd AS_16 && bash run.sh` | `cd AS_16 && bash run.sh` | `cd AS_16 && bash run.sh` |
@@ -415,6 +425,34 @@ Before starting the workday, an administrator wants a quick report showing CPU, 
 - 📖 **Sprint Documentation:** [`AS_06/README.md`](./AS_06/README.md)
 - 📜 **Audit Log File:** [`AS_06/logs/server_health_check.log`](./AS_06/logs/server_health_check.log)
 - 📋 **Command Log:** [`AS_06/commands_used.md`](./AS_06/commands_used.md)
+
+</details>
+
+<details>
+<summary><strong>AS_07 — Low Disk Space Alert (Disk Monitoring)</strong></summary>
+
+### Problem Statement
+A server administrator wants to know if any file system has crossed 80% utilization. Write a script that displays the affected file systems and an appropriate warning.
+
+### Summary of Approach
+- **POSIX Portable Filesystem Auditing:** Queries active storage partitions via `df -P`, preventing multi-column line-wrap anomalies and cleanly isolating device, mount point, blocks, used, and capacity percentage.
+- **Dynamic Capacity Thresholding:** Defaults to 80% utilization detection threshold with configurable CLI argument overrides (`-t <percent>`) and virtual volume filtering.
+- **Graduated Severity Alert Classification:** Categorizes exceeding filesystems by risk severity — WARNING (80%–89%), HIGH (90%–94%), and CRITICAL (&ge; 95%) — with color-coded terminal alerts.
+- **Storage Remediation Playbook:** Generates immediate administrator mitigation playbooks covering directory isolation (`du -sh`), systemd journal vacuuming (`journalctl --vacuum-time`), package cache purges (`apt clean`), and container cleanup (`docker system prune`).
+- **Cross-Platform HTML Dashboard (`run.sh`):** Executes probe, serializes JSON telemetry, regenerates dark-themed `report.html` with capacity alert cards, full volume inventory table, and visual progress meters, and opens the default browser across WSL, Linux, macOS, and Git Bash.
+
+### Key Commands Used
+- `bash run.sh` — Single command to audit disk capacity, regenerate dashboard, and open HTML report (Linux / macOS / Windows)
+- `./low_disk_space_alert.sh` — Default scan of mounted filesystems with 80% alert threshold
+- `./low_disk_space_alert.sh 70` — Stress test with custom 70% threshold (triggers warnings on live WSL/host volumes)
+- `./low_disk_space_alert.sh --json` — Emits structured JSON telemetry
+- `./low_disk_space_alert.sh --help` — Displays CLI manual and option syntax
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_07/report.html`](./AS_07/report.html)
+- 📖 **Sprint Documentation:** [`AS_07/README.md`](./AS_07/README.md)
+- 📜 **Audit Log File:** [`AS_07/logs/disk_alert.log`](./AS_07/logs/disk_alert.log)
+- 📋 **Command Log:** [`AS_07/commands_used.md`](./AS_07/commands_used.md)
 
 </details>
 
