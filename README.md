@@ -43,6 +43,14 @@ LSA_AS/
 │   ├── logs/                       # Audit trail & JSON telemetry directory
 │   ├── sandbox_data/               # Multi-tier permission test dataset directory
 │   └── README.md                   # Problem documentation & usage
+├── AS_05/                          # Automation Sprint Problem #5
+│   ├── ownership_audit.sh          # Core project administrator file ownership auditing script
+│   ├── run.sh                      # Unified execution & HTML dashboard generator
+│   ├── commands_used.md            # Command log & development history
+│   ├── report.html                 # Standalone dark-themed dashboard report
+│   ├── logs/                       # Audit trail & JSON telemetry directory
+│   ├── sandbox_data/               # Simulated project codebase with multi-user file ownership
+│   └── README.md                   # Problem documentation & usage
 ├── AS_14/                          # Automation Sprint Problem #14
 │   ├── suspicious_ip_detector.sh   # Core bash script for IP detection
 │   ├── commands_used.md            # Command log & viva preparation
@@ -146,6 +154,7 @@ LSA_AS/
 | **AS_02** | **Inactive Employee Detection** | Real local account discovery (`/etc/passwd`), human user filtering (`UID >= 1000`), multi-tier login history resolution (`lastlog` / `last` / `loginctl` fallback), configurable thresholding, and dark-themed HTML report. | ✅ Completed | [`AS_02/`](./AS_02) |
 | **AS_03** | **Department Access** | Department group creation (`groupadd`), sandboxed shared directory provisioning (`chmod 2770`), SGID bit inheritance enforcement, zero non-member access (`---`), and safe teardown (`cleanup.sh`). | ✅ Completed | [`AS_03/`](./AS_03) |
 | **AS_04** | **Permission Audit** | Automated world-writable file auditing (`find -type f -perm -0002`), risk severity classification, least-privilege compliance scoring, and dark-themed HTML report. | ✅ Completed | [`AS_04/`](./AS_04) |
+| **AS_05** | **Ownership Audit** | Project administrator ownership verification (`find ! -user <admin>`), privilege drift classification (root/foreign/orphan), compliance ratio reporting, and dark-themed HTML report. | ✅ Completed | [`AS_05/`](./AS_05) |
 | **AS_14** | **Suspicious IP Detection** | Automated SSH brute-force monitor, real log auto-detection (`/var/log/auth.log`), regex parsing, descending ranking, and audit reporting. | ✅ Completed | [`AS_14/`](./AS_14) |
 | **AS_15** | **Error Log Report** | Automated error extraction, real log auto-detection (`/var/log/syslog`), severity breakdown, frequency ranking, and tail-style review. | ✅ Completed | [`AS_15/`](./AS_15) |
 | **AS_16** | **Service Availability Check** | Real-time service monitoring, boot persistence verification, systemd/SysV fallback, audit logging, and dark-themed HTML report dashboard. | ✅ Completed | [`AS_16/`](./AS_16) |
@@ -175,6 +184,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_02** | Inactive Employee Detection | `cd AS_02 && bash run.sh` |
 | **AS_03** | Department Access | `cd AS_03 && bash run.sh` *(Run `bash cleanup.sh` afterward to restore system)* |
 | **AS_04** | Permission Audit | `cd AS_04 && bash run.sh` |
+| **AS_05** | Ownership Audit | `cd AS_05 && bash run.sh` |
 | **AS_14** | Suspicious IP Detection | `cd AS_14 && bash run.sh` |
 | **AS_15** | Error Log Report | `cd AS_15 && bash run.sh` |
 | **AS_16** | Service Availability Check | `cd AS_16 && bash run.sh` |
@@ -197,6 +207,7 @@ Each project can be executed with a **single command** that automatically runs t
 | **AS_02** | `cd AS_02 && bash run.sh` | `cd AS_02 && bash run.sh` | `cd AS_02 && bash run.sh` | `cd AS_02 && bash run.sh` |
 | **AS_03** | `cd AS_03 && bash run.sh` | `cd AS_03 && bash run.sh` | `cd AS_03 && bash run.sh` | `cd AS_03 && bash run.sh` |
 | **AS_04** | `cd AS_04 && bash run.sh` | `cd AS_04 && bash run.sh` | `cd AS_04 && bash run.sh` | `cd AS_04 && bash run.sh` |
+| **AS_05** | `cd AS_05 && bash run.sh` | `cd AS_05 && bash run.sh` | `cd AS_05 && bash run.sh` | `cd AS_05 && bash run.sh` |
 | **AS_14** | `cd AS_14 && bash run.sh` | `cd AS_14 && bash run.sh` | `cd AS_14 && bash run.sh` | `cd AS_14 && bash run.sh` |
 | **AS_15** | `cd AS_15 && bash run.sh` | `cd AS_15 && bash run.sh` | `cd AS_15 && bash run.sh` | `cd AS_15 && bash run.sh` |
 | **AS_16** | `cd AS_16 && bash run.sh` | `cd AS_16 && bash run.sh` | `cd AS_16 && bash run.sh` | `cd AS_16 && bash run.sh` |
@@ -337,6 +348,35 @@ A company security administrator wants to identify all world-writable files in a
 - 📖 **Sprint Documentation:** [`AS_04/README.md`](./AS_04/README.md)
 - 📜 **Audit Log File:** [`AS_04/logs/permission_audit.log`](./AS_04/logs/permission_audit.log)
 - 📋 **Command Log:** [`AS_04/commands_used.md`](./AS_04/commands_used.md)
+
+</details>
+
+<details>
+<summary><strong>AS_05 — Ownership Audit (File Ownership)</strong></summary>
+
+### Problem Statement
+Write a script to find files in a project directory that are not owned by the designated project administrator.
+
+### Summary of Approach
+- **Single-Admin Ownership Verification:** Enforces designated administrative ownership by identifying all non-matching file objects via `find "$TARGET_DIR" -type f ! -user "$ADMIN_USER"`.
+- **Privilege Drift Categorization:** Evaluates flagged files into actionable threat classes: ROOT_PRIVILEGE (accidental `sudo` runs leaving root-owned files), FOREIGN_USER (unauthorized user or contractor accounts), and ORPHAN_UID (`-nouser`, unmapped legacy UIDs).
+- **Dual-Mode Target Flexibility:** Validated against a multi-tier sandboxed project tree (`AS_05/sandbox_data/project_alpha`) simulating multi-user development, and equally capable of auditing host system directories (e.g. `/etc/cron.d root`).
+- **Targeted Remediation Recommendations:** Generates specific remediation commands (`sudo chown <ADMIN_USER> <file>`) with an optional `--remediate` correction engine.
+- **Cross-Platform HTML Dashboard (`run.sh`):** Dispatches scanner, records audit trail, regenerates dark-themed `report.html` with KPI compliance cards and inventory table, and opens the default web browser across WSL, Linux, macOS, and Git Bash.
+
+### Key Commands Used
+- `bash run.sh` — Single command to audit ownership, regenerate dashboard, and open HTML report (Linux / macOS / Windows)
+- `./ownership_audit.sh` — Default scan of sandboxed project directory with current user as admin
+- `./ownership_audit.sh /etc/cron.d root` — Real-world audit of live system cron directory enforcing root ownership
+- `./ownership_audit.sh --dir ./sandbox_data --admin pankaj` — Explicit directory and administrator targeting
+- `./ownership_audit.sh --json` — Emits structured JSON telemetry
+- `./ownership_audit.sh --help` — Displays CLI manual and option syntax
+
+### Dashboard Report & Documentation
+- 📊 **Interactive Dashboard:** [`AS_05/report.html`](./AS_05/report.html)
+- 📖 **Sprint Documentation:** [`AS_05/README.md`](./AS_05/README.md)
+- 📜 **Audit Log File:** [`AS_05/logs/ownership_audit.log`](./AS_05/logs/ownership_audit.log)
+- 📋 **Command Log:** [`AS_05/commands_used.md`](./AS_05/commands_used.md)
 
 </details>
 
