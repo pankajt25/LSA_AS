@@ -1,0 +1,20 @@
+[2026-10-07 17:06:33] [INFO] ============================================================
+[2026-10-07 17:06:33] [INFO] LSA Sprint AS_47 - System Security Audit Engine
+[2026-10-07 17:06:33] [INFO] Audit Target:         /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_47
+[2026-10-07 17:06:33] [INFO] Log File:             /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_47/logs/security_audit_20261007_170633.log
+[2026-10-07 17:06:33] [INFO] ============================================================
+[2026-10-07 17:06:33] [INFO] Provisioning test account 'lsatest_audit_nopass' to demonstrate passwordless detection...
+[2026-10-07 17:06:34] [SUCCESS] Demo user 'lsatest_audit_nopass' created with blank password.
+[2026-10-07 17:06:34] [INFO] Seeded world-writable test file: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_47/sandbox_data/insecure_shared_config.conf
+[2026-10-07 17:06:34] [INFO] Vector 1: Scanning /etc/shadow for password-less accounts...
+[2026-10-07 17:06:34] [WARN] [HIGH RISK] Password-less account found: 'lsatest_audit_nopass' (UID: 1011, Shell: /usr/sbin/nologin)
+[2026-10-07 17:06:34] [INFO] Found 1 password-less account(s).
+[2026-10-07 17:06:34] [INFO] Vector 2: Auditing directory '/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_47' for world-writable files...
+[2026-10-07 17:06:34] [WARN] [MEDIUM RISK] World-writable file: sandbox_data/insecure_shared_config.conf (-rw-rw-rw- / 666, Owner: pankaj:pankaj)
+[2026-10-07 17:06:34] [INFO] Found 1 world-writable file(s).
+[2026-10-07 17:06:34] [INFO] Vector 3: Analyzing authentication logs for failed login attempts...
+[2026-10-07 17:06:34] [INFO] Found 1 recent failed login attempt(s).
+[2026-10-07 17:06:34] [INFO] Vector 4: Profiling active interactive login sessions...
+[2026-10-07 17:06:34] [INFO] Active Session: User=pankaj, TTY=pts/1, Login=2026-10-07 15:50, Remote=local
+[2026-10-07 17:06:34] [INFO] Identified 1 active interactive session(s).
+[2026-10-07 17:06:34] [INFO] Security Audit Complete. Compliance Score: 65% | Severity: [CRITICAL VULNERABILITY DETECTED]

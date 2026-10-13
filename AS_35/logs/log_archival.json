@@ -1,0 +1,62 @@
+{
+  "status": "SUCCESS",
+  "metadata": {
+    "source_directory": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_35/sandbox_data/active_logs",
+    "output_directory": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_35/archives",
+    "archive_file": "log_archive_20261007_154424.tar.gz",
+    "archive_path": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_35/archives/log_archive_20261007_154424.tar.gz",
+    "checksum_file": "log_archive_20261007_154424.tar.gz.sha256",
+    "sha256_hash": "1cca6297eb9ad4c885ff8cd1cfe58e9dd880d4e3151506f3910ca5a0ef06ca52",
+    "compression_format": "GZ",
+    "archival_timestamp": "2026-10-07 15:44:24 ",
+    "integrity_verification": "VERIFIED_INTEGRITY_OK"
+  },
+  "metrics": {
+    "files_archived_count": 5,
+    "uncompressed_bytes": 788643,
+    "uncompressed_human": "770.2 KB",
+    "compressed_bytes": 58678,
+    "compressed_human": "57.3 KB",
+    "space_saved_bytes": 729965,
+    "space_saved_human": "712.9 KB",
+    "compression_ratio_pct": 92.6,
+    "source_logs_purged": 0
+  },
+  "archived_files": [
+    {
+      "relative_path": "api_gateway_access.log",
+      "absolute_path": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_35/sandbox_data/active_logs/api_gateway_access.log",
+      "size_bytes": 243600,
+      "size_human": "237.9 KB",
+      "mtime_formatted": "2026-10-07 15:42:15"
+    },
+    {
+      "relative_path": "auth_audit.log",
+      "absolute_path": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_35/sandbox_data/active_logs/auth_audit.log",
+      "size_bytes": 202952,
+      "size_human": "198.2 KB",
+      "mtime_formatted": "2026-10-07 15:42:15"
+    },
+    {
+      "relative_path": "database_queries.log",
+      "absolute_path": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_35/sandbox_data/active_logs/database_queries.log",
+      "size_bytes": 164807,
+      "size_human": "160.9 KB",
+      "mtime_formatted": "2026-10-07 15:42:15"
+    },
+    {
+      "relative_path": "payment_transactions.log",
+      "absolute_path": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_35/sandbox_data/active_logs/payment_transactions.log",
+      "size_bytes": 105445,
+      "size_human": "103.0 KB",
+      "mtime_formatted": "2026-10-07 15:42:15"
+    },
+    {
+      "relative_path": "system_errors.log",
+      "absolute_path": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_35/sandbox_data/active_logs/system_errors.log",
+      "size_bytes": 71839,
+      "size_human": "70.2 KB",
+      "mtime_formatted": "2026-10-07 15:42:15"
+    }
+  ]
+}

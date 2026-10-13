@@ -1,0 +1,27 @@
+{
+  "problem_id": "AS_11",
+  "title": "Backup Verification",
+  "timestamp": "2026-10-07 11:56:53 IST",
+  "timestamp_epoch": 1791354413,
+  "hostname": "SP",
+  "backup_directory": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_11/sandbox_data/backups",
+  "archive_filename": "backup_prod_20261007_020000.tar.gz",
+  "archive_path": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_11/sandbox_data/backups/backup_prod_20261007_020000.tar.gz",
+  "total_archives_in_repo": 3,
+  "file_size_bytes": 379,
+  "file_size_human": "379 B",
+  "entities_count": 6,
+  "modified_timestamp": "2026-10-07 11:54:49",
+  "age_hours": 0.0,
+  "sha256_checksum": "31f865402923b24f0b657dee90b199e928e3ba5301bf61771c6f42c0c5e2d5c1",
+  "has_companion_checksum": true,
+  "checks": {
+    "existence": true,
+    "non_empty": true,
+    "archive_integrity": true,
+    "checksum_valid": true,
+    "within_freshness_sla": true
+  },
+  "overall_success": true,
+  "status": "VERIFIED_HEALTHY"
+}

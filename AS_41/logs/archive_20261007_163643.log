@@ -1,0 +1,25 @@
+[2026-10-07 16:36:43] [INFO] ============================================================
+[2026-10-07 16:36:43] [INFO] LSA Sprint AS_41 - Old Project File Archival Engine
+[2026-10-07 16:36:43] [INFO] Source Directory:     /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_41/sandbox_data/projects
+[2026-10-07 16:36:43] [INFO] Archive Directory:    /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_41/sandbox_data/archive
+[2026-10-07 16:36:43] [INFO] Age Threshold:        > 30 days
+[2026-10-07 16:36:43] [INFO] Dry Run Mode:         false
+[2026-10-07 16:36:43] [INFO] Compression:          true
+[2026-10-07 16:36:43] [INFO] Log File:             /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_41/logs/archive_20261007_163643.log
+[2026-10-07 16:36:43] [INFO] ============================================================
+[2026-10-07 16:36:43] [INFO] Scanning '/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_41/sandbox_data/projects' for files older than 30 days...
+[2026-10-07 16:36:43] [INFO] Found 5 candidate file(s) exceeding 30 days threshold.
+[2026-10-07 16:36:43] [INFO] Candidate: alpha_project/builds/release_2023_candidate.iso (131072 B, last modified: 2026-07-04 16:36:42.000000000 +0530, age: 95d)
+[2026-10-07 16:36:44] [SUCCESS] Archived -> /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_41/sandbox_data/archive/archive_20261007_163643/alpha_project/builds/release_2023_candidate.iso
+[2026-10-07 16:36:44] [INFO] Candidate: alpha_project/docs/arch_v0.1_old.pdf (27 B, last modified: 2026-06-09 16:36:42.000000000 +0530, age: 120d)
+[2026-10-07 16:36:44] [SUCCESS] Archived -> /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_41/sandbox_data/archive/archive_20261007_163643/alpha_project/docs/arch_v0.1_old.pdf
+[2026-10-07 16:36:44] [INFO] Candidate: beta_service/logs/service_2023_debug.log (43 B, last modified: 2026-08-03 16:36:42.000000000 +0530, age: 65d)
+[2026-10-07 16:36:44] [SUCCESS] Archived -> /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_41/sandbox_data/archive/archive_20261007_163643/beta_service/logs/service_2023_debug.log
+[2026-10-07 16:36:44] [INFO] Candidate: gamma_analytics/reports/q1_2024_interim.csv (37 B, last modified: 2026-08-20 16:36:42.000000000 +0530, age: 48d)
+[2026-10-07 16:36:44] [SUCCESS] Archived -> /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_41/sandbox_data/archive/archive_20261007_163643/gamma_analytics/reports/q1_2024_interim.csv
+[2026-10-07 16:36:44] [INFO] Candidate: legacy_core/src/driver_v1.c (58 B, last modified: 2026-08-28 16:36:42.000000000 +0530, age: 40d)
+[2026-10-07 16:36:44] [SUCCESS] Archived -> /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_41/sandbox_data/archive/archive_20261007_163643/legacy_core/src/driver_v1.c
+[2026-10-07 16:36:44] [INFO] Compressing archive batch into /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_41/sandbox_data/archive/project_archive_20261007_163643.tar.gz...
+[2026-10-07 16:36:45] [SUCCESS] Archival bundle created: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_41/sandbox_data/archive/project_archive_20261007_163643.tar.gz (132607 bytes)
+[2026-10-07 16:36:45] [INFO] Archival operation completed.
+[2026-10-07 16:36:45] [INFO] Summary: 5 files archived, 131237 bytes reclaimed, 4 active files remaining.

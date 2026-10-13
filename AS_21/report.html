@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Connectivity Check — Automation Sprint (AS_21)</title>
+    <style>
+        :root {
+            --bg-body: #0b1120;
+            --bg-card: #131d35;
+            --bg-card-alt: #1a2744;
+            --border-color: #273553;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --accent-cyan: #38bdf8;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-amber: #f59e0b;
+            --accent-purple: #818cf8;
+            --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            line-height: 1.5;
+            padding: 24px;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: linear-gradient(180deg, #1e293b 0%, var(--bg-card) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        .badge-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .badge-cyan {
+            background-color: rgba(56, 189, 248, 0.15);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+
+        .badge-green {
+            background-color: rgba(16, 185, 129, 0.15);
+            color: var(--accent-green);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .badge-purple {
+            background-color: rgba(129, 140, 248, 0.15);
+            color: var(--accent-purple);
+            border: 1px solid rgba(129, 140, 248, 0.3);
+        }
+
+        h1 {
+            font-size: 1.85rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 6px;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 12px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .meta-item {
+            background-color: var(--bg-card-alt);
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .meta-label {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+            margin-bottom: 2px;
+        }
+
+        .meta-value {
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: #ffffff;
+            font-family: var(--font-mono);
+            word-break: break-all;
+        }
+
+        /* Assessment Banner */
+        .assessment-banner {
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.15) 0%, rgba(12, 74, 110, 0.25) 100%);
+            border: 1px solid #38bdf8;
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.25);
+        }
+
+        .banner-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .banner-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .banner-badge {
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: #38bdf8;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid #38bdf8;
+            letter-spacing: 0.05em;
+        }
+
+        .banner-desc {
+            color: #cbd5e1;
+            font-size: 0.92rem;
+            line-height: 1.6;
+        }
+
+        /* Target Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .status-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-header {
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: var(--bg-card-alt);
+        }
+
+        .card-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-icon {
+            font-size: 1.4rem;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .card-role {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        .status-pill {
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .card-body {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .metric-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .metric-box {
+            background-color: var(--bg-body);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px 14px;
+        }
+
+        .metric-box-title {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            margin-bottom: 4px;
+        }
+
+        .metric-box-val {
+            font-size: 1.4rem;
+            font-weight: 800;
+            font-family: var(--font-mono);
+        }
+
+        .sub-metrics {
+            background-color: var(--bg-card-alt);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 0.85rem;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .sub-metric-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sub-label {
+            color: var(--text-muted);
+        }
+
+        .sub-val {
+            font-family: var(--font-mono);
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+
+        .summary-box {
+            background-color: var(--bg-body);
+            border-left: 3px solid var(--accent-cyan);
+            border-radius: 4px;
+            padding: 10px 12px;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: #94a3b8;
+            word-break: break-all;
+        }
+
+        /* Context & Routing Details */
+        .section-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        .section-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--bg-card-alt);
+            color: var(--accent-cyan);
+            padding: 10px 14px;
+            font-weight: 700;
+            border-bottom: 2px solid var(--border-color);
+            text-transform: uppercase;
+            font-size: 0.72rem;
+            letter-spacing: 0.05em;
+        }
+
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border-color);
+            color: #e2e8f0;
+        }
+
+        tr:hover td {
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        /* Monospace Logs */
+        pre.log-display {
+            background-color: #050914;
+            color: #38bdf8;
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            padding: 16px;
+            font-family: var(--font-mono);
+            font-size: 0.82rem;
+            line-height: 1.5;
+            max-height: 380px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            padding: 24px 0 12px 0;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .code-pill {
+            background-color: var(--bg-card-alt);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            color: var(--accent-cyan);
+            border: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <header>
+            <div class="badge-row">
+                <span class="badge badge-cyan">Course: E1ITA307</span>
+                <span class="badge badge-purple">Sprint: AS_21</span>
+                <span class="badge badge-green">Live Telemetry</span>
+            </div>
+            <h1>Network Connectivity Check &amp; Gateway Monitor</h1>
+            <div class="subtitle">
+                Automated ICMP Echo Reachability Analysis, Packet Loss Accounting &amp; Round-Trip Telemetry
+            </div>
+            <div class="meta-grid">
+                <div class="meta-item">
+                    <div class="meta-label">Execution Timestamp</div>
+                    <div class="meta-value">2026-09-29 23:45:18</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">Hostname &amp; User</div>
+                    <div class="meta-value">SP (pankaj)</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">Operating System</div>
+                    <div class="meta-value">Ubuntu 26.04.1 LTS</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">Kernel Version</div>
+                    <div class="meta-value">6.18.33.2-microsoft-standard-WSL2</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">Active Interface</div>
+                    <div class="meta-value">eth0 (192.168.42.183)</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">Detected Gateway</div>
+                    <div class="meta-value">192.168.32.1</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- DIAGNOSTIC ASSESSMENT BANNER -->
+        <div class="assessment-banner">
+            <div class="banner-header">
+                <div class="banner-title">🌐 Internet Accessible: Gateway Unreachable / ICMP Echo Filtered</div>
+                <div class="banner-badge">STATUS: INTERNET ACCESSIBLE (ICMP FILTERED)</div>
+            </div>
+            <div class="banner-desc">The public baseline (8.8.8.8) responded normally, confirming WAN routing is active. However, Gateway (192.168.32.1) dropped ICMP packets. In virtualized environments (such as WSL2 virtual switch) or enterprise firewalls, host routers routinely block ICMP echo requests while continuing to route forwarded traffic.</div>
+        </div>
+
+        <!-- STATUS CARDS (TARGET & BASELINE) -->
+        <div class="cards-grid">
+            <!-- TARGET / GATEWAY CARD -->
+            <div class="status-card" style="border-top: 4px solid #ef4444;">
+                <div class="card-header">
+                    <div class="card-header-left">
+                        <span class="card-icon">❌</span>
+                        <div>
+                            <div class="card-title">192.168.32.1</div>
+                            <div class="card-role">Gateway</div>
+                        </div>
+                    </div>
+                    <span class="status-pill" style="background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #f87171;">
+                        UNREACHABLE
+                    </span>
+                </div>
+                <div class="card-body">
+                    <div class="metric-row">
+                        <div class="metric-box">
+                            <div class="metric-box-title">Packet Loss</div>
+                            <div class="metric-box-val" style="color: #f87171;">
+                                100%
+                            </div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-box-title">Average RTT</div>
+                            <div class="metric-box-val" style="color: #94a3b8;">
+                                N/A
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sub-metrics">
+                        <div class="sub-metric-item">
+                            <span class="sub-label">Packets Transmitted / Received</span>
+                            <span class="sub-val">4 sent / 4 recv</span>
+                        </div>
+                        <div class="sub-metric-item">
+                            <span class="sub-label">Latency Range (Min / Max)</span>
+                            <span class="sub-val">12.332ms / 15.255ms</span>
+                        </div>
+                        <div class="sub-metric-item">
+                            <span class="sub-label">Probe Status Line</span>
+                            <span class="sub-val">❌ Gateway 192.168.32.1 is UNREACHABLE (100% loss)</span>
+                        </div>
+                    </div>
+                    <div class="summary-box">
+                        <strong>Architectural Note:</strong> Gateway detection executed via <span class="code-pill">ip route | grep default | awk '{print $3}'</span>. When run inside WSL2 or cloud environments, virtual switch adapters frequently filter ICMP echo requests while allowing full TCP/UDP WAN forwarding.
+                    </div>
+                </div>
+            </div>
+
+            <!-- SANITY BASELINE CARD -->
+            <div class="status-card" style="border-top: 4px solid #10b981;">
+                <div class="card-header">
+                    <div class="card-header-left">
+                        <span class="card-icon">✅</span>
+                        <div>
+                            <div class="card-title">8.8.8.8</div>
+                            <div class="card-role">Sanity Baseline (Public Reference)</div>
+                        </div>
+                    </div>
+                    <span class="status-pill" style="background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #34d399;">
+                        REACHABLE
+                    </span>
+                </div>
+                <div class="card-body">
+                    <div class="metric-row">
+                        <div class="metric-box">
+                            <div class="metric-box-title">Packet Loss</div>
+                            <div class="metric-box-val" style="color: #34d399;">
+                                0%
+                            </div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-box-title">Average RTT</div>
+                            <div class="metric-box-val" style="color: #38bdf8;">
+                                56.527ms
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sub-metrics">
+                        <div class="sub-metric-item">
+                            <span class="sub-label">Packets Transmitted / Received</span>
+                            <span class="sub-val">4 sent / 4 recv</span>
+                        </div>
+                        <div class="sub-metric-item">
+                            <span class="sub-label">Latency Range (Min / Max)</span>
+                            <span class="sub-val">41.990ms / 92.303ms</span>
+                        </div>
+                        <div class="sub-metric-item">
+                            <span class="sub-label">Probe Status Line</span>
+                            <span class="sub-val">✅ Baseline Host 8.8.8.8 is REACHABLE (0% loss, avg 56.527ms)</span>
+                        </div>
+                    </div>
+                    <div class="summary-box">
+                        <strong>Sanity Baseline Rationale:</strong> Probing a resilient global Anycast DNS resolver (<span class="code-pill">8.8.8.8</span>) eliminates false alarms caused by gateway-level ICMP filtering and confirms whether the machine has active WAN Internet connectivity.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NETWORK CONFIGURATION & TRIANGULATION MATRIX -->
+        <div class="section-card">
+            <div class="section-title">🌐 Live Network Configuration &amp; Routing Context</div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Active Value</th>
+                            <th>Detection / Extraction Mechanism</th>
+                            <th>Operational Significance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Default Gateway</strong></td>
+                            <td><span class="code-pill">192.168.32.1</span></td>
+                            <td><code>ip route | grep default | awk '{print $3}'</code></td>
+                            <td>Primary next-hop router for all non-local outbound traffic</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Host IP Address</strong></td>
+                            <td><span class="code-pill">192.168.42.183</span></td>
+                            <td><code>ip -4 addr show dev eth0</code></td>
+                            <td>Local network interface address bound for socket traffic</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Primary Interface</strong></td>
+                            <td><span class="code-pill">eth0</span></td>
+                            <td>Derived from route table egress interface column ($5)</td>
+                            <td>Physical or virtual network adapter processing ICMP packets</td>
+                        </tr>
+                        <tr>
+                            <td><strong>DNS Resolvers</strong></td>
+                            <td><span class="code-pill">10.255.255.254,</span></td>
+                            <td><code>grep -E '^nameserver' /etc/resolv.conf</code></td>
+                            <td>Nameserver addresses used for domain resolution</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Probe Packet Count</strong></td>
+                            <td><span class="code-pill">4 packets (-c 4)</span></td>
+                            <td>Configured bounded count flag</td>
+                            <td>Guarantees bounded probe runtime; never unbounded</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TRIANGULATION MATRIX REFERENCE -->
+        <div class="section-card">
+            <div class="section-title">🛡️ Triangulation Matrix: Distinguishing Network Failure Modes</div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Gateway Status</th>
+                            <th>Sanity Baseline (8.8.8.8)</th>
+                            <th>Diagnostic Verdict</th>
+                            <th>Root Cause &amp; Administrative Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background: rgba(16, 185, 129, 0.05);">
+                            <td><strong style="color: #34d399;">REACHABLE (0% loss)</strong></td>
+                            <td><strong style="color: #34d399;">REACHABLE (0% loss)</strong></td>
+                            <td><strong>✅ All Systems Operational</strong></td>
+                            <td>Full local and WAN connectivity. Packets flow seamlessly through gateway to the Internet.</td>
+                        </tr>
+                        <tr style="background: rgba(56, 189, 248, 0.05);">
+                            <td><strong style="color: #f87171;">UNREACHABLE (100% loss)</strong></td>
+                            <td><strong style="color: #34d399;">REACHABLE (0% loss)</strong></td>
+                            <td><strong>🌐 Internet Accessible (ICMP Filtered)</strong></td>
+                            <td>WAN routing is operational, but gateway drops ICMP echo. Common on WSL2 virtual switch, Azure, and enterprise routers.</td>
+                        </tr>
+                        <tr style="background: rgba(245, 158, 11, 0.05);">
+                            <td><strong style="color: #34d399;">REACHABLE (0% loss)</strong></td>
+                            <td><strong style="color: #f87171;">UNREACHABLE (100% loss)</strong></td>
+                            <td><strong>⚠️ Local Network Only</strong></td>
+                            <td>Local LAN/WLAN is up, but WAN uplink is severed. Inspect ISP modem, fiber link, or upstream router peering.</td>
+                        </tr>
+                        <tr style="background: rgba(239, 68, 68, 0.05);">
+                            <td><strong style="color: #f87171;">UNREACHABLE (100% loss)</strong></td>
+                            <td><strong style="color: #f87171;">UNREACHABLE (100% loss)</strong></td>
+                            <td><strong>❌ Complete Network Outage</strong></td>
+                            <td>Host is isolated. Verify physical cable, Wi-Fi association, DHCP lease, or restart local network stack.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- RECENT TERMINAL EXECUTION PREVIEW -->
+        <div class="section-card">
+            <div class="section-title">💻 Captured Terminal Execution Output</div>
+            <pre class="log-display">================================================================================
+     NETWORK CONNECTIVITY CHECK — AUTOMATION SPRINT (AS_21)                    
+================================================================================
+Timestamp : 2026-09-29 23:45:10 | Host: SP | OS: Linux (6.18.33.2-microsoft-standard-WSL2)
+User      : pankaj
+Target    : 192.168.32.1 (Gateway)
+Baseline  : 8.8.8.8 (Sanity Host / Public Internet Reference)
+Pings     : 4 packets per target (Timeout: 2s)
+--------------------------------------------------------------------------------
+[1/2] Probing Gateway: 192.168.32.1...
+[2/2] Probing Sanity Baseline Host: 8.8.8.8...
+--------------------------------------------------------------------------------
+PROBE RESULTS:
+  ❌ Gateway 192.168.32.1 is UNREACHABLE (100% loss)
+  ✅ Baseline Host 8.8.8.8 is REACHABLE (0% loss, avg 56.527ms)
+--------------------------------------------------------------------------------
+DIAGNOSTIC ASSESSMENT:
+  🌐 Internet Accessible: Gateway Unreachable / ICMP Echo Filtered
+  The public baseline (8.8.8.8) responded normally, confirming WAN routing is active. However, Gateway (192.168.32.1) dropped ICMP packets. In virtualized environments (such as WSL2 virtual switch) or enterprise firewalls, host routers routinely block ICMP echo requests while continuing to route forwarded traffic.
+================================================================================
+Audit log appended to: logs/connectivity.log</pre>
+        </div>
+
+        <!-- PERSISTENT AUDIT LOG HISTORY -->
+        <div class="section-card">
+            <div class="section-title">📜 Chronological Audit Trail (<span class="code-pill">logs/connectivity.log</span>)</div>
+            <pre class="log-display">Status        : UNREACHABLE
+  Packets       : Transmitted = 4, Received = 0, Packet Loss = 100%
+  Round-Trip    : Min = N/A, Avg = N/A, Max = N/A
+  Summary Line  : ❌ Gateway 192.168.32.1 is UNREACHABLE (100% loss)
+--------------------------------------------------------------------------------
+PROBE 2: Sanity Baseline (8.8.8.8)
+  Status        : REACHABLE
+  Packets       : Transmitted = 4, Received = 4, Packet Loss = 0%
+  Round-Trip    : Min = 41.990ms, Avg = 59.748ms, Max = 92.303ms
+  Summary Line  : ✅ Baseline Host 8.8.8.8 is REACHABLE (0% loss, avg 59.748ms)
+--------------------------------------------------------------------------------
+DIAGNOSIS: [ICMP_FILTERED]
+  🌐 Internet Accessible: Gateway Unreachable / ICMP Echo Filtered
+  The public baseline (8.8.8.8) responded normally, confirming WAN routing is active. However, Gateway (192.168.32.1) dropped ICMP packets. In virtualized environments (such as WSL2 virtual switch) or enterprise firewalls, host routers routinely block ICMP echo requests while continuing to route forwarded traffic.
+================================================================================
+
+================================================================================
+[2026-09-29 23:44:49] NETWORK CONNECTIVITY AUDIT CHECK
+Host: SP | OS: Linux | Kernel: 6.18.33.2-microsoft-standard-WSL2 | User: pankaj
+Scan Configuration: Count=4 packets | Timeout=2s
+--------------------------------------------------------------------------------
+PROBE 1: Target Host (1.1.1.1)
+  Status        : REACHABLE
+  Packets       : Transmitted = 4, Received = 4, Packet Loss = 0%
+  Round-Trip    : Min = 12.332ms, Avg = 14.054ms, Max = 15.255ms
+  Summary Line  : ✅ Target Host 1.1.1.1 is REACHABLE (0% loss, avg 14.054ms)
+--------------------------------------------------------------------------------
+PROBE 2: Sanity Baseline (8.8.8.8)
+  Status        : REACHABLE
+  Packets       : Transmitted = 4, Received = 4, Packet Loss = 0%
+  Round-Trip    : Min = 28.359ms, Avg = 33.343ms, Max = 40.160ms
+  Summary Line  : ✅ Baseline Host 8.8.8.8 is REACHABLE (0% loss, avg 33.343ms)
+--------------------------------------------------------------------------------
+DIAGNOSIS: [FULL_CONNECTIVITY]
+  ✅ All Systems Operational: Full Local &amp; Internet Connectivity
+  Both the Target Host (1.1.1.1) and the public baseline (8.8.8.8) are responsive. Packets flow freely through both local and WAN network paths.
+================================================================================
+
+================================================================================
+[2026-09-29 23:45:10] NETWORK CONNECTIVITY AUDIT CHECK
+Host: SP | OS: Linux | Kernel: 6.18.33.2-microsoft-standard-WSL2 | User: pankaj
+Scan Configuration: Count=4 packets | Timeout=2s
+--------------------------------------------------------------------------------
+PROBE 1: Gateway (192.168.32.1)
+  Status        : UNREACHABLE
+  Packets       : Transmitted = 4, Received = 0, Packet Loss = 100%
+  Round-Trip    : Min = N/A, Avg = N/A, Max = N/A
+  Summary Line  : ❌ Gateway 192.168.32.1 is UNREACHABLE (100% loss)
+--------------------------------------------------------------------------------
+PROBE 2: Sanity Baseline (8.8.8.8)
+  Status        : REACHABLE
+  Packets       : Transmitted = 4, Received = 4, Packet Loss = 0%
+  Round-Trip    : Min = 25.949ms, Avg = 56.527ms, Max = 118.884ms
+  Summary Line  : ✅ Baseline Host 8.8.8.8 is REACHABLE (0% loss, avg 56.527ms)
+--------------------------------------------------------------------------------
+DIAGNOSIS: [ICMP_FILTERED]
+  🌐 Internet Accessible: Gateway Unreachable / ICMP Echo Filtered
+  The public baseline (8.8.8.8) responded normally, confirming WAN routing is active. However, Gateway (192.168.32.1) dropped ICMP packets. In virtualized environments (such as WSL2 virtual switch) or enterprise firewalls, host routers routinely block ICMP echo requests while continuing to route forwarded traffic.
+================================================================================</pre>
+        </div>
+
+        <!-- FOOTER -->
+        <footer>
+            <div>Linux System Administration (E1ITA307) — Automation Sprint (AS_21)</div>
+            <div style="margin-top: 4px;">Single Command to Re-run: <span class="code-pill">bash run.sh</span></div>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AS_08: Large File Detection Dashboard</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --surface-hover: #334155;
+            --border: #334155;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --accent-glow: rgba(56, 189, 248, 0.15);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --code-bg: #090d16;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            padding: 2rem;
+            line-height: 1.5;
+        }
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .header-title h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .header-title p {
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+            font-size: 0.95rem;
+        }
+        .sys-badge {
+            display: inline-flex;
+            gap: 0.5rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            align-self: flex-start;
+        }
+        .sys-badge span {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+        .card {
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.25rem;
+            position: relative;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+        }
+        .card-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+        .card-value {
+            font-size: 1.65rem;
+            font-weight: 700;
+            color: var(--text-main);
+            word-break: break-all;
+        }
+        .card-subtext {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.4rem;
+        }
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.65rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .badge-success { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #059669; }
+        .badge-warning { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid #d97706; }
+        .badge-danger { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #dc2626; }
+        
+        .section-box {
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+        }
+        .section-header {
+            background: rgba(0,0,0,0.15);
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .section-header h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+        .table-responsive {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+        th {
+            background: rgba(15, 23, 42, 0.6);
+            padding: 0.75rem 1rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--border);
+        }
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(51, 65, 85, 0.4);
+            color: var(--text-main);
+        }
+        tr:hover td {
+            background-color: var(--surface-hover);
+        }
+        .rank-cell {
+            font-weight: 700;
+            color: var(--accent);
+            width: 60px;
+        }
+        .size-cell {
+            color: #fbbf24;
+            font-weight: 600;
+            width: 120px;
+        }
+        .path-cell {
+            font-family: monospace;
+            font-size: 0.85rem;
+            word-break: break-all;
+        }
+        .time-cell {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 2rem !important;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+        pre.terminal-log {
+            background-color: var(--code-bg);
+            color: #e2e8f0;
+            padding: 1.25rem;
+            font-family: "JetBrains Mono", Consolas, "Courier New", monospace;
+            font-size: 0.82rem;
+            line-height: 1.45;
+            overflow-x: auto;
+            max-height: 380px;
+            white-space: pre-wrap;
+            border-radius: 0 0 8px 8px;
+        }
+        .remediation-box {
+            padding: 1.25rem;
+            background: rgba(56, 189, 248, 0.05);
+            border-left: 4px solid var(--accent);
+            font-size: 0.88rem;
+            line-height: 1.6;
+        }
+        .remediation-box code {
+            background: #090d16;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            color: var(--accent);
+            font-family: monospace;
+        }
+        footer {
+            text-align: center;
+            padding-top: 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>🔍 Large File Detection Dashboard</h1>
+                <p>E1ITA307 Linux System Administration — Automation Sprint (AS_08)</p>
+            </div>
+            <div class="sys-badge">
+                <span>HOST:</span> SP &nbsp;|&nbsp; 
+                <span>OS:</span> Ubuntu 26.04.1 LTS &nbsp;|&nbsp; 
+                <span>KERNEL:</span> 6.18.40.1-microsoft-standard-WSL2
+            </div>
+        </header>
+
+        <!-- KPI CARDS -->
+        <div class="grid">
+            <div class="card">
+                <div class="card-label">Target Directory</div>
+                <div class="card-value" style="font-size: 1.15rem; font-family: monospace;">/var/log</div>
+                <div class="card-subtext">Recursive subtree scanned</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Size Threshold</div>
+                <div class="card-value" style="color: var(--accent);">&gt; 1M</div>
+                <div class="card-subtext">Filter cutoff limit</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Matching Files</div>
+                <div class="card-value">102</div>
+                <div class="card-subtext">102 file(s) consume significant disk capacity.</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Cumulative Storage</div>
+                <div class="card-value" style="color: #fbbf24;">815.12 MB</div>
+                <div class="card-subtext">Total consumption of flagged items</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Storage Health Status</div>
+                <div class="card-value" style="font-size: 1rem; margin-top: 0.4rem;"><span class="badge badge-warning">FILES DETECTED</span></div>
+                <div class="card-subtext">Storage triage policy</div>
+            </div>
+        </div>
+
+        <!-- LARGE FILES INVENTORY TABLE -->
+        <div class="section-box">
+            <div class="section-header">
+                <h2>📁 Detected Large Files Inventory (Sorted by Size Descending)</h2>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">102 file(s) displayed</span>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Size</th>
+                            <th>Perms</th>
+                            <th>Owner:Group</th>
+                            <th>Last Modified</th>
+                            <th>File Location / Path</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+        <tr>
+            <td class="rank-cell">#1</td>
+            <td class="size-cell"><strong>16.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-10-07 11:26:30</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system.journal">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system.journal</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#2</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-30 16:52:40</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065cbec4038c0d-9550ca0d7cfc2afe.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065cbec4038c0d-9550ca0d7cfc2afe.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#3</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-30 15:29:29</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065cb0a3c6fabe-d5aa63d3ee2e9e7a.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065cb0a3c6fabe-d5aa63d3ee2e9e7a.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#4</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-30 12:15:08</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065cada736520c-465196982ab40624.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065cada736520c-465196982ab40624.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#5</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-30 11:52:24</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065cad9db3358e-60315468b4717ffa.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065cad9db3358e-60315468b4717ffa.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#6</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 19:41:01</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065ca2b0f340cc-506abee1558caa1d.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065ca2b0f340cc-506abee1558caa1d.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#7</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 19:40:09</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9fbf963245-4151486aa9cae068.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9fbf963245-4151486aa9cae068.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#8</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 19:38:50</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9fbc8a6b45-c24e2e6b606f33e9.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9fbc8a6b45-c24e2e6b606f33e9.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#9</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 19:37:03</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9fb7e00f44-878b8404f9d83be1.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9fb7e00f44-878b8404f9d83be1.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#10</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 19:34:45</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9fb1dd1fc0-5aa60d0685a3ac50.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9fb1dd1fc0-5aa60d0685a3ac50.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#11</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 19:33:35</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9fa93d8fc2-92c9b4d5fa6f1d35.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9fa93d8fc2-92c9b4d5fa6f1d35.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#12</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 19:31:39</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9fa50ee8d2-ce9014577b210acd.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9fa50ee8d2-ce9014577b210acd.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#13</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 19:28:44</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9f9e1fd1f4-50ce0ab807d2ddd1.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9f9e1fd1f4-50ce0ab807d2ddd1.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#14</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 19:27:44</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9f934e7841-3dacd4578ac063cf.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9f934e7841-3dacd4578ac063cf.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#15</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 19:22:56</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9f8aeb058c-fd6409a727f7bc89.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9f8aeb058c-fd6409a727f7bc89.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#16</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 19:22:18</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9f7ee8c3a5-9bee0c3d7b6b6aa6.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9f7ee8c3a5-9bee0c3d7b6b6aa6.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#17</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 19:19:24</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9f7cbc6687-28a53aca551564b4.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9f7cbc6687-28a53aca551564b4.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#18</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 19:13:38</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9f7230efe2-f0a1b20ffbaa3eba.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9f7230efe2-f0a1b20ffbaa3eba.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#19</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 19:02:53</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9f5dbf1052-8bbdedf53fe19429.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9f5dbf1052-8bbdedf53fe19429.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#20</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 18:56:41</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9f373c2ba0-7fcd32bb78dc95d0.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9f373c2ba0-7fcd32bb78dc95d0.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#21</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 18:53:22</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9f2117b452-6d8316ad7f22feb5.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9f2117b452-6d8316ad7f22feb5.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#22</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 18:46:43</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9f152eb562-179f8210720aad0b.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9f152eb562-179f8210720aad0b.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#23</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 18:45:30</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9efd694e30-e1e392103cbd3c37.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9efd694e30-e1e392103cbd3c37.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#24</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 18:41:59</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9ef046db6c-6d043c1e8af92d5b.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9ef046db6c-6d043c1e8af92d5b.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#25</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 18:26:25</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9eb902b943-be4e1a6fed2555ff.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9eb902b943-be4e1a6fed2555ff.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#26</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 18:17:39</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9e997833ab-04843d7eed7b8290.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9e997833ab-04843d7eed7b8290.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#27</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 09:41:50</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9e86deefb7-c9b2503a576c70dd.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9e86deefb7-c9b2503a576c70dd.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#28</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 09:16:07</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c97536cf2f6-f5eec0f66437ba4f.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c97536cf2f6-f5eec0f66437ba4f.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#29</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 08:22:13</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c965c700164-6ff9e536f6864797.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c965c700164-6ff9e536f6864797.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#30</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-26 08:24:51</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c830a019f5c-22de3fbebb3aa5f3.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c830a019f5c-22de3fbebb3aa5f3.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#31</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-24 09:56:59</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c3430162d94-3609233f2e7a7d46.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c3430162d94-3609233f2e7a7d46.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#32</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-23 12:57:00</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c325fcf371f-b53b77a438ed9c21.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c325fcf371f-b53b77a438ed9c21.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#33</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-23 11:17:54</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c20112b368a-a05f04fdf3bf830e.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c20112b368a-a05f04fdf3bf830e.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#34</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-23 00:54:58</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c1ff16a7a4c-51130ce35465035a.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c1ff16a7a4c-51130ce35465035a.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#35</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-22 09:46:03</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c0aa1e68b06-fc1ad451782d3e02.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c0aa1e68b06-fc1ad451782d3e02.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#36</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-22 09:38:29</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c0a902bf150-6733ddbbd13d337e.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c0a902bf150-6733ddbbd13d337e.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#37</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-09 12:04:02</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065b1a851d3faa-85121c50b8901173.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065b1a851d3faa-85121c50b8901173.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#38</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-08 22:38:46</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065b066b9e4e4d-02715a4cde9a063e.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065b066b9e4e4d-02715a4cde9a063e.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#39</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-08 10:23:03</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065afb510ff518-85c923e53a6e8e4e.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065afb510ff518-85c923e53a6e8e4e.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#40</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-07 16:21:25</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065af096667479-f6559e15597dec65.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065af096667479-f6559e15597dec65.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#41</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-07 09:56:39</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065ae2528594d1-fc5f02f6323595bf.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065ae2528594d1-fc5f02f6323595bf.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#42</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-06 18:39:42</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065adcbe0a4de2-c76a6e181bfb530a.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065adcbe0a4de2-c76a6e181bfb530a.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#43</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-06 02:01:10</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065acba9522787-1e633c0702a2075a.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065acba9522787-1e633c0702a2075a.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#44</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-10-07 11:15:37</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000.journal">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000.journal</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#45</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-30 16:52:43</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065cbec3955cd4-a7f2b832dc4e078d.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065cbec3955cd4-a7f2b832dc4e078d.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#46</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-30 15:29:46</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065cb0a2fd70dd-48bb6bc6c8b5003a.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065cb0a2fd70dd-48bb6bc6c8b5003a.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#47</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-30 12:16:48</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065cadc59a6e9a-824a79255ebe1bfa.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065cadc59a6e9a-824a79255ebe1bfa.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#48</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-30 12:15:12</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065cada5c7f293-e5f7e42c42cd75d1.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065cada5c7f293-e5f7e42c42cd75d1.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#49</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-30 11:52:25</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065cad9c995a65-e42e3fe487a1cbf7.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065cad9c995a65-e42e3fe487a1cbf7.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#50</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 19:41:02</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065ca2b0177f42-38a6317732624e6b.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065ca2b0177f42-38a6317732624e6b.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#51</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 19:40:09</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9fbf267c4a-4808ecc8bc84341c.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9fbf267c4a-4808ecc8bc84341c.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#52</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 19:38:51</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9fbbf44b6b-5c4820b33c03e240.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9fbbf44b6b-5c4820b33c03e240.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#53</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 19:37:03</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9fb73a4663-7996a54db8c4f7ac.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9fb73a4663-7996a54db8c4f7ac.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#54</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 19:34:45</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9fb15eaf38-6a64d3aed736efbf.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9fb15eaf38-6a64d3aed736efbf.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#55</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 19:33:36</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9fa8a4b1a4-868cca56e9017336.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9fa8a4b1a4-868cca56e9017336.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#56</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 19:31:40</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9fa496bdaa-99faf70995ddd18d.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9fa496bdaa-99faf70995ddd18d.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#57</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 19:28:45</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9f9d8af3bd-1aeb8c25a48d0268.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9f9d8af3bd-1aeb8c25a48d0268.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#58</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 19:27:44</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9f92b1d33a-263da1e623f0140e.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9f92b1d33a-263da1e623f0140e.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#59</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 19:22:57</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9f8a49e291-1d92fdbc64d031d1.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9f8a49e291-1d92fdbc64d031d1.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#60</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 19:22:19</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9f7e8264ed-51ffe9ce1e0352e6.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9f7e8264ed-51ffe9ce1e0352e6.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#61</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 19:19:29</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9f7c165179-6cb29af72c86bfc7.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9f7c165179-6cb29af72c86bfc7.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#62</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 19:13:39</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9f7185b39b-122990410bc5896b.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9f7185b39b-122990410bc5896b.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#63</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 19:02:53</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9f5d1f6c8a-2e95ec794147eebd.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9f5d1f6c8a-2e95ec794147eebd.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#64</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 18:56:41</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9f3695af8d-d3153563d07c037e.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9f3695af8d-d3153563d07c037e.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#65</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 18:53:24</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9f206c15c2-22e1d6c3bd139265.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9f206c15c2-22e1d6c3bd139265.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#66</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 18:46:44</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9f144ce29e-2e23a398d70aa841.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9f144ce29e-2e23a398d70aa841.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#67</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 18:45:33</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9efca16f83-ceeef571037d8aae.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9efca16f83-ceeef571037d8aae.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#68</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 18:42:02</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9eef73664b-68c4dedd56c0533a.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9eef73664b-68c4dedd56c0533a.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#69</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 18:37:09</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9ede533b61-2201651237c82f2c.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9ede533b61-2201651237c82f2c.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#70</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 18:31:25</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9ec948c275-966b976bb9bdd15b.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9ec948c275-966b976bb9bdd15b.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#71</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 18:26:28</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9eb7fb62f3-2e7d87ecb2f77495.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9eb7fb62f3-2e7d87ecb2f77495.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#72</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 18:17:42</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9e9878796b-156c3e17e82c79e7.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9e9878796b-156c3e17e82c79e7.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#73</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 09:41:52</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9e85af8c1f-980bb791d4a45c35.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9e85af8c1f-980bb791d4a45c35.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#74</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 09:16:10</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9752cea6d2-d6fe68a9a7c7d6fb.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c9752cea6d2-d6fe68a9a7c7d6fb.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#75</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-29 08:22:21</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c965b82b1a5-9db4f0b1d4098d61.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c965b82b1a5-9db4f0b1d4098d61.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#76</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-28 10:32:30</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c964418f902-ee68daf87c5ab910.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c964418f902-ee68daf87c5ab910.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#77</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-26 08:24:51</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c83081d0675-3f7b4834c71b6575.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c83081d0675-3f7b4834c71b6575.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#78</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-24 09:57:00</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c342f557d54-e83ebe3f8363e0e0.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c342f557d54-e83ebe3f8363e0e0.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#79</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-23 12:57:01</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c325ea59a2d-e57349d55a663fb5.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c325ea59a2d-e57349d55a663fb5.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#80</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-23 12:09:35</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c215d0809b2-b947708f9456c1d7.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c215d0809b2-b947708f9456c1d7.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#81</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-23 11:17:54</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c2010ac26c0-4760bb4d8ba7c2e2.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c2010ac26c0-4760bb4d8ba7c2e2.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#82</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-23 00:54:59</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c1ff052037a-dfd051e4040f1c0a.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c1ff052037a-dfd051e4040f1c0a.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#83</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-23 00:41:23</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c1722a0edd9-139129403d1d5ff8.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c1722a0edd9-139129403d1d5ff8.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#84</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-22 23:51:57</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c16c4df847d-53e10fe41449db45.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c16c4df847d-53e10fe41449db45.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#85</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-22 09:46:04</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c0aa125cd16-816a93ec50ea5c68.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c0aa125cd16-816a93ec50ea5c68.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#86</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-22 09:38:31</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c0a8f9d7992-55ab87dc26a185f6.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c0a8f9d7992-55ab87dc26a185f6.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#87</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-22 08:56:25</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c09f0d36982-992959a07628edd1.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c09f0d36982-992959a07628edd1.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#88</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-21 09:54:28</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c09d8825f85-87a58b7a9a5c2863.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065c09d8825f85-87a58b7a9a5c2863.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#89</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-10 23:55:43</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065bf694c139a4-bed904c6cd25fae9.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065bf694c139a4-bed904c6cd25fae9.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#90</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-10 20:05:00</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065b24578a7f58-708337904cf5371e.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065b24578a7f58-708337904cf5371e.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#91</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-10 18:34:35</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065b213dc0aef9-ae6a57e8bfea5f34.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065b213dc0aef9-ae6a57e8bfea5f34.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#92</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-09 12:04:03</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065b1a8474fa67-8bade00b74810f92.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065b1a8474fa67-8bade00b74810f92.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#93</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-08 22:38:46</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065b066acd67f8-20b2575eadb6505a.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065b066acd67f8-20b2575eadb6505a.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#94</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-08 10:23:04</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065afb501703dc-a9e025994b9fdbd0.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065afb501703dc-a9e025994b9fdbd0.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#95</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-07 16:43:35</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065af095bbe38d-331fa7cfcf54a0aa.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065af095bbe38d-331fa7cfcf54a0aa.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#96</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-07 16:22:03</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065ae26aab4dd2-c96e0bfbfb481450.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065ae26aab4dd2-c96e0bfbfb481450.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#97</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-07 16:01:10</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065ae25138e347-91a49203cbdb3dea.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065ae25138e347-91a49203cbdb3dea.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#98</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-07 09:56:43</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065ae21c59654f-043c0af618687a70.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065ae21c59654f-043c0af618687a70.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#99</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-06 18:39:43</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065adcbcf10fe9-50d1630dbc479d57.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065adcbcf10fe9-50d1630dbc479d57.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#100</td>
+            <td class="size-cell"><strong>8.00 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>root:systemd-journal</td>
+            <td class="time-cell">2026-09-06 02:01:10</td>
+            <td class="path-cell" title="/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065acba855aec4-162a96f2f31f8527.journal~">/var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system@00065acba855aec4-162a96f2f31f8527.journal~</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#101</td>
+            <td class="size-cell"><strong>4.97 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>syslog:adm</td>
+            <td class="time-cell">2026-10-07 10:45:11</td>
+            <td class="path-cell" title="/var/log/syslog.1">/var/log/syslog.1</td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#102</td>
+            <td class="size-cell"><strong>2.14 MB</strong></td>
+            <td><code>-rw-r-----</code></td>
+            <td>syslog:adm</td>
+            <td class="time-cell">2026-10-07 10:42:13</td>
+            <td class="path-cell" title="/var/log/kern.log.1">/var/log/kern.log.1</td>
+        </tr>
+        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- REMEDIATION & BEST PRACTICES -->
+        <div class="section-box">
+            <div class="section-header">
+                <h2>🛠️ Storage Remediation & Triage Recommendations</h2>
+            </div>
+            <div class="remediation-box">
+                <p><strong>Recommended Actions for Discovered Large Files:</strong></p>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                    <li><strong>Journal Logs:</strong> If <code>/var/log/journal</code> files are accumulating, vacuum old journal archives: <code>sudo journalctl --vacuum-size=200M</code> or <code>sudo journalctl --vacuum-time=7d</code>.</li>
+                    <li><strong>Log Rotation:</strong> Ensure <code>logrotate</code> is configured with compression enabled (<code>compress</code> and <code>rotate 4</code> in <code>/etc/logrotate.conf</code>).</li>
+                    <li><strong>Core Dumps & Temporary Files:</strong> Clean stale core dumps using <code>coredumpctl</code> or delete orphaned crash traces.</li>
+                    <li><strong>Database Exports & Archives:</strong> Move SQL dumps or raw backups to external secondary storage or cold object storage (S3/Glacier).</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- LIVE EXECUTION AUDIT LOG -->
+        <div class="section-box">
+            <div class="section-header">
+                <h2>💻 Console Execution Output</h2>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">2026-10-07 11:34:25 IST</span>
+            </div>
+            <pre class="terminal-log">[36m[1m================================================================================[0m
+[36m[1m         STORAGE MANAGEMENT: LARGE FILE DETECTION ENGINE (AS_08)                 [0m
+[36m[1m================================================================================[0m
+ Target Directory : [1m/var/log[0m
+ Size Threshold   : [1m&gt; 1M[0m
+ Display Limit    : Top 20 largest matching file(s)
+ Hostname         : SP
+ Timestamp        : 2026-10-07 11:34:15 IST
+[36m--------------------------------------------------------------------------------[0m
+[INFO] Matching files found: [1m102[0m
+[INFO] Cumulative storage  : [1m815.12 MB[0m (854710474 bytes)
+[36m--------------------------------------------------------------------------------[0m
+[1mRANK SIZE         PERMS      OWNER        GROUP        MODIFIED         LOCATION / FILE PATH[0m
+--------------------------------------------------------------------------------
+#1   [33m16.00 MB    [0m -rw-r----- root         systemd-journal 2026-10-07 11:26:30 /var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/system.journal
+#2   [33m8.00 MB     [0m -rw-r----- root         systemd-journal 2026-09-30 16:52:40 /var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065cbec4038c0d-9550ca0d7cfc2afe.journal~
+#3   [33m8.00 MB     [0m -rw-r----- root         systemd-journal 2026-09-30 15:29:29 /var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065cb0a3c6fabe-d5aa63d3ee2e9e7a.journal~
+#4   [33m8.00 MB     [0m -rw-r----- root         systemd-journal 2026-09-30 12:15:08 /var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065cada736520c-465196982ab40624.journal~
+#5   [33m8.00 MB     [0m -rw-r----- root         systemd-journal 2026-09-30 11:52:24 /var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065cad9db3358e-60315468b4717ffa.journal~
+#6   [33m8.00 MB     [0m -rw-r----- root         systemd-journal 2026-09-29 19:41:01 /var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065ca2b0f340cc-506abee1558caa1d.journal~
+#7   [33m8.00 MB     [0m -rw-r----- root         systemd-journal 2026-09-29 19:40:09 /var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9fbf963245-4151486aa9cae068.journal~
+#8   [33m8.00 MB     [0m -rw-r----- root         systemd-journal 2026-09-29 19:38:50 /var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9fbc8a6b45-c24e2e6b606f33e9.journal~
+#9   [33m8.00 MB     [0m -rw-r----- root         systemd-journal 2026-09-29 19:37:03 /var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9fb7e00f44-878b8404f9d83be1.journal~
+#10  [33m8.00 MB     [0m -rw-r----- root         systemd-journal 2026-09-29 19:34:45 /var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9fb1dd1fc0-5aa60d0685a3ac50.journal~
+#11  [33m8.00 MB     [0m -rw-r----- root         systemd-journal 2026-09-29 19:33:35 /var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9fa93d8fc2-92c9b4d5fa6f1d35.journal~
+#12  [33m8.00 MB     [0m -rw-r----- root         systemd-journal 2026-09-29 19:31:39 /var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9fa50ee8d2-ce9014577b210acd.journal~
+#13  [33m8.00 MB     [0m -rw-r----- root         systemd-journal 2026-09-29 19:28:44 /var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9f9e1fd1f4-50ce0ab807d2ddd1.journal~
+#14  [33m8.00 MB     [0m -rw-r----- root         systemd-journal 2026-09-29 19:27:44 /var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9f934e7841-3dacd4578ac063cf.journal~
+#15  [33m8.00 MB     [0m -rw-r----- root         systemd-journal 2026-09-29 19:22:56 /var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9f8aeb058c-fd6409a727f7bc89.journal~
+#16  [33m8.00 MB     [0m -rw-r----- root         systemd-journal 2026-09-29 19:22:18 /var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9f7ee8c3a5-9bee0c3d7b6b6aa6.journal~
+#17  [33m8.00 MB     [0m -rw-r----- root         systemd-journal 2026-09-29 19:19:24 /var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9f7cbc6687-28a53aca551564b4.journal~
+#18  [33m8.00 MB     [0m -rw-r----- root         systemd-journal 2026-09-29 19:13:38 /var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9f7230efe2-f0a1b20ffbaa3eba.journal~
+#19  [33m8.00 MB     [0m -rw-r----- root         systemd-journal 2026-09-29 19:02:53 /var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9f5dbf1052-8bbdedf53fe19429.journal~
+#20  [33m8.00 MB     [0m -rw-r----- root         systemd-journal 2026-09-29 18:56:41 /var/log/journal/142dcae1c8d14e47b5bb0bb851fd23b9/user-1000@00065c9f373c2ba0-7fcd32bb78dc95d0.journal~
+[36m... and 82 more file(s) exceeding threshold (view report.html for full inventory).[0m
+[36m--------------------------------------------------------------------------------[0m
+[1mDETECTION SUMMARY:[0m
+  Files Exceeding 1M: [1m102[0m file(s)
+  Total Space Consumed   : [1m815.12 MB[0m
+  Telemetry JSON File    : [36m/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_08/logs/large_files.json[0m
+  Persistent Audit Log   : [36m/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_08/logs/large_files.log[0m
+[36m================================================================================[0m</pre>
+        </div>
+
+        <footer>
+            Automated Linux System Administration Sprint &bull; Problem AS_08 &bull; Generated on 2026-10-07 11:34:25 IST
+        </footer>
+    </div>
+</body>
+</html>

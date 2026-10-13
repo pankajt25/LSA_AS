@@ -1,0 +1,26 @@
+{
+  "problem_id": "AS_13",
+  "title": "Failed Login Audit",
+  "timestamp": "2026-10-07 12:32:50 IST",
+  "timestamp_epoch": 1791356570,
+  "hostname": "SP",
+  "log_file": "/var/log/auth.log",
+  "log_source_type": "REAL_SYSTEM_AUTH_LOG",
+  "total_failed_logins": 0,
+  "unique_offending_ips": 0,
+  "targeted_user_count": 0,
+  "invalid_user_attempts": 0,
+  "valid_user_attempts": 0,
+  "failure_types": {
+    "password": 0,
+    "publickey": 0,
+    "other": 0
+  },
+  "status": "CLEAN",
+  "top_offending_ips": [
+    
+  ],
+  "top_targeted_users": [
+    
+  ]
+}

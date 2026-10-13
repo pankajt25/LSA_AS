@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP Configuration Report — AS_23 (E1ITA307)</title>
+    <style>
+        :root {
+            --bg-base: #0b1120;
+            --bg-card: #131d35;
+            --bg-card-alt: #1a2744;
+            --bg-hover: #1e2e54;
+            --border-dim: #233252;
+            --border-bright: #3b507d;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-cyan: #38bdf8;
+            --accent-blue: #3b82f6;
+            --accent-emerald: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-red: #ef4444;
+            --accent-purple: #a855f7;
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            line-height: 1.5;
+            padding: 24px;
+        }
+
+        .container {
+            max-width: 1320px;
+            margin: 0 auto;
+        }
+
+        /* Header Card */
+        .header-card {
+            background: linear-gradient(135deg, #131d35 0%, #172547 50%, #0f172a 100%);
+            border: 1px solid var(--border-bright);
+            border-radius: 14px;
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue), var(--accent-emerald));
+        }
+
+        .header-top {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+
+        .badges-cluster {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .badge-cyan {
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+
+        .badge-green {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-emerald);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .badge-amber {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--accent-amber);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .badge-purple {
+            background: rgba(168, 85, 247, 0.15);
+            color: var(--accent-purple);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+
+        .header-title {
+            font-size: 1.95rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            margin-bottom: 6px;
+        }
+
+        .header-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 18px;
+        }
+
+        .meta-strip {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: 14px;
+        }
+
+        .meta-item strong {
+            color: #e2e8f0;
+        }
+
+        /* Summary Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .summary-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-dim);
+            border-radius: 12px;
+            padding: 20px;
+            transition: transform 0.15s ease, border-color 0.15s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--border-bright);
+        }
+
+        .card-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-value {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 6px;
+            font-family: var(--font-mono);
+            word-break: break-all;
+        }
+
+        .card-subtext {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Section Layout */
+        .section-box {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-dim);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-dim);
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Table Styling */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--bg-card-alt);
+            color: var(--text-secondary);
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border-dim);
+        }
+
+        td {
+            padding: 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            vertical-align: middle;
+        }
+
+        tr:hover td {
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        .cell-ifname {
+            font-family: var(--font-mono);
+            font-size: 1rem;
+        }
+
+        .if-type-sub {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-family: var(--font-sans);
+            margin-top: 2px;
+        }
+
+        .mac-code {
+            font-family: var(--font-mono);
+            color: var(--accent-cyan);
+            background: rgba(56, 189, 248, 0.08);
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+        }
+
+        .mtu-val {
+            font-family: var(--font-mono);
+            color: #e2e8f0;
+            font-weight: 600;
+        }
+
+        .code-pill {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 0.82rem;
+            padding: 2px 8px;
+            border-radius: 6px;
+            margin: 2px 2px 2px 0;
+            font-weight: 500;
+        }
+
+        .ipv4-pill {
+            background: rgba(16, 185, 129, 0.12);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.25);
+        }
+
+        .ipv6-pill {
+            background: rgba(168, 85, 247, 0.12);
+            color: #c084fc;
+            border: 1px solid rgba(168, 85, 247, 0.25);
+        }
+
+        .dns-chip {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 8px;
+            padding: 4px 10px;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            margin-right: 6px;
+            margin-bottom: 6px;
+        }
+
+        /* Two Column Layout */
+        .two-col-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        /* Tech Details List */
+        .tech-list {
+            list-style: none;
+        }
+
+        .tech-item {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .tech-item:last-child {
+            border-bottom: none;
+        }
+
+        .tech-key {
+            color: var(--text-secondary);
+        }
+
+        .tech-val {
+            color: #f1f5f9;
+            font-family: var(--font-mono);
+            font-weight: 600;
+        }
+
+        /* Comparison Matrix */
+        .comp-table th {
+            background-color: #17223b;
+        }
+
+        .comp-table td {
+            font-size: 0.85rem;
+        }
+
+        .tag-modern {
+            color: var(--accent-emerald);
+            font-weight: 700;
+        }
+
+        .tag-legacy {
+            color: var(--accent-amber);
+            font-weight: 700;
+        }
+
+        /* Terminal Console Box */
+        .terminal-box {
+            background-color: #030712;
+            border: 1px solid #1f2937;
+            border-radius: 10px;
+            padding: 18px;
+            font-family: var(--font-mono);
+            font-size: 0.82rem;
+            color: #cbd5e1;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            max-height: 400px;
+            line-height: 1.45;
+        }
+
+        /* Audit File Items */
+        .report-file-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 12px;
+            background: var(--bg-card-alt);
+            border-radius: 6px;
+            margin-bottom: 6px;
+            font-size: 0.85rem;
+        }
+
+        .report-file-name {
+            font-family: var(--font-mono);
+            color: #e2e8f0;
+        }
+
+        .report-file-meta {
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 24px 0 12px 0;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border-dim);
+            margin-top: 24px;
+        }
+
+        .text-center { text-align: center; }
+        .text-muted { color: var(--text-muted); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Banner -->
+        <header class="header-card">
+            <div class="header-top">
+                <div class="badges-cluster">
+                    <span class="badge badge-cyan">Course: E1ITA307</span>
+                    <span class="badge badge-purple">Sprint: AS_23</span>
+                    <span class="badge badge-green">Status: Live Audit Active</span>
+                    <span class="badge badge-amber">Engine: iproute2 (ip)</span>
+                </div>
+                <div style="font-size: 0.82rem; color: var(--text-muted); font-family: var(--font-mono);">
+                    ID: 00944bd8-5d05-4b17-aa54-cdfbae1eaad5
+                </div>
+            </div>
+            <h1 class="header-title">IP Configuration &amp; Network Interface Audit</h1>
+            <p class="header-subtitle">
+                Real-time kernel telemetry capturing local host identity, routing vectors, hardware MAC bindings, MTU boundaries, and DNS resolvers via netlink sockets.
+            </p>
+            <div class="meta-strip">
+                <div class="meta-item">Timestamp: <strong>2026-09-30 11:33:35 IST</strong></div>
+                <div class="meta-item">Host Platform: <strong>Ubuntu 26.04.1 LTS</strong></div>
+                <div class="meta-item">Kernel: <strong>6.18.33.2-microsoft-standard-WSL2</strong></div>
+                <div class="meta-item">Architecture: <strong>x86_64</strong></div>
+            </div>
+        </header>
+
+        <!-- Summary Cards Grid -->
+        <div class="cards-grid">
+            <!-- Card 1: Hostname -->
+            <div class="summary-card">
+                <div class="card-label">
+                    <span>Host Identity</span>
+                    <span>💻</span>
+                </div>
+                <div class="card-value" style="color: var(--accent-cyan);">SP</div>
+                <div class="card-subtext">All IPs: <code>192.168.42.183</code></div>
+            </div>
+
+            <!-- Card 2: Primary IPv4 -->
+            <div class="summary-card">
+                <div class="card-label">
+                    <span>Primary IPv4 Address</span>
+                    <span>📡</span>
+                </div>
+                <div class="card-value" style="color: var(--accent-emerald);">192.168.42.183/20</div>
+                <div class="card-subtext">Bound to interface: <strong>eth0</strong></div>
+            </div>
+
+            <!-- Card 3: Default Gateway -->
+            <div class="summary-card">
+                <div class="card-label">
+                    <span>Default Gateway</span>
+                    <span>🌐</span>
+                </div>
+                <div class="card-value" style="color: #60a5fa;">192.168.32.1</div>
+                <div class="card-subtext">Egress Dev: <strong>eth0</strong> (Proto: kernel)</div>
+            </div>
+
+            <!-- Card 4: Active Interfaces -->
+            <div class="summary-card">
+                <div class="card-label">
+                    <span>Active Interfaces</span>
+                    <span>🔌</span>
+                </div>
+                <div class="card-value" style="color: var(--accent-amber);">2 <small style="font-size: 0.9rem; color: var(--text-muted);">UP</small></div>
+                <div class="card-subtext">1 Physical/Virtual &bull; 1 Loopback</div>
+            </div>
+        </div>
+
+        <!-- Active Network Interfaces Table -->
+        <div class="section-box">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span>Active Network Interfaces &amp; Address Bindings</span>
+                </h2>
+                <span class="badge badge-cyan">2 Interfaces Detected</span>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Interface / Type</th>
+                            <th>Oper State</th>
+                            <th>MAC Hardware Address</th>
+                            <th>MTU Limit</th>
+                            <th>IPv4 Address / CIDR</th>
+                            <th>IPv6 Address / CIDR</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+    <tr>
+        <td class="cell-ifname">
+            <strong>lo</strong>
+            <div class="if-type-sub">Loopback</div>
+        </td>
+        <td><span class="badge badge-amber">UNKNOWN</span></td>
+        <td><code class="mac-code">00:00:00:00:00:00</code></td>
+        <td><span class="mtu-val">65536 <small>bytes</small></span></td>
+        <td><span class="code-pill ipv4-pill">127.0.0.1/8</span> <span class="code-pill ipv4-pill">10.255.255.254/32</span> </td>
+        <td><span class="code-pill ipv6-pill">::1/128</span> </td>
+    </tr>
+    
+
+    <tr>
+        <td class="cell-ifname">
+            <strong>eth0</strong>
+            <div class="if-type-sub">Physical Ethernet</div>
+        </td>
+        <td><span class="badge badge-green">UP</span></td>
+        <td><code class="mac-code">00:15:5d:bb:c0:36</code></td>
+        <td><span class="mtu-val">1500 <small>bytes</small></span></td>
+        <td><span class="code-pill ipv4-pill">192.168.42.183/20</span> </td>
+        <td><span class="code-pill ipv6-pill">fe80::215:5dff:febb:c036/64</span> </td>
+    </tr>
+    
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Two Column Deep Dive: Routing & DNS -->
+        <div class="two-col-grid">
+            <!-- Box A: Routing & Gateway Details -->
+            <div class="section-box">
+                <div class="section-header">
+                    <h3 class="section-title">🛣️ Routing Table Telemetry</h3>
+                    <span class="badge badge-green">FIB Active</span>
+                </div>
+                <ul class="tech-list">
+                    <li class="tech-item">
+                        <span class="tech-key">Default Gateway IP</span>
+                        <span class="tech-val">192.168.32.1</span>
+                    </li>
+                    <li class="tech-item">
+                        <span class="tech-key">Egress Interface</span>
+                        <span class="tech-val">eth0</span>
+                    </li>
+                    <li class="tech-item">
+                        <span class="tech-key">Routing Protocol</span>
+                        <span class="tech-val">kernel</span>
+                    </li>
+                    <li class="tech-item">
+                        <span class="tech-key">Route Metric Priority</span>
+                        <span class="tech-val">N/A</span>
+                    </li>
+                    <li class="tech-item">
+                        <span class="tech-key">Raw Route Directive</span>
+                        <span class="tech-val" style="font-size: 0.78rem;">default via 192.168.32.1 dev eth0 proto kernel </span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Box B: DNS Resolver Configuration -->
+            <div class="section-box">
+                <div class="section-header">
+                    <h3 class="section-title">🔎 DNS Resolver Directives</h3>
+                    <span class="badge badge-purple">Resolver Active</span>
+                </div>
+                <div style="margin-bottom: 14px;">
+                    <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; font-weight: 700;">Configured Nameservers</div>
+                    <div><span class="dns-chip">🌐 10.255.255.254</span> </div>
+                </div>
+                <ul class="tech-list">
+                    <li class="tech-item">
+                        <span class="tech-key">Search Domains</span>
+                        <span class="tech-val">ALLIANCEBLR.COM</span>
+                    </li>
+                    <li class="tech-item">
+                        <span class="tech-key">Configuration Source</span>
+                        <span class="tech-val">/etc/resolv.conf</span>
+                    </li>
+                    <li class="tech-item">
+                        <span class="tech-key">Resolution Mode</span>
+                        <span class="tech-val">System Stub / Dynamic</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Architectural Comparison Matrix: iproute2 vs net-tools -->
+        <div class="section-box">
+            <div class="section-header">
+                <h3 class="section-title">⚖️ Architectural Rationale: iproute2 (ip) vs Legacy net-tools (ifconfig/route)</h3>
+                <span class="badge badge-amber">Engineering Deep Dive</span>
+            </div>
+            <div class="table-responsive">
+                <table class="comp-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 20%;">Architectural Metric</th>
+                            <th style="width: 40%;">Modern iproute2 (<code>ip</code> suite)</th>
+                            <th style="width: 40%;">Legacy net-tools (<code>ifconfig</code> / <code>route</code>)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Kernel Communication</strong></td>
+                            <td><span class="tag-modern">AF_NETLINK Sockets:</span> High-throughput, asynchronous, event-driven kernel datagram communication.</td>
+                            <td><span class="tag-legacy">Synchronous ioctl():</span> Slow, inflexible system calls incapable of conveying rich modern link state.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Multi-IP Handling</strong></td>
+                            <td><span class="tag-modern">Native First-Class Objects:</span> Dozens of addresses bind directly to a single link without artificial alias syntax.</td>
+                            <td><span class="tag-legacy">Archaic Alias Hack:</span> Required virtual sub-interfaces (<code>eth0:0</code>, <code>eth0:1</code>); hides secondary unlabeled IPs.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Subnet Representation</strong></td>
+                            <td><span class="tag-modern">Native CIDR Notation:</span> Standard prefix length notation (<code>/24</code>, <code>/20</code>, <code>/64</code>) used universally.</td>
+                            <td><span class="tag-legacy">Dotted Decimal Masks:</span> Verbose <code>netmask 255.255.255.0</code> inherited from legacy classful era.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Namespaces &amp; Containers</strong></td>
+                            <td><span class="tag-modern">Complete Netns Integration:</span> Full control of virtual ethernet, network namespaces, bridges, and VRFs.</td>
+                            <td><span class="tag-legacy">Zero Namespace Awareness:</span> Incapable of inspecting or isolating containerized networking environments.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Policy Routing &amp; FIB</strong></td>
+                            <td><span class="tag-modern">Policy Routing (PBR):</span> Manages multiple routing tables, traffic selectors, metrics, and multipath rules.</td>
+                            <td><span class="tag-legacy">Single Static Table:</span> Strictly limited to the default kernel destination routing table.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Distribution Status</strong></td>
+                            <td><span class="tag-modern">Default Standard:</span> Actively developed in lockstep with the Linux kernel across all enterprise distributions.</td>
+                            <td><span class="tag-legacy">Deprecated:</span> Officially deprecated in ~2009; omitted from Ubuntu, Debian, RHEL, and Fedora default installs.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Terminal Output Log Box -->
+        <div class="section-box">
+            <div class="section-header">
+                <h3 class="section-title">🖥️ Live Terminal Execution Capture</h3>
+                <span class="badge badge-cyan">CLI Output</span>
+            </div>
+            <div class="terminal-box">================================================================================
+        LINUX SYSTEM ADMINISTRATION (E1ITA307) — IP CONFIGURATION REPORT        
+================================================================================
+Generated On : 2026-09-30 11:33:35 IST
+Operating Sys: Ubuntu 26.04.1 LTS (Kernel: 6.18.33.2-microsoft-standard-WSL2, Arch: x86_64)
+Query Engine : iproute2 (ip)
+
+--- [1] HOST IDENTIFICATION &amp; IP SUMMARY ---------------------------------------
+  Hostname        : SP
+  Assigned IPs    : 192.168.42.183
+  Primary IPv4    : 192.168.42.183/20 (on interface: eth0)
+
+--- [2] DEFAULT GATEWAY &amp; ROUTING TABLE ----------------------------------------
+  Default Gateway : 192.168.32.1
+  Egress Interface: eth0
+  Protocol/Metric : kernel (metric: N/A)
+  Route Directive : default via 192.168.32.1 dev eth0 proto kernel 
+
+--- [3] DNS RESOLUTION CONFIGURATION -------------------------------------------
+  Nameservers     : 10.255.255.254
+  Search Domains  : ALLIANCEBLR.COM
+  Source File     : /etc/resolv.conf
+
+--- [4] ACTIVE NETWORK INTERFACES (2 Detected) ---------------------------
+  INTERFACE  STATE    MAC ADDRESS        MTU    IPv4 ADDRESS / CIDR       TYPE                
+  --------------------------------------------------------------------------------
+  lo         UNKNOWN  00:00:00:00:00:00  65536  127.0.0.1/8               Loopback            
+  eth0       UP       00:15:5d:bb:c0:36  1500   192.168.42.183/20         Physical Ethernet   
+
+Detailed Interface Breakdown:
+  * Interface [lo]:
+      Type       : Loopback
+      Oper State : UNKNOWN
+      Hardware/MAC: 00:00:00:00:00:00
+      MTU Payload: 65536 bytes
+      IPv4 / CIDR: 127.0.0.1/8,10.255.255.254/32
+      IPv6 / CIDR: ::1/128
+  * Interface [eth0]:
+      Type       : Physical Ethernet
+      Oper State : UP
+      Hardware/MAC: 00:15:5d:bb:c0:36
+      MTU Payload: 1500 bytes
+      IPv4 / CIDR: 192.168.42.183/20
+      IPv6 / CIDR: fe80::215:5dff:febb:c036/64
+
+--- [5] ARCHITECTURAL NOTE: MODERN iproute2 VS LEGACY net-tools --------------
+  * Protocol Standard : iproute2 communicates via Netlink sockets (AF_NETLINK),
+                        avoiding legacy synchronous ioctl() overhead.
+  * Subnet Semantics  : Native CIDR prefix notation (/24, /20, /64) replaces
+                        archaic dotted classful/classless netmasks.
+  * Multi-IP Support  : Multiple IP addresses per device are first-class objects,
+                        eliminating fragile sub-interface aliases (eth0:1).
+  * Deprecation Status: net-tools (ifconfig/route) was deprecated in ~2009 and
+                        is omitted by default in modern enterprise Linux.
+================================================================================
+
+[OK] Network configuration report saved to: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_23/reports/ip_report_20260930_113335.txt
+     Latest symlink/pointer updated at : /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_23/reports/latest_ip_report.txt</div>
+        </div>
+
+        <!-- Historical Reports Audit Trail -->
+        <div class="section-box">
+            <div class="section-header">
+                <h3 class="section-title">📁 Generated Audit Reports (Inside <code>reports/</code>)</h3>
+                <span class="badge badge-purple">7 Saved Runs</span>
+            </div>
+            <div>
+                
+    <div class="report-file-item">
+        <span class="report-file-name">📄 ip_report_20260930_113335.txt</span>
+        <span class="report-file-meta">2738 B</span>
+    </div>
+    
+    <div class="report-file-item">
+        <span class="report-file-name">📄 ip_report_20260930_113215.txt</span>
+        <span class="report-file-meta">2738 B</span>
+    </div>
+    
+    <div class="report-file-item">
+        <span class="report-file-name">📄 ip_report_20260930_113132.txt</span>
+        <span class="report-file-meta">2738 B</span>
+    </div>
+    
+    <div class="report-file-item">
+        <span class="report-file-name">📄 ip_report_20260930_113041.txt</span>
+        <span class="report-file-meta">2738 B</span>
+    </div>
+    
+    <div class="report-file-item">
+        <span class="report-file-name">📄 ip_report_20260930_112927.txt</span>
+        <span class="report-file-meta">2738 B</span>
+    </div>
+    
+    <div class="report-file-item">
+        <span class="report-file-name">📄 ip_report_20260930_112830.txt</span>
+        <span class="report-file-meta">2738 B</span>
+    </div>
+    
+    <div class="report-file-item">
+        <span class="report-file-name">📄 ip_report_20260930_112741.txt</span>
+        <span class="report-file-meta">2738 B</span>
+    </div>
+    
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p><strong>Course:</strong> Linux System Administration (E1ITA307) &bull; Automation Sprint AS_23 &bull; IP Configuration Report</p>
+            <p style="margin-top: 4px; font-size: 0.8rem;">Live Network Telemetry captured via <code>iproute2</code>. Report auto-regenerated from live system state on every run.</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,7 @@
+Sep 23 10:00:01 host kernel: INFO: system boot complete
+Sep 23 10:01:15 host app: ERROR: failed to connect to database
+Sep 23 10:02:03 host app: WARNING: low memory detected
+Sep 23 10:03:44 host app: CRITICAL: disk write failure on /dev/sdb1
+Sep 23 10:04:10 host cron: INFO: job completed successfully
+Sep 23 10:05:59 host app: ERROR: authentication failed for user admin
+Sep 23 10:06:20 host app: FATAL: service crashed unexpectedly

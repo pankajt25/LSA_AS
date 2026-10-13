@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AS_37: Cron-Based Automated Project Backup</title>
+    <style>
+        :root {
+            --bg-primary: #0b0f19;
+            --bg-secondary: #111827;
+            --bg-card: #192231;
+            --bg-card-hover: #1f2c40;
+            --border-color: #28374d;
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            --text-muted: #6b7280;
+            --accent-cyan: #06b6d4;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-purple: #8b5cf6;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 30px 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            background: linear-gradient(135deg, #111c30 0%, #1e293b 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .header-title h1 {
+            font-size: 26px;
+            font-weight: 700;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .badge-sprint {
+            background: rgba(6, 182, 212, 0.15);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            font-size: 13px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+        .header-subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-top: 6px;
+        }
+        .status-pill {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-green);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .status-pill::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 8px var(--accent-green);
+        }
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            margin-bottom: 28px;
+        }
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(6, 182, 212, 0.4);
+        }
+        .card-label {
+            font-size: 13px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+        .card-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+        .card-sub {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .section-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .cron-box {
+            background: #0f1623;
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            padding: 16px;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            font-size: 14px;
+            color: #38bdf8;
+            overflow-x: auto;
+            margin-bottom: 16px;
+        }
+        .tasks-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        .tasks-table th {
+            background: #111827;
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-align: left;
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .tasks-table td {
+            padding: 14px;
+            border-bottom: 1px solid rgba(39, 53, 79, 0.5);
+            vertical-align: middle;
+        }
+        .tasks-table tr:last-child td {
+            border-bottom: none;
+        }
+        .task-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .badge-success {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-green);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        .hash-code {
+            font-family: "SFMono-Regular", Consolas, monospace;
+            font-size: 12px;
+            background: #0f172a;
+            padding: 4px 8px;
+            border-radius: 4px;
+            color: var(--accent-cyan);
+            word-break: break-all;
+        }
+        .log-terminal {
+            background: #05080f;
+            border: 1px solid #1a2233;
+            border-radius: 8px;
+            padding: 16px;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            font-size: 13px;
+            color: #e2e8f0;
+            max-height: 380px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            line-height: 1.5;
+        }
+        .footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-top: 36px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-title">
+                <h1>
+                    <span>📦 Cron-Based Automated Project Backup</span>
+                    <span class="badge-sprint">AS_37</span>
+                </h1>
+                <div class="header-subtitle">Linux System Administration (E1ITA307) • Cron & Backup Automation</div>
+            </div>
+            <div class="header-meta">
+                <div class="status-pill">CRON BACKUP VERIFIED</div>
+            </div>
+        </header>
+
+        <!-- Metric Cards -->
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-label">Cron Schedule</div>
+                <div class="card-value" style="color: var(--accent-cyan); font-size: 20px;">0 1 * * *</div>
+                <div class="card-sub">Nightly at 01:00 AM System Time</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Target Project</div>
+                <div class="card-value" style="font-size: 20px;">my_project</div>
+                <div class="card-sub">3 files • 438 bytes</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Archive Footprint</div>
+                <div class="card-value" style="color: var(--accent-green);">585 B</div>
+                <div class="card-sub">Format: GZ Tarball</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Integrity & Checksum</div>
+                <div class="card-value" style="color: var(--accent-green);">100% OK</div>
+                <div class="card-sub">tar -tzf passed & SHA-256 written</div>
+            </div>
+        </div>
+
+        <!-- Section 1: Cron Automation Registration -->
+        <div class="section-box">
+            <div class="section-header">
+                <div class="section-title">
+                    <span>⏰</span> Cron Schedule Registration & Automation Policy
+                </div>
+            </div>
+            <p style="color: var(--text-secondary); margin-bottom: 12px; font-size: 14px;">
+                The scheduled backup job is active in the user's crontab with automatic logging and the required safety tag:
+            </p>
+            <div class="cron-box">0 1 * * * /bin/bash &quot;/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_37/scheduled_backup.sh&quot; --source &quot;/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_37/sandbox_data/my_project&quot; --destination &quot;/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_37/backups&quot; &gt;&gt; &quot;/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_37/logs/cron_backup.log&quot; 2&gt;&amp;1 # LSA_SPRINT_TEST</div>
+            <div style="font-size: 13px; color: var(--text-muted); display: flex; gap: 20px; flex-wrap: wrap;">
+                <div>🏷️ <strong>Safety Tag:</strong> <code style="color: var(--accent-cyan);"># LSA_SPRINT_TEST</code></div>
+                <div>🔄 <strong>Frequency:</strong> Nightly at 01:00 AM</div>
+                <div>🛡️ <strong>Retention Policy:</strong> 14 days retention</div>
+            </div>
+        </div>
+
+        <!-- Section 2: Archive Telemetry & Manifest -->
+        <div class="section-box">
+            <div class="section-header">
+                <div class="section-title">
+                    <span>🔍</span> Generated Backup Manifest & Cryptographic Signature
+                </div>
+            </div>
+            <table class="tasks-table">
+                <thead>
+                    <tr>
+                        <th>Property</th>
+                        <th>Value / Detail</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Archive Filename</strong></td>
+                        <td><code>backup_my_project_20261007_161025.tar.gz</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Archive Path</strong></td>
+                        <td><code>/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_37/backups/backup_my_project_20261007_161025.tar.gz</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cryptographic SHA-256 Digest</strong></td>
+                        <td><span class="hash-code">0c4642251a09e1a14ae6ef2fc9cdbae490b308ad6b6f96d0eeeb49a9eb8971fa</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Integrity Verification Status</strong></td>
+                        <td><span class="task-badge badge-success">NON-DESTRUCTIVE DECOMPRESSION PASSED</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Retention Enforced</strong></td>
+                        <td>14 Days window (0 purged)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Section 3: Live Terminal Trace -->
+        <div class="section-box">
+            <div class="section-header">
+                <div class="section-title">
+                    <span>💻</span> Live Execution Terminal Trace
+                </div>
+            </div>
+            <div class="log-terminal">[1;34m[1m
+================================================================================
+         LSA AUTOMATION SPRINT (AS_37) — SCHEDULED BACKUP ENGINE                
+================================================================================
+[0m
+[1;36m[2026-10-07 16:10:25] [INFO] Target Project   : /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_37/sandbox_data/my_project[0m
+[1;36m[2026-10-07 16:10:25] [INFO] Destination Dir  : /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_37/backups[0m
+[1;36m[2026-10-07 16:10:25] [INFO] Archive Filename : backup_my_project_20261007_161025.tar.gz[0m
+[1;36m[2026-10-07 16:10:25] [INFO] Compression Mode : GZ[0m
+[1;36m[2026-10-07 16:10:25] [INFO] Source Footprint : 438 bytes (3 files)[0m
+[1;36m[2026-10-07 16:10:25] [INFO] Creating compressed archive...[0m
+[1;32m[2026-10-07 16:10:25] [SUCCESS] Archive generated successfully: 585 bytes[0m
+[1;36m[2026-10-07 16:10:25] [INFO] Performing non-destructive archive integrity test (tar -tzf)...[0m
+[1;32m[2026-10-07 16:10:25] [SUCCESS] Archive integrity test PASSED (zero corruption detected).[0m
+[1;36m[2026-10-07 16:10:25] [INFO] Generating SHA-256 cryptographic checksum manifest...[0m
+[1;32m[2026-10-07 16:10:25] [SUCCESS] SHA-256: 0c4642251a09e1a14ae6ef2fc9cdbae490b308ad6b6f96d0eeeb49a9eb8971fa[0m
+[1;36m[2026-10-07 16:10:25] [INFO] Space Saved      : -147 bytes (-33.56% reduction)[0m
+[1;36m[2026-10-07 16:10:25] [INFO] Applying retention policy (pruning archives older than 14 days)...[0m
+[1;32m[2026-10-07 16:10:25] [SUCCESS] Retention audit complete: 0 expired archive(s) purged.[0m
+[1;32m[2026-10-07 16:10:25] [SUCCESS] Automated project backup completed in 0s.[0m
+[1;32m[2026-10-07 16:10:25] [SUCCESS] Backup telemetry serialized to /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_37/logs/backup_metadata.json[0m
+
+[INFO] Registering automated backup job in Cron table...
+[1;36m[2026-10-07 16:10:26] [INFO] Installing scheduled backup cron task...[0m
+[1;36m[2026-10-07 16:10:26] [INFO] Target Directory : /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_37/sandbox_data/my_project[0m
+[1;36m[2026-10-07 16:10:26] [INFO] Backup Target    : /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_37/backups[0m
+[1;36m[2026-10-07 16:10:26] [INFO] Schedule Cron    : &#x27;0 1 * * *&#x27; (Tag: # LSA_SPRINT_TEST)[0m
+[1;32m[2026-10-07 16:10:26] [SUCCESS] Backup cron schedule installed successfully in user crontab.[0m
+[1;36m[2026-10-07 16:10:26] [INFO] Verifying active crontab entry:[0m
+   [1;32m↳ 0 1 * * * /bin/bash &quot;/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_37/scheduled_backup.sh&quot; --source &quot;/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_37/sandbox_data/my_project&quot; --destination &quot;/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_37/backups&quot; &gt;&gt; &quot;/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_37/logs/cron_backup.log&quot; 2&gt;&amp;1 # LSA_SPRINT_TEST[0m
+
+[1;36m[2026-10-07 16:10:26] [INFO] Inspecting user crontab for scheduled LSA backup jobs...[0m
+[1;32m[2026-10-07 16:10:26] [SUCCESS] Active scheduled backup job(s) found:[0m
+   [1;32m✔ 0 1 * * * /bin/bash &quot;/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_37/scheduled_backup.sh&quot; --source &quot;/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_37/sandbox_data/my_project&quot; --destination &quot;/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_37/backups&quot; &gt;&gt; &quot;/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_37/logs/cron_backup.log&quot; 2&gt;&amp;1 # LSA_SPRINT_TEST[0m</div>
+        </div>
+
+        <!-- Section 4: System Host Context -->
+        <div class="section-box">
+            <div class="section-header">
+                <div class="section-title">
+                    <span>🖥️</span> System Host Context
+                </div>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; font-size: 14px;">
+                <div><span style="color: var(--text-muted);">Hostname:</span> <strong>SP</strong></div>
+                <div><span style="color: var(--text-muted);">OS Display:</span> <strong>Ubuntu 26.04.1 LTS</strong></div>
+                <div><span style="color: var(--text-muted);">Kernel:</span> <strong>6.18.40.1-microsoft-standard-WSL2</strong></div>
+                <div><span style="color: var(--text-muted);">Operator:</span> <strong>pankaj</strong></div>
+                <div><span style="color: var(--text-muted);">Timestamp:</span> <strong>2026-10-07 16:10:26 IST</strong></div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            Linux System Administration (E1ITA307) • Automation Sprint • Problem #37 Scheduled Backup Dashboard
+        </div>
+    </div>
+</body>
+</html>

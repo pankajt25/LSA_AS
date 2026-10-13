@@ -1,0 +1,57 @@
+{
+  "problem_id": "AS_06",
+  "title": "Server Health Check",
+  "timestamp": "2026-10-07 11:20:04 IST",
+  "timestamp_epoch": 1791352205,
+  "host": {
+    "hostname": "SP",
+    "os": "Ubuntu 26.04.1 LTS",
+    "kernel": "6.18.40.1-microsoft-standard-WSL2",
+    "arch": "x86_64",
+    "boot_time": "",
+    "uptime": "up 30 minutes"
+  },
+  "cpu": {
+    "cores": 4,
+    "utilization_pct": 1.6,
+    "load_1m": 0.15,
+    "load_5m": 0.22,
+    "load_15m": 0.22,
+    "load_per_core": 0.04
+  },
+  "memory": {
+    "total_mb": 3869,
+    "used_mb": 732,
+    "free_mb": 1275,
+    "available_mb": 3136,
+    "usage_pct": 18.9,
+    "total_readable": "3.8Gi",
+    "used_readable": "732Mi",
+    "avail_readable": "3.1Gi"
+  },
+  "swap": {
+    "total_mb": 1024,
+    "used_mb": 0,
+    "usage_pct": 0.0
+  },
+  "disk": {
+    "root_total": "1007G",
+    "root_used": "6.4G",
+    "root_avail": "950G",
+    "root_use_pct": 1
+  },
+  "users": {
+    "logged_in_count": 1,
+    "sessions": [
+      {"user":"pankaj","terminal":"pts/1","login_time":"2026-10-07 10:41","host":""}
+    ]
+  },
+  "processes": {
+    "total_count": 36,
+    "zombie_count": 1
+  },
+  "health": {
+    "status": "OPTIMAL",
+    "warnings_count": 1
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "problem_id": "AS_27",
+  "title": "Application Installation Automation",
+  "timestamp": "2026-10-07 12:39:04 IST",
+  "timestamp_epoch": 1791356944,
+  "hostname": "SP",
+  "package_manager": "apt",
+  "install_command": "sudo apt-get install -y",
+  "catalog_total": 10,
+  "installed_total": 9,
+  "available_total": 1,
+  "packages": [
+    {"name":"cowsay","category":"Demo/Utility","is_safe_demo":true,"description":"Configurable ASCII art talking cow character","installed":true,"version":"3.03+dfsg2-8build1"},{"name":"figlet","category":"Demo/Utility","is_safe_demo":true,"description":"ASCII banner and large stylized letter generator","installed":true,"version":"2.2.5-3.1"},{"name":"sl","category":"Demo/Animation","is_safe_demo":true,"description":"Steam Locomotive terminal animation corrector","installed":true,"version":"5.02-1build1"},{"name":"curl","category":"Network/Web","is_safe_demo":false,"description":"Command-line tool for transferring data with URLs","installed":true,"version":"8.18.0-1ubuntu2.7"},{"name":"git","category":"Development","is_safe_demo":false,"description":"Fast, scalable, distributed revision control system","installed":true,"version":"1:2.53.0-1ubuntu1"},{"name":"htop","category":"Monitoring","is_safe_demo":false,"description":"Interactive process viewer and system resource monitor","installed":false,"version":"Not Installed"},{"name":"tmux","category":"Terminal","is_safe_demo":false,"description":"Terminal multiplexer for persistent shell workspaces","installed":true,"version":"3.6a-2ubuntu0.1"},{"name":"jq","category":"Data Processing","is_safe_demo":false,"description":"Lightweight and flexible command-line JSON processor","installed":true,"version":"1.8.1-4ubuntu2"},{"name":"vim","category":"Text Editor","is_safe_demo":false,"description":"Extensible and ubiquitous modal terminal text editor","installed":true,"version":"2:9.1.2141-1ubuntu4.9"},{"name":"tree","category":"Filesystem","is_safe_demo":false,"description":"Recursive directory tree visualizer with color output","installed":true,"version":"2.3.1-1"}
+  ]
+}

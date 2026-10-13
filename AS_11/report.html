@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AS_11: Backup Verification Dashboard</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --surface-hover: #334155;
+            --border: #334155;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --accent-glow: rgba(56, 189, 248, 0.15);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --code-bg: #090d16;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            padding: 2rem;
+            line-height: 1.5;
+        }
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .header-title h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .header-title p {
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+            font-size: 0.95rem;
+        }
+        .sys-badge {
+            display: inline-flex;
+            gap: 0.5rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            align-self: flex-start;
+        }
+        .sys-badge span {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+        .card {
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.25rem;
+            position: relative;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+        }
+        .card-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+        .card-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-main);
+            word-break: break-all;
+        }
+        .card-subtext {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.4rem;
+        }
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.65rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .badge-success { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #059669; }
+        .badge-warning { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid #d97706; }
+        .badge-danger { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #dc2626; }
+        
+        .section-box {
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+        }
+        .section-header {
+            background: rgba(0,0,0,0.15);
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .section-header h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+        .table-responsive {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+        th {
+            background: rgba(15, 23, 42, 0.6);
+            padding: 0.75rem 1rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--border);
+        }
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(51, 65, 85, 0.4);
+            color: var(--text-main);
+        }
+        tr:hover td {
+            background-color: var(--surface-hover);
+        }
+        .rank-cell {
+            font-weight: 700;
+            color: var(--accent);
+            width: 50px;
+        }
+        .size-cell {
+            color: #fbbf24;
+            font-weight: 600;
+            width: 110px;
+        }
+        .path-cell {
+            font-family: monospace;
+            font-size: 0.85rem;
+            word-break: break-all;
+        }
+        .time-cell {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 2rem !important;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+        pre.terminal-log {
+            background-color: var(--code-bg);
+            color: #e2e8f0;
+            padding: 1.25rem;
+            font-family: "JetBrains Mono", Consolas, "Courier New", monospace;
+            font-size: 0.82rem;
+            line-height: 1.45;
+            overflow-x: auto;
+            max-height: 380px;
+            white-space: pre-wrap;
+            border-radius: 0 0 8px 8px;
+        }
+        .checksum-box {
+            background: #090d16;
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.88rem;
+            color: #38bdf8;
+            word-break: break-all;
+            margin-top: 0.5rem;
+            border: 1px solid var(--border);
+        }
+        footer {
+            text-align: center;
+            padding-top: 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>🛡️ Backup Verification & Validation Dashboard</h1>
+                <p>E1ITA307 Linux System Administration — Automation Sprint (AS_11)</p>
+            </div>
+            <div class="sys-badge">
+                <span>HOST:</span> SP &nbsp;|&nbsp; 
+                <span>OS:</span> Ubuntu 26.04.1 LTS &nbsp;|&nbsp; 
+                <span>KERNEL:</span> 6.18.40.1-microsoft-standard-WSL2
+            </div>
+        </header>
+
+        <!-- KPI CARDS -->
+        <div class="grid">
+            <div class="card">
+                <div class="card-label">Target Archive</div>
+                <div class="card-value" style="font-size: 1rem; font-family: monospace; color: var(--accent);">backup_prod_20261007_020000.tar.gz</div>
+                <div class="card-subtext">Latest candidate in repository</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Archive Size</div>
+                <div class="card-value" style="color: #fbbf24;">379 B</div>
+                <div class="card-subtext">379 bytes on disk</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Repository Inventory</div>
+                <div class="card-value">3</div>
+                <div class="card-subtext">Archives in repository</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Freshness Age</div>
+                <div class="card-value" style="color: #34d399;">0.0 hrs</div>
+                <div class="card-subtext">Modified: 2026-10-07 11:54:49</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Overall Validation</div>
+                <div class="card-value" style="font-size: 1rem; margin-top: 0.4rem;"><span class="badge badge-success">VERIFIED HEALTHY (100%)</span></div>
+                <div class="card-subtext">5-Point SLA verification</div>
+            </div>
+        </div>
+
+        <!-- 5-POINT VERIFICATION MATRIX -->
+        <div class="section-box">
+            <div class="section-header">
+                <h2>✅ 5-Point Backup Verification Matrix</h2>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">SLA Compliance Audit</span>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Verification Check</th>
+                            <th>Validation Standard</th>
+                            <th>Live Measured Value</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+    <tr>
+        <td class="rank-cell">#1</td>
+        <td><strong>Archive Existence</strong></td>
+        <td>File exists on storage</td>
+        <td><code>backup_prod_20261007_020000.tar.gz</code></td>
+        <td><span class="badge badge-success">PASS</span></td>
+    </tr>
+    
+    <tr>
+        <td class="rank-cell">#2</td>
+        <td><strong>Non-Empty File Integrity</strong></td>
+        <td>File size strictly &gt; 0 bytes</td>
+        <td><code>379 B (379 B)</code></td>
+        <td><span class="badge badge-success">PASS</span></td>
+    </tr>
+    
+    <tr>
+        <td class="rank-cell">#3</td>
+        <td><strong>Compression / Tar Structure</strong></td>
+        <td>Readable table of contents (tar -tzf)</td>
+        <td><code>6 internal entities</code></td>
+        <td><span class="badge badge-success">PASS</span></td>
+    </tr>
+    
+    <tr>
+        <td class="rank-cell">#4</td>
+        <td><strong>Cryptographic Hash Validation</strong></td>
+        <td>SHA-256 match with .sha256</td>
+        <td><code>Valid digest match</code></td>
+        <td><span class="badge badge-success">PASS</span></td>
+    </tr>
+    
+    <tr>
+        <td class="rank-cell">#5</td>
+        <td><strong>Recency &amp; Freshness SLA</strong></td>
+        <td>Modified within 24 hours (&amp;le; 24h)</td>
+        <td><code>0.0 hours old</code></td>
+        <td><span class="badge badge-success">PASS</span></td>
+    </tr>
+    
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- CRYPTOGRAPHIC INTEGRITY -->
+        <div class="section-box">
+            <div class="section-header">
+                <h2>🔐 Cryptographic Checksum Verification</h2>
+            </div>
+            <div style="padding: 1.25rem;">
+                <p style="font-size: 0.9rem; color: var(--text-muted);">
+                    SHA-256 cryptographic hash calculated on candidate archive:
+                </p>
+                <div class="checksum-box">
+                    <strong>SHA-256:</strong> 31f865402923b24f0b657dee90b199e928e3ba5301bf61771c6f42c0c5e2d5c1
+                </div>
+            </div>
+        </div>
+
+        <!-- ARCHIVE CONTENT MANIFEST -->
+        <div class="section-box">
+            <div class="section-header">
+                <h2>📁 Verified Archive Contents Manifest (tar -tvf)</h2>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">6 internal item(s)</span>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Internal File Path</th>
+                            <th>Size</th>
+                            <th>Perms</th>
+                            <th>Owner / Group</th>
+                            <th>Last Modified</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+            <tr>
+                <td class="rank-cell">#1</td>
+                <td class="path-cell">test_project/</td>
+                <td class="size-cell">0 B</td>
+                <td><code>drwxr-xr-x</code></td>
+                <td>pankaj/pankaj</td>
+                <td class="time-cell">2026-10-07 11:54</td>
+            </tr>
+            
+            <tr>
+                <td class="rank-cell">#2</td>
+                <td class="path-cell">test_project/app.properties</td>
+                <td class="size-cell">17 B</td>
+                <td><code>-rw-r--r--</code></td>
+                <td>pankaj/pankaj</td>
+                <td class="time-cell">2026-10-07 11:54</td>
+            </tr>
+            
+            <tr>
+                <td class="rank-cell">#3</td>
+                <td class="path-cell">test_project/db.conf</td>
+                <td class="size-cell">43 B</td>
+                <td><code>-rw-r--r--</code></td>
+                <td>pankaj/pankaj</td>
+                <td class="time-cell">2026-10-07 11:54</td>
+            </tr>
+            
+            <tr>
+                <td class="rank-cell">#4</td>
+                <td class="path-cell">test_project/index.js</td>
+                <td class="size-cell">36 B</td>
+                <td><code>-rw-r--r--</code></td>
+                <td>pankaj/pankaj</td>
+                <td class="time-cell">2026-10-07 11:54</td>
+            </tr>
+            
+            <tr>
+                <td class="rank-cell">#5</td>
+                <td class="path-cell">test_project/static/</td>
+                <td class="size-cell">0 B</td>
+                <td><code>drwxr-xr-x</code></td>
+                <td>pankaj/pankaj</td>
+                <td class="time-cell">2026-10-07 11:54</td>
+            </tr>
+            
+            <tr>
+                <td class="rank-cell">#6</td>
+                <td class="path-cell">test_project/static/style.css</td>
+                <td class="size-cell">30 B</td>
+                <td><code>-rw-r--r--</code></td>
+                <td>pankaj/pankaj</td>
+                <td class="time-cell">2026-10-07 11:54</td>
+            </tr>
+            
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- LIVE EXECUTION AUDIT LOG -->
+        <div class="section-box">
+            <div class="section-header">
+                <h2>💻 Console Execution Output</h2>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">2026-10-07 11:56:53 IST</span>
+            </div>
+            <pre class="terminal-log">[36m[1m================================================================================[0m
+[36m[1m            BACKUP VALIDATION &amp; INTEGRITY VERIFIER ENGINE (AS_11)               [0m
+[36m[1m================================================================================[0m
+ Backup Repository  : [1m/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_11/sandbox_data/backups[0m
+ Target Candidate   : [33mbackup_prod_20261007_020000.tar.gz[0m
+ Hostname           : SP
+ Verification Date  : 2026-10-07 11:56:52 IST
+[36m--------------------------------------------------------------------------------[0m
+[1/5] Archive Existence Check      : [ [32mPASS[0m ] (/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_11/sandbox_data/backups/backup_prod_20261007_020000.tar.gz)
+[2/5] Non-Empty Integrity Check    : [ [32mPASS[0m ] (379 B, 379 bytes)
+[3/5] Archive Container Integrity  : [ [32mPASS[0m ] (6 entities inside archive)
+[4/5] SHA-256 Checksum Validation  : [ [32mPASS[0m ] (Verified against companion .sha256)
+      Hash: [36m31f865402923b24f0b657dee90b199e928e3ba5301bf61771c6f42c0c5e2d5c1[0m
+[5/5] Backup Freshness / Recency   : [ [32mPASS[0m ] (0.0h old, modified: 2026-10-07 11:54:49)
+[36m--------------------------------------------------------------------------------[0m
+[1mVERIFICATION SUMMARY:[0m
+  Overall Status       : [32m[1m✅ ARCHIVE VALIDATED (100% HEALTHY)[0m
+  Verified File        : [33mbackup_prod_20261007_020000.tar.gz[0m
+  Archive Size         : [1m379 B[0m (379 bytes)
+  Internal Entities    : [1m6[0m files/directories
+  SHA-256 Digest       : [36m31f865402923b24f0b657dee90b199e928e3ba5301bf61771c6f42c0c5e2d5c1[0m
+  Telemetry JSON       : [36m/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_11/logs/verify.json[0m
+  Audit Log File       : [36m/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_11/logs/backup_verify.log[0m
+[36m================================================================================[0m</pre>
+        </div>
+
+        <footer>
+            Automated Linux System Administration Sprint &bull; Problem AS_11 &bull; Generated on 2026-10-07 11:56:53 IST
+        </footer>
+    </div>
+</body>
+</html>

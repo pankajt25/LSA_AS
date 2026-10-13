@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AS_12: Old Backup Cleanup Dashboard</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --surface-hover: #334155;
+            --border: #334155;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --accent-glow: rgba(56, 189, 248, 0.15);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --code-bg: #090d16;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            padding: 2rem;
+            line-height: 1.5;
+        }
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .header-title h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .header-title p {
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+            font-size: 0.95rem;
+        }
+        .sys-badge {
+            display: inline-flex;
+            gap: 0.5rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            align-self: flex-start;
+        }
+        .sys-badge span {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+        .card {
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.25rem;
+            position: relative;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+        }
+        .card-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+        .card-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-main);
+            word-break: break-all;
+        }
+        .card-subtext {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.4rem;
+        }
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.65rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .badge-success { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #059669; }
+        .badge-warning { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid #d97706; }
+        .badge-danger { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #dc2626; }
+        
+        .section-box {
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+        }
+        .section-header {
+            background: rgba(0,0,0,0.15);
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .section-header h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+        .table-responsive {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+        th {
+            background: rgba(15, 23, 42, 0.6);
+            padding: 0.75rem 1rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--border);
+        }
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(51, 65, 85, 0.4);
+            color: var(--text-main);
+        }
+        tr:hover td {
+            background-color: var(--surface-hover);
+        }
+        .rank-cell {
+            font-weight: 700;
+            color: var(--accent);
+            width: 50px;
+        }
+        .size-cell {
+            color: #fbbf24;
+            font-weight: 600;
+            width: 110px;
+        }
+        .path-cell {
+            font-family: monospace;
+            font-size: 0.85rem;
+            word-break: break-all;
+        }
+        .time-cell {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 2rem !important;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+        pre.terminal-log {
+            background-color: var(--code-bg);
+            color: #e2e8f0;
+            padding: 1.25rem;
+            font-family: "JetBrains Mono", Consolas, "Courier New", monospace;
+            font-size: 0.82rem;
+            line-height: 1.45;
+            overflow-x: auto;
+            max-height: 380px;
+            white-space: pre-wrap;
+            border-radius: 0 0 8px 8px;
+        }
+        .remediation-box {
+            padding: 1.25rem;
+            background: rgba(56, 189, 248, 0.05);
+            border-left: 4px solid var(--accent);
+            font-size: 0.88rem;
+            line-height: 1.6;
+        }
+        .remediation-box code {
+            background: #090d16;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            color: var(--accent);
+            font-family: monospace;
+        }
+        footer {
+            text-align: center;
+            padding-top: 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>🗄️ Old Backup Cleanup & Retention Dashboard</h1>
+                <p>E1ITA307 Linux System Administration — Automation Sprint (AS_12)</p>
+            </div>
+            <div class="sys-badge">
+                <span>HOST:</span> SP &nbsp;|&nbsp; 
+                <span>OS:</span> Ubuntu 26.04.1 LTS &nbsp;|&nbsp; 
+                <span>KERNEL:</span> 6.18.40.1-microsoft-standard-WSL2
+            </div>
+        </header>
+
+        <!-- KPI CARDS -->
+        <div class="grid">
+            <div class="card">
+                <div class="card-label">Backup Repository</div>
+                <div class="card-value" style="font-size: 1.05rem; font-family: monospace;">/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_12/sandbox_data/backups</div>
+                <div class="card-subtext">8 total archives evaluated</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Retention Threshold</div>
+                <div class="card-value" style="color: var(--accent);">&gt; 7 Days</div>
+                <div class="card-subtext">Min guarantee: 1 latest</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Expired Backups Pruned</div>
+                <div class="card-value" style="color: #f87171;">4</div>
+                <div class="card-subtext">4 companion checksum(s) unlinked</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Active Backups Retained</div>
+                <div class="card-value" style="color: #34d399;">4</div>
+                <div class="card-subtext">Preserved within retention window</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Storage Space Reclaimed</div>
+                <div class="card-value" style="color: #fbbf24;">960.22 KB</div>
+                <div class="card-subtext"><span class="badge badge-danger">ACTIVE PRUNING</span></div>
+            </div>
+        </div>
+
+        <!-- PRUNED ARCHIVES TABLE -->
+        <div class="section-box">
+            <div class="section-header">
+                <h2>🗑️ Pruned Expired Archives (&gt; 7 Days Old)</h2>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">4 archive(s) pruned</span>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Archive Filename</th>
+                            <th>Archive Size</th>
+                            <th>Age</th>
+                            <th>Modified Date</th>
+                            <th>Companion Checksum</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+        <tr>
+            <td class="rank-cell">#5</td>
+            <td class="path-cell" title="backup_db_prod_20260927_020000.tar.gz"><strong>backup_db_prod_20260927_020000.tar.gz</strong></td>
+            <td class="size-cell">180.05 KB</td>
+            <td><span class="badge badge-danger">10 days</span></td>
+            <td class="time-cell">2026-09-27 12:17:18</td>
+            <td><span class="badge badge-success">PURGED (.sha256)</span></td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#6</td>
+            <td class="path-cell" title="backup_db_prod_20260923_020000.tar.gz"><strong>backup_db_prod_20260923_020000.tar.gz</strong></td>
+            <td class="size-cell">310.07 KB</td>
+            <td><span class="badge badge-danger">14 days</span></td>
+            <td class="time-cell">2026-09-23 12:17:17</td>
+            <td><span class="badge badge-success">PURGED (.sha256)</span></td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#7</td>
+            <td class="path-cell" title="backup_db_prod_20260917_020000.tar.gz"><strong>backup_db_prod_20260917_020000.tar.gz</strong></td>
+            <td class="size-cell">220.05 KB</td>
+            <td><span class="badge badge-danger">20 days</span></td>
+            <td class="time-cell">2026-09-17 12:17:17</td>
+            <td><span class="badge badge-success">PURGED (.sha256)</span></td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#8</td>
+            <td class="path-cell" title="backup_db_prod_20260907_020000.tar.gz"><strong>backup_db_prod_20260907_020000.tar.gz</strong></td>
+            <td class="size-cell">250.06 KB</td>
+            <td><span class="badge badge-danger">30 days</span></td>
+            <td class="time-cell">2026-09-07 12:17:17</td>
+            <td><span class="badge badge-success">PURGED (.sha256)</span></td>
+        </tr>
+        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- RETAINED ARCHIVES TABLE -->
+        <div class="section-box">
+            <div class="section-header">
+                <h2>✅ Retained Active Backup Archives (Current Generation)</h2>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">4 archive(s) active</span>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Archive Filename</th>
+                            <th>Archive Size</th>
+                            <th>Age</th>
+                            <th>Modified Date</th>
+                            <th>Retention Policy Reason</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+        <tr>
+            <td class="rank-cell">#1</td>
+            <td class="path-cell" title="backup_db_prod_20261007_020000.tar.gz"><strong>backup_db_prod_20261007_020000.tar.gz</strong></td>
+            <td class="size-cell">320.07 KB</td>
+            <td><span class="badge badge-success">0 days</span></td>
+            <td class="time-cell">2026-10-07 12:17:18</td>
+            <td><span class="badge badge-warning">MINIMUM SAFEGUARD</span></td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#2</td>
+            <td class="path-cell" title="backup_db_prod_20261006_020000.tar.gz"><strong>backup_db_prod_20261006_020000.tar.gz</strong></td>
+            <td class="size-cell">300.07 KB</td>
+            <td><span class="badge badge-success">1 days</span></td>
+            <td class="time-cell">2026-10-06 12:17:18</td>
+            <td><span class="badge badge-success">ACTIVE RETENTION (&le; 7d)</span></td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#3</td>
+            <td class="path-cell" title="backup_db_prod_20261004_020000.tar.gz"><strong>backup_db_prod_20261004_020000.tar.gz</strong></td>
+            <td class="size-cell">240.06 KB</td>
+            <td><span class="badge badge-success">3 days</span></td>
+            <td class="time-cell">2026-10-04 12:17:18</td>
+            <td><span class="badge badge-success">ACTIVE RETENTION (&le; 7d)</span></td>
+        </tr>
+        
+        <tr>
+            <td class="rank-cell">#4</td>
+            <td class="path-cell" title="backup_db_prod_20261002_020000.tar.gz"><strong>backup_db_prod_20261002_020000.tar.gz</strong></td>
+            <td class="size-cell">290.07 KB</td>
+            <td><span class="badge badge-success">5 days</span></td>
+            <td class="time-cell">2026-10-02 12:17:18</td>
+            <td><span class="badge badge-success">ACTIVE RETENTION (&le; 7d)</span></td>
+        </tr>
+        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ENTERPRISE RETENTION POLICIES -->
+        <div class="section-box">
+            <div class="section-header">
+                <h2>🛡️ Enterprise Retention & Lifecycle Policies</h2>
+            </div>
+            <div class="remediation-box">
+                <p><strong>Backup Lifecycle & Storage Management Standards:</strong></p>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                    <li><strong>Grandfather-Father-Son (GFS) Rotation:</strong> Maintain daily differentials for 7 days (Son), weekly rollups for 4 weeks (Father), and monthly snapshots for 12 months (Grandfather).</li>
+                    <li><strong>Companion Artifact Hygiene:</strong> Always prune companion metadata (<code>.sha256</code>, <code>.md5</code>, <code>.log</code>) in lockstep with parent archive deletion to prevent inode leakage.</li>
+                    <li><strong>Safety Minimum Safeguard:</strong> Never allow cleanup routines to prune all archives. Enforce <code>KEEP_MIN >= 1</code> to safeguard against catastrophic zero-backup scenarios during extended outages.</li>
+                    <li><strong>Scheduled Automation:</strong> Schedule pruning immediately after successful backup creation via cron: <code>0 3 * * * /usr/local/bin/old_backup_cleaner.sh -d 7 --delete</code>.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- LIVE EXECUTION AUDIT LOG -->
+        <div class="section-box">
+            <div class="section-header">
+                <h2>💻 Console Execution Output</h2>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">2026-10-07 12:17:20 IST</span>
+            </div>
+            <pre class="terminal-log">[36m[1m================================================================================[0m
+[36m[1m         BACKUP RETENTION &amp; OLD ARCHIVE PRUNING ENGINE (AS_12)                  [0m
+[36m[1m================================================================================[0m
+ Backup Repository  : [1m/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_12/sandbox_data/backups[0m
+ Retention Window   : [1m&gt; 7 day(s) eligible for pruning[0m
+ Minimum Guaranteed : Keep at least [1m1[0m newest backup(s)
+ Purge Companions   : Enabled (.sha256, .md5)
+ Execution Mode     : [31m[1mACTIVE (Actual Deletion)[0m
+ Hostname           : SP
+ Timestamp          : 2026-10-07 12:17:19 IST
+[36m--------------------------------------------------------------------------------[0m
+[1m#    SIZE         AGE(DAYS)  MODIFIED             POLICY ACTION    ARCHIVE FILENAME[0m
+--------------------------------------------------------------------------------
+#1   320.07 KB    0d         2026-10-07 12:17:18  [32mRETAIN (SAFEGUARD)[0m backup_db_prod_20261007_020000.tar.gz
+#2   300.07 KB    1d         2026-10-06 12:17:18  [32mRETAIN (ACTIVE)[0m   backup_db_prod_20261006_020000.tar.gz
+#3   240.06 KB    3d         2026-10-04 12:17:18  [32mRETAIN (ACTIVE)[0m   backup_db_prod_20261004_020000.tar.gz
+#4   290.07 KB    5d         2026-10-02 12:17:18  [32mRETAIN (ACTIVE)[0m   backup_db_prod_20261002_020000.tar.gz
+#5   180.05 KB    10d        2026-09-27 12:17:18  [31mPRUNED / DELETED[0m  backup_db_prod_20260927_020000.tar.gz
+#6   310.07 KB    14d        2026-09-23 12:17:17  [31mPRUNED / DELETED[0m  backup_db_prod_20260923_020000.tar.gz
+#7   220.05 KB    20d        2026-09-17 12:17:17  [31mPRUNED / DELETED[0m  backup_db_prod_20260917_020000.tar.gz
+#8   250.06 KB    30d        2026-09-07 12:17:17  [31mPRUNED / DELETED[0m  backup_db_prod_20260907_020000.tar.gz
+[36m--------------------------------------------------------------------------------[0m
+[1mCLEANUP SUMMARY:[0m
+  Total Archives Evaluated: [1m8[0m
+  Expired Archives Pruned : [33m[1m4[0m (&gt; 7 days)
+  Active Archives Retained: [32m[1m4[0m (&amp;le; 7 days / safeguard)
+  Storage Space Reclaimed : [1m960.22 KB[0m (983267 bytes)
+  Companion Files Purged  : [36m4[0m checksum file(s)
+  Notice                  : [32mExpired archives and associated checksums unlinked.[0m
+  Telemetry JSON File     : [36m/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_12/logs/cleanup.json[0m
+  Audit Log File          : [36m/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_12/logs/old_backup_cleaner.log[0m
+[36m================================================================================[0m</pre>
+        </div>
+
+        <footer>
+            Automated Linux System Administration Sprint &bull; Problem AS_12 &bull; Generated on 2026-10-07 12:17:20 IST
+        </footer>
+    </div>
+</body>
+</html>

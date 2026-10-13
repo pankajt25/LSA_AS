@@ -1,0 +1,156 @@
+{
+  "timestamp": "2026-10-07 17:15:46",
+  "hostname": "SP",
+  "kernel": "6.18.40.1-microsoft-standard-WSL2",
+  "architecture": "x86_64",
+  "uptime": {
+    "formatted": "0d 2h 7m 48s",
+    "pretty": "up 2 hours, 7 minutes",
+    "boot_time": "2026-10-07 15:07:56",
+    "seconds": 7668
+  },
+  "cpu": {
+    "usage_pct": 2.46,
+    "load_1m": 0.19,
+    "load_5m": 0.32,
+    "load_15m": 0.37,
+    "cores": 4,
+    "top_consumer": "agy (17.8%)"
+  },
+  "memory": {
+    "total_mb": 3869.3,
+    "used_mb": 748.3,
+    "avail_mb": 3120.9,
+    "usage_pct": 19.3,
+    "swap_used_mb": 0.0,
+    "swap_total_mb": 1024.0,
+    "swap_pct": 0.0
+  },
+  "disk": {
+    "root_fs": "/dev/sdd",
+    "total": "1007G",
+    "used": "6.5G",
+    "avail": "950G",
+    "usage_pct": 1,
+    "mounts": [
+      {
+        "filesystem": "none",
+        "size": "1.9G",
+        "used": "0",
+        "avail": "1.9G",
+        "pct": "0%",
+        "mount": "/usr/lib/modules/6.18.40.1-microsoft-standard-WSL2"
+      },
+      {
+        "filesystem": "drivers",
+        "size": "118G",
+        "used": "83G",
+        "avail": "35G",
+        "pct": "71%",
+        "mount": "/usr/lib/wsl/drivers"
+      },
+      {
+        "filesystem": "/dev/sdd",
+        "size": "1007G",
+        "used": "6.5G",
+        "avail": "950G",
+        "pct": "1%",
+        "mount": "/"
+      },
+      {
+        "filesystem": "none",
+        "size": "1.9G",
+        "used": "0",
+        "avail": "1.9G",
+        "pct": "0%",
+        "mount": "/usr/lib/wsl/lib"
+      },
+      {
+        "filesystem": "rootfs",
+        "size": "1.9G",
+        "used": "3.3M",
+        "avail": "1.9G",
+        "pct": "1%",
+        "mount": "/init"
+      },
+      {
+        "filesystem": "none",
+        "size": "1.9G",
+        "used": "80K",
+        "avail": "1.9G",
+        "pct": "1%",
+        "mount": "/mnt/wslg/versions.txt"
+      },
+      {
+        "filesystem": "none",
+        "size": "1.9G",
+        "used": "80K",
+        "avail": "1.9G",
+        "pct": "1%",
+        "mount": "/mnt/wslg/doc"
+      },
+      {
+        "filesystem": "C:\\",
+        "size": "118G",
+        "used": "83G",
+        "avail": "35G",
+        "pct": "71%",
+        "mount": "/mnt/c"
+      },
+      {
+        "filesystem": "D:\\",
+        "size": "918G",
+        "used": "109G",
+        "avail": "809G",
+        "pct": "12%",
+        "mount": "/mnt/d"
+      }
+    ]
+  },
+  "users": {
+    "count": 1,
+    "sessions": [
+      {
+        "user": "pankaj",
+        "tty": "pts/1",
+        "login_time": "2026-10-07 15:50"
+      }
+    ]
+  },
+  "services": [
+    {
+      "service": "cron",
+      "status": "RUNNING"
+    },
+    {
+      "service": "rsyslog",
+      "status": "RUNNING"
+    },
+    {
+      "service": "systemd-resolved",
+      "status": "RUNNING"
+    },
+    {
+      "service": "chrony",
+      "status": "RUNNING"
+    },
+    {
+      "service": "containerd",
+      "status": "RUNNING"
+    },
+    {
+      "service": "dbus",
+      "status": "RUNNING"
+    },
+    {
+      "service": "ssh",
+      "status": "NOT INSTALLED"
+    },
+    {
+      "service": "nginx",
+      "status": "NOT INSTALLED"
+    }
+  ],
+  "report_txt": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_48/reports/daily_report_20261007.txt",
+  "log_file": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_48/logs/daily_report_20261007_171544.log"
+}

@@ -1,0 +1,24 @@
+2026-10-07T08:15:22.102341+05:30 srv-prod-01 sshd[1042]: Accepted publickey for sarah from 192.168.1.105 port 54322 ssh2: RSA SHA256:dGhpc2lzYWZha2VmaW5nZXJwcmludGtleWZvcg
+2026-10-07T08:15:22.115890+05:30 srv-prod-01 sshd[1042]: pam_unix(sshd:session): session opened for user sarah(uid=1002) by (uid=0)
+2026-10-07T08:15:22.120000+05:30 srv-prod-01 systemd-logind[412]: New session '12' of user 'sarah' with class 'user' and type 'pts/0'.
+2026-10-07T08:30:10.450123+05:30 srv-prod-01 login[1204]: pam_unix(login:session): session opened for user alex(uid=1001) by alex(uid=0)
+2026-10-07T08:30:10.455000+05:30 srv-prod-01 systemd-logind[412]: New session '13' of user 'alex' with class 'user' and type 'tty1'.
+2026-10-07T08:45:00.001200+05:30 srv-prod-01 sshd[1410]: Accepted publickey for devops_admin from 10.14.20.5 port 49152 ssh2: ED25519 SHA256:YW5vdGhlcmtleWZpbmdlcnByaW50ZXhhbXBsZQ
+2026-10-07T08:45:00.015000+05:30 srv-prod-01 sshd[1410]: pam_unix(sshd:session): session opened for user devops_admin(uid=1004) by (uid=0)
+2026-10-07T08:45:00.021000+05:30 srv-prod-01 systemd-logind[412]: New session '14' of user 'devops_admin' with class 'user' and type 'pts/2'.
+2026-10-07T09:12:30.123456+05:30 srv-prod-01 sudo: pam_unix(sudo:session): session opened for user root(uid=0) by sarah(uid=1002)
+2026-10-07T09:20:15.981000+05:30 srv-prod-01 sudo: pam_unix(sudo:session): session closed for user root
+2026-10-07T09:40:02.112000+05:30 srv-prod-01 sshd[1850]: Accepted publickey for marcus from 172.16.50.88 port 60124 ssh2: RSA SHA256:bWFyY3Vza2V5ZXhhbXBsZXNoYTI1NmtleWZvcg
+2026-10-07T09:40:02.125000+05:30 srv-prod-01 sshd[1850]: pam_unix(sshd:session): session opened for user marcus(uid=1003) by (uid=0)
+2026-10-07T09:40:02.130000+05:30 srv-prod-01 systemd-logind[412]: New session '15' of user 'marcus' with class 'user' and type 'pts/3'.
+2026-10-07T10:15:40.890120+05:30 srv-prod-01 sshd[2210]: Accepted password for sec_auditor from 203.0.113.45 port 51230 ssh2
+2026-10-07T10:15:40.902000+05:30 srv-prod-01 sshd[2210]: pam_unix(sshd:session): session opened for user sec_auditor(uid=1005) by (uid=0)
+2026-10-07T10:15:40.908000+05:30 srv-prod-01 systemd-logind[412]: New session '16' of user 'sec_auditor' with class 'user' and type 'pts/4'.
+2026-10-07T11:00:12.345678+05:30 srv-prod-01 sshd[1042]: pam_unix(sshd:session): session closed for user sarah
+2026-10-07T11:45:00.123000+05:30 srv-prod-01 sshd[2550]: Accepted publickey for backup_svc from 10.14.20.100 port 55400 ssh2: ED25519 SHA256:YmFja3Vwc3Zja2V5ZXhhbXBsZXNoYTI1Ng
+2026-10-07T11:45:00.134000+05:30 srv-prod-01 sshd[2550]: pam_unix(sshd:session): session opened for user backup_svc(uid=1006) by (uid=0)
+2026-10-07T12:00:10.500000+05:30 srv-prod-01 sshd[2550]: pam_unix(sshd:session): session closed for user backup_svc
+2026-10-07T13:10:45.670000+05:30 srv-prod-01 login[1204]: pam_unix(login:session): session closed for user alex
+2026-10-07T14:05:12.890000+05:30 srv-prod-01 sshd[3100]: Accepted publickey for devops_admin from 10.14.20.5 port 58900 ssh2: ED25519 SHA256:YW5vdGhlcmtleWZpbmdlcnByaW50ZXhhbXBsZQ
+2026-10-07T14:05:12.905000+05:30 srv-prod-01 sshd[3100]: pam_unix(sshd:session): session opened for user devops_admin(uid=1004) by (uid=0)
+2026-10-07T14:05:12.910000+05:30 srv-prod-01 systemd-logind[412]: New session '17' of user 'devops_admin' with class 'user' and type 'pts/1'.

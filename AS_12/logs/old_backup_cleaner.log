@@ -1,0 +1,22 @@
+[2026-10-07 12:16:08 IST] [INFO] Starting backup cleanup scan on '/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_12/sandbox_data/backups', retention: >7d, keep_min: 1, dry_run: true
+[2026-10-07 12:16:08 IST] [RETAIN] Retained latest backup by safeguard: backup_db_prod_20261007_020000.tar.gz (0d old)
+[2026-10-07 12:16:09 IST] [RETAIN] Retained active backup within retention window: backup_db_prod_20261006_020000.tar.gz (1d old &le; 7d)
+[2026-10-07 12:16:09 IST] [RETAIN] Retained active backup within retention window: backup_db_prod_20261004_020000.tar.gz (3d old &le; 7d)
+[2026-10-07 12:16:09 IST] [RETAIN] Retained active backup within retention window: backup_db_prod_20261002_020000.tar.gz (5d old &le; 7d)
+[2026-10-07 12:16:10 IST] [DRY_RUN] Identified expired backup for pruning: backup_db_prod_20260927_020000.tar.gz (180.05 KB, 10d old)
+[2026-10-07 12:16:10 IST] [DRY_RUN] Identified expired backup for pruning: backup_db_prod_20260923_020000.tar.gz (310.07 KB, 14d old)
+[2026-10-07 12:16:10 IST] [DRY_RUN] Identified expired backup for pruning: backup_db_prod_20260917_020000.tar.gz (220.05 KB, 20d old)
+[2026-10-07 12:16:10 IST] [DRY_RUN] Identified expired backup for pruning: backup_db_prod_20260907_020000.tar.gz (250.06 KB, 30d old)
+[2026-10-07 12:17:19 IST] [INFO] Starting backup cleanup scan on '/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_12/sandbox_data/backups', retention: >7d, keep_min: 1, dry_run: false
+[2026-10-07 12:17:19 IST] [RETAIN] Retained latest backup by safeguard: backup_db_prod_20261007_020000.tar.gz (0d old)
+[2026-10-07 12:17:19 IST] [RETAIN] Retained active backup within retention window: backup_db_prod_20261006_020000.tar.gz (1d old &le; 7d)
+[2026-10-07 12:17:19 IST] [RETAIN] Retained active backup within retention window: backup_db_prod_20261004_020000.tar.gz (3d old &le; 7d)
+[2026-10-07 12:17:19 IST] [RETAIN] Retained active backup within retention window: backup_db_prod_20261002_020000.tar.gz (5d old &le; 7d)
+[2026-10-07 12:17:19 IST] [PRUNE] Unlinked companion checksum: backup_db_prod_20260927_020000.tar.gz.sha256
+[2026-10-07 12:17:19 IST] [PRUNE] Deleted expired backup: backup_db_prod_20260927_020000.tar.gz (180.05 KB, 10d old)
+[2026-10-07 12:17:19 IST] [PRUNE] Unlinked companion checksum: backup_db_prod_20260923_020000.tar.gz.sha256
+[2026-10-07 12:17:19 IST] [PRUNE] Deleted expired backup: backup_db_prod_20260923_020000.tar.gz (310.07 KB, 14d old)
+[2026-10-07 12:17:19 IST] [PRUNE] Unlinked companion checksum: backup_db_prod_20260917_020000.tar.gz.sha256
+[2026-10-07 12:17:19 IST] [PRUNE] Deleted expired backup: backup_db_prod_20260917_020000.tar.gz (220.05 KB, 20d old)
+[2026-10-07 12:17:20 IST] [PRUNE] Unlinked companion checksum: backup_db_prod_20260907_020000.tar.gz.sha256
+[2026-10-07 12:17:20 IST] [PRUNE] Deleted expired backup: backup_db_prod_20260907_020000.tar.gz (250.06 KB, 30d old)

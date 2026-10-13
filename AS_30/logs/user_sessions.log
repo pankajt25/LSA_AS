@@ -1,0 +1,13 @@
+[2026-10-07 12:55:10 IST] [SESSION] User: pankaj, TTY: pts/1, Remote: - (Local/Console), Login: 10:41, Idle: 2:13m, Command: -bash
+[2026-10-07 12:55:10 IST] [SESSION] User: root, TTY: pts/0, Remote: 192.168.1.50 (Remote), Login: 08:15, Idle: 1:12m, Command: htop
+[2026-10-07 12:55:10 IST] [SESSION] User: pankaj, TTY: pts/1, Remote: 10.0.0.12 (Remote), Login: 09:30, Idle: 0.00s, Command: vim /etc/nginx/nginx.conf
+[2026-10-07 12:55:10 IST] [SESSION] User: alice, TTY: pts/2, Remote: 172.16.5.88 (Remote), Login: 11:02, Idle: 45:10, Command: -bash
+[2026-10-07 12:55:11 IST] [SESSION] User: bob, TTY: tty1, Remote: :0 (Local/Console), Login: 07:45, Idle: 5:14m, Command: /usr/bin/gnome-shell
+[2026-10-07 12:55:11 IST] [SESSION] User: devops, TTY: pts/3, Remote: 203.0.113.19 (Remote), Login: 12:20, Idle: 12s, Command: git pull origin main
+[2026-10-07 12:56:03 IST] [SESSION] User: pankaj, TTY: pts/1, Remote: - (Local/Console), Login: 10:41, Idle: 2:14m, Command: -bash
+[2026-10-07 12:56:03 IST] [SESSION] User: root, TTY: pts/0, Remote: 192.168.1.50 (Remote), Login: 08:15, Idle: 1:12m, Command: htop
+[2026-10-07 12:56:03 IST] [SESSION] User: pankaj, TTY: pts/1, Remote: 10.0.0.12 (Remote), Login: 09:30, Idle: 0.00s, Command: vim /etc/nginx/nginx.conf
+[2026-10-07 12:56:03 IST] [SESSION] User: alice, TTY: pts/2, Remote: 172.16.5.88 (Remote), Login: 11:02, Idle: 45:10, Command: -bash
+[2026-10-07 12:56:03 IST] [SESSION] User: bob, TTY: tty1, Remote: :0 (Local/Console), Login: 07:45, Idle: 5:14m, Command: /usr/bin/gnome-shell
+[2026-10-07 12:56:03 IST] [SESSION] User: devops, TTY: pts/3, Remote: 203.0.113.19 (Remote), Login: 12:20, Idle: 12s, Command: git pull origin main
+[2026-10-07 12:56:03 IST] [SESSION] User: pankaj, TTY: pts/1, Remote: - (Local/Console), Login: 10:41, Idle: 2:14m, Command: -bash

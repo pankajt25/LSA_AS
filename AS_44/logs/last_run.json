@@ -1,0 +1,121 @@
+{
+  "timestamp": "2026-10-07 16:49:36",
+  "overall_status": "OK",
+  "cpu": {
+    "usage_pct": 4.19,
+    "status": "OK",
+    "cores": 4,
+    "load_1m": 0.37,
+    "load_5m": 0.3,
+    "load_15m": 0.23,
+    "warn_threshold": 70.0,
+    "crit_threshold": 85.0
+  },
+  "memory": {
+    "usage_pct": 18.43,
+    "status": "OK",
+    "total_mb": 3869.3,
+    "used_mb": 713.3,
+    "available_mb": 3156.0,
+    "warn_threshold": 75.0,
+    "crit_threshold": 90.0
+  },
+  "swap": {
+    "usage_pct": 0.0,
+    "status": "OK",
+    "total_mb": 1024.0,
+    "used_mb": 0.0,
+    "warn_threshold": 50.0,
+    "crit_threshold": 75.0
+  },
+  "top_cpu_processes": [
+    {
+      "pid": "3698",
+      "user": "pankaj",
+      "cpu_pct": "70.0",
+      "mem_pct": "0.3",
+      "comm": "python3",
+      "args": "python3 -"
+    },
+    {
+      "pid": "897",
+      "user": "pankaj",
+      "cpu_pct": "14.7",
+      "mem_pct": "8.8",
+      "comm": "agy",
+      "args": "agy"
+    },
+    {
+      "pid": "3654",
+      "user": "pankaj",
+      "cpu_pct": "3.3",
+      "mem_pct": "0.0",
+      "comm": "bash",
+      "args": "bash ./resource_monitor.sh"
+    },
+    {
+      "pid": "203",
+      "user": "root",
+      "cpu_pct": "0.1",
+      "mem_pct": "1.3",
+      "comm": "containerd",
+      "args": "/usr/bin/containerd"
+    },
+    {
+      "pid": "300",
+      "user": "root",
+      "cpu_pct": "0.1",
+      "mem_pct": "0.0",
+      "comm": "Relay(301)",
+      "args": "/init"
+    }
+  ],
+  "top_mem_processes": [
+    {
+      "pid": "897",
+      "user": "pankaj",
+      "mem_pct": "8.8",
+      "cpu_pct": "14.7",
+      "rss_mb": 342.9,
+      "comm": "agy",
+      "args": "agy"
+    },
+    {
+      "pid": "203",
+      "user": "root",
+      "mem_pct": "1.3",
+      "cpu_pct": "0.1",
+      "rss_mb": 50.3,
+      "comm": "containerd",
+      "args": "/usr/bin/containerd"
+    },
+    {
+      "pid": "224",
+      "user": "root",
+      "mem_pct": "0.8",
+      "cpu_pct": "0.0",
+      "rss_mb": 31.9,
+      "comm": "unattended-upgr",
+      "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-u"
+    },
+    {
+      "pid": "159",
+      "user": "root",
+      "mem_pct": "0.7",
+      "cpu_pct": "0.0",
+      "rss_mb": 29.2,
+      "comm": "networkd-dispat",
+      "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-"
+    },
+    {
+      "pid": "54",
+      "user": "root",
+      "mem_pct": "0.4",
+      "cpu_pct": "0.0",
+      "rss_mb": 17.3,
+      "comm": "systemd-journal",
+      "args": "/usr/lib/systemd/systemd-journald"
+    }
+  ],
+  "log_file": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_44/logs/resource_monitor_20261007_164934.log"
+}

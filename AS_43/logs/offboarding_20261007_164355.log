@@ -1,0 +1,26 @@
+[2026-10-07 16:43:55] [INFO] ============================================================
+[2026-10-07 16:43:55] [INFO] LSA Sprint AS_43 - Employee Offboarding Engine
+[2026-10-07 16:43:55] [INFO] Target Employee:      lsatest_offboard_demo
+[2026-10-07 16:43:55] [INFO] Archive Directory:    /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_43/archives
+[2026-10-07 16:43:55] [INFO] Log File:             /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_43/logs/offboarding_20261007_164355.log
+[2026-10-07 16:43:55] [INFO] ============================================================
+[2026-10-07 16:43:55] [INFO] Demo user 'lsatest_offboard_demo' does not exist. Creating with sample files...
+[2026-10-07 16:43:55] [SUCCESS] Provisioned demo user 'lsatest_offboard_demo' with home directory '/home/lsatest_offboard_demo'.
+[2026-10-07 16:43:55] [INFO] Pre-Offboarding State:
+[2026-10-07 16:43:55] [INFO]   Home Directory:    /home/lsatest_offboard_demo
+[2026-10-07 16:43:56] [INFO]   Active Shell:      /bin/bash
+[2026-10-07 16:43:56] [INFO]   Password Status:   P (P=Password active, L=Locked, NP=No password)
+[2026-10-07 16:43:56] [INFO] Step 1: Terminating any active processes for 'lsatest_offboard_demo'...
+[2026-10-07 16:43:56] [SUCCESS] Active processes terminated. Remaining processes: 0.
+[2026-10-07 16:43:56] [INFO] Step 2: Locking user password...
+[2026-10-07 16:43:56] [SUCCESS] Password locked. Status: L.
+[2026-10-07 16:43:56] [INFO] Step 3: Disabling interactive login shell...
+[2026-10-07 16:43:56] [SUCCESS] Shell updated to: /usr/sbin/nologin.
+[2026-10-07 16:43:56] [INFO] Step 4: Expiring account validity date...
+[2026-10-07 16:43:56] [SUCCESS] Account expiry status: Jan 02, 1970.
+[2026-10-07 16:43:56] [INFO] Step 5: Archiving home directory '/home/lsatest_offboard_demo'...
+[2026-10-07 16:43:56] [SUCCESS] Home directory successfully archived: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_43/archives/lsatest_offboard_demo_archive_20261007_164355.tar.gz (2585 bytes).
+[2026-10-07 16:43:56] [SUCCESS] SHA-256 Digest: 708ff990d90271a38e7ff10ecf7ef90f4c77542d988d8cb0137d11ee19508fb6.
+[2026-10-07 16:43:56] [INFO] Verifying archive bundle integrity...
+[2026-10-07 16:43:56] [SUCCESS] Archive integrity confirmed. Contained entries: 10.
+[2026-10-07 16:43:57] [INFO] Employee offboarding completed successfully.

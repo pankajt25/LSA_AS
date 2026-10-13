@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AS_30: Logged-in User Report Dashboard</title>
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #1e293b;
+            --border-color: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-cyan: #38bdf8;
+            --accent-green: #10b981;
+            --accent-yellow: #f59e0b;
+            --accent-red: #ef4444;
+            --accent-purple: #a855f7;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.5;
+            padding: 24px;
+        }
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+        header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .header-title h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .header-title p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 4px;
+        }
+        .header-badges {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .badge-cyan { background: rgba(56, 189, 248, 0.2); color: var(--accent-cyan); border: 1px solid rgba(56, 189, 248, 0.3); }
+        .badge-green { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); border: 1px solid rgba(16, 185, 129, 0.3); }
+        .badge-danger { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); border: 1px solid rgba(239, 68, 68, 0.3); }
+        .badge-warning { background: rgba(245, 158, 11, 0.2); color: var(--accent-yellow); border: 1px solid rgba(245, 158, 11, 0.3); }
+        .badge-purple { background: rgba(168, 85, 247, 0.2); color: var(--accent-purple); border: 1px solid rgba(168, 85, 247, 0.3); }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .kpi-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+        .kpi-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent-cyan);
+        }
+        .kpi-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .kpi-value {
+            font-size: 1.85rem;
+            font-weight: 700;
+            color: #fff;
+        }
+        .kpi-subtext {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 6px;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .card-header h2 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+        }
+        th {
+            background-color: rgba(15, 23, 42, 0.6);
+            color: var(--text-secondary);
+            text-align: left;
+            padding: 10px 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        td {
+            padding: 12px 14px;
+            border-bottom: 1px solid rgba(51, 65, 85, 0.4);
+            color: #e2e8f0;
+        }
+        tr:hover td {
+            background-color: rgba(51, 65, 85, 0.25);
+        }
+        .center { text-align: center; }
+        .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        .text-cyan { color: var(--accent-cyan); }
+        .text-green { color: var(--accent-green); }
+        .text-amber { color: var(--accent-yellow); }
+        .text-muted { color: var(--text-secondary); }
+
+        .code-pill {
+            background: #0b1120;
+            border: 1px solid var(--border-color);
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: #cbd5e1;
+        }
+
+        pre {
+            background-color: #0b1120;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.8rem;
+            color: #cbd5e1;
+            overflow-x: auto;
+            max-height: 320px;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 32px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>👥 AS_30: Active Logged-in User Report</h1>
+                <p>Linux System Administration (E1ITA307) &bull; Terminal Sessions, Remote IPs &amp; Idle Monitoring</p>
+            </div>
+            <div class="header-badges">
+                <span class="badge badge-cyan">Ubuntu 26.04.1 LTS</span>
+                <span class="badge badge-purple">SP</span>
+                <span class="badge badge-green">KERNEL 6.18.40.1-microsoft-standard-WSL2</span>
+                <span class="badge badge-warning">2026-10-07 12:56:03 IST</span>
+            </div>
+        </header>
+
+        <!-- KPI SUMMARY CARDS -->
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-label">Active Host Sessions</div>
+                <div class="kpi-value text-cyan">1</div>
+                <div class="kpi-subtext">Currently connected terminals</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Unique Logged-in Users</div>
+                <div class="kpi-value text-green">1</div>
+                <div class="kpi-subtext">Distinct accounts in active use</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Local Console / TTY</div>
+                <div class="kpi-value">1</div>
+                <div class="kpi-subtext">Local terminal sessions</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Remote Network Sessions</div>
+                <div class="kpi-value text-amber">0</div>
+                <div class="kpi-subtext">Inbound SSH/network sessions</div>
+            </div>
+        </div>
+
+        <!-- LIVE HOST SESSIONS TABLE -->
+        <div class="card">
+            <div class="card-header">
+                <h2>🟢 Live Host Active Sessions &bull; Real System Telemetry</h2>
+                <span class="badge badge-green">1 SESSION ACTIVE</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 140px;">Username</th>
+                        <th style="width: 100px;">Terminal</th>
+                        <th style="width: 180px;">Remote Host / IP</th>
+                        <th class="center" style="width: 110px;">Type</th>
+                        <th style="width: 110px;">Login Time</th>
+                        <th style="width: 150px;">Idle Time</th>
+                        <th>Active Process / Command</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+        <tr>
+            <td class="font-mono text-cyan"><strong>pankaj</strong> </td>
+            <td class="font-mono text-muted">pts/1</td>
+            <td class="font-mono text-amber"><strong>-</strong></td>
+            <td class="center"><span class="badge badge-green">LOCAL</span></td>
+            <td class="font-mono">10:41</td>
+            <td class="font-mono text-amber">2:14m (Idle (2:14m))</td>
+            <td class="font-mono"><code class="code-pill">-bash</code></td>
+        </tr>
+        
+                </tbody>
+            </table>
+        </div>
+
+        <!-- MULTI-USER ENTERPRISE DRILL TABLE -->
+        <div class="card">
+            <div class="card-header">
+                <h2>🏢 Multi-User Corporate Scenario Drill &bull; Simulated Environment</h2>
+                <span class="badge badge-purple">5 SESSIONS AUDITED</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 140px;">Username</th>
+                        <th style="width: 100px;">Terminal</th>
+                        <th style="width: 180px;">Remote Host / IP</th>
+                        <th class="center" style="width: 110px;">Type</th>
+                        <th style="width: 110px;">Login Time</th>
+                        <th style="width: 150px;">Idle Time</th>
+                        <th>Active Process / Command</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+        <tr>
+            <td class="font-mono text-cyan"><strong>root</strong> <span class="badge badge-danger">ROOT</span></td>
+            <td class="font-mono text-muted">pts/0</td>
+            <td class="font-mono text-amber"><strong>192.168.1.50</strong></td>
+            <td class="center"><span class="badge badge-warning">REMOTE</span></td>
+            <td class="font-mono">08:15</td>
+            <td class="font-mono text-amber">1:12m (Idle (1:12m))</td>
+            <td class="font-mono"><code class="code-pill">htop</code></td>
+        </tr>
+        
+        <tr>
+            <td class="font-mono text-cyan"><strong>pankaj</strong> </td>
+            <td class="font-mono text-muted">pts/1</td>
+            <td class="font-mono text-amber"><strong>10.0.0.12</strong></td>
+            <td class="center"><span class="badge badge-warning">REMOTE</span></td>
+            <td class="font-mono">09:30</td>
+            <td class="font-mono text-green">0.00s (Active (0.00s))</td>
+            <td class="font-mono"><code class="code-pill">vim /etc/nginx/nginx.conf</code></td>
+        </tr>
+        
+        <tr>
+            <td class="font-mono text-cyan"><strong>alice</strong> </td>
+            <td class="font-mono text-muted">pts/2</td>
+            <td class="font-mono text-amber"><strong>172.16.5.88</strong></td>
+            <td class="center"><span class="badge badge-warning">REMOTE</span></td>
+            <td class="font-mono">11:02</td>
+            <td class="font-mono text-muted">45:10 (Idle (45:10))</td>
+            <td class="font-mono"><code class="code-pill">-bash</code></td>
+        </tr>
+        
+        <tr>
+            <td class="font-mono text-cyan"><strong>bob</strong> </td>
+            <td class="font-mono text-muted">tty1</td>
+            <td class="font-mono text-amber"><strong>:0</strong></td>
+            <td class="center"><span class="badge badge-green">LOCAL</span></td>
+            <td class="font-mono">07:45</td>
+            <td class="font-mono text-amber">5:14m (Idle (5:14m))</td>
+            <td class="font-mono"><code class="code-pill">/usr/bin/gnome-shell</code></td>
+        </tr>
+        
+        <tr>
+            <td class="font-mono text-cyan"><strong>devops</strong> </td>
+            <td class="font-mono text-muted">pts/3</td>
+            <td class="font-mono text-amber"><strong>203.0.113.19</strong></td>
+            <td class="center"><span class="badge badge-warning">REMOTE</span></td>
+            <td class="font-mono">12:20</td>
+            <td class="font-mono text-green">12s (Active (12s))</td>
+            <td class="font-mono"><code class="code-pill">git pull origin main</code></td>
+        </tr>
+        
+                </tbody>
+            </table>
+        </div>
+
+        <!-- TERMINAL EXECUTION STREAM -->
+        <div class="card">
+            <div class="card-header">
+                <h2>🖥️ Terminal Audit Stream</h2>
+                <span class="badge badge-green">STATUS: COMPLETED</span>
+            </div>
+            <pre>[36m[1m================================================================================[0m
+[36m[1m         ACTIVE LOGGED-IN USERS MONITORING ENGINE (AS_30)                       [0m
+[36m[1m================================================================================[0m
+ Data Source        : [32mREAL_LIVE_HOST[0m
+ Hostname           : [1mSP[0m
+ System Uptime      : up 2 hours, 0 minutes
+ Timestamp          : 2026-10-07 12:56:03 IST
+[36m--------------------------------------------------------------------------------[0m
+ Active Sessions    : [1m1[0m ([32m1 Local[0m, [33m0 Remote[0m)
+ Unique Users       : [1m1[0m
+[36m--------------------------------------------------------------------------------[0m
+USER         TTY        REMOTE HOST/IP     TYPE             LOGIN TIME   IDLE         ACTIVE COMMAND
+------------------------------------------------------------------------------------------------
+[1mpankaj[0m        pts/1      -                  [32mLocal/Console[0m    10:41        2:14m        -bash
+[36m================================================================================[0m</pre>
+        </div>
+
+        <!-- AUDIT LOG HISTORY -->
+        <div class="card">
+            <div class="card-header">
+                <h2>📜 Persistent Session Log (logs/user_sessions.log)</h2>
+                <span class="badge badge-cyan">SYSTEM AUDIT TRAIL</span>
+            </div>
+            <pre>[2026-10-07 12:55:10 IST] [SESSION] User: pankaj, TTY: pts/1, Remote: - (Local/Console), Login: 10:41, Idle: 2:13m, Command: -bash
+[2026-10-07 12:55:10 IST] [SESSION] User: root, TTY: pts/0, Remote: 192.168.1.50 (Remote), Login: 08:15, Idle: 1:12m, Command: htop
+[2026-10-07 12:55:10 IST] [SESSION] User: pankaj, TTY: pts/1, Remote: 10.0.0.12 (Remote), Login: 09:30, Idle: 0.00s, Command: vim /etc/nginx/nginx.conf
+[2026-10-07 12:55:10 IST] [SESSION] User: alice, TTY: pts/2, Remote: 172.16.5.88 (Remote), Login: 11:02, Idle: 45:10, Command: -bash
+[2026-10-07 12:55:11 IST] [SESSION] User: bob, TTY: tty1, Remote: :0 (Local/Console), Login: 07:45, Idle: 5:14m, Command: /usr/bin/gnome-shell
+[2026-10-07 12:55:11 IST] [SESSION] User: devops, TTY: pts/3, Remote: 203.0.113.19 (Remote), Login: 12:20, Idle: 12s, Command: git pull origin main
+[2026-10-07 12:56:03 IST] [SESSION] User: pankaj, TTY: pts/1, Remote: - (Local/Console), Login: 10:41, Idle: 2:14m, Command: -bash
+[2026-10-07 12:56:03 IST] [SESSION] User: root, TTY: pts/0, Remote: 192.168.1.50 (Remote), Login: 08:15, Idle: 1:12m, Command: htop
+[2026-10-07 12:56:03 IST] [SESSION] User: pankaj, TTY: pts/1, Remote: 10.0.0.12 (Remote), Login: 09:30, Idle: 0.00s, Command: vim /etc/nginx/nginx.conf
+[2026-10-07 12:56:03 IST] [SESSION] User: alice, TTY: pts/2, Remote: 172.16.5.88 (Remote), Login: 11:02, Idle: 45:10, Command: -bash
+[2026-10-07 12:56:03 IST] [SESSION] User: bob, TTY: tty1, Remote: :0 (Local/Console), Login: 07:45, Idle: 5:14m, Command: /usr/bin/gnome-shell
+[2026-10-07 12:56:03 IST] [SESSION] User: devops, TTY: pts/3, Remote: 203.0.113.19 (Remote), Login: 12:20, Idle: 12s, Command: git pull origin main
+[2026-10-07 12:56:03 IST] [SESSION] User: pankaj, TTY: pts/1, Remote: - (Local/Console), Login: 10:41, Idle: 2:14m, Command: -bash</pre>
+        </div>
+
+        <div class="footer">
+            Linux System Administration (E1ITA307) &bull; Automation Sprint AS_30 &bull; Generated dynamically by run.sh
+        </div>
+    </div>
+</body>
+</html>

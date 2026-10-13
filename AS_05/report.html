@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ownership Audit Dashboard — AS_05 (E1ITA307)</title>
+    <style>
+        :root {
+            --bg-primary: #0b0f19;
+            --bg-card: #151e32;
+            --bg-card-hover: #1b2742;
+            --border-color: #243452;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --cyan: #38bdf8;
+            --green: #22c55e;
+            --amber: #f59e0b;
+            --red: #ef4444;
+            --purple: #a855f7;
+            --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            font-family: var(--font-stack);
+            line-height: 1.6;
+            padding: 24px;
+        }
+        .container { max-width: 1380px; margin: 0 auto; }
+        .header {
+            background: linear-gradient(135deg, #151e32 0%, #1e293b 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 28px 32px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        }
+        .header-title h1 {
+            font-size: 1.85rem;
+            font-weight: 700;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .header-title p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-top: 6px;
+        }
+        .meta-pill {
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid var(--border-color);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .meta-pill strong { color: #ffffff; }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .card-metric-title {
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        .card-metric-value {
+            font-size: 1.85rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 6px;
+            font-family: var(--font-mono);
+        }
+        .card-metric-desc {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        .section-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .section-header h2 {
+            font-size: 1.25rem;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.92rem;
+        }
+        th {
+            background: #0f172a;
+            color: var(--text-muted);
+            text-align: left;
+            padding: 12px 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.78rem;
+            letter-spacing: 0.04em;
+            border-bottom: 2px solid var(--border-color);
+        }
+        td {
+            padding: 14px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-main);
+        }
+        tr:hover td {
+            background-color: var(--bg-card-hover);
+        }
+        code {
+            background: #0f172a;
+            color: var(--cyan);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 0.88rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        .badge-success { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
+        .badge-warning { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+        .badge-danger { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+        .badge-info { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+
+        .terminal-box {
+            background: #090d16;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: #e2e8f0;
+            max-height: 380px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-title">
+                <h1>👤 Project Ownership Audit — AS_05</h1>
+                <p>Linux System Administration (E1ITA307) &bull; Project Directory Administrator Ownership Enforcement</p>
+            </div>
+            <div class="header-meta">
+                <span class="meta-pill">Host: <strong>SP</strong></span>
+                <span class="meta-pill">OS: <strong>Ubuntu 26.04.1 LTS</strong></span>
+                <span class="meta-pill">Kernel: <strong>6.18.40.1-microsoft-standard-WSL2</strong></span>
+                <span class="meta-pill">Operator: <strong>pankaj</strong></span>
+                <span class="meta-pill">Timestamp: <strong>2026-10-07 11:15:27 IST</strong></span>
+            </div>
+        </div>
+
+        <!-- Metric KPI Cards -->
+        <div class="cards-grid">
+            <div class="card" style="border-top: 4px solid var(--cyan);">
+                <div class="card-metric-title">Designated Admin</div>
+                <div class="card-metric-value" style="font-size: 1.5rem; color: var(--cyan);">pankaj</div>
+                <div class="card-metric-desc">UID: <strong>1000</strong> &bull; Target: <code>project_alpha</code></div>
+            </div>
+
+            <div class="card" style="border-top: 4px solid var(--amber);">
+                <div class="card-metric-title">Ownership Compliance</div>
+                <div class="card-metric-value" style="color: var(--amber);">
+                    57.1%
+                </div>
+                <div class="card-metric-desc"><strong>4</strong> compliant / <strong>7</strong> total files</div>
+            </div>
+
+            <div class="card" style="border-top: 4px solid var(--red);">
+                <div class="card-metric-title">Non-Admin Files</div>
+                <div class="card-metric-value" style="color: var(--red);">
+                    3
+                </div>
+                <div class="card-metric-desc">2 Root drift, 1 Foreign user</div>
+            </div>
+
+            <div class="card" style="border-top: 4px solid var(--purple);">
+                <div class="card-metric-title">Audit Engine Query</div>
+                <div class="card-metric-value" style="font-size: 1.25rem; color: var(--purple);">! -user pankaj</div>
+                <div class="card-metric-desc">Finds all files not matching administrator UID</div>
+            </div>
+        </div>
+
+        <!-- Flagged Files Table -->
+        <div class="section-panel">
+            <div class="section-header">
+                <h2>📋 Flagged Non-Admin Files Inventory</h2>
+                <span class="badge" style="background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid #ef4444;">3 MISMATCHED FILES</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>File Path</th>
+                        <th>Actual Owner</th>
+                        <th>Designated Admin</th>
+                        <th>Permissions</th>
+                        <th>Size</th>
+                        <th>Risk Category</th>
+                        <th>Remediation Command</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+        <tr>
+            <td><code>/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_05/sandbox_data/project_alpha/assets/logo.svg</code></td>
+            <td><strong>nobody</strong> (UID: 65534)</td>
+            <td>pankaj (UID: 1000)</td>
+            <td><code>-rw-r--r--</code> (644)</td>
+            <td>99 B</td>
+            <td><span class="badge badge-warning">FOREIGN_USER</span></td>
+            <td><code>sudo chown pankaj /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_05/sandbox_data/project_alpha/assets/logo.svg</code></td>
+        </tr>
+        
+        <tr>
+            <td><code>/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_05/sandbox_data/project_alpha/config/secrets.env</code></td>
+            <td><strong>root</strong> (UID: 0)</td>
+            <td>pankaj (UID: 1000)</td>
+            <td><code>-rw-r--r--</code> (644)</td>
+            <td>67 B</td>
+            <td><span class="badge badge-danger">ROOT_PRIVILEGE</span></td>
+            <td><code>sudo chown pankaj /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_05/sandbox_data/project_alpha/config/secrets.env</code></td>
+        </tr>
+        
+        <tr>
+            <td><code>/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_05/sandbox_data/project_alpha/tests/test_api.py</code></td>
+            <td><strong>root</strong> (UID: 0)</td>
+            <td>pankaj (UID: 1000)</td>
+            <td><code>-rw-r--r--</code> (644)</td>
+            <td>71 B</td>
+            <td><span class="badge badge-danger">ROOT_PRIVILEGE</span></td>
+            <td><code>sudo chown pankaj /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_05/sandbox_data/project_alpha/tests/test_api.py</code></td>
+        </tr>
+        
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Live Terminal Execution Output -->
+        <div class="section-panel">
+            <div class="section-header">
+                <h2>🖥️ Live Audit Execution Transcript</h2>
+                <span class="badge badge-info">CLI Console</span>
+            </div>
+            <div class="terminal-box">[36m[1m================================================================================[0m
+[36m[1m           PROJECT FILE OWNERSHIP AUDIT &amp; COMPLIANCE ENGINE (AS_05)              [0m
+[36m[1m================================================================================[0m
+ Target Directory   : [1m/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_05/sandbox_data/project_alpha[0m
+ Designated Admin   : [1mpankaj[0m (UID: 1000)
+ Audit Policy       : [1mEnforce Single-Admin File Ownership (! -user pankaj)[0m
+ Timestamp          : 2026-10-07 11:15:26 IST
+ Hostname           : SP
+[36m--------------------------------------------------------------------------------[0m
+[INFO] Total regular files scanned  : [1m7[0m
+[INFO] Compliant files (pankaj) : [32m[1m4[0m
+[INFO] Non-compliant files flagged  : [31m[1m3[0m
+[36m--------------------------------------------------------------------------------[0m
+[1mACTUAL OWNER UID    PERMS      SIZE       CATEGORY         FILE PATH[0m
+--------------------------------------------------------------------------------
+nobody       65534  -rw-r--r-- 99B        [33mFOREIGN_USER    [0m /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_05/sandbox_data/project_alpha/assets/logo.svg
+root         0      -rw-r--r-- 67B        [31mROOT_PRIVILEGE  [0m /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_05/sandbox_data/project_alpha/config/secrets.env
+root         0      -rw-r--r-- 71B        [31mROOT_PRIVILEGE  [0m /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_05/sandbox_data/project_alpha/tests/test_api.py
+[36m--------------------------------------------------------------------------------[0m
+[1mOWNERSHIP AUDIT SUMMARY:[0m
+  Overall Status       : [31mVIOLATIONS DETECTED (3 Files Mismatched)[0m
+  Root Privilege Drift : [31m2[0m files (Accidental root ownership)
+  Foreign User Files   : [33m1[0m files (Wrong user / contractor)
+  Orphan UIDs          : [35m0[0m files (Unmapped UIDs)
+  Compliance Ratio     : 57.1%
+  Audit Telemetry JSON : [36m/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_05/logs/ownership_audit.json[0m
+  Audit Log History    : [36m/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_05/logs/ownership_audit.log[0m
+[36m================================================================================[0m</div>
+        </div>
+
+        <!-- Persistent Audit Log Viewer -->
+        <div class="section-panel">
+            <div class="section-header">
+                <h2>📜 Persistent Audit Log (<code>logs/ownership_audit.log</code>)</h2>
+                <span class="badge badge-info">Audit Trail</span>
+            </div>
+            <div class="terminal-box">[2026-10-07 11:14:24 IST] [INFO] Scanning &#x27;/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_05/sandbox_data/project_alpha&#x27; for files not owned by &#x27;pankaj&#x27;
+[2026-10-07 11:14:25 IST] [VIOLATION] Ownership mismatch: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_05/sandbox_data/project_alpha/assets/logo.svg (actual: nobody:65534, expected: pankaj, cat: FOREIGN_USER)
+[2026-10-07 11:14:25 IST] [VIOLATION] Ownership mismatch: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_05/sandbox_data/project_alpha/config/secrets.env (actual: root:0, expected: pankaj, cat: ROOT_PRIVILEGE)
+[2026-10-07 11:14:25 IST] [VIOLATION] Ownership mismatch: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_05/sandbox_data/project_alpha/tests/test_api.py (actual: root:0, expected: pankaj, cat: ROOT_PRIVILEGE)
+[2026-10-07 11:14:34 IST] [INFO] Scanning &#x27;/etc/cron.d&#x27; for files not owned by &#x27;root&#x27;
+[2026-10-07 11:14:34 IST] [INFO] All files in /etc/cron.d owned by root
+[2026-10-07 11:15:26 IST] [INFO] Scanning &#x27;/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_05/sandbox_data/project_alpha&#x27; for files not owned by &#x27;pankaj&#x27;
+[2026-10-07 11:15:26 IST] [VIOLATION] Ownership mismatch: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_05/sandbox_data/project_alpha/assets/logo.svg (actual: nobody:65534, expected: pankaj, cat: FOREIGN_USER)
+[2026-10-07 11:15:27 IST] [VIOLATION] Ownership mismatch: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_05/sandbox_data/project_alpha/config/secrets.env (actual: root:0, expected: pankaj, cat: ROOT_PRIVILEGE)
+[2026-10-07 11:15:27 IST] [VIOLATION] Ownership mismatch: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_05/sandbox_data/project_alpha/tests/test_api.py (actual: root:0, expected: pankaj, cat: ROOT_PRIVILEGE)</div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            Linux System Administration (E1ITA307) &bull; Automation Sprint AS_05 &bull; Generated dynamically via <code>run.sh</code>
+        </div>
+    </div>
+</body>
+</html>

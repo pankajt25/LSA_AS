@@ -1,0 +1,91 @@
+{
+  "timestamp": "2026-10-07 16:59:42",
+  "total_services": 8,
+  "active_count": 5,
+  "inactive_count": 0,
+  "failed_count": 0,
+  "not_found_count": 3,
+  "log_file": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_46/logs/service_dashboard_20261007_165938.log",
+  "services": [
+    {
+      "service": "ssh",
+      "unit": "ssh.service",
+      "status": "NOT INSTALLED",
+      "enabled": "not-found",
+      "pid": "-",
+      "memory": "-",
+      "since": "-",
+      "description": "ssh service"
+    },
+    {
+      "service": "nginx",
+      "unit": "nginx.service",
+      "status": "NOT INSTALLED",
+      "enabled": "not-found",
+      "pid": "-",
+      "memory": "-",
+      "since": "-",
+      "description": "nginx service"
+    },
+    {
+      "service": "apache2",
+      "unit": "apache2.service",
+      "status": "NOT INSTALLED",
+      "enabled": "not-found",
+      "pid": "-",
+      "memory": "-",
+      "since": "-",
+      "description": "apache2 service"
+    },
+    {
+      "service": "cron",
+      "unit": "cron.service",
+      "status": "ACTIVE",
+      "enabled": "enabled",
+      "pid": "153",
+      "memory": "0.5 MB",
+      "since": "Wed",
+      "description": "Regular background program processing daemon"
+    },
+    {
+      "service": "rsyslog",
+      "unit": "rsyslog.service",
+      "status": "ACTIVE",
+      "enabled": "enabled",
+      "pid": "181",
+      "memory": "2.5 MB",
+      "since": "Wed",
+      "description": "System Logging Service"
+    },
+    {
+      "service": "systemd-resolved",
+      "unit": "systemd-resolved.service",
+      "status": "ACTIVE",
+      "enabled": "enabled",
+      "pid": "98",
+      "memory": "7.4 MB",
+      "since": "Wed",
+      "description": "Network Name Resolution"
+    },
+    {
+      "service": "chrony",
+      "unit": "chrony.service",
+      "status": "ACTIVE",
+      "enabled": "enabled",
+      "pid": "147",
+      "memory": "7.1 MB",
+      "since": "Wed",
+      "description": "chrony, an NTP client/server"
+    },
+    {
+      "service": "containerd",
+      "unit": "containerd.service",
+      "status": "ACTIVE",
+      "enabled": "enabled",
+      "pid": "203",
+      "memory": "80.8 MB",
+      "since": "Wed",
+      "description": "containerd container runtime"
+    }
+  ]
+}

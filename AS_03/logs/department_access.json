@@ -1,0 +1,28 @@
+{
+  "problem_id": "AS_03",
+  "title": "Department Access",
+  "timestamp": "2026-10-07 10:50:41 IST",
+  "timestamp_epoch": 1791350441,
+  "hostname": "SP",
+  "os": "Linux",
+  "kernel": "6.18.40.1-microsoft-standard-WSL2",
+  "department_group": {
+    "name": "lsatest_dept_shared",
+    "exists": true,
+    "gid": "1009",
+    "members": ""
+  },
+  "shared_directory": {
+    "path": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_03/sandbox_data/shared",
+    "octal_mode": "2770",
+    "symbolic_mode": "drwxrws---",
+    "owner": "pankaj",
+    "group": "lsatest_dept_shared",
+    "target_mode": "2770",
+    "sgid_active": true,
+    "others_blocked": true,
+    "inheritance_verified": true,
+    "non_member_denied": true
+  },
+  "status": "CONFIGURED"
+}

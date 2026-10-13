@@ -1,0 +1,39 @@
+[2026-10-07 16:40:32] [INFO] ============================================================
+[2026-10-07 16:40:32] [INFO] LSA Sprint AS_42 - Department Folder Provisioning Engine
+[2026-10-07 16:40:32] [INFO] Base Directory:       /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_42/sandbox_data/departments
+[2026-10-07 16:40:32] [INFO] Group Prefix:         lsatest_
+[2026-10-07 16:40:32] [INFO] Permission Mode:      2770 (SGID)
+[2026-10-07 16:40:32] [INFO] Departments:          engineering finance marketing operations human_resources
+[2026-10-07 16:40:32] [INFO] Log File:             /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_42/logs/dept_creation_20261007_164032.log
+[2026-10-07 16:40:32] [INFO] ============================================================
+[2026-10-07 16:40:32] [INFO] Processing department: [engineering]...
+[2026-10-07 16:40:32] [INFO] Group 'lsatest_engineering' does not exist. Creating...
+[2026-10-07 16:40:32] [SUCCESS] Created group 'lsatest_engineering' (GID: 1009).
+[2026-10-07 16:40:32] [SUCCESS] Created directory: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_42/sandbox_data/departments/engineering
+[2026-10-07 16:40:33] [SUCCESS] Folder: engineering -> Perms: drwxrws--- (2770) Owner: pankaj Group: lsatest_engineering
+[2026-10-07 16:40:33] [INFO] SGID Test File: dept_charter.txt -> Owner: pankaj Group: lsatest_engineering (Inherited: YES)
+[2026-10-07 16:40:33] [INFO] Processing department: [finance]...
+[2026-10-07 16:40:33] [INFO] Group 'lsatest_finance' does not exist. Creating...
+[2026-10-07 16:40:33] [SUCCESS] Created group 'lsatest_finance' (GID: 1010).
+[2026-10-07 16:40:33] [SUCCESS] Created directory: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_42/sandbox_data/departments/finance
+[2026-10-07 16:40:33] [SUCCESS] Folder: finance -> Perms: drwxrws--- (2770) Owner: pankaj Group: lsatest_finance
+[2026-10-07 16:40:33] [INFO] SGID Test File: dept_charter.txt -> Owner: pankaj Group: lsatest_finance (Inherited: YES)
+[2026-10-07 16:40:33] [INFO] Processing department: [marketing]...
+[2026-10-07 16:40:33] [INFO] Group 'lsatest_marketing' does not exist. Creating...
+[2026-10-07 16:40:33] [SUCCESS] Created group 'lsatest_marketing' (GID: 1011).
+[2026-10-07 16:40:33] [SUCCESS] Created directory: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_42/sandbox_data/departments/marketing
+[2026-10-07 16:40:33] [SUCCESS] Folder: marketing -> Perms: drwxrws--- (2770) Owner: pankaj Group: lsatest_marketing
+[2026-10-07 16:40:33] [INFO] SGID Test File: dept_charter.txt -> Owner: pankaj Group: lsatest_marketing (Inherited: YES)
+[2026-10-07 16:40:34] [INFO] Processing department: [operations]...
+[2026-10-07 16:40:34] [INFO] Group 'lsatest_operations' does not exist. Creating...
+[2026-10-07 16:40:34] [SUCCESS] Created group 'lsatest_operations' (GID: 1012).
+[2026-10-07 16:40:34] [SUCCESS] Created directory: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_42/sandbox_data/departments/operations
+[2026-10-07 16:40:34] [SUCCESS] Folder: operations -> Perms: drwxrws--- (2770) Owner: pankaj Group: lsatest_operations
+[2026-10-07 16:40:34] [INFO] SGID Test File: dept_charter.txt -> Owner: pankaj Group: lsatest_operations (Inherited: YES)
+[2026-10-07 16:40:34] [INFO] Processing department: [human_resources]...
+[2026-10-07 16:40:34] [INFO] Group 'lsatest_human_resources' does not exist. Creating...
+[2026-10-07 16:40:34] [SUCCESS] Created group 'lsatest_human_resources' (GID: 1013).
+[2026-10-07 16:40:34] [SUCCESS] Created directory: /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_42/sandbox_data/departments/human_resources
+[2026-10-07 16:40:34] [SUCCESS] Folder: human_resources -> Perms: drwxrws--- (2770) Owner: pankaj Group: lsatest_human_resources
+[2026-10-07 16:40:34] [INFO] SGID Test File: dept_charter.txt -> Owner: pankaj Group: lsatest_human_resources (Inherited: YES)
+[2026-10-07 16:40:35] [INFO] Department folder provisioning completed successfully.
