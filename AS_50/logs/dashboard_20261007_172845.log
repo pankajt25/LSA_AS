@@ -1,0 +1,40 @@
+[1;36m========================================================================================[0m
+[1m   LINUX SYSTEM ADMINISTRATION — MINI ADMINISTRATION DASHBOARD (AS_50)[0m
+[1;36m========================================================================================[0m
+ Hostname:    [1mSP[0m | OS: Ubuntu 26.04.1 LTS | Kernel: 6.18.40.1-microsoft-standard-WSL2
+ Uptime:      [1;32m2h 20m 49s[0m (Boot: 2026-10-07 15:07:56) | Cores: 4
+[1;36m----------------------------------------------------------------------------------------[0m
+[1mVITAL RESOURCE UTILIZATION:[0m
+  CPU Usage:    [--------------------] [1m3.9%[0m  (Load 1m/5m/15m: 0.08, 0.18, 0.27)
+  Memory Usage: [###-----------------] [1m19.6%[0m  (760 MB / 3869 MB, Avail: 3109 MB)
+  Swap Usage:   [--------------------] [1m0.0%[0m  (0 MB / 1024 MB)
+  Root Storage: [--------------------] [1m1%[0m  (6.5G / 1007G, Avail: 950G, Inodes: 1%)
+
+[1mSYSTEM SESSIONS & CORE DAEMONS:[0m
+  Active Users: [1m1[0m session(s) (1 unique)
+  Systemd Units: [1;32m14 running[0m | [1;31m1 failed[0m
+
+[1mKEY MONITORED SERVICES:[0m
+  SERVICE UNIT             STATUS     ENABLED    MAIN PID MEMORY      
+  ------------------------ ---------- ---------- -------- ------------
+  cron.service             [1;32mACTIVE[0m    enabled    153      0.5 MB      
+  dbus.service             [1;32mACTIVE[0m    static     155      1.7 MB      
+  rsyslog.service          [1;32mACTIVE[0m    enabled    181      2.5 MB      
+  systemd-journald.service [1;32mACTIVE[0m    static     54       12.7 MB     
+  systemd-logind.service   [1;32mACTIVE[0m    static     161      2.7 MB      
+  systemd-resolved.service [1;32mACTIVE[0m    enabled    98       7.2 MB      
+  containerd.service       [1;32mACTIVE[0m    enabled    203      81.0 MB     
+
+[1mLOGGED-IN SESSIONS:[0m
+  USER         TERMINAL     LOGIN TIME         HOST / ORIGIN       
+  ------------ ------------ ------------------ --------------------
+  pankaj       pts/1        2026-10-07 15:50   local               
+
+[1mTOP CPU PROCESSES:[0m
+  PID      USER         %CPU     %MEM     COMMAND             
+  897      pankaj       17.3     10.3     agy                 
+  6283     pankaj       1.5      0.0      bash                
+  203      root         0.2      1.3      containerd          
+  300      root         0.1      0.0      Relay(301)          
+  1        root         0.0      0.3      systemd             
+[1;36m========================================================================================[0m

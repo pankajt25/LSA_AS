@@ -1,0 +1,7 @@
+{
+  "app_name": "PaymentGatewayService",
+  "version": "2.4.1",
+  "environment": "production",
+  "workers": 8,
+  "timeout": 30
+}

@@ -1,0 +1,17 @@
+{
+  "problem_id": "AS_07",
+  "title": "Low Disk Space Alert",
+  "timestamp": "2026-10-07 11:25:39 IST",
+  "timestamp_epoch": 1791352540,
+  "hostname": "SP",
+  "threshold_pct": 80,
+  "total_filesystems_scanned": 9,
+  "affected_filesystems_count": 0,
+  "status": "HEALTHY",
+  "affected_filesystems": [
+    
+  ],
+  "all_filesystems": [
+    {"device":"none","mount":"/usr/lib/modules/6.18.40.1-microsoft-standard-WSL2","total":"1.9G","used":"0M","available":"1.9G","utilization_pct":0,"crossed_threshold":false},{"device":"drivers","mount":"/usr/lib/wsl/drivers","total":"117.2G","used":"82.3G","available":"34.9G","utilization_pct":71,"crossed_threshold":false},{"device":"/dev/sdd","mount":"/","total":"1006.9G","used":"6.4G","available":"949.2G","utilization_pct":1,"crossed_threshold":false},{"device":"none","mount":"/usr/lib/wsl/lib","total":"1.9G","used":"0M","available":"1.9G","utilization_pct":0,"crossed_threshold":false},{"device":"rootfs","mount":"/init","total":"1.9G","used":"3M","available":"1.9G","utilization_pct":1,"crossed_threshold":false},{"device":"none","mount":"/mnt/wslg/versions.txt","total":"1.9G","used":"0M","available":"1.9G","utilization_pct":1,"crossed_threshold":false},{"device":"none","mount":"/mnt/wslg/doc","total":"1.9G","used":"0M","available":"1.9G","utilization_pct":1,"crossed_threshold":false},{"device":"C:\\","mount":"/mnt/c","total":"117.2G","used":"82.3G","available":"34.9G","utilization_pct":71,"crossed_threshold":false},{"device":"D:\\","mount":"/mnt/d","total":"917.4G","used":"108.7G","available":"808.7G","utilization_pct":12,"crossed_threshold":false}
+  ]
+}

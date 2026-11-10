@@ -1,0 +1,6 @@
+[2026-10-07 12:38:50 IST] [INFO] Evaluating package 'cowsay' (dry_run=false)
+[2026-10-07 12:38:50 IST] [INSTALL_START] Executing: sudo apt-get install -y cowsay
+[2026-10-07 12:38:58 IST] [SUCCESS] Package 'cowsay' installed successfully (Version: 3.03+dfsg2-8build1)
+[2026-10-07 12:38:59 IST] [INFO] Evaluating package 'figlet' (dry_run=false)
+[2026-10-07 12:38:59 IST] [INSTALL_START] Executing: sudo apt-get install -y figlet
+[2026-10-07 12:39:03 IST] [SUCCESS] Package 'figlet' installed successfully (Version: 2.2.5-3.1)

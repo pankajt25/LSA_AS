@@ -1,0 +1,25 @@
+[2026-10-07 15:20:22] USER LOGIN AUDIT RUN
+Mode: Live
+Records found: 184
+Unique users: ["nobody","pankaj","root"]
+------------------------------------------------------------
+[2026-10-07 15:20:28] USER LOGIN AUDIT RUN
+Mode: Sandbox
+Records found: 8
+Unique users: ["alex","backup_svc","devops_admin","marcus","root","sarah","sec_auditor"]
+------------------------------------------------------------
+[2026-10-07 15:21:40] USER LOGIN AUDIT RUN
+Mode: Live
+Records found: 184
+Unique users: ["nobody","pankaj","root"]
+------------------------------------------------------------
+[2026-10-07 15:21:41] USER LOGIN AUDIT RUN
+Mode: Sandbox
+Records found: 8
+Unique users: ["alex","backup_svc","devops_admin","marcus","root","sarah","sec_auditor"]
+------------------------------------------------------------
+[2026-10-07 15:21:41] USER LOGIN AUDIT RUN
+Mode: Live
+Records found: 184
+Unique users: ["nobody","pankaj","root"]
+------------------------------------------------------------

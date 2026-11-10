@@ -1,0 +1,12 @@
+[2026-10-07 16:26:27] [INFO] Scanning mounted file system tables across Linux VFS...
+[2026-10-07 16:26:27] [INFO] Configuration: Sort By='pct', Filter='All', IncludeAll=false
+[2026-10-07 16:26:27 IST] MOUNT_AUDIT: Mounts=16, RW=14, RO=2, AvgPct=10.2%
+[2026-10-07 16:26:27] [SUCCESS] Mounted filesystem report generated in 0s.
+[2026-10-07 16:28:05] [INFO] Scanning mounted file system tables across Linux VFS...
+[2026-10-07 16:28:05] [INFO] Configuration: Sort By='pct', Filter='All', IncludeAll=false
+[2026-10-07 16:28:05 IST] MOUNT_AUDIT: Mounts=16, RW=14, RO=2, AvgPct=10.2%
+[2026-10-07 16:28:05] [SUCCESS] Mounted filesystem report generated in 0s.
+[2026-10-07 16:28:45] [INFO] Scanning mounted file system tables across Linux VFS...
+[2026-10-07 16:28:45] [INFO] Configuration: Sort By='pct', Filter='All', IncludeAll=false
+[2026-10-07 16:28:45 IST] MOUNT_AUDIT: Mounts=16, RW=14, RO=2, AvgPct=10.2%
+[2026-10-07 16:28:46] [SUCCESS] Mounted filesystem report generated in 1s.

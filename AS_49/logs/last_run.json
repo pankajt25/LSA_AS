@@ -1,0 +1,54 @@
+{
+  "timestamp": "2026-10-07 17:20:15",
+  "source_dir": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_49/sandbox_data/source",
+  "dest_dir": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_49/sandbox_data/dest",
+  "dry_run": false,
+  "delete_prune": true,
+  "stats": {
+    "total_files": 10,
+    "files_transferred": 2,
+    "total_file_size": "256 bytes",
+    "transferred_size": "141 bytes",
+    "literal_data": "141 bytes",
+    "speedup": "0.43"
+  },
+  "sync_verified": true,
+  "files": [
+    {
+      "file": "assets/branding.svg",
+      "size": "28 B",
+      "src_hash": "f5292d20e02e8fcb...",
+      "dest_hash": "f5292d20e02e8fcb...",
+      "status": "MATCH"
+    },
+    {
+      "file": "config/settings.json",
+      "size": "56 B",
+      "src_hash": "ed77ca711c7daa93...",
+      "dest_hash": "ed77ca711c7daa93...",
+      "status": "MATCH"
+    },
+    {
+      "file": "docs/architecture.md",
+      "size": "76 B",
+      "src_hash": "b46441eab7a0eb63...",
+      "dest_hash": "b46441eab7a0eb63...",
+      "status": "MATCH"
+    },
+    {
+      "file": "src/main.py",
+      "size": "31 B",
+      "src_hash": "32fd3a59fb866668...",
+      "dest_hash": "32fd3a59fb866668...",
+      "status": "MATCH"
+    },
+    {
+      "file": "src/utils.py",
+      "size": "65 B",
+      "src_hash": "c7c0cd77a0a51d39...",
+      "dest_hash": "c7c0cd77a0a51d39...",
+      "status": "MATCH"
+    }
+  ],
+  "log_file": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_49/logs/sync_20261007_172014.log"
+}

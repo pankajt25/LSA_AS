@@ -1,0 +1,22 @@
+{
+  "problem_id": "AS_05",
+  "title": "Ownership Audit",
+  "timestamp": "2026-10-07 11:15:27 IST",
+  "timestamp_epoch": 1791351927,
+  "hostname": "SP",
+  "target_directory": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_05/sandbox_data/project_alpha",
+  "designated_admin": "pankaj",
+  "admin_uid": 1000,
+  "total_files_scanned": 7,
+  "compliant_files": 4,
+  "flagged_files_count": 3,
+  "breakdown": {
+    "root_privilege_drift": 2,
+    "foreign_user_accounts": 1,
+    "orphan_uids": 0
+  },
+  "status": "VIOLATIONS_FOUND",
+  "flagged_files": [
+    {"path":"/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_05/sandbox_data/project_alpha/assets/logo.svg","actual_owner":"nobody","actual_uid":65534,"group":"nogroup","symbolic_mode":"-rw-r--r--","octal_mode":"644","size":99,"category":"FOREIGN_USER","remediation":"sudo chown pankaj /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_05/sandbox_data/project_alpha/assets/logo.svg"},{"path":"/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_05/sandbox_data/project_alpha/config/secrets.env","actual_owner":"root","actual_uid":0,"group":"root","symbolic_mode":"-rw-r--r--","octal_mode":"644","size":67,"category":"ROOT_PRIVILEGE","remediation":"sudo chown pankaj /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_05/sandbox_data/project_alpha/config/secrets.env"},{"path":"/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_05/sandbox_data/project_alpha/tests/test_api.py","actual_owner":"root","actual_uid":0,"group":"root","symbolic_mode":"-rw-r--r--","octal_mode":"644","size":71,"category":"ROOT_PRIVILEGE","remediation":"sudo chown pankaj /mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_05/sandbox_data/project_alpha/tests/test_api.py"}
+  ]
+}

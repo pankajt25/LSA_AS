@@ -1,0 +1,58 @@
+{
+  "scan_metadata": {
+    "target_directory": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_32/sandbox_data/project_repo",
+    "scan_timestamp": "2026-10-08 12:11:08 ",
+    "threshold_hours": 24.0,
+    "extension_filter": "All Extensions"
+  },
+  "summary": {
+    "total_files_scanned": 9,
+    "modified_files_count": 2,
+    "older_files_count": 7,
+    "modification_percentage": 22.2,
+    "total_modified_bytes": 188,
+    "total_modified_human": "188 B",
+    "most_recent_file": "build/pipeline_output.log",
+    "time_brackets": {
+      "under_1h": 0,
+      "1h_to_6h": 0,
+      "6h_to_12h": 0,
+      "12h_to_24h": 2,
+      "over_24h": 7
+    },
+    "top_extensions": {
+      ".log": 1,
+      ".py": 1
+    }
+  },
+  "modified_files": [
+    {
+      "relative_path": "build/pipeline_output.log",
+      "absolute_path": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_32/sandbox_data/project_repo/build/pipeline_output.log",
+      "filename": "pipeline_output.log",
+      "extension": ".log",
+      "size_bytes": 87,
+      "size_human": "87 B",
+      "mtime_epoch": 1791365134.0,
+      "mtime_formatted": "2026-10-07 14:55:34",
+      "age_hours": 21.26,
+      "age_string": "21.3h ago",
+      "owner": "pankaj",
+      "permissions": "644"
+    },
+    {
+      "relative_path": "src/auth_service.py",
+      "absolute_path": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_32/sandbox_data/project_repo/src/auth_service.py",
+      "filename": "auth_service.py",
+      "extension": ".py",
+      "size_bytes": 101,
+      "size_human": "101 B",
+      "mtime_epoch": 1791359734.0,
+      "mtime_formatted": "2026-10-07 13:25:34",
+      "age_hours": 22.76,
+      "age_string": "22.8h ago",
+      "owner": "pankaj",
+      "permissions": "644"
+    }
+  ]
+}

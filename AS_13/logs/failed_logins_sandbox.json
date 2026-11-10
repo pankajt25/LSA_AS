@@ -1,0 +1,26 @@
+{
+  "problem_id": "AS_13",
+  "title": "Failed Login Audit",
+  "timestamp": "2026-10-07 12:32:49 IST",
+  "timestamp_epoch": 1791356569,
+  "hostname": "SP",
+  "log_file": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_13/sandbox_data/auth.log",
+  "log_source_type": "SYNTHETIC_SANDBOX",
+  "total_failed_logins": 20,
+  "unique_offending_ips": 5,
+  "targeted_user_count": 11,
+  "invalid_user_attempts": 9,
+  "valid_user_attempts": 11,
+  "failure_types": {
+    "password": 19,
+    "publickey": 1,
+    "other": 0
+  },
+  "status": "THREATS_DETECTED",
+  "top_offending_ips": [
+    {"rank":1,"ip":"198.51.100.23","attempts":8,"percentage":"40.0%"},{"rank":2,"ip":"203.0.113.88","attempts":5,"percentage":"25.0%"},{"rank":3,"ip":"192.0.2.145","attempts":3,"percentage":"15.0%"},{"rank":4,"ip":"198.51.100.99","attempts":2,"percentage":"10.0%"},{"rank":5,"ip":"192.168.1.105","attempts":2,"percentage":"10.0%"}
+  ],
+  "top_targeted_users": [
+    {"rank":1,"user":"root","attempts":6,"percentage":"30.0%"},{"rank":2,"user":"ubuntu","attempts":3,"percentage":"15.0%"},{"rank":3,"user":"pankaj","attempts":2,"percentage":"10.0%"},{"rank":4,"user":"admin","attempts":2,"percentage":"10.0%"},{"rank":5,"user":"test","attempts":1,"percentage":"5.0%"},{"rank":6,"user":"support","attempts":1,"percentage":"5.0%"},{"rank":7,"user":"postgres","attempts":1,"percentage":"5.0%"},{"rank":8,"user":"oracle","attempts":1,"percentage":"5.0%"},{"rank":9,"user":"guest","attempts":1,"percentage":"5.0%"},{"rank":10,"user":"deploy","attempts":1,"percentage":"5.0%"},{"rank":11,"user":"backup","attempts":1,"percentage":"5.0%"}
+  ]
+}

@@ -1,0 +1,115 @@
+{
+  "system_info": {
+    "hostname": "SP",
+    "audit_timestamp": "2026-10-07 15:21:40 ",
+    "mode": "Sandbox Simulation"
+  },
+  "summary": {
+    "total_logins_recorded": 8,
+    "unique_users_count": 7,
+    "unique_users_list": [
+      "alex",
+      "backup_svc",
+      "devops_admin",
+      "marcus",
+      "root",
+      "sarah",
+      "sec_auditor"
+    ],
+    "active_sessions_count": 8,
+    "remote_logins_count": 6,
+    "local_console_count": 1,
+    "sudo_elevations_count": 1,
+    "user_frequency": {
+      "devops_admin": 2,
+      "backup_svc": 1,
+      "sec_auditor": 1,
+      "marcus": 1,
+      "root": 1,
+      "alex": 1,
+      "sarah": 1
+    }
+  },
+  "records": [
+    {
+      "timestamp": "2026-10-07 14:05:12",
+      "user": "devops_admin",
+      "uid": "1004",
+      "service": "sshd",
+      "type": "Remote SSH",
+      "terminal": "pts/?",
+      "remote_host": "10.14.20.5",
+      "status": "Active / Logged In"
+    },
+    {
+      "timestamp": "2026-10-07 11:45:00",
+      "user": "backup_svc",
+      "uid": "1006",
+      "service": "sshd",
+      "type": "Remote SSH",
+      "terminal": "pts/?",
+      "remote_host": "10.14.20.100",
+      "status": "Active / Logged In"
+    },
+    {
+      "timestamp": "2026-10-07 10:15:40",
+      "user": "sec_auditor",
+      "uid": "1005",
+      "service": "sshd",
+      "type": "Remote SSH",
+      "terminal": "pts/?",
+      "remote_host": "203.0.113.45",
+      "status": "Active / Logged In"
+    },
+    {
+      "timestamp": "2026-10-07 09:40:02",
+      "user": "marcus",
+      "uid": "1003",
+      "service": "sshd",
+      "type": "Remote SSH",
+      "terminal": "pts/?",
+      "remote_host": "172.16.50.88",
+      "status": "Active / Logged In"
+    },
+    {
+      "timestamp": "2026-10-07 09:12:30",
+      "user": "root",
+      "uid": "0",
+      "service": "sudo",
+      "type": "Sudo Privilege",
+      "terminal": "pts/?",
+      "remote_host": "Local",
+      "status": "Active / Logged In"
+    },
+    {
+      "timestamp": "2026-10-07 08:45:00",
+      "user": "devops_admin",
+      "uid": "1004",
+      "service": "sshd",
+      "type": "Remote SSH",
+      "terminal": "pts/?",
+      "remote_host": "10.14.20.5",
+      "status": "Active / Logged In"
+    },
+    {
+      "timestamp": "2026-10-07 08:30:10",
+      "user": "alex",
+      "uid": "1001",
+      "service": "login",
+      "type": "Local Console",
+      "terminal": "pts/?",
+      "remote_host": "Local",
+      "status": "Active / Logged In"
+    },
+    {
+      "timestamp": "2026-10-07 08:15:22",
+      "user": "sarah",
+      "uid": "1002",
+      "service": "sshd",
+      "type": "Remote SSH",
+      "terminal": "pts/?",
+      "remote_host": "192.168.1.105",
+      "status": "Active / Logged In"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+ 12:54:04 up 14 days,  4 users,  load average: 0.45, 0.38, 0.28
+USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU  WHAT
+root     pts/0    192.168.1.50     08:15    1:12m  0.84s  0.12s htop
+pankaj   pts/1    10.0.0.12        09:30    0.00s  2.45s  1.20s vim /etc/nginx/nginx.conf
+alice    pts/2    172.16.5.88      11:02    45:10  0.15s  0.02s -bash
+bob      tty1     :0               07:45    5:14m  4.10s  0.80s /usr/bin/gnome-shell
+devops   pts/3    203.0.113.19     12:20    12s    0.30s  0.15s git pull origin main

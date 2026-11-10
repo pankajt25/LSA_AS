@@ -1,0 +1,13 @@
+[2026-10-07 11:23:18 IST] [INFO] Starting disk utilization scan with threshold 80%
+[2026-10-07 11:23:18 IST] [INFO] All 0 filesystems below 80% utilization threshold.
+[2026-10-07 11:23:33 IST] [INFO] Starting disk utilization scan with threshold 80%
+[2026-10-07 11:23:34 IST] [INFO] All 9 filesystems below 80% utilization threshold.
+[2026-10-07 11:23:39 IST] [INFO] Starting disk utilization scan with threshold 70%
+[2026-10-07 11:23:40 IST] [ALERT] Filesystem drivers mounted on /usr/lib/wsl/drivers crossed threshold: 71% (severity: WARNING)
+[2026-10-07 11:23:40 IST] [ALERT] Filesystem C:\ mounted on /mnt/c crossed threshold: 71% (severity: WARNING)
+[2026-10-07 11:24:35 IST] [INFO] Starting disk utilization scan with threshold 80%
+[2026-10-07 11:24:35 IST] [INFO] All 9 filesystems below 80% utilization threshold.
+[2026-10-07 11:25:09 IST] [INFO] Starting disk utilization scan with threshold 80%
+[2026-10-07 11:25:10 IST] [INFO] All 9 filesystems below 80% utilization threshold.
+[2026-10-07 11:25:39 IST] [INFO] Starting disk utilization scan with threshold 80%
+[2026-10-07 11:25:39 IST] [INFO] All 9 filesystems below 80% utilization threshold.

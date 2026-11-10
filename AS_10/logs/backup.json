@@ -1,0 +1,23 @@
+{
+  "problem_id": "AS_10",
+  "title": "Daily Backup",
+  "timestamp": "2026-10-07 11:51:04 IST",
+  "timestamp_epoch": 1791354064,
+  "hostname": "SP",
+  "source_directory": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_10/sandbox_data/project",
+  "destination_directory": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_10/backups",
+  "archive_filename": "backup_project_20261007_115104.tar.gz",
+  "archive_path": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_10/backups/backup_project_20261007_115104.tar.gz",
+  "compression_algorithm": "gzip",
+  "uncompressed_bytes": 1133,
+  "uncompressed_human": "1.11 KB",
+  "compressed_bytes": 1159,
+  "compressed_human": "1.13 KB",
+  "compression_ratio": "0.0%",
+  "file_count": 8,
+  "verification_status": "PASSED",
+  "sha256_checksum": "7e708df5c1a84884dc5e077cc07da5bee3f60518b1332711be798ef5f32a9686",
+  "checksum_file": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_10/backups/backup_project_20261007_115104.tar.gz.sha256",
+  "duration_ms": 125,
+  "status": "BACKUP_SUCCESS"
+}

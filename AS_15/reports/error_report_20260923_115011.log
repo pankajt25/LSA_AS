@@ -1,0 +1,51 @@
+================================================================================
+                       SYSTEM LOG ERROR ANALYSIS REPORT
+================================================================================
+Generated On       : 2026-09-23 11:50:11 IST
+Target Log File    : ./sample_syslog.log
+Log File Size      : 434 bytes
+Total Log Entries  : 7
+Monitored Keywords : error fail critical fatal warn
+================================================================================
+
+[+] SECTION 1: EXECUTIVE SUMMARY
+--------------------------------------------------------------------------------
+Status                  : [ALERT] Errors/Warnings detected!
+Total Lines Analyzed    : 7
+Matching Error Entries  : 5 (71.43% of total entries)
+
+[+] SECTION 2: SEVERITY & KEYWORD BREAKDOWN
+--------------------------------------------------------------------------------
+KEYWORD        MATCHING LINES SHARE (%)    DISTRIBUTION            
+--------------------------------------------------------------------------------
+ERROR          2              40.0%        [########------------]
+FAIL           3              60.0%        [############--------]
+CRITICAL       1              20.0%        [####----------------]
+FATAL          1              20.0%        [####----------------]
+WARN           1              20.0%        [####----------------]
+--------------------------------------------------------------------------------
+Note: The sum of individual keyword counts may exceed total error lines because
+      a single log entry can contain multiple keywords (e.g. 'ERROR: failed...').
+
+[+] SECTION 3: FREQUENCY OF RECURRING ERROR PATTERNS
+--------------------------------------------------------------------------------
+COUNT        | ERROR ENTRY PATTERN
+--------------------------------------------------------------------------------
+1            | Sep 23 10:06:20 host app: FATAL: service crashed unexpectedly
+1            | Sep 23 10:05:59 host app: ERROR: authentication failed for user admin
+1            | Sep 23 10:03:44 host app: CRITICAL: disk write failure on /dev/sdb1
+1            | Sep 23 10:02:03 host app: WARNING: low memory detected
+1            | Sep 23 10:01:15 host app: ERROR: failed to connect to database
+
+[+] SECTION 4: 10 MOST RECENT MATCHING LINES (CHRONOLOGICAL)
+--------------------------------------------------------------------------------
+ORIG LINE  | LOG ENTRY CONTENT
+--------------------------------------------------------------------------------
+Line 2     | Sep 23 10:01:15 host app: ERROR: failed to connect to database
+Line 3     | Sep 23 10:02:03 host app: WARNING: low memory detected
+Line 4     | Sep 23 10:03:44 host app: CRITICAL: disk write failure on /dev/sdb1
+Line 6     | Sep 23 10:05:59 host app: ERROR: authentication failed for user admin
+Line 7     | Sep 23 10:06:20 host app: FATAL: service crashed unexpectedly
+================================================================================
+                          END OF ERROR LOG REPORT
+================================================================================

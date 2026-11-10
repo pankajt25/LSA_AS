@@ -1,0 +1,57 @@
+================================================================================
+                       SYSTEM LOG ERROR ANALYSIS REPORT
+================================================================================
+Generated On       : 2026-09-30 16:27:43 IST
+Target Log File    : /var/log/syslog
+Log Source Type    : real system log (/var/log/syslog)
+Log File Size      : 3493602 bytes
+Total Log Entries  : 28981
+Monitored Keywords : error fail critical fatal warn
+================================================================================
+
+[+] SECTION 1: EXECUTIVE SUMMARY
+--------------------------------------------------------------------------------
+Status                  : [ALERT] Errors/Warnings detected!
+Total Lines Analyzed    : 28981
+Matching Error Entries  : 1304 (4.50% of total entries)
+
+[+] SECTION 2: SEVERITY & KEYWORD BREAKDOWN
+--------------------------------------------------------------------------------
+KEYWORD        MATCHING LINES SHARE (%)    DISTRIBUTION            
+--------------------------------------------------------------------------------
+ERROR          586            44.9%        [########------------]
+FAIL           594            45.6%        [#########-----------]
+CRITICAL       0              0.0%         [--------------------]
+FATAL          35             2.7%         [--------------------]
+WARN           290            22.2%        [####----------------]
+--------------------------------------------------------------------------------
+Note: The sum of individual keyword counts may exceed total error lines because
+      a single log entry can contain multiple keywords (e.g. 'ERROR: failed...').
+
+[+] SECTION 3: FREQUENCY OF RECURRING ERROR PATTERNS
+--------------------------------------------------------------------------------
+COUNT        | ERROR ENTRY PATTERN
+--------------------------------------------------------------------------------
+1            | 2026-09-30T16:24:19.556185+05:30 SP ubuntu-insights[929]: 2026/09/30 16:24:19 ERROR failed to collect insights: insights write failed: report already exists for this period
+1            | 2026-09-30T16:24:17.575256+05:30 SP ubuntu-insights[929]: 2026/09/30 16:24:17 WARN failed to run wsl.exe -v error="exit status 1"
+1            | 2026-09-30T16:19:03.012006+05:30 SP unattended-upgrade-shutdown[215]: /usr/share/unattended-upgrades/unattended-upgrade-shutdown:250: PyGIDeprecationWarning: GLib.unix_signal_add is deprecated; use GLibUnix.signal_add instead
+1            | 2026-09-30T16:19:02.777754+05:30 SP kernel: WSL (105) ERROR: CheckConnection: getaddrinfo() failed: -5
+1            | 2026-09-30T16:19:02.229899+05:30 SP containerd[196]: time="2026-09-30T16:19:02.228394300+05:30" level=error msg="failed to load cni during init, please check CRI plugin status before setting up network for pods" error="cni config load failed: no network config found in /etc/cni/net.d: cni plugin not initialized: failed to load cni config"
+
+[+] SECTION 4: 10 MOST RECENT MATCHING LINES (CHRONOLOGICAL)
+--------------------------------------------------------------------------------
+ORIG LINE  | LOG ENTRY CONTENT
+--------------------------------------------------------------------------------
+Line 28786 | 2026-09-30T16:19:02.145087+05:30 SP containerd[196]: time="2026-09-30T16:19:02.144918500+05:30" level=info msg="skip loading plugin" error="lstat /var/lib/containerd/io.containerd.snapshotter.v1.zfs: no such file or directory: skip plugin" id=io.containerd.snapshotter.v1.zfs type=io.containerd.snapshotter.v1
+Line 28797 | 2026-09-30T16:19:02.218183+05:30 SP containerd[196]: time="2026-09-30T16:19:02.214261100+05:30" level=info msg="skip loading plugin" error="failed to check mkfs.erofs availability: failed to run mkfs.erofs --help: exec: \"mkfs.erofs\": executable file not found in $PATH: skip plugin" id=io.containerd.differ.v1.erofs type=io.containerd.differ.v1
+Line 28826 | 2026-09-30T16:19:02.225788+05:30 SP containerd[196]: time="2026-09-30T16:19:02.222657200+05:30" level=info msg="starting cri plugin" config="{\"containerd\":{\"defaultRuntimeName\":\"runc\",\"runtimes\":{\"runc\":{\"runtimeType\":\"io.containerd.runc.v2\",\"runtimePath\":\"\",\"PodAnnotations\":null,\"ContainerAnnotations\":null,\"options\":{\"BinaryName\":\"\",\"CriuImagePath\":\"\",\"CriuWorkPath\":\"\",\"IoGid\":0,\"IoUid\":0,\"NoNewKeyring\":false,\"Root\":\"\",\"ShimCgroup\":\"\",\"SystemdCgroup\":false},\"privileged_without_host_devices\":false,\"privileged_without_host_devices_all_devices_allowed\":false,\"cgroupWritable\":false,\"baseRuntimeSpec\":\"\",\"cniConfDir\":\"\",\"cniMaxConfNum\":0,\"snapshotter\":\"\",\"sandboxer\":\"podsandbox\",\"io_type\":\"\"}},\"ignoreBlockIONotEnabledErrors\":false,\"ignoreRdtNotEnabledErrors\":false},\"cni\":{\"binDir\":\"\",\"binDirs\":[\"/opt/cni/bin\"],\"confDir\":\"/etc/cni/net.d\",\"maxConfNum\":1,\"setupSerially\":false,\"confTemplate\":\"\",\"ipPref\":\"\",\"useInternalLoopback\":false},\"enableSelinux\":false,\"selinuxCategoryRange\":1024,\"maxContainerLogLineSize\":16384,\"disableApparmor\":false,\"restrictOOMScoreAdj\":false,\"disableProcMount\":false,\"unsetSeccompProfile\":\"\",\"tolerateMissingHugetlbController\":true,\"disableHugetlbController\":true,\"device_ownership_from_security_context\":false,\"ignoreImageDefinedVolumes\":false,\"netnsMountsUnderStateDir\":false,\"enableUnprivilegedPorts\":true,\"enableUnprivilegedICMP\":true,\"enableCDI\":true,\"cdiSpecDirs\":[\"/etc/cdi\",\"/var/run/cdi\"],\"drainExecSyncIOTimeout\":\"0s\",\"ignoreDeprecationWarnings\":null,\"containerdRootDir\":\"/var/lib/containerd\",\"containerdEndpoint\":\"/run/containerd/containerd.sock\",\"rootDir\":\"/var/lib/containerd/io.containerd.grpc.v1.cri\",\"stateDir\":\"/run/containerd/io.containerd.grpc.v1.cri\"}"
+Line 28839 | 2026-09-30T16:19:02.229267+05:30 SP containerd[196]: time="2026-09-30T16:19:02.223686100+05:30" level=info msg="skip loading plugin" error="skip plugin: tracing endpoint not configured" id=io.containerd.tracing.processor.v1.otlp type=io.containerd.tracing.processor.v1
+Line 28841 | 2026-09-30T16:19:02.229430+05:30 SP containerd[196]: time="2026-09-30T16:19:02.223743900+05:30" level=info msg="skip loading plugin" error="skip plugin: tracing endpoint not configured" id=io.containerd.internal.v1.tracing type=io.containerd.internal.v1
+Line 28847 | 2026-09-30T16:19:02.229899+05:30 SP containerd[196]: time="2026-09-30T16:19:02.228394300+05:30" level=error msg="failed to load cni during init, please check CRI plugin status before setting up network for pods" error="cni config load failed: no network config found in /etc/cni/net.d: cni plugin not initialized: failed to load cni config"
+Line 28861 | 2026-09-30T16:19:02.777754+05:30 SP kernel: WSL (105) ERROR: CheckConnection: getaddrinfo() failed: -5
+Line 28865 | 2026-09-30T16:19:03.012006+05:30 SP unattended-upgrade-shutdown[215]: /usr/share/unattended-upgrades/unattended-upgrade-shutdown:250: PyGIDeprecationWarning: GLib.unix_signal_add is deprecated; use GLibUnix.signal_add instead
+Line 28921 | 2026-09-30T16:24:17.575256+05:30 SP ubuntu-insights[929]: 2026/09/30 16:24:17 WARN failed to run wsl.exe -v error="exit status 1"
+Line 28977 | 2026-09-30T16:24:19.556185+05:30 SP ubuntu-insights[929]: 2026/09/30 16:24:19 ERROR failed to collect insights: insights write failed: report already exists for this period
+================================================================================
+                          END OF ERROR LOG REPORT
+================================================================================

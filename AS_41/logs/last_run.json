@@ -1,0 +1,14 @@
+{
+  "timestamp": "2026-10-07 16:36:45",
+  "source_dir": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_41/sandbox_data/projects",
+  "archive_dir": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_41/sandbox_data/archive",
+  "days_threshold": 30,
+  "dry_run": false,
+  "compressed": true,
+  "total_scanned_files": 9,
+  "archived_count": 5,
+  "bytes_reclaimed": 131237,
+  "remaining_files": 4,
+  "archive_artifact": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_41/sandbox_data/archive/project_archive_20261007_163643.tar.gz",
+  "log_file": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint/AS_41/logs/archive_20261007_163643.log"
+}

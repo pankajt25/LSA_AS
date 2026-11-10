@@ -1,0 +1,4 @@
+Sep 23 11:00:01 host kernel: INFO: system boot complete
+Sep 23 11:01:00 host cron: INFO: hourly jobs finished
+Sep 23 11:02:15 host systemd: NOTICE: service reloaded successfully
+Sep 23 11:03:30 host sshd: INFO: session opened for user test

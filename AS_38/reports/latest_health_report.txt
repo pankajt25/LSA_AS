@@ -1,0 +1,52 @@
+================================================================================
+LINUX SYSTEM HEALTH AUDIT REPORT
+Generated At: 2026-10-07 16:16:36 IST
+Host: SP | Kernel: 6.18.40.1-microsoft-standard-WSL2 | Uptime: up 1 hour, 8 minutes
+================================================================================
+
+1. SYSTEM IDENTITY & LOAD
+--------------------------------------------------------------------------------
+Hostname         : SP
+Kernel Version   : 6.18.40.1-microsoft-standard-WSL2
+CPU Logical Cores: 4
+Uptime           : up 1 hour, 8 minutes
+Load Average     : 1 min: 0.03 | 5 min: 0.13 | 15 min: 0.19
+
+2. MEMORY & SWAP UTILIZATION
+--------------------------------------------------------------------------------
+Physical RAM     : Total: 3869MB | Used: 677MB (17.5%) | Free: 1786MB
+Buffers/Cached   : 1543MB | Available: 3191MB
+Swap Space       : Total: 1024MB | Used: 0MB | Free: 1024MB
+
+3. FILESYSTEM STORAGE FOOTPRINT (Root /)
+--------------------------------------------------------------------------------
+Total Capacity   : 1007G
+Used Space       : 6.5G (1%)
+Available Space  : 950G
+
+4. NETWORK INTERFACES
+--------------------------------------------------------------------------------
+lo               UNKNOWN        127.0.0.1/8 10.255.255.254/32 ::1/128 
+eth0             UP             192.168.42.183/20 fe80::215:5dff:fe64:16d1/64 
+
+5. TOP 5 CPU INTENSIVE PROCESSES
+--------------------------------------------------------------------------------
+    PID USER     %CPU %MEM COMMAND
+    897 pankaj   12.2  7.9 agy
+   2268 pankaj    4.5  0.0 bash
+   2264 pankaj    3.3  0.0 bash
+    203 root      0.2  1.3 containerd
+      1 root      0.1  0.3 systemd
+
+6. TOP 5 MEMORY INTENSIVE PROCESSES
+--------------------------------------------------------------------------------
+    PID USER     %MEM   RSS COMMAND
+    897 pankaj    7.9 313904 agy
+    203 root      1.3 51524 containerd
+    224 root      0.8 32648 unattended-upgr
+    159 root      0.7 29856 networkd-dispat
+     54 root      0.4 17492 systemd-journal
+
+================================================================================
+END OF REPORT — LSA SPRINT AUTOMATION (AS_38)
+================================================================================

@@ -1,0 +1,36 @@
+{
+  "problem_id": "AS_29",
+  "title": "System Inventory Audit",
+  "timestamp": "2026-10-07 12:49:56 IST",
+  "timestamp_epoch": 1791357596,
+  "system": {
+    "hostname": "SP",
+    "os_name": "Ubuntu",
+    "os_version": "26.04",
+    "os_pretty": "Ubuntu 26.04.1 LTS",
+    "kernel": "6.18.40.1-microsoft-standard-WSL2",
+    "architecture": "x86_64",
+    "uptime": "up 1 hour, 54 minutes"
+  },
+  "cpu": {
+    "model": "Intel(R) Core(TM) i3-7020U CPU @ 2.30GHz",
+    "cores": 4,
+    "clock_mhz": "2303"
+  },
+  "memory": {
+    "total_mb": 3869,
+    "used_mb": 818,
+    "available_mb": 3051,
+    "free_mb": 1087,
+    "usage_percent": "21.1%",
+    "swap_total_mb": 1024,
+    "swap_used_mb": 0,
+    "swap_free_mb": 1024
+  },
+  "storage": [
+    {"filesystem":"drivers","size":"118G","used":"83G","available":"35G","use_percent":"71%","use_percent_val":71,"mount_point":"/usr/lib/wsl/drivers"},{"filesystem":"/dev/sdd","size":"1007G","used":"6.4G","available":"950G","use_percent":"1%","use_percent_val":1,"mount_point":"/"},{"filesystem":"rootfs","size":"1.9G","used":"3.3M","available":"1.9G","use_percent":"1%","use_percent_val":1,"mount_point":"/init"},{"filesystem":"C:\","size":"118G","used":"83G","available":"35G","use_percent":"71%","use_percent_val":71,"mount_point":"/mnt/c"},{"filesystem":"D:\","size":"918G","used":"109G","available":"809G","use_percent":"12%","use_percent_val":12,"mount_point":"/mnt/d"}
+  ],
+  "network": [
+    {"interface":"lo","state":"UNKNOWN","mac_address":"00:00:00:00:00:00","ip_addresses":"127.0.0.1/8 10.255.255.254/32 ::1/128"},{"interface":"eth0","state":"UP","mac_address":"00:15:5d:a0:4d:67","ip_addresses":"192.168.42.183/20 fe80::215:5dff:fea0:4d67/64"}
+  ]
+}

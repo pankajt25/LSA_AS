@@ -1,0 +1,277 @@
+{
+  "system_info": {
+    "hostname": "SP",
+    "audit_timestamp": "2026-10-07 15:21:41 ",
+    "mode": "Live System Audit"
+  },
+  "summary": {
+    "total_logins_recorded": 184,
+    "unique_users_count": 3,
+    "unique_users_list": [
+      "nobody",
+      "pankaj",
+      "root"
+    ],
+    "active_sessions_count": 57,
+    "remote_logins_count": 0,
+    "local_console_count": 57,
+    "sudo_elevations_count": 127,
+    "user_frequency": {
+      "pankaj": 57,
+      "root": 125,
+      "nobody": 2
+    }
+  },
+  "records": [
+    {
+      "timestamp": "2026-10-07 15:09:03",
+      "user": "pankaj",
+      "uid": "1000",
+      "service": "login",
+      "type": "Local Console",
+      "terminal": "pts/1",
+      "remote_host": "Local",
+      "status": "Active (Logged In)"
+    },
+    {
+      "timestamp": "2026-10-07 12:39:42",
+      "user": "root",
+      "uid": "0",
+      "service": "sudo",
+      "type": "Sudo Privilege",
+      "terminal": "pts/1",
+      "remote_host": "Local",
+      "status": "Logged Out"
+    },
+    {
+      "timestamp": "2026-10-07 12:39:39",
+      "user": "root",
+      "uid": "0",
+      "service": "sudo",
+      "type": "Sudo Privilege",
+      "terminal": "pts/1",
+      "remote_host": "Local",
+      "status": "Logged Out"
+    },
+    {
+      "timestamp": "2026-10-07 12:38:59",
+      "user": "root",
+      "uid": "0",
+      "service": "sudo",
+      "type": "Sudo Privilege",
+      "terminal": "pts/1",
+      "remote_host": "Local",
+      "status": "Logged Out"
+    },
+    {
+      "timestamp": "2026-10-07 12:38:50",
+      "user": "root",
+      "uid": "0",
+      "service": "sudo",
+      "type": "Sudo Privilege",
+      "terminal": "pts/1",
+      "remote_host": "Local",
+      "status": "Logged Out"
+    },
+    {
+      "timestamp": "2026-10-07 12:36:54",
+      "user": "root",
+      "uid": "0",
+      "service": "sudo",
+      "type": "Sudo Privilege",
+      "terminal": "pts/1",
+      "remote_host": "Local",
+      "status": "Logged Out"
+    },
+    {
+      "timestamp": "2026-10-07 11:13:48",
+      "user": "root",
+      "uid": "0",
+      "service": "sudo",
+      "type": "Sudo Privilege",
+      "terminal": "pts/1",
+      "remote_host": "Local",
+      "status": "Logged Out"
+    },
+    {
+      "timestamp": "2026-10-07 11:13:48",
+      "user": "root",
+      "uid": "0",
+      "service": "sudo",
+      "type": "Sudo Privilege",
+      "terminal": "pts/1",
+      "remote_host": "Local",
+      "status": "Logged Out"
+    },
+    {
+      "timestamp": "2026-10-07 11:13:48",
+      "user": "root",
+      "uid": "0",
+      "service": "sudo",
+      "type": "Sudo Privilege",
+      "terminal": "pts/1",
+      "remote_host": "Local",
+      "status": "Logged Out"
+    },
+    {
+      "timestamp": "2026-10-07 10:51:19",
+      "user": "root",
+      "uid": "0",
+      "service": "sudo",
+      "type": "Sudo Privilege",
+      "terminal": "pts/1",
+      "remote_host": "Local",
+      "status": "Logged Out"
+    },
+    {
+      "timestamp": "2026-10-07 10:51:19",
+      "user": "root",
+      "uid": "0",
+      "service": "sudo",
+      "type": "Sudo Privilege",
+      "terminal": "pts/1",
+      "remote_host": "Local",
+      "status": "Logged Out"
+    },
+    {
+      "timestamp": "2026-10-07 10:51:18",
+      "user": "root",
+      "uid": "0",
+      "service": "sudo",
+      "type": "Sudo Privilege",
+      "terminal": "pts/1",
+      "remote_host": "Local",
+      "status": "Logged Out"
+    },
+    {
+      "timestamp": "2026-10-07 10:50:41",
+      "user": "nobody",
+      "uid": "65534",
+      "service": "sudo",
+      "type": "Sudo Privilege",
+      "terminal": "pts/1",
+      "remote_host": "Local",
+      "status": "Logged Out"
+    },
+    {
+      "timestamp": "2026-10-07 10:50:41",
+      "user": "nobody",
+      "uid": "65534",
+      "service": "sudo",
+      "type": "Sudo Privilege",
+      "terminal": "pts/1",
+      "remote_host": "Local",
+      "status": "Logged Out"
+    },
+    {
+      "timestamp": "2026-10-07 10:50:40",
+      "user": "root",
+      "uid": "0",
+      "service": "sudo",
+      "type": "Sudo Privilege",
+      "terminal": "pts/1",
+      "remote_host": "Local",
+      "status": "Logged Out"
+    },
+    {
+      "timestamp": "2026-10-07 10:50:40",
+      "user": "root",
+      "uid": "0",
+      "service": "sudo",
+      "type": "Sudo Privilege",
+      "terminal": "pts/1",
+      "remote_host": "Local",
+      "status": "Logged Out"
+    },
+    {
+      "timestamp": "2026-10-07 10:50:40",
+      "user": "root",
+      "uid": "0",
+      "service": "sudo",
+      "type": "Sudo Privilege",
+      "terminal": "pts/1",
+      "remote_host": "Local",
+      "status": "Logged Out"
+    },
+    {
+      "timestamp": "2026-10-07 10:47:07",
+      "user": "root",
+      "uid": "0",
+      "service": "sudo",
+      "type": "Sudo Privilege",
+      "terminal": "pts/1",
+      "remote_host": "Local",
+      "status": "Logged Out"
+    },
+    {
+      "timestamp": "2026-10-07 10:46:33",
+      "user": "root",
+      "uid": "0",
+      "service": "sudo",
+      "type": "Sudo Privilege",
+      "terminal": "pts/1",
+      "remote_host": "Local",
+      "status": "Logged Out"
+    },
+    {
+      "timestamp": "2026-10-07 10:41:41",
+      "user": "pankaj",
+      "uid": "1000",
+      "service": "login",
+      "type": "Local Console",
+      "terminal": "pts/1",
+      "remote_host": "Local",
+      "status": "Active (Logged In)"
+    },
+    {
+      "timestamp": "2026-10-06 08:36:32",
+      "user": "pankaj",
+      "uid": "1000",
+      "service": "login",
+      "type": "Local Console",
+      "terminal": "pts/1",
+      "remote_host": "Local",
+      "status": "Active (Logged In)"
+    },
+    {
+      "timestamp": "2026-10-06 08:30:12",
+      "user": "pankaj",
+      "uid": "1000",
+      "service": "login",
+      "type": "Local Console",
+      "terminal": "pts/1",
+      "remote_host": "Local",
+      "status": "Active (Logged In)"
+    },
+    {
+      "timestamp": "2026-10-05 10:44:52",
+      "user": "pankaj",
+      "uid": "1000",
+      "service": "login",
+      "type": "Local Console",
+      "terminal": "pts/1",
+      "remote_host": "Local",
+      "status": "Active (Logged In)"
+    },
+    {
+      "timestamp": "2026-10-05 10:37:47",
+      "user": "pankaj",
+      "uid": "1000",
+      "service": "login",
+      "type": "Local Console",
+      "terminal": "pts/1",
+      "remote_host": "Local",
+      "status": "Active (Logged In)"
+    },
+    {
+      "timestamp": "2026-10-05 10:08:03",
+      "user": "pankaj",
+      "uid": "1000",
+      "service": "login",
+      "type": "Local Console",
+      "terminal": "pts/1",
+      "remote_host": "Local",
+      "status": "Active (Logged In)"
+    }
+  ]
+}

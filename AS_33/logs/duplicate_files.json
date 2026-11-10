@@ -1,0 +1,161 @@
+{
+  "scan_metadata": {
+    "target_directory": "/mnt/d/Users/Dell/Downloads/Projects/LSA/Automation_sprint",
+    "algorithm": "SHA256",
+    "min_size_filter": 1,
+    "scan_timestamp": "2026-10-07 15:33:32 "
+  },
+  "summary": {
+    "total_files_scanned": 339,
+    "total_directory_size_bytes": 54736262,
+    "total_directory_size_human": "52.20 MB",
+    "candidate_collision_sizes": 19,
+    "files_hashed_count": 53,
+    "duplicate_groups_count": 7,
+    "redundant_files_count": 10,
+    "wasted_space_bytes": 8979,
+    "wasted_space_human": "8.8 KB",
+    "wasted_storage_percentage": 0.02
+  },
+  "duplicate_groups": [
+    {
+      "group_id": "DUP-003",
+      "checksum": "6dec8c0807780129e53d41dd31e01a92cf81af4747b788e60f07dae37ddeeb79",
+      "algorithm": "SHA256",
+      "file_size_bytes": 2709,
+      "file_size_human": "2.6 KB",
+      "copies_count": 2,
+      "redundant_count": 1,
+      "wasted_bytes": 2709,
+      "wasted_human": "2.6 KB",
+      "original_file": "AS_23/reports/ip_report_20260930_164121.txt",
+      "duplicate_files": [
+        "AS_23/reports/latest_ip_report.txt"
+      ],
+      "all_files": [
+        "AS_23/reports/ip_report_20260930_164121.txt",
+        "AS_23/reports/latest_ip_report.txt"
+      ]
+    },
+    {
+      "group_id": "DUP-004",
+      "checksum": "55cc97a20c80fb7046a67b0ab22ea8beaeb21fed8aa26798136e37e568847fcb",
+      "algorithm": "SHA256",
+      "file_size_bytes": 2492,
+      "file_size_human": "2.4 KB",
+      "copies_count": 2,
+      "redundant_count": 1,
+      "wasted_bytes": 2492,
+      "wasted_human": "2.4 KB",
+      "original_file": "AS_33/logs/duplicate_files.json",
+      "duplicate_files": [
+        "AS_33/logs/duplicate_files_sandbox.json"
+      ],
+      "all_files": [
+        "AS_33/logs/duplicate_files.json",
+        "AS_33/logs/duplicate_files_sandbox.json"
+      ]
+    },
+    {
+      "group_id": "DUP-005",
+      "checksum": "682670156671209c9a3c00c8cbfb183b72b969e17db2cb91505f9e162f53aaf2",
+      "algorithm": "SHA256",
+      "file_size_bytes": 656,
+      "file_size_human": "656 B",
+      "copies_count": 3,
+      "redundant_count": 2,
+      "wasted_bytes": 1312,
+      "wasted_human": "1.3 KB",
+      "original_file": "AS_33/sandbox_data/archive/brand_asset_2026.bin",
+      "duplicate_files": [
+        "AS_33/sandbox_data/media/favicon_hires.bin",
+        "AS_33/sandbox_data/media/logo_256.bin"
+      ],
+      "all_files": [
+        "AS_33/sandbox_data/archive/brand_asset_2026.bin",
+        "AS_33/sandbox_data/media/favicon_hires.bin",
+        "AS_33/sandbox_data/media/logo_256.bin"
+      ]
+    },
+    {
+      "group_id": "DUP-001",
+      "checksum": "7e708df5c1a84884dc5e077cc07da5bee3f60518b1332711be798ef5f32a9686",
+      "algorithm": "SHA256",
+      "file_size_bytes": 1159,
+      "file_size_human": "1.1 KB",
+      "copies_count": 2,
+      "redundant_count": 1,
+      "wasted_bytes": 1159,
+      "wasted_human": "1.1 KB",
+      "original_file": "AS_10/backups/backup_project_20261007_115004.tar.gz",
+      "duplicate_files": [
+        "AS_10/backups/backup_project_20261007_115104.tar.gz"
+      ],
+      "all_files": [
+        "AS_10/backups/backup_project_20261007_115004.tar.gz",
+        "AS_10/backups/backup_project_20261007_115104.tar.gz"
+      ]
+    },
+    {
+      "group_id": "DUP-002",
+      "checksum": "31f865402923b24f0b657dee90b199e928e3ba5301bf61771c6f42c0c5e2d5c1",
+      "algorithm": "SHA256",
+      "file_size_bytes": 379,
+      "file_size_human": "379 B",
+      "copies_count": 3,
+      "redundant_count": 2,
+      "wasted_bytes": 758,
+      "wasted_human": "758 B",
+      "original_file": "AS_11/sandbox_data/backups/backup_prod_20261005_020000.tar.gz",
+      "duplicate_files": [
+        "AS_11/sandbox_data/backups/backup_prod_20261006_020000.tar.gz",
+        "AS_11/sandbox_data/backups/backup_prod_20261007_020000.tar.gz"
+      ],
+      "all_files": [
+        "AS_11/sandbox_data/backups/backup_prod_20261005_020000.tar.gz",
+        "AS_11/sandbox_data/backups/backup_prod_20261006_020000.tar.gz",
+        "AS_11/sandbox_data/backups/backup_prod_20261007_020000.tar.gz"
+      ]
+    },
+    {
+      "group_id": "DUP-006",
+      "checksum": "7121fac28f91cc7261b241cd2507151474acbd850480203cd4b1d2b5ea2f0493",
+      "algorithm": "SHA256",
+      "file_size_bytes": 160,
+      "file_size_human": "160 B",
+      "copies_count": 3,
+      "redundant_count": 2,
+      "wasted_bytes": 320,
+      "wasted_human": "320 B",
+      "original_file": "AS_33/sandbox_data/archive/old_msa_copy.txt",
+      "duplicate_files": [
+        "AS_33/sandbox_data/contracts/master_services_agreement_2026.txt",
+        "AS_33/sandbox_data/contracts/msa_signed_backup.txt"
+      ],
+      "all_files": [
+        "AS_33/sandbox_data/archive/old_msa_copy.txt",
+        "AS_33/sandbox_data/contracts/master_services_agreement_2026.txt",
+        "AS_33/sandbox_data/contracts/msa_signed_backup.txt"
+      ]
+    },
+    {
+      "group_id": "DUP-007",
+      "checksum": "0ef56b3a3c06d93f8b8214cdce02f85d11133726a83586ccd66f03b0a9905a64",
+      "algorithm": "SHA256",
+      "file_size_bytes": 229,
+      "file_size_human": "229 B",
+      "copies_count": 2,
+      "redundant_count": 1,
+      "wasted_bytes": 229,
+      "wasted_human": "229 B",
+      "original_file": "AS_33/sandbox_data/backups/db_schema_seed.sql",
+      "duplicate_files": [
+        "AS_33/sandbox_data/configs/db_schema_v2.sql"
+      ],
+      "all_files": [
+        "AS_33/sandbox_data/backups/db_schema_seed.sql",
+        "AS_33/sandbox_data/configs/db_schema_v2.sql"
+      ]
+    }
+  ]
+}
